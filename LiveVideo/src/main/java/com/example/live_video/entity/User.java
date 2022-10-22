@@ -17,11 +17,13 @@ public class User {
     private Long id;
 
     private String username;
-    private Character type;
+
+    @TableField(value = "type")
+    private UserType userType;
     private String mail;
     private String password;
 
-    @TableField(value = "photo_url", select = false)
+    @TableField(value = "photo_url")
     private String photoUrl;
     private Long account;
 
@@ -35,9 +37,9 @@ public class User {
     @TableField(value = "is_delete", insertStrategy = FieldStrategy.NOT_EMPTY)
     private Integer deleteFlag;
 
-    public User(String username, Character type, String mail, String password, String photoUrl, Long account) {
+    public User(String username, UserType userType, String mail, String password, String photoUrl, Long account) {
         this.username = username;
-        this.type = type;
+        this.userType = userType;
         this.mail = mail;
         this.password = password;
         this.photoUrl = photoUrl;

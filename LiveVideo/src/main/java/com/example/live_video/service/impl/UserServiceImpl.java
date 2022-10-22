@@ -16,13 +16,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     UserMapper userMapper;
 
-    /**
-     * Register the user into database. If success, it will return true. If there's another user has the same name, it
-     * will throw SQLRegisterUsernameConflictException
-     * @param user
-     * @return boolean
-     * @throws SQLUsernameConflictException
-     */
     @Override
     public boolean register(User user) throws SQLUsernameConflictException {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
@@ -37,12 +30,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return res == 1;
     }
 
-    /**
-     * Return true if the user has the same password with the record in database
-     * @param user
-     * @return boolean
-     * @throws SQLUsernameConflictException
-     */
+
     @Override
     public boolean compareUserPassword(User user) throws SQLUsernameConflictException {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();

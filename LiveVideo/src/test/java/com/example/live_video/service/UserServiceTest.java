@@ -1,6 +1,7 @@
 package com.example.live_video.service;
 
 import com.example.live_video.entity.User;
+import com.example.live_video.entity.UserType;
 import com.example.live_video.exception.SQLUserNotFoundException;
 import com.example.live_video.exception.SQLUsernameConflictException;
 import com.example.live_video.mapper.UserMapper;
@@ -19,7 +20,7 @@ public class UserServiceTest {
 
     @Test
     public void testRegister(){
-        User user1 = new User("user1", 'A', "user1@mail.com", "123456", null, 0L);
+        User user1 = new User("user1", UserType.A, "user1@mail.com", "123456", null, 0L);
         boolean res1;
         boolean res2;
         try {
@@ -39,9 +40,9 @@ public class UserServiceTest {
 
     @Test
     public void testLogin(){
-        User user1 = new User("user1", 'A', "user1@mail.com", "123456", null, 0L);
-        User user2 = new User("notexist", 'A', "notexist@mail.com", "123", null, 0L);
-        User user3 = new User("user1", 'A', "user1@mail.com", "password", null, 0L);
+        User user1 = new User("user1", UserType.A, "user1@mail.com", "123456", null, 0L);
+        User user2 = new User("notexist", UserType.A, "notexist@mail.com", "123", null, 0L);
+        User user3 = new User("user1", UserType.A, "user1@mail.com", "password", null, 0L);
         userMapper.insert(user1);
         boolean res1;
         boolean res2;
@@ -70,7 +71,7 @@ public class UserServiceTest {
 
     @Test
     public void TestRemoveUser(){
-        User user1 = new User("user1", 'A', "user1@mail.com", "123456", null, 0L);
+        User user1 = new User("user1", UserType.A, "user1@mail.com", "123456", null, 0L);
         userMapper.insert(user1);
         long oldCount = userService.count();
         boolean removeFlag = userService.removeUser(user1);
