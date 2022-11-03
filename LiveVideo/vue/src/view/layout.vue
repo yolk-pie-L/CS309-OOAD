@@ -1,11 +1,14 @@
 <template>
-  <router-view></router-view>
+    <!-- 路由 -->
+    路由
 </template>
 
 <script>
-
-
 export default {
-  name: 'App'
+
 }
 </script>
+
+<style>
+
+</style>
