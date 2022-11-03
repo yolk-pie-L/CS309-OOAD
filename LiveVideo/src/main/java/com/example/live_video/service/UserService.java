@@ -2,6 +2,7 @@ package com.example.live_video.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.live_video.entity.User;
+import com.example.live_video.exception.SQLMailConflictException;
 import com.example.live_video.exception.SQLUsernameConflictException;
 import com.example.live_video.exception.SQLUserNotFoundException;
 
@@ -16,7 +17,7 @@ public interface UserService extends IService<User> {
      * @return boolean
      * @throws SQLUsernameConflictException
      */
-    public boolean register(User user) throws SQLUsernameConflictException;
+    public boolean register(User user) throws SQLUsernameConflictException, SQLMailConflictException;
 
     /**
      * Return true if the user has the same password with the record in database
