@@ -9,14 +9,15 @@ CREATE TABLE user
     id          int auto_increment primary key,
     username    varchar(20)                                not null,
     type        enum ('Administrator','Student','Teacher') not null,
-    mail        varchar(50) unique,
+    mail        varchar(50) ,
     password    varchar(50)                                not null,
     photo_url   varchar(50),
     account     bigint                                              default 0,
     create_time timestamp                                  not null default CURRENT_TIMESTAMP,
     update_time timestamp                                  null     default null on update CURRENT_TIMESTAMP,
     is_delete   int                                                 default 0,
-    CONSTRAINT unique (username, is_delete)
+    CONSTRAINT unique (username, is_delete),
+    CONSTRAINT unique (mail, is_delete)
 );
 
 CREATE TABLE course
