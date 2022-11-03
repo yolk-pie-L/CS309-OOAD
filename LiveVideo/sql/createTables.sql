@@ -7,29 +7,32 @@ drop table stu_assign, stu_course, stu_section;
 CREATE TABLE user
 (
     id          int auto_increment primary key,
-    username    varchar(20)        not null,
-    type        enum ('A','S','T') not null,
-    mail        varchar(50),
-    password    varchar(50)        not null,
+    username    varchar(20)                                not null,
+    type        enum ('Administrator','Student','Teacher') not null,
+    mail        varchar(50) unique,
+    password    varchar(50)                                not null,
     photo_url   varchar(50),
-    account     bigint                      default 0,
-    create_time timestamp          not null default CURRENT_TIMESTAMP,
-    update_time timestamp          null     default null on update CURRENT_TIMESTAMP,
-    is_delete   int                         default 0,
+    account     bigint                                              default 0,
+    create_time timestamp                                  not null default CURRENT_TIMESTAMP,
+    update_time timestamp                                  null     default null on update CURRENT_TIMESTAMP,
+    is_delete   int                                                 default 0,
     CONSTRAINT unique (username, is_delete)
 );
 
 CREATE TABLE course
 (
     id          int auto_increment primary key,
-    name        varchar(20) not null,
-    user_id     int         not null references user (id),
+    coursename varchar(20)                              not null,
+    user_id     int                                      not null references user (id),
     tag         varchar(20),
-    charge      varchar(20) not null,
+    charge      bigint                                   not null,
     description text,
-    status      varchar(5)  not null,
+    status      enum ('APPROVED', 'FAILED', 'REVIEWING') not null,
     picture_url varchar(50),
-    CONSTRAINT unique (name, user_id)
+    create_time timestamp                                not null default CURRENT_TIMESTAMP,
+    update_time timestamp                                null     default null on update CURRENT_TIMESTAMP,
+    is_delete   int                                               default 0,
+    CONSTRAINT unique (coursename, user_id, is_delete)
 );
 
 CREATE TABLE assignment

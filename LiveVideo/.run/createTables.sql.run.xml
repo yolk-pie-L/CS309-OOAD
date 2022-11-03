@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="createTables.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
+    <script-file value="$PROJECT_DIR$/sql/createTables.sql" />
+    <script-mode>FILE</script-mode>
+    <data-source id="b00f12dd-ec4e-4023-a10b-ee139387b320" namespace="schema/&quot;livevideo&quot;" />
+    <method v="2" />
+  </configuration>
+</component>

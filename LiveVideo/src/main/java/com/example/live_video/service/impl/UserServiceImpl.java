@@ -13,17 +13,32 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
-    @Autowired
+    @Autowired(required = false)
     UserMapper userMapper;
+
+    @Override
+    public Long getUserId(String username) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", username);
+        User resUser = userMapper.selectOne(queryWrapper);
+        return resUser.getId();
+    }
 
     @Override
     public boolean register(User user) throws SQLUsernameConflictException {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username", user.getUsername());
+        queryWrapper.eq("username", user.getUserName());
         boolean existsFlag = userMapper.exists(queryWrapper);
-        // 如果存在该用户，则抛出异常
+        // 如果存在该用户名，则抛出异常
         if(existsFlag){
             throw new SQLUsernameConflictException();
+        }
+        queryWrapper.clear();
+
+        queryWrapper.eq("mail", user.getMail());
+        existsFlag = userMapper.exists(queryWrapper);
+        if(existsFlag){
+
         }
         // 如果不存在该用户，则顺利执行插入
         int res = userMapper.insert(user);
@@ -34,10 +49,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public boolean compareUserPassword(User user) throws SQLUsernameConflictException {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username", user.getUsername());
+        queryWrapper.eq("username", user.getUserName());
         queryWrapper.select("password");
         User resUser = userMapper.selectOne(queryWrapper);
-        System.out.println(resUser);
         // 如果不存在该用户，则抛出异常
         if(resUser == null){
             throw new SQLUserNotFoundException();
@@ -48,7 +62,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public boolean removeUser(User user) throws SQLUserNotFoundException {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username", user.getUsername());
+        queryWrapper.eq("username", user.getUserName());
         User resUser = userMapper.selectOne(queryWrapper);
         // 如果不存在该用户，则抛出异常
         if(resUser == null){

@@ -10,7 +10,7 @@ import java.util.List;
 @SpringBootTest
 public class UserMapperTest {
 
-    @Autowired
+    @Autowired(required = false)
     private UserMapper userMapper;
 
     @Test
