@@ -9,7 +9,6 @@ import com.example.live_video.exception.SQLUserNotFoundException;
 import com.example.live_video.exception.SQLUsernameConflictException;
 import com.example.live_video.mapper.UserMapper;
 import com.example.live_video.service.UserService;
-import com.sun.activation.registries.MailcapParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,14 +17,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired(required = false)
     UserMapper userMapper;
-
-    @Override
-    public Long getUserId(String username) {
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username", username);
-        User resUser = userMapper.selectOne(queryWrapper);
-        return resUser.getId();
-    }
 
     @Override
     public boolean register(User user) throws MyException {

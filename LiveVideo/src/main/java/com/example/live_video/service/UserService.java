@@ -3,19 +3,21 @@ package com.example.live_video.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.live_video.entity.User;
 import com.example.live_video.exception.MyException;
+import com.example.live_video.exception.SQLMailConflictException;
 import com.example.live_video.exception.SQLUsernameConflictException;
 import com.example.live_video.exception.SQLUserNotFoundException;
 
 public interface UserService extends IService<User> {
 
-    public Long getUserId(String username);
-
     /**
-     * Register the user into database. If success, it will return true. If there's another user has the same name, it
-     * will throw SQLRegisterUsernameConflictException
+     * Register the user into database. If success, it will return true.
      * @param user
      * @return boolean
-     * @throws SQLUsernameConflictException
+     * @throws MyException
+     * @throws SQLUsernameConflictException If there's another user has the same name, it
+     * will throw SQLUsernameConflictException.
+     * @throws SQLMailConflictException If there's another user has the same mail, it will throw
+     * SQLMailConflictException
      */
     public boolean register(User user) throws MyException;
 
@@ -23,9 +25,17 @@ public interface UserService extends IService<User> {
      * Return true if the user has the same password with the record in database
      * @param user
      * @return boolean
-     * @throws SQLUsernameConflictException
+     * @throws MyException
+     * @throws SQLUserNotFoundException
      */
     public boolean compareUserPassword(User user) throws MyException;
 
+    /**
+     *
+     * @param user
+     * @return
+     * @throws MyException
+     * @throws SQLUserNotFoundException
+     */
     public boolean removeUser(User user) throws MyException;
 }

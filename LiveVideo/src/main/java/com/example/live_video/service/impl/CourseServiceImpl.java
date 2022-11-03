@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.live_video.entity.Course;
 import com.example.live_video.entity.CourseStatus;
 import com.example.live_video.entity.User;
+import com.example.live_video.exception.MyException;
 import com.example.live_video.exception.SQLCoursenameConflictException;
 import com.example.live_video.mapper.CourseMapper;
 import com.example.live_video.mapper.UserMapper;
@@ -25,7 +26,7 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
 
 
     @Override
-    public boolean createCourse(Course course) throws SQLCoursenameConflictException {
+    public boolean createCourse(Course course) throws MyException {
         Boolean existsFlag = courseMapper.existCourse(course.getTeacherName(), course.getCourseName());
         if(existsFlag){
             throw new SQLCoursenameConflictException();
