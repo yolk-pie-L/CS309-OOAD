@@ -1,17 +1,17 @@
-import { createStore } from 'vuex'
-// 持久化
-import createPersistedstate from 'vuex-persistedstate'
+import Vue from 'vue'
+import Vuex from 'vuex'
 
-import user from './modules/user'
-export default createStore({
-  modules: {
-    user
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  state: {
   },
-  // 持久化
-  plugins: [
-    createPersistedstate({
-      key: 'blog',
-      paths: ['user']
-    })
-  ]
+  getters: {
+  },
+  mutations: {
+  },
+  actions: {
+  },
+  modules: {
+  }
 })

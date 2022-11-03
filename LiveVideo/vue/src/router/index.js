@@ -1,23 +1,31 @@
-// 引入
-import {  createRouter, createWebHashHistory} from 'vue-router'
-/* 引入首页 路由 */
-import Home from '../view/home.vue'
-import layout from '../view/layout.vue'
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import Login from '../views/Login.vue'
+import HomeView from "@/views/HomeView";
+import regist from "@/views/regist";
+Vue.use(VueRouter)
 
-const Router = createRouter({
-    history: createWebHashHistory(),
-    routes:[{
-        path:'/',
-        name:'home',
-        component:Home
-    },
-{
-    path:'/layout',
-    name:'layout',
-    component:layout
+const routes = [
+  // 配置登陆页面的路由
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
+  },
+  {
+    path: '/home',
+    name: 'HomeView',
+    component: HomeView
+  },
+  {
+    path: '/regist',
+    name: 'regist',
+    component: regist
+  }
+]
 
-}]
+const router = new VueRouter({
+  routes
 })
 
-// 导出
-export default Router
+export default router
