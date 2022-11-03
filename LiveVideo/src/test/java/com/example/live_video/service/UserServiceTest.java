@@ -2,6 +2,7 @@ package com.example.live_video.service;
 
 import com.example.live_video.entity.User;
 import com.example.live_video.entity.UserType;
+import com.example.live_video.exception.MyException;
 import com.example.live_video.exception.SQLUserNotFoundException;
 import com.example.live_video.exception.SQLUsernameConflictException;
 import com.example.live_video.mapper.UserMapper;
@@ -24,18 +25,18 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testRegister(){
+    public void testRegister() {
         User user1 = new User("user1", UserType.Administrator, "user1@mail.com", "123456");
         boolean res1;
         boolean res2;
         try {
             res1 = userService.register(user1);
-        }catch (SQLUsernameConflictException e){
+        }catch (MyException e){
             res1 = false;
         }
         try{
             res2 = userService.register(user1);
-        }catch (SQLUsernameConflictException e){
+        }catch (MyException e){
             res2 = true;
         }
         assert res1;
@@ -54,18 +55,18 @@ public class UserServiceTest {
         boolean res3;
         try {
             res1 = userService.compareUserPassword(user1);
-        }catch (SQLUserNotFoundException e){
+        }catch (MyException e){
             res1 = false;
         }
         try{
             userService.compareUserPassword(user2);
             res2 = false;
-        }catch (SQLUserNotFoundException e){
+        }catch (MyException e){
             res2 = true;
         }
         try{
             res3 = userService.compareUserPassword(user3);
-        }catch (SQLUserNotFoundException e){
+        }catch (MyException e){
             res3 = true;
         }
         assert res1;
@@ -79,9 +80,12 @@ public class UserServiceTest {
         User user1 = new User("user1", UserType.Administrator, "user1@mail.com", "123456");
         userMapper.insert(user1);
         long oldCount = userService.count();
-        boolean removeFlag = userService.removeUser(user1);
+        try {
+            boolean removeFlag = userService.removeUser(user1);
+        } catch (MyException e) {
+            e.printStackTrace();
+        }
         long newCount = userService.count();
-        assert removeFlag;
         assert newCount == oldCount - 1;
         userMapper.deleteById(user1);
     }

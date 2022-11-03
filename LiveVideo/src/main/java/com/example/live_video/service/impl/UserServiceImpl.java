@@ -3,10 +3,13 @@ package com.example.live_video.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.live_video.entity.User;
+import com.example.live_video.exception.MyException;
+import com.example.live_video.exception.SQLMailConflictException;
 import com.example.live_video.exception.SQLUserNotFoundException;
 import com.example.live_video.exception.SQLUsernameConflictException;
 import com.example.live_video.mapper.UserMapper;
 import com.example.live_video.service.UserService;
+import com.sun.activation.registries.MailcapParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +28,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public boolean register(User user) throws SQLUsernameConflictException {
+    public boolean register(User user) throws MyException {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", user.getUserName());
         boolean existsFlag = userMapper.exists(queryWrapper);
@@ -38,7 +41,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         queryWrapper.eq("mail", user.getMail());
         existsFlag = userMapper.exists(queryWrapper);
         if(existsFlag){
-
+            throw new SQLMailConflictException();
         }
         // 如果不存在该用户，则顺利执行插入
         int res = userMapper.insert(user);
@@ -47,7 +50,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 
     @Override
-    public boolean compareUserPassword(User user) throws SQLUsernameConflictException {
+    public boolean compareUserPassword(User user) throws MyException {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", user.getUserName());
         queryWrapper.select("password");
