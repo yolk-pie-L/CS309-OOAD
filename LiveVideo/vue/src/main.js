@@ -1,24 +1,12 @@
-import Vue from 'vue'
-import axios from "axios"
+import { createApp } from 'vue'
 import App from './App.vue'
-import router from './router'
-import store from './store'
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
-import moment  from 'moment'
+import './index.css'
+// 引入 router
+import router from './router/index'
+// 引入 store
+import store from './store/index'
+// 引入element-plus
+import ElementPlus from 'element-plus'
+import '../node_modules/element-plus/theme-chalk/index.css'
+createApp(App).use(router).use(store).use(ElementPlus).mount('#app')
 
-Vue.use(ElementUI)
-
-Vue.filter('moment', function (value, formatString) {
-  formatString = formatString || 'YYYY-MM-DD HH:mm:ss';
-  return moment(value).format("YYYY-MM-DD"); // value可以是普通日期 20170723
-});
-Vue.prototype.$axios = axios
-
-Vue.config.productionTip = false
-
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
