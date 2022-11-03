@@ -7,6 +7,8 @@ import com.example.live_video.exception.SQLUserNotFoundException;
 
 public interface UserService extends IService<User> {
 
+    public Long getUserId(String username);
+
     /**
      * Register the user into database. If success, it will return true. If there's another user has the same name, it
      * will throw SQLRegisterUsernameConflictException

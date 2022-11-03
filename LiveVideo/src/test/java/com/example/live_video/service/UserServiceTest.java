@@ -12,15 +12,20 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class UserServiceTest {
 
-    @Autowired
+    @Autowired(required = false)
     UserMapper userMapper;
 
     @Autowired
     UserService userService;
 
     @Test
+    public void testGetUserId(){
+
+    }
+
+    @Test
     public void testRegister(){
-        User user1 = new User("user1", UserType.A, "user1@mail.com", "123456", null, 0L);
+        User user1 = new User("user1", UserType.Administrator, "user1@mail.com", "123456");
         boolean res1;
         boolean res2;
         try {
@@ -40,9 +45,9 @@ public class UserServiceTest {
 
     @Test
     public void testLogin(){
-        User user1 = new User("user1", UserType.A, "user1@mail.com", "123456", null, 0L);
-        User user2 = new User("notexist", UserType.A, "notexist@mail.com", "123", null, 0L);
-        User user3 = new User("user1", UserType.A, "user1@mail.com", "password", null, 0L);
+        User user1 = new User("user1", UserType.Administrator, "user1@mail.com", "123456");
+        User user2 = new User("notexist", UserType.Administrator, "notexist@mail.com", "123");
+        User user3 = new User("user1", UserType.Administrator, "user1@mail.com", "password");
         userMapper.insert(user1);
         boolean res1;
         boolean res2;
@@ -71,7 +76,7 @@ public class UserServiceTest {
 
     @Test
     public void TestRemoveUser(){
-        User user1 = new User("user1", UserType.A, "user1@mail.com", "123456", null, 0L);
+        User user1 = new User("user1", UserType.Administrator, "user1@mail.com", "123456");
         userMapper.insert(user1);
         long oldCount = userService.count();
         boolean removeFlag = userService.removeUser(user1);
