@@ -27,7 +27,7 @@ public class UserController {
 
     @GetMapping("/")
     public void index() {
-        User user = new User("shey", UserType.Administrator, "12012138@.com", "23", "phto_url", 0L);
+        User user = new User("jkljlk", UserType.Administrator, "12013029@.com", "23", "phto_url", 0L);
         int a = 0;
         System.out.println("a" + a);
         try {
@@ -39,6 +39,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ExceptionMessage registerUser(UserForm userForm) {
+        System.out.println(userForm);
         try {
             userService.register(userForm.convertToUser());
         } catch (MyException e) {
