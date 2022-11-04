@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Objects;
 
 @SpringBootTest
-@Transactional
-@Rollback
+//@Transactional
+//@Rollback
 public class CourseServiceTest {
 
     @Autowired
@@ -182,5 +182,18 @@ public class CourseServiceTest {
         assert courseList.size() == 1;
         assert Objects.equals(courseList.get(0).getId(), allCourses.get(allCourses.size() - 1).getId());
         tearDown();
+    }
+
+    @Test
+    void removeCourse(){
+        User teacher = new User("t", UserType.Teacher, "t@m", "123");
+        userMapper.insert(teacher);
+        Course course = new Course("aa", teacher.getId(), "cs", 1L, "aab", CourseStatus.APPROVED, "url");
+        courseMapper.insert(course);
+        Long count1 = courseMapper.selectCount(null);
+        boolean flag = courseService.removeCourse(teacher.getUserName(), course.getCourseName());
+        assert flag;
+        Long count2 = courseMapper.selectCount(null);
+        assert count1 == count2 + 1;
     }
 }

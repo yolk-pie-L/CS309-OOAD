@@ -52,6 +52,11 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
     }
 
     @Override
+    public boolean removeCourse(String teacherName, String courseName) {
+        return courseMapper.removeCourse(teacherName, courseName);
+    }
+
+    @Override
     public List<Course> getReviewingCourses(int recordsPerPage, int pageNum) {
         int limit = recordsPerPage;
         int offset = recordsPerPage * (pageNum - 1);

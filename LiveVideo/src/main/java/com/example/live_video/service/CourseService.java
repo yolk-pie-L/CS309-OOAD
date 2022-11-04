@@ -30,6 +30,7 @@ public interface CourseService extends IService<Course> {
      */
     public boolean updateCourse(Course course);
 
+    public boolean removeCourse(String teacherName, String courseName);
 
     /**
      * Get the courses that has status REVIEWING.实现了分页

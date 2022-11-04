@@ -2,8 +2,10 @@ package com.example.live_video.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.live_video.entity.Course;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -25,6 +27,15 @@ public interface CourseMapper extends BaseMapper<Course> {
             "                 AND user.is_delete = 0\n" +
             "                 AND course.is_delete = 0)"})
     public Boolean existCourse(String teacherName, String courseName);
+
+    @Update({"UPDATE course\n" +
+            "         LEFT JOIN user ON course.user_id = user.id\n" +
+            "SET course.is_delete = course.id\n" +
+            "WHERE course.coursename = #{courseName}\n" +
+            "  AND user.username = #{teacherName}\n" +
+            "  AND user.is_delete = 0\n" +
+            "  AND course.is_delete = 0;"})
+    public Boolean removeCourse(String teacherName, String courseName);
 
     @Select("SELECT * FROM course WHERE status = 'REVIEWING' AND is_delete = 0 LIMIT #{limit} OFFSET #{offset}")
     public List<Course> getReviewingCourses(int limit, int offset);
