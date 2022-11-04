@@ -2,16 +2,20 @@ package com.example.live_video.service;
 
 import com.example.live_video.entity.User;
 import com.example.live_video.entity.UserType;
-import com.example.live_video.exception.*;
+import com.example.live_video.exception.MyException;
+import com.example.live_video.exception.SQLMailConflictException;
+import com.example.live_video.exception.SQLUserNotFoundException;
+import com.example.live_video.exception.SQLUsernameConflictException;
 import com.example.live_video.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
+@Transactional
+@Rollback
 public class UserServiceTest {
 
     @Autowired(required = false)

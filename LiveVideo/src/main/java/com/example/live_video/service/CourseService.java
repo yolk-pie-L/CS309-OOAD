@@ -1,5 +1,6 @@
 package com.example.live_video.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.live_video.entity.Course;
 import com.example.live_video.entity.CourseStatus;
@@ -20,19 +21,36 @@ public interface CourseService extends IService<Course> {
      */
     public boolean createCourse(Course course) throws MyException;
 
+
     /**
      * Update the course. Any field that is not empty in the course will be updated.
      * @param course course to be updated
-     * @return true if the course is updated succesfully
+     * @return true if the course is updated successfully
      * @throws
      */
-    public boolean updateCourse(Course course, User teacher);
+    public boolean updateCourse(Course course);
+
 
     /**
-     * Get the course that has status REVIEWING
-     * @return a list of courses
+     * Get the courses that has status REVIEWING.实现了分页
+     * @param  recordsPerPage 每一页的记录数量
+     * @param pageNum 第几页（从1开始）
+     * @return A list of course
      */
-    public List<Course> getReviewingCourses();
+    public List<Course> getReviewingCourses(int recordsPerPage, int pageNum);
 
 
+    /**
+     * Get the courses that has status APPROVED. 实现了分页
+     * @param recordsPerPage 每一页的记录数量
+     * @param pageNum 第几页（从1开始）
+     * @return A list of course
+     */
+    public List<Course> getApprovedCourses(int recordsPerPage, int pageNum);
+
+    public List<Course> getApprovedCoursesOfTeacher(int recordsPerPage, int pageNum, String teacherName);
+
+    public List<Course> getFailedCoursesOfTeacher(int recordsPerPage, int pageNum, String teacherName);
+
+    public List<Course> getReviewingCoursesOfTeacher(int recordsPerPage, int pageNum, String teacherName);
 }

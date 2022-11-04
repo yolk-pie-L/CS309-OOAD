@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Timestamp;
 
@@ -48,7 +49,7 @@ public class User {
         this.account = account;
     }
 
-    public User(String userName, UserType userType, String mail, String password) {
+    public User(@NotNull String userName, UserType userType, String mail, String password) {
         this.userName = userName;
         this.userType = userType;
         this.mail = mail;

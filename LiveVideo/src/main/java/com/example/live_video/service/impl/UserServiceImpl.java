@@ -64,4 +64,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         return userMapper.deleteById(resUser) == 1;
     }
+
+    @Override
+    public Long getUserIdByUsername(String userName){
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("username", userName);
+        userQueryWrapper.select("id");
+        User resUser = userMapper.selectOne(userQueryWrapper);
+        return resUser.getId();
+    }
+
+    @Override
+    public User getUserByUsername(String userName) {
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("username", userName);
+        return userMapper.selectOne(userQueryWrapper);
+    }
 }
