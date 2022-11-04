@@ -3,6 +3,7 @@ package com.example.live_video.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.live_video.entity.User;
+import com.example.live_video.entity.UserType;
 import com.example.live_video.exception.MyException;
 import com.example.live_video.exception.SQLMailConflictException;
 import com.example.live_video.exception.SQLUserNotFoundException;
@@ -20,17 +21,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public boolean register(User user) throws MyException {
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username", user.getUserName());
-        boolean existsFlag = userMapper.exists(queryWrapper);
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("username", user.getUserName());
+        boolean existsFlag = userMapper.exists(userQueryWrapper);
         // 如果存在该用户名，则抛出异常
         if(existsFlag){
             throw new SQLUsernameConflictException();
         }
-        queryWrapper.clear();
+        userQueryWrapper.clear();
 
-        queryWrapper.eq("mail", user.getMail());
-        existsFlag = userMapper.exists(queryWrapper);
+        userQueryWrapper.eq("mail", user.getMail());
+        existsFlag = userMapper.exists(userQueryWrapper);
         if(existsFlag){
             throw new SQLMailConflictException();
         }
@@ -42,10 +43,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public boolean compareUserPassword(User user) throws MyException {
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username", user.getUserName());
-        queryWrapper.select("password");
-        User resUser = userMapper.selectOne(queryWrapper);
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("username", user.getUserName());
+        userQueryWrapper.select("password");
+        User resUser = userMapper.selectOne(userQueryWrapper);
         // 如果不存在该用户，则抛出异常
         if(resUser == null){
             throw new SQLUserNotFoundException();
@@ -55,9 +56,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public boolean removeUser(User user) throws SQLUserNotFoundException {
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username", user.getUserName());
-        User resUser = userMapper.selectOne(queryWrapper);
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("username", user.getUserName());
+        User resUser = userMapper.selectOne(userQueryWrapper);
         // 如果不存在该用户，则抛出异常
         if(resUser == null){
             throw new SQLUserNotFoundException();
@@ -79,5 +80,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("username", userName);
         return userMapper.selectOne(userQueryWrapper);
+    }
+
+    @Override
+    public UserType getUserTypeByUsername(String userName) {
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("username", userName);
+        userQueryWrapper.select("usertype");
+        User resUser = userMapper.selectOne(userQueryWrapper);
+        return resUser.getUserType();
     }
 }

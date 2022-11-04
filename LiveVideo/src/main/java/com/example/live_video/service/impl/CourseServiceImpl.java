@@ -45,10 +45,10 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
     public boolean updateCourse(Course course) {
         Long teacherId = userService.getUserIdByUsername(course.getTeacherName());
         course.setTeacherId(teacherId);
-        QueryWrapper<Course> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("coursename", course.getCourseName());
-        queryWrapper.eq("user_id", teacherId);
-        return super.update(course, queryWrapper);
+        QueryWrapper<Course> courseQueryWrapper = new QueryWrapper<>();
+        courseQueryWrapper.eq("coursename", course.getCourseName());
+        courseQueryWrapper.eq("user_id", teacherId);
+        return super.update(course, courseQueryWrapper);
     }
 
     @Override

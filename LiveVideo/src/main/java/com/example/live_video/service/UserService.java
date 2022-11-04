@@ -2,6 +2,7 @@ package com.example.live_video.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.live_video.entity.User;
+import com.example.live_video.entity.UserType;
 import com.example.live_video.exception.MyException;
 import com.example.live_video.exception.SQLMailConflictException;
 import com.example.live_video.exception.SQLUsernameConflictException;
@@ -52,4 +53,6 @@ public interface UserService extends IService<User> {
      * @return User instance
      */
     public User getUserByUsername(String userName);
+    
+    public UserType getUserTypeByUsername(String userName);
 }

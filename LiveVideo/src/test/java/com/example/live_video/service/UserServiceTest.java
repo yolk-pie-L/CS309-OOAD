@@ -13,6 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 @SpringBootTest
 @Transactional
 @Rollback
@@ -23,6 +27,24 @@ public class UserServiceTest {
 
     @Autowired
     UserService userService;
+
+    List<User> allUsers = new ArrayList<>();
+
+    void setUp(){
+        User user1 = new User("user1", UserType.Administrator, "user1@mail.com", "123456");
+        User user2 = new User("user2", UserType.Teacher, "user2@mail.com1", "123456");
+        User user3 = new User("user3", UserType.Student, "user3@mail.com1", "123456");
+        allUsers.add(user1);
+        allUsers.add(user2);
+        allUsers.add(user2);
+        userMapper.insert(user1);
+        userMapper.insert(user2);
+        userMapper.insert(user3);
+    }
+
+    void tearDown(){
+        userMapper.deleteBatchIds(allUsers);
+    }
 
     @Test
     public void testRegister(){
@@ -109,5 +131,25 @@ public class UserServiceTest {
             removeFlag = e instanceof SQLUserNotFoundException;
         }
         assert removeFlag;
+    }
+
+    @Test
+    void getUserTypeByUsername(){
+        setUp();
+        for(User user: allUsers){
+            UserType userType = userService.getUserTypeByUsername(user.getUserName());
+            assert userType == user.getUserType();
+        }
+        tearDown();
+    }
+
+    @Test
+    void getUserIdByUsername(){
+        setUp();
+        for (User user : allUsers) {
+            Long id = userService.getUserIdByUsername(user.getUserName());
+            assert Objects.equals(id, user.getId());
+        }
+        tearDown();
     }
 }

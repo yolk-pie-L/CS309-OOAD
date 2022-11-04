@@ -20,8 +20,9 @@ public class User {
     @TableField(value = "username")
     private String userName;
 
-    @TableField(value = "type")
+    @TableField(value = "usertype")
     private UserType userType;
+
     private String mail;
     private String password;
 
@@ -49,7 +50,7 @@ public class User {
         this.account = account;
     }
 
-    public User(@NotNull String userName, UserType userType, String mail, String password) {
+    public User(String userName, UserType userType, String mail, String password) {
         this.userName = userName;
         this.userType = userType;
         this.mail = mail;
