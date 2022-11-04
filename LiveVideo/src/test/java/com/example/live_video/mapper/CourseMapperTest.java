@@ -43,8 +43,14 @@ public class CourseMapperTest {
 
     @Test
     public void testSelectAll(){
+        User user = new User("shenyun", UserType.Teacher, "sy@mail.sustech.edu.cn", "123456");
+        userMapper.insert(user);
+        Course course = new Course("DSAA", user.getId(), "CS", 2L, null, CourseStatus.REVIEWING, "courseurl");
+        courseMapper.insert(course);
         List<Course> courseList = courseMapper.selectList(null);
         courseList.forEach(System.out::println);
         System.out.println(courseList.size());
+        courseMapper.deleteById(course);
+        userMapper.deleteById(user);
     }
 }
