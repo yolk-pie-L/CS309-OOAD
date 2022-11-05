@@ -1,14 +1,24 @@
 <template>
-  <div id="app">
+  <div id="app" :style="{'background-image': bgUrl,'background-repeat': 'no-repeat', 'background-size': 'cover'}">
     <nav>
       <router-link to="/login">Login</router-link> |
       <router-link to="/regist">Regist</router-link>
     </nav>
-
+<!--/?username=-->
     <!--路由页面-->
     <router-view/>
   </div>
 </template>
+
+<script>
+export default {
+  data () {
+    return {
+      bgUrl:'url(https://p0.meituan.net/dpplatform/76b2dbcba530ed0b2f16a9b260a99e80481882.jpg)',
+    }
+  }
+}
+</script>
 
 <style>
 /*全局的父类高度*/
@@ -36,6 +46,7 @@ a {
 
 nav {
   padding: 30px;
+  border-bottom: black;
 }
 
 nav a {

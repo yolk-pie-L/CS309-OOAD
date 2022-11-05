@@ -194,7 +194,7 @@ export default {
   text-shadow: -3px 3px 1px #5f565e;
   text-align: center;
   margin-top: 10%;
-  color: #41b9a6;
+  color: greenyellow;
   font-size: 40px;
 }
 

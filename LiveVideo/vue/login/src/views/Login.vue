@@ -88,7 +88,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // 表单验证成功
-          this.$axios.post('http://localhost:8082/user/checkLogin', this.loginForm).then(res => {
+          this.$axios.post('http://localhost:8082/user/checkLogin/', this.loginForm).then(res => {
             // 拿到结果
             let result = JSON.parse(res.data.data);
             let message = res.data.msg;
@@ -130,7 +130,6 @@ export default {
 .bg-login {
   height: 100%;
   background-size: 200%;
-
 }
 
 .btn-ground {
@@ -148,7 +147,7 @@ export default {
   text-shadow: -3px 3px 1px #5f565e;
   text-align: center;
   margin-top: 10%;
-  color: #41b9a6;
+  color: greenyellow;
   font-size: 40px;
 }
 
