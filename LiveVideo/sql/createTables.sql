@@ -23,7 +23,7 @@ CREATE TABLE user
 CREATE TABLE course
 (
     id          int auto_increment primary key,
-    coursename  varchar(20)                              not null,
+    course_name  varchar(20)                              not null,
     user_id     int                                      not null references user (id),
     tag         varchar(20),
     charge      bigint                                   not null,
@@ -33,7 +33,7 @@ CREATE TABLE course
     create_time timestamp                                not null default CURRENT_TIMESTAMP,
     update_time timestamp                                null     default null on update CURRENT_TIMESTAMP,
     is_delete   int                                               default 0,
-    CONSTRAINT unique (coursename, user_id, is_delete)
+    CONSTRAINT unique (course_name, user_id, is_delete)
 );
 
 CREATE TABLE assignment
@@ -44,7 +44,7 @@ CREATE TABLE assignment
     deadline       datetime,
     total_grade    int,
     assignment_url varchar(50),
-    isAssignment   boolean     not null,
+    is_assignment   boolean     not null,
     description    text,
     CONSTRAINT unique (name, course_id)
 );

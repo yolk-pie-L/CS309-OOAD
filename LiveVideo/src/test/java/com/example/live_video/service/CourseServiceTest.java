@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Objects;
 
 @SpringBootTest
-//@Transactional
-//@Rollback
+@Transactional
+@Rollback
 public class CourseServiceTest {
 
     @Autowired

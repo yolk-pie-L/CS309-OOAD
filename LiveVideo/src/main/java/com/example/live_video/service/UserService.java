@@ -33,12 +33,12 @@ public interface UserService extends IService<User> {
 
     /**
      *
-     * @param user
+     * @param userName
      * @return
      * @throws MyException
      * @throws SQLUserNotFoundException
      */
-    public boolean removeUser(User user) throws MyException;
+    public boolean removeUser(String userName) throws MyException;
 
     /**
      * Get the id of the user in the database. If the user not in the database, it will return null

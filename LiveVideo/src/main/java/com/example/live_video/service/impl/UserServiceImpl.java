@@ -55,9 +55,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public boolean removeUser(User user) throws SQLUserNotFoundException {
+    public boolean removeUser(String userName) throws SQLUserNotFoundException {
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
-        userQueryWrapper.eq("username", user.getUserName());
+        userQueryWrapper.eq("username", userName);
         User resUser = userMapper.selectOne(userQueryWrapper);
         // 如果不存在该用户，则抛出异常
         if(resUser == null){

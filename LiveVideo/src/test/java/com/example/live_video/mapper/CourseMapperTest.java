@@ -10,7 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @SpringBootTest
 @Transactional
@@ -22,6 +24,25 @@ public class CourseMapperTest {
 
     @Autowired(required = false)
     UserMapper userMapper;
+
+    List<User> allUsers = new ArrayList<>();
+
+    List<Course> allCourses = new ArrayList<>();
+
+    public void setUp(){
+        User user = new User("shenyun", UserType.Teacher, "sy@mail.sustech.edu.cn", "123456");
+        userMapper.insert(user);
+        Course course = new Course("DSAA", user.getId(), "CS", 0L, null, CourseStatus.REVIEWING, null);
+        course.setTeacherName(user.getUserName());
+        courseMapper.insert(course);
+        allCourses.add(course);
+        allUsers.add(user);
+    }
+
+    public void tearDown(){
+        courseMapper.deleteBatchIds(allCourses);
+        userMapper.deleteBatchIds(allUsers);
+    }
 
     @Test
     public void testExistCourse(){
@@ -39,6 +60,15 @@ public class CourseMapperTest {
         courseMapper.deleteById(course);
         flag = courseMapper.existCourse(user.getUserName(), course.getCourseName() + "1");
         assert !flag;
+    }
+
+    @Test
+    public void getCourseIdByCourseNameTeacherName(){
+        setUp();
+        Course course = allCourses.get(0);
+        Long id = courseMapper.getCourseIdByTeacherNameCourseName(course.getTeacherName(), course.getCourseName());
+        assert Objects.equals(id, course.getId());
+        tearDown();
     }
 
     @Test

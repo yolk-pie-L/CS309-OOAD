@@ -117,7 +117,7 @@ public class UserServiceTest {
         long oldCount = userService.count();
         boolean removeFlag;
         try {
-            removeFlag = userService.removeUser(user1);
+            removeFlag = userService.removeUser(user1.getUserName());
         }catch (MyException e){
             removeFlag = false;
         }
@@ -126,7 +126,7 @@ public class UserServiceTest {
         assert newCount == oldCount - 1;
         userMapper.deleteById(user1);
         try{
-            removeFlag = userService.removeUser(user1);
+            removeFlag = userService.removeUser(user1.getUserName());
         }catch (MyException e){
             removeFlag = e instanceof SQLUserNotFoundException;
         }

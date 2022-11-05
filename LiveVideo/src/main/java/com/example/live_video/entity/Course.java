@@ -15,7 +15,7 @@ public class Course {
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    @TableField(value = "coursename")
+    @TableField(value = "course_name")
     private String courseName;
 
     @TableField(value = "user_id")

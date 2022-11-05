@@ -46,7 +46,7 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
         Long teacherId = userService.getUserIdByUsername(course.getTeacherName());
         course.setTeacherId(teacherId);
         QueryWrapper<Course> courseQueryWrapper = new QueryWrapper<>();
-        courseQueryWrapper.eq("coursename", course.getCourseName());
+        courseQueryWrapper.eq("course_name", course.getCourseName());
         courseQueryWrapper.eq("user_id", teacherId);
         return super.update(course, courseQueryWrapper);
     }

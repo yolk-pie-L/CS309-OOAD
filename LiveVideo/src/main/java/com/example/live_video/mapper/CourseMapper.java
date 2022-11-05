@@ -2,7 +2,6 @@ package com.example.live_video.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.live_video.entity.Course;
-import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -23,7 +22,7 @@ public interface CourseMapper extends BaseMapper<Course> {
             "               FROM user\n" +
             "                        JOIN course ON user.id = course.user_id\n" +
             "               where username = #{teacherName}\n" +
-            "                 AND coursename = #{courseName}\n" +
+            "                 AND course_name = #{courseName}\n" +
             "                 AND user.is_delete = 0\n" +
             "                 AND course.is_delete = 0)"})
     public Boolean existCourse(String teacherName, String courseName);
@@ -31,11 +30,20 @@ public interface CourseMapper extends BaseMapper<Course> {
     @Update({"UPDATE course\n" +
             "         LEFT JOIN user ON course.user_id = user.id\n" +
             "SET course.is_delete = course.id\n" +
-            "WHERE course.coursename = #{courseName}\n" +
+            "WHERE course.course_name = #{courseName}\n" +
             "  AND user.username = #{teacherName}\n" +
             "  AND user.is_delete = 0\n" +
             "  AND course.is_delete = 0;"})
     public Boolean removeCourse(String teacherName, String courseName);
+
+    @Select({"SELECT course.id\n" +
+            "FROM course\n" +
+            "         JOIN user ON course.user_id = user.id\n" +
+            "WHERE username = #{teacherName}\n" +
+            "  AND course_name = #{courseName}\n" +
+            "  AND course.is_delete = 0\n" +
+            "  AND user.is_delete = 0"})
+    public Long getCourseIdByTeacherNameCourseName(String teacherName, String courseName);
 
     @Select("SELECT * FROM course WHERE status = 'REVIEWING' AND is_delete = 0 LIMIT #{limit} OFFSET #{offset}")
     public List<Course> getReviewingCourses(int limit, int offset);
