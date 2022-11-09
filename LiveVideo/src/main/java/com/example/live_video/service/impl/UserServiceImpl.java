@@ -3,13 +3,13 @@ package com.example.live_video.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.live_video.entity.User;
+import com.example.live_video.entity.UserType;
 import com.example.live_video.exception.MyException;
 import com.example.live_video.exception.SQLMailConflictException;
 import com.example.live_video.exception.SQLUserNotFoundException;
 import com.example.live_video.exception.SQLUsernameConflictException;
 import com.example.live_video.mapper.UserMapper;
 import com.example.live_video.service.UserService;
-import com.sun.activation.registries.MailcapParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,26 +20,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     UserMapper userMapper;
 
     @Override
-    public Long getUserId(String username) {
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username", username);
-        User resUser = userMapper.selectOne(queryWrapper);
-        return resUser.getId();
-    }
-
-    @Override
     public boolean register(User user) throws MyException {
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username", user.getUserName());
-        boolean existsFlag = userMapper.exists(queryWrapper);
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("username", user.getUserName());
+        boolean existsFlag = userMapper.exists(userQueryWrapper);
         // 如果存在该用户名，则抛出异常
         if(existsFlag){
             throw new SQLUsernameConflictException();
         }
-        queryWrapper.clear();
+        userQueryWrapper.clear();
 
-        queryWrapper.eq("mail", user.getMail());
-        existsFlag = userMapper.exists(queryWrapper);
+        userQueryWrapper.eq("mail", user.getMail());
+        existsFlag = userMapper.exists(userQueryWrapper);
         if(existsFlag){
             throw new SQLMailConflictException();
         }
@@ -52,10 +44,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public boolean compareUserPassword(User user) throws MyException {
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username", user.getUserName());
-        queryWrapper.select("password");
-        User resUser = userMapper.selectOne(queryWrapper);
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("username", user.getUserName());
+        userQueryWrapper.select("password");
+        User resUser = userMapper.selectOne(userQueryWrapper);
         // 如果不存在该用户，则抛出异常
         if(resUser == null){
             throw new SQLUserNotFoundException();
@@ -64,14 +56,39 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public boolean removeUser(User user) throws SQLUserNotFoundException {
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username", user.getUserName());
-        User resUser = userMapper.selectOne(queryWrapper);
+    public boolean removeUser(String userName) throws SQLUserNotFoundException {
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("username", userName);
+        User resUser = userMapper.selectOne(userQueryWrapper);
         // 如果不存在该用户，则抛出异常
         if(resUser == null){
             throw new SQLUserNotFoundException();
         }
         return userMapper.deleteById(resUser) == 1;
+    }
+
+    @Override
+    public Long getUserIdByUsername(String userName){
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("username", userName);
+        userQueryWrapper.select("id");
+        User resUser = userMapper.selectOne(userQueryWrapper);
+        return resUser.getId();
+    }
+
+    @Override
+    public User getUserByUsername(String userName) {
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("username", userName);
+        return userMapper.selectOne(userQueryWrapper);
+    }
+
+    @Override
+    public UserType getUserTypeByUsername(String userName) {
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("username", userName);
+        userQueryWrapper.select("usertype");
+        User resUser = userMapper.selectOne(userQueryWrapper);
+        return resUser.getUserType();
     }
 }

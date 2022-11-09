@@ -5,18 +5,11 @@ import com.example.live_video.dto.UserForm;
 import com.example.live_video.entity.User;
 import com.example.live_video.entity.UserType;
 import com.example.live_video.exception.MyException;
-import com.example.live_video.exception.SQLUsernameConflictException;
 import com.example.live_video.service.UserService;
-import com.example.live_video.service.impl.UserServiceImpl;
-import com.sun.jndi.cosnaming.ExceptionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class UserController {

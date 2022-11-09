@@ -34,3 +34,6 @@ build/
 
 ### VUE ###
 vue/package.json
+
+###配置###
+LiveVideo/src/main/resources/application.yml

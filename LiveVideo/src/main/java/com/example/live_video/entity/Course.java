@@ -3,6 +3,7 @@ package com.example.live_video.entity;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Timestamp;
 
@@ -14,7 +15,7 @@ public class Course {
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    @TableField(value = "coursename")
+    @TableField(value = "course_name")
     private String courseName;
 
     @TableField(value = "user_id")
@@ -35,8 +36,8 @@ public class Course {
     @TableField(updateStrategy = FieldStrategy.NOT_EMPTY)
     private CourseStatus status;
 
-    @TableField(updateStrategy = FieldStrategy.NOT_EMPTY)
-    private String picture_url;
+    @TableField(value = "picture_url", updateStrategy = FieldStrategy.NOT_EMPTY)
+    private String pictureUrl;
 
 
     @TableField(value = "create_time", insertStrategy = FieldStrategy.NOT_EMPTY)
@@ -50,23 +51,28 @@ public class Course {
     private Integer deleteFlag;
 
     /**
-     * For upper layer. If you're not lx, you should use this constructor because you don't know the teacher_id.
+     * <p>
+     * For upper layer. If you're not LiXin, you should use this constructor because you don't know the teacher_id.
+     * If you don't know the exact parameter, for example, you don't know charge, but you just want to update
+     * tag, you can just set charge to null, description to null.
+     * It's essential to fill courseName and teacherName two fields.
+     * <p/>
      * @param courseName
      * @param teacherName
      * @param tag
      * @param charge
      * @param description
      * @param status
-     * @param picture_url
+     * @param pictureUrl
      */
-    public Course(String courseName, String teacherName, String tag, Long charge, String description, CourseStatus status, String picture_url) {
+    public Course(@NotNull String courseName, @NotNull String teacherName, String tag, Long charge, String description, CourseStatus status, String pictureUrl) {
         this.courseName = courseName;
         this.teacherName = teacherName;
         this.tag = tag;
         this.charge = charge;
         this.description = description;
         this.status = status;
-        this.picture_url = picture_url;
+        this.pictureUrl = pictureUrl;
     }
 
     /**
@@ -77,16 +83,16 @@ public class Course {
      * @param charge
      * @param description
      * @param status
-     * @param picture_url
+     * @param pictureUrl
      */
-    public Course(String courseName, Long teacherId, String tag, Long charge, String description, CourseStatus status, String picture_url) {
+    public Course(String courseName, Long teacherId, String tag, Long charge, String description, CourseStatus status, String pictureUrl) {
         this.courseName = courseName;
         this.teacherId = teacherId;
         this.tag = tag;
         this.charge = charge;
         this.description = description;
         this.status = status;
-        this.picture_url = picture_url;
+        this.pictureUrl = pictureUrl;
     }
 
 }

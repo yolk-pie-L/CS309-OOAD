@@ -1,8 +1,12 @@
 package com.example.live_video.config;
 
+import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.baomidou.mybatisplus.core.MybatisXMLLanguageDriver;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.plugin.Interceptor;
@@ -29,12 +33,18 @@ public class MybatisPlusConfig {
     @Autowired
     private ResourceLoader resourceLoader = new DefaultResourceLoader();
 
-    @Autowired(required = false)
-    private Interceptor[] interceptors;
+//    @Autowired(required = false)
+//    private Interceptor[] interceptors;
 
     @Autowired(required = false)
     private DatabaseIdProvider databaseIdProvider;
 
+    @Bean
+    public MybatisPlusInterceptor mybatisPlusInterceptor() {
+        MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+        interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
+        return interceptor;
+    }
 
     @Bean
     public MybatisSqlSessionFactoryBean mybatisSqlSessionFactoryBean() {
@@ -45,9 +55,9 @@ public class MybatisPlusConfig {
             mybatisPlus.setConfigLocation(this.resourceLoader.getResource(this.properties.getConfigLocation()));
         }
 
-        if (!ObjectUtils.isEmpty(this.interceptors)) {
-            mybatisPlus.setPlugins(this.interceptors);
-        }
+//        if (!ObjectUtils.isEmpty(this.interceptors)) {
+//            mybatisPlus.setPlugins(this.interceptors);
+//        }
 
         MybatisConfiguration mc = new MybatisConfiguration();
         mc.setDefaultScriptingLanguage(MybatisXMLLanguageDriver.class);

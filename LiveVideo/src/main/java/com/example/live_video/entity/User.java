@@ -3,6 +3,7 @@ package com.example.live_video.entity;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Timestamp;
 
@@ -17,8 +18,9 @@ public class User {
     @TableField(value = "username")
     private String userName;
 
-    @TableField(value = "type")
+    @TableField(value = "usertype")
     private UserType userType;
+
     private String mail;
     private String password;
 

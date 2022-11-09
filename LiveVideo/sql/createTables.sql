@@ -8,8 +8,8 @@ CREATE TABLE user
 (
     id          int auto_increment primary key,
     username    varchar(20)                                not null,
-    type        enum ('Administrator','Student','Teacher') not null,
-    mail        varchar(50) ,
+    usertype    enum ('Administrator','Student','Teacher') not null,
+    mail        varchar(50),
     password    varchar(50)                                not null,
     photo_url   varchar(50),
     account     bigint                                              default 0,
@@ -23,7 +23,7 @@ CREATE TABLE user
 CREATE TABLE course
 (
     id          int auto_increment primary key,
-    coursename varchar(20)                              not null,
+    course_name  varchar(20)                              not null,
     user_id     int                                      not null references user (id),
     tag         varchar(20),
     charge      bigint                                   not null,
@@ -33,7 +33,7 @@ CREATE TABLE course
     create_time timestamp                                not null default CURRENT_TIMESTAMP,
     update_time timestamp                                null     default null on update CURRENT_TIMESTAMP,
     is_delete   int                                               default 0,
-    CONSTRAINT unique (coursename, user_id, is_delete)
+    CONSTRAINT unique (course_name, user_id, is_delete)
 );
 
 CREATE TABLE assignment
@@ -44,7 +44,7 @@ CREATE TABLE assignment
     deadline       datetime,
     total_grade    int,
     assignment_url varchar(50),
-    isAssignment   boolean     not null,
+    is_assignment   boolean     not null,
     description    text,
     CONSTRAINT unique (name, course_id)
 );
@@ -58,11 +58,14 @@ CREATE TABLE administrator
 
 CREATE TABLE section
 (
-    id        int auto_increment primary key,
-    name      varchar(20) not null,
-    course_id int         not null references course (id),
-    video_url varchar(50),
-    CONSTRAINT unique (name, course_id)
+    id           int auto_increment primary key,
+    section_name varchar(20) not null,
+    course_id    int         not null references course (id),
+    video_url    varchar(50),
+    create_time  timestamp   not null default CURRENT_TIMESTAMP,
+    update_time  timestamp   null     default null on update CURRENT_TIMESTAMP,
+    is_delete    int                  default 0,
+    CONSTRAINT unique (section_name, course_id, is_delete)
 );
 
 CREATE TABLE announcement

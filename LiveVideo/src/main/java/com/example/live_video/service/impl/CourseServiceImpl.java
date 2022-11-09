@@ -4,11 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.live_video.entity.Course;
 import com.example.live_video.entity.CourseStatus;
-import com.example.live_video.entity.User;
+import com.example.live_video.exception.MyException;
 import com.example.live_video.exception.SQLCoursenameConflictException;
 import com.example.live_video.mapper.CourseMapper;
 import com.example.live_video.mapper.UserMapper;
 import com.example.live_video.service.CourseService;
+import com.example.live_video.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,32 +24,70 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
     @Autowired(required = false)
     UserMapper userMapper;
 
+    @Autowired
+    UserService userService;
+
 
     @Override
-    public boolean createCourse(Course course) throws SQLCoursenameConflictException {
+    public boolean createCourse(Course course) throws MyException {
         Boolean existsFlag = courseMapper.existCourse(course.getTeacherName(), course.getCourseName());
         if(existsFlag){
             throw new SQLCoursenameConflictException();
         }
         // 查询teacher的id
-        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
-        userQueryWrapper.eq("username", course.getTeacherName());
-        userQueryWrapper.select("id");
-        User resUser = userMapper.selectOne(userQueryWrapper);
-
-        course.setTeacherId(resUser.getId());
+        Long teacherId = userService.getUserIdByUsername(course.getTeacherName());
+        course.setTeacherId(teacherId);
         course.setStatus(CourseStatus.REVIEWING);
         return courseMapper.insert(course) == 1;
     }
 
     @Override
-    public boolean updateCourse(Course course, User teacher) {
-
-        return false;
+    public boolean updateCourse(Course course) {
+        Long teacherId = userService.getUserIdByUsername(course.getTeacherName());
+        course.setTeacherId(teacherId);
+        QueryWrapper<Course> courseQueryWrapper = new QueryWrapper<>();
+        courseQueryWrapper.eq("course_name", course.getCourseName());
+        courseQueryWrapper.eq("user_id", teacherId);
+        return super.update(course, courseQueryWrapper);
     }
 
     @Override
-    public List<Course> getReviewingCourses() {
-        return null;
+    public boolean removeCourse(String teacherName, String courseName) {
+        return courseMapper.removeCourse(teacherName, courseName);
+    }
+
+    @Override
+    public List<Course> getReviewingCourses(int recordsPerPage, int pageNum) {
+        int limit = recordsPerPage;
+        int offset = recordsPerPage * (pageNum - 1);
+        return courseMapper.getReviewingCourses(limit, offset);
+    }
+
+    @Override
+    public List<Course> getApprovedCourses(int recordsPerPage, int pageNum) {
+        int limit = recordsPerPage;
+        int offset = recordsPerPage * (pageNum - 1);
+        return courseMapper.getApprovedCourses(limit, offset);
+    }
+
+    @Override
+    public List<Course> getApprovedCoursesOfTeacher(int recordsPerPage, int pageNum, String teacherName) {
+        int limit = recordsPerPage;
+        int offset = recordsPerPage * (pageNum - 1);
+        return courseMapper.getApprovedCoursesOfTeacher(limit, offset, teacherName);
+    }
+
+    @Override
+    public List<Course> getFailedCoursesOfTeacher(int recordsPerPage, int pageNum, String teacherName) {
+        int limit = recordsPerPage;
+        int offset = recordsPerPage * (pageNum - 1);
+        return courseMapper.getFailedCoursesOfTeacher(limit, offset, teacherName);
+    }
+
+    @Override
+    public List<Course> getReviewingCoursesOfTeacher(int recordsPerPage, int pageNum, String teacherName) {
+        int limit = recordsPerPage;
+        int offset = recordsPerPage * (pageNum - 1);
+        return courseMapper.getReviewingCoursesOfTeacher(limit, offset, teacherName);
     }
 }
