@@ -54,6 +54,11 @@ git init
 > git rm readme.md
 ```
 
+## Git删除远程分支（慎用）
+
+```
+> git push origin --delete dev3
+```
 
 ## Git常见问题
 
