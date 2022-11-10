@@ -30,7 +30,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/register")
+    @PostMapping("/api/register")
     public ExceptionMessage registerUser(UserForm userForm) {
         try {
             userService.register(userForm.convertToUser());
@@ -39,4 +39,16 @@ public class UserController {
         }
         return new ExceptionMessage("OK");
     }
+
+    @PostMapping("/api/login")
+    public ExceptionMessage loginUser(UserForm userForm) {
+        try {
+            String type = userService.login(userForm.convertToUser());
+            return new ExceptionMessage("OK", type, null);
+        } catch (MyException e) {
+            return new ExceptionMessage("error", e.getMessage());
+        }
+    }
+
+
 }

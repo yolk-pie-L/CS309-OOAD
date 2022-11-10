@@ -53,6 +53,14 @@ public interface UserService extends IService<User> {
      * @return User instance
      */
     public User getUserByUsername(String userName);
-    
+
     public UserType getUserTypeByUsername(String userName);
+
+    /**
+     *
+     * @param user
+     * @return the type of user: Student, Teacher, Administrator. Return null if no user exists.
+     * @throws MyException
+     */
+    public String login(User user) throws MyException;
 }

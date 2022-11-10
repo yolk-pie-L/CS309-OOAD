@@ -1,4 +1,4 @@
-package com.example.live_video.service.impl;
+package com.example.live_video.entity.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -89,5 +89,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userQueryWrapper.select("usertype");
         User resUser = userMapper.selectOne(userQueryWrapper);
         return resUser.getUserType();
+    }
+
+    @Override
+    public String login(User user) throws MyException {
+        if (compareUserPassword(user)) {
+            return getUserTypeByUsername(user.getUserName()).name();
+        } else {
+            return null;
+        }
     }
 }
