@@ -5,12 +5,18 @@ import com.example.live_video.dto.UserForm;
 import com.example.live_video.entity.User;
 import com.example.live_video.entity.UserType;
 import com.example.live_video.exception.MyException;
+import com.example.live_video.exception.SQLCoursenameConflictException;
 import com.example.live_video.service.UserService;
+import com.example.live_video.wrapper.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+
+@ResponseResult
 @RestController
 public class UserController {
 
@@ -50,5 +56,17 @@ public class UserController {
         }
     }
 
-
+    @PostMapping("/api/index")
+    public Object hello(@RequestParam String code) {
+        if (code.equals("HelloWorld!")) {
+            return new MyException("HelloWorld!");
+        }
+        if (code.equals("list")) {
+            ArrayList<User> arrayList = new ArrayList<>();
+            arrayList.add(new User("Hello", UserType.Student, "World", "Password"));
+            arrayList.add(new User());
+            return arrayList;
+        }
+        return new ExceptionMessage("OK");
+    }
 }
