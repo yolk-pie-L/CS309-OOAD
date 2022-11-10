@@ -36,6 +36,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new SQLMailConflictException();
         }
         // 如果不存在该用户，则顺利执行插入
+        System.out.println(user);
         int res = userMapper.insert(user);
         return res == 1;
     }
