@@ -5,8 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
+@NoArgsConstructor
 @TableName(value = "assignment")
 public class Assignment {
 
@@ -30,6 +32,9 @@ public class Assignment {
 
     @TableField(value = "total_grade", updateStrategy = FieldStrategy.NOT_EMPTY)
     private Integer totalGrade;
+
+    @TableField(exist = false)
+    private List<String> assignUrls;
 
     @TableField(value = "is_assignment", updateStrategy = FieldStrategy.NOT_EMPTY)
     private Boolean isAssignment;
@@ -64,7 +69,8 @@ public class Assignment {
      * @param isAssignment
      * @param description
      */
-    public Assignment(String assignmentName, String courseName, String teacherName, Timestamp deadline, Integer totalGrade, Boolean isAssignment, String description) {
+    public Assignment(String assignmentName, String courseName, String teacherName, Timestamp deadline, Integer totalGrade,
+                      Boolean isAssignment, String description, List<String> assignUrls) {
         this.assignmentName = assignmentName;
         this.courseName = courseName;
         this.teacherName = teacherName;
@@ -72,5 +78,6 @@ public class Assignment {
         this.totalGrade = totalGrade;
         this.isAssignment = isAssignment;
         this.description = description;
+        this.assignUrls = assignUrls;
     }
 }

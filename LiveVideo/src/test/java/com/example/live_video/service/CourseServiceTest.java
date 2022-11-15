@@ -42,12 +42,12 @@ public class CourseServiceTest {
         User teacher2 = new User("teacher2", UserType.Teacher, "teacher2@mail", "123456");
         userMapper.insert(teacher1);
         userMapper.insert(teacher2);
-        Course rc1_t1 = new Course("rc1_t1", teacher1.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "url");
-        Course rc2_t1 = new Course("rc2_t1", teacher1.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "url");
-        Course rc3_t1 = new Course("rc3_t1", teacher1.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "url");
-        Course ac1_t1 = new Course("ac_t1", teacher1.getId(), "test", 0L, "approve", CourseStatus.APPROVED, "url");
-        Course fc1_t1 = new Course("fc_t1", teacher1.getId(), "test", 0L, "fail", CourseStatus.FAILED, "url");
-        Course rc1_t2 = new Course("rc1_t1", teacher2.getId(), "test", 0L, "the same name as rc1_t1", CourseStatus.REVIEWING, "url");
+        Course rc1_t1 = new Course("rc1_t1", teacher1.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "assign_url");
+        Course rc2_t1 = new Course("rc2_t1", teacher1.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "assign_url");
+        Course rc3_t1 = new Course("rc3_t1", teacher1.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "assign_url");
+        Course ac1_t1 = new Course("ac_t1", teacher1.getId(), "test", 0L, "approve", CourseStatus.APPROVED, "assign_url");
+        Course fc1_t1 = new Course("fc_t1", teacher1.getId(), "test", 0L, "fail", CourseStatus.FAILED, "assign_url");
+        Course rc1_t2 = new Course("rc1_t1", teacher2.getId(), "test", 0L, "the same name as rc1_t1", CourseStatus.REVIEWING, "assign_url");
         courseMapper.insert(rc1_t1);
         courseMapper.insert(rc2_t1);
         courseMapper.insert(rc3_t1);
@@ -89,7 +89,7 @@ public class CourseServiceTest {
     void updateCourse() {
         User teacher = new User("teacher1", UserType.Teacher, "teacher1@mail", "123456");
         userMapper.insert(teacher);
-        Course course = new Course("course", teacher.getId(), "test", 0L, "HELLP", CourseStatus.APPROVED, "url");
+        Course course = new Course("course", teacher.getId(), "test", 0L, "HELLP", CourseStatus.APPROVED, "assign_url");
         Course course_copy = new Course("course", teacher.getUserName(), null, 0L, null, CourseStatus.FAILED, "NEWURL");
         courseMapper.insert(course);
         courseService.updateCourse(course_copy);
@@ -105,10 +105,10 @@ public class CourseServiceTest {
     void getReviewingCourses() {
         User teacher = new User("teacher1", UserType.Teacher, "teacher1@mail", "123456");
         userMapper.insert(teacher);
-        Course rc1 = new Course("rc1", teacher.getId(), "test", 0L, "HELLP", CourseStatus.REVIEWING, "url");
-        Course rc2 = new Course("rc2", teacher.getId(), "test", 0L, "HELLP", CourseStatus.REVIEWING, "url");
-        Course rc3 = new Course("rc3", teacher.getId(), "test", 0L, "HELLP", CourseStatus.REVIEWING, "url");
-        Course ac = new Course("ac", teacher.getId(), "test", 0L, "HELLP", CourseStatus.APPROVED, "url");
+        Course rc1 = new Course("rc1", teacher.getId(), "test", 0L, "HELLP", CourseStatus.REVIEWING, "assign_url");
+        Course rc2 = new Course("rc2", teacher.getId(), "test", 0L, "HELLP", CourseStatus.REVIEWING, "assign_url");
+        Course rc3 = new Course("rc3", teacher.getId(), "test", 0L, "HELLP", CourseStatus.REVIEWING, "assign_url");
+        Course ac = new Course("ac", teacher.getId(), "test", 0L, "HELLP", CourseStatus.APPROVED, "assign_url");
         courseMapper.insert(rc1);
         courseMapper.insert(rc2);
         courseMapper.insert(rc3);
@@ -174,7 +174,7 @@ public class CourseServiceTest {
     void removeCourse(){
         User teacher = new User("t", UserType.Teacher, "t@m", "123");
         userMapper.insert(teacher);
-        Course course = new Course("aa", teacher.getId(), "cs", 1L, "aab", CourseStatus.APPROVED, "url");
+        Course course = new Course("aa", teacher.getId(), "cs", 1L, "aab", CourseStatus.APPROVED, "assign_url");
         courseMapper.insert(course);
         Long count1 = courseMapper.selectCount(null);
         boolean flag = courseService.removeCourse(teacher.getUserName(), course.getCourseName());

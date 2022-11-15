@@ -10,4 +10,5 @@ public interface AssignmentService extends IService<Assignment> {
     public Object removeAssignment(Assignment assignment);
 
     public Object getAssignmentByCourseNameTeacherNameAssignName(String courseName, String teacherName, String assignName);
+
 }

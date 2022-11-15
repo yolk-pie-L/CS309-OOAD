@@ -10,8 +10,6 @@ import com.example.live_video.service.AssignmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class AssignmentServiceImpl extends ServiceImpl<AssignmentMapper, Assignment> implements AssignmentService {
 
@@ -32,17 +30,20 @@ public class AssignmentServiceImpl extends ServiceImpl<AssignmentMapper, Assignm
         if(existFlag){
             return new SQLAssignNameConflictException();
         }
-        return assignmentMapper.insert(assignment);
+        int flag = assignmentMapper.insert(assignment);
+        if(assignment.getAssignUrls() == null){
+            return flag;
+        }
+        for(String assign_url: assignment.getAssignUrls()){
+            assignmentMapper.insertAssignUrls(assignment.getId(), assign_url);
+        }
+        return flag == 1;
     }
 
     @Override
     public Object removeAssignment(Assignment assignment) {
         Long courseId = courseMapper.getCourseIdByTeacherNameCourseName(assignment.getTeacherName(), assignment.getCourseName());
-        assignment.setCourseId(courseId);
-        QueryWrapper<Assignment> assignQueryWrapper = new QueryWrapper<>();
-        assignQueryWrapper.eq("course_id", courseId);
-        assignQueryWrapper.eq("assignment_name", assignment.getAssignmentName());
-        return assignmentMapper.delete(assignQueryWrapper);
+        return assignmentMapper.deleteAssignment(courseId, assignment.getAssignmentName());
     }
 
     @Override
@@ -51,6 +52,8 @@ public class AssignmentServiceImpl extends ServiceImpl<AssignmentMapper, Assignm
         QueryWrapper<Assignment> assignQueryWrapper = new QueryWrapper<>();
         assignQueryWrapper.eq("course_id", courseId);
         assignQueryWrapper.eq("assignment_name", assignName);
-        return assignmentMapper.selectOne(assignQueryWrapper);
+        Assignment assignment = assignmentMapper.selectOne(assignQueryWrapper);
+        assignment.setAssignUrls(assignmentMapper.getAssignUrls(courseId, assignName));
+        return assignment;
     }
 }
