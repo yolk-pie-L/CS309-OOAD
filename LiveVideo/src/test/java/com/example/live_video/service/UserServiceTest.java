@@ -54,25 +54,9 @@ public class UserServiceTest {
         boolean res1 = false;
         boolean res2 = false;
         boolean res3 = false;
-        try {
-            res1 = userService.register(user1);
-        }catch (MyException e){
-            res1 = false;
-        }
-        try{
-            res2 = userService.register(user2);
-        }catch (MyException e){
-            if(e instanceof SQLUsernameConflictException)
-                res2 = true;
-        }
-        try{
-            res3 = userService.register(user3);
-        }catch (MyException e){
-            if(e instanceof SQLUsernameConflictException)
-                res3 = false;
-            else if(e instanceof SQLMailConflictException)
-                res3 = true;
-        }
+        res1 = (boolean) userService.register(user1);
+        res2 = userService.register(user2) instanceof SQLUsernameConflictException;
+        res3 = userService.register(user3) instanceof SQLMailConflictException;
         assert res1;
         assert res2;
         assert res3;
@@ -116,20 +100,12 @@ public class UserServiceTest {
         userMapper.insert(user1);
         long oldCount = userService.count();
         boolean removeFlag;
-        try {
-            removeFlag = userService.removeUser(user1.getUserName());
-        }catch (MyException e){
-            removeFlag = false;
-        }
+        removeFlag = (boolean) userService.removeUser(user1.getUserName());
         long newCount = userService.count();
         assert removeFlag;
         assert newCount == oldCount - 1;
         userMapper.deleteById(user1);
-        try{
-            removeFlag = userService.removeUser(user1.getUserName());
-        }catch (MyException e){
-            removeFlag = e instanceof SQLUserNotFoundException;
-        }
+        removeFlag = userService.removeUser(user1.getUserName()) instanceof SQLUserNotFoundException;
         assert removeFlag;
     }
 

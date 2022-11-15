@@ -1,7 +1,6 @@
 package com.example.live_video.service;
 
 import com.example.live_video.entity.*;
-import com.example.live_video.exception.MyException;
 import com.example.live_video.exception.SQLSectionnameConflictException;
 import com.example.live_video.mapper.CourseMapper;
 import com.example.live_video.mapper.SectionMapper;
@@ -17,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -87,18 +84,9 @@ class SectionServiceTest {
         User teacher = allUsers.get(0);
         Section section5 = new Section("s5", course2.getCourseName(), teacher.getUserName(), "url");
         boolean flag = false;
-        try {
-            flag = sectionService.createSection(section5);
-        }catch (MyException e){
-            flag = false;
-        }
+        flag = (boolean) sectionService.createSection(section5);
         assert flag;
-        try {
-            sectionService.createSection(section5);
-            flag = false;
-        }catch (MyException e){
-            flag = e instanceof SQLSectionnameConflictException;
-        }
+        flag = sectionService.createSection(section5) instanceof SQLSectionnameConflictException;
         assert flag;
         sectionMapper.deleteById(section5);
     }

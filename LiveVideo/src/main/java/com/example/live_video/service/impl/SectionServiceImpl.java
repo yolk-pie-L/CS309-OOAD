@@ -3,7 +3,6 @@ package com.example.live_video.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.live_video.entity.Section;
-import com.example.live_video.exception.MyException;
 import com.example.live_video.exception.SQLSectionnameConflictException;
 import com.example.live_video.mapper.CourseMapper;
 import com.example.live_video.mapper.SectionMapper;
@@ -23,14 +22,14 @@ public class SectionServiceImpl extends ServiceImpl<SectionMapper, Section> impl
     CourseMapper courseMapper;
 
     @Override
-    public Boolean createSection(Section section) throws MyException {
+    public Object createSection(Section section) {
         Long courseId = courseMapper.getCourseIdByTeacherNameCourseName(section.getTeacherName(), section.getCourseName());
         section.setCourseId(courseId);
         QueryWrapper<Section> sectionQueryWrapper = new QueryWrapper<>();
         sectionQueryWrapper.eq("section_name", section.getSectionName());
         sectionQueryWrapper.eq("course_id", section.getCourseId());
         if(sectionMapper.exists(sectionQueryWrapper)){
-            throw new SQLSectionnameConflictException();
+            return new SQLSectionnameConflictException();
         }
         return sectionMapper.insert(section) == 1;
     }

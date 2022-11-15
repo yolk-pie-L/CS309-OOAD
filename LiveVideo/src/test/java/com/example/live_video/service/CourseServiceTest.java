@@ -4,12 +4,9 @@ import com.example.live_video.entity.Course;
 import com.example.live_video.entity.CourseStatus;
 import com.example.live_video.entity.User;
 import com.example.live_video.entity.UserType;
-import com.example.live_video.exception.MyException;
 import com.example.live_video.exception.SQLCoursenameConflictException;
 import com.example.live_video.mapper.CourseMapper;
 import com.example.live_video.mapper.UserMapper;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -80,17 +77,9 @@ public class CourseServiceTest {
         User teacher = new User("teacher1", UserType.Teacher, "teacher1@mail", "123456");
         userMapper.insert(teacher);
         boolean flag = false;
-        try {
-            flag = courseService.createCourse(course);
-        } catch (MyException e) {
-            flag = e instanceof SQLCoursenameConflictException;
-        }
+        flag = (boolean) courseService.createCourse(course);
         assert flag;
-        try {
-            flag = courseService.createCourse(course);
-        } catch (MyException e) {
-            flag = e instanceof SQLCoursenameConflictException;
-        }
+        flag = courseService.createCourse(course) instanceof SQLCoursenameConflictException;
         assert flag;
         courseMapper.deleteById(course);
         userMapper.deleteById(teacher);
@@ -124,14 +113,11 @@ public class CourseServiceTest {
         courseMapper.insert(rc2);
         courseMapper.insert(rc3);
         courseMapper.insert(ac);
-        List<Course> courseList = courseService.getReviewingCourses(2, 1);
-        assert courseList.size() == 2;
+        List<Course> courseList = courseService.getReviewingCourses();
+        assert courseList.size() == 3;
         for (Course course : courseList) {
             assert course.getStatus() == CourseStatus.REVIEWING;
         }
-        courseList = courseService.getReviewingCourses(2, 2);
-        assert courseList.size() == 1;
-        assert courseList.get(0).getCourseName().equals("rc3");
         courseMapper.deleteById(rc1);
         courseMapper.deleteById(rc2);
         courseMapper.deleteById(rc3);
