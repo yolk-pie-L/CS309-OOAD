@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.live_video.entity.Course;
 import com.example.live_video.entity.CourseStatus;
-import com.example.live_video.exception.MyException;
 import com.example.live_video.exception.SQLCoursenameConflictException;
 import com.example.live_video.mapper.CourseMapper;
 import com.example.live_video.mapper.UserMapper;
@@ -29,10 +28,10 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
 
 
     @Override
-    public boolean createCourse(Course course) throws MyException {
+    public Object createCourse(Course course) {
         Boolean existsFlag = courseMapper.existCourse(course.getTeacherName(), course.getCourseName());
         if(existsFlag){
-            throw new SQLCoursenameConflictException();
+            return new SQLCoursenameConflictException();
         }
         // 查询teacher的id
         Long teacherId = userService.getUserIdByUsername(course.getTeacherName());
@@ -57,10 +56,10 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
     }
 
     @Override
-    public List<Course> getReviewingCourses(int recordsPerPage, int pageNum) {
-        int limit = recordsPerPage;
-        int offset = recordsPerPage * (pageNum - 1);
-        return courseMapper.getReviewingCourses(limit, offset);
+    public List<Course> getReviewingCourses() {
+        QueryWrapper<Course> courseQueryWrapper = new QueryWrapper<>();
+        courseQueryWrapper.eq("status", CourseStatus.REVIEWING);
+        return courseMapper.selectList(courseQueryWrapper);
     }
 
     @Override

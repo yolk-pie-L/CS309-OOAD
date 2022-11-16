@@ -12,15 +12,16 @@ public interface UserService extends IService<User> {
 
     /**
      * Register the user into database. If success, it will return true.
+     *
      * @param user
      * @return boolean
      * @throws MyException
      * @throws SQLUsernameConflictException If there's another user has the same name, it
-     * will throw SQLUsernameConflictException.
-     * @throws SQLMailConflictException If there's another user has the same mail, it will throw
-     * SQLMailConflictException
+     *                                      will throw SQLUsernameConflictException.
+     * @throws SQLMailConflictException     If there's another user has the same mail, it will throw
+     *                                      SQLMailConflictException
      */
-    public boolean register(User user) throws MyException;
+    public Object register(User user);
 
     /**
      * Return true if the user has the same password with the record in database
@@ -32,13 +33,12 @@ public interface UserService extends IService<User> {
     public boolean compareUserPassword(User user) throws MyException;
 
     /**
-     *
      * @param userName
      * @return
      * @throws MyException
      * @throws SQLUserNotFoundException
      */
-    public boolean removeUser(String userName) throws MyException;
+    public Object removeUser(String userName);
 
     /**
      * Get the id of the user in the database. If the user not in the database, it will return null

@@ -20,20 +20,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     UserMapper userMapper;
 
     @Override
-    public boolean register(User user) throws MyException {
+    public Object register(User user) {
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("username", user.getUserName());
         boolean existsFlag = userMapper.exists(userQueryWrapper);
         // 如果存在该用户名，则抛出异常
         if(existsFlag){
-            throw new SQLUsernameConflictException();
+            return new SQLUsernameConflictException();
         }
         userQueryWrapper.clear();
 
         userQueryWrapper.eq("mail", user.getMail());
         existsFlag = userMapper.exists(userQueryWrapper);
         if(existsFlag){
-            throw new SQLMailConflictException();
+            return new SQLMailConflictException();
         }
         // 如果不存在该用户，则顺利执行插入
         int res = userMapper.insert(user);
@@ -55,13 +55,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public boolean removeUser(String userName) throws SQLUserNotFoundException {
+    public Object removeUser(String userName) {
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("username", userName);
         User resUser = userMapper.selectOne(userQueryWrapper);
         // 如果不存在该用户，则抛出异常
         if(resUser == null){
-            throw new SQLUserNotFoundException();
+            return new SQLUserNotFoundException();
         }
         return userMapper.deleteById(resUser) == 1;
     }

@@ -1,4 +1,4 @@
-drop table user, course, assignment, administrator, section;
+drop table user, course, assignment, assign_urls, administrator, section;
 drop table announcement, danmu, comment, course_invitation;
 drop table user_login_log, user_payment_log;
 drop table stu_assign, stu_course, stu_section;
@@ -23,7 +23,7 @@ CREATE TABLE user
 CREATE TABLE course
 (
     id          int auto_increment primary key,
-    course_name  varchar(20)                              not null,
+    course_name varchar(20)                              not null,
     user_id     int                                      not null references user (id),
     tag         varchar(20),
     charge      bigint                                   not null,
@@ -38,15 +38,22 @@ CREATE TABLE course
 
 CREATE TABLE assignment
 (
-    id             int auto_increment primary key,
-    name           varchar(20) not null,
-    course_id      int         not null references course (id),
-    deadline       datetime,
-    total_grade    int,
-    assignment_url varchar(50),
+    id              int auto_increment primary key,
+    assignment_name varchar(20) not null,
+    course_id       int         not null references course (id),
+    deadline        timestamp,
+    total_grade     int,
     is_assignment   boolean     not null,
-    description    text,
-    CONSTRAINT unique (name, course_id)
+    description     text,
+    create_time     timestamp   not null default CURRENT_TIMESTAMP,
+    update_time     timestamp   null     default null on update CURRENT_TIMESTAMP,
+    CONSTRAINT unique (assignment_name, course_id)
+);
+
+CREATE TABLE assign_urls
+(
+    assign_id int         not null references assignment (id),
+    assign_url       varchar(50) not null
 );
 
 CREATE TABLE administrator

@@ -20,7 +20,7 @@ public class UserMapperTest {
 
     @Test
     public void testSelectAll(){
-        User user = new User("uuu", UserType.Student, "120@", "12", "url", 1L);
+        User user = new User("uuu", UserType.Student, "120@", "12", "assign_url", 1L);
         userMapper.insert(user);
         List<User> userList = userMapper.selectList(null);
         userList.forEach(System.out::println);
