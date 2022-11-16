@@ -59,4 +59,12 @@ public interface UserService extends IService<User> {
     public Long getUserAccountByUsername(String userName);
 
     public Boolean updateUser(User user);
+
+    /**
+     *
+     * @param user
+     * @return the type of user: Student, Teacher, Administrator. Return null if no user exists.
+     * @throws MyException
+     */
+    public String login(User user) throws MyException;
 }

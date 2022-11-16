@@ -106,4 +106,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userQueryWrapper.eq("username", user.getUserName());
         return userMapper.update(user, userQueryWrapper) == 1;
     }
+
+    @Override
+    public String login(User user) throws MyException {
+        if (compareUserPassword(user)) {
+            return getUserTypeByUsername(user.getUserName()).name();
+        } else {
+            return null;
+        }
+    }
 }
