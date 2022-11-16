@@ -67,6 +67,6 @@ public class UserController {
             arrayList.add(new User());
             return arrayList;
         }
-        return new ExceptionMessage("OK");
+        return "OK";
     }
 }

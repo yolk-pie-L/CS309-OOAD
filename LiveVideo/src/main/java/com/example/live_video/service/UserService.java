@@ -63,4 +63,6 @@ public interface UserService extends IService<User> {
      * @throws MyException
      */
     public String login(User user) throws MyException;
+
+    public Boolean updateUserInfo(String userName, String password, String photoUrl);
 }

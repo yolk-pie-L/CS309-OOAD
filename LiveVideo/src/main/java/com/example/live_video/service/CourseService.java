@@ -56,4 +56,6 @@ public interface CourseService extends IService<Course> {
     public List<Course> getFailedCoursesOfTeacher(int recordsPerPage, int pageNum, String teacherName);
 
     public List<Course> getReviewingCoursesOfTeacher(int recordsPerPage, int pageNum, String teacherName);
+
+    List<Course> getAttendedCourseOfUser(String username);
 }

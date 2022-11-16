@@ -90,4 +90,10 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
         int offset = recordsPerPage * (pageNum - 1);
         return courseMapper.getReviewingCoursesOfTeacher(limit, offset, teacherName);
     }
+
+    @Override
+    public List<Course> getAttendedCourseOfUser(String username) {
+        //TODO: complete it
+        return null;
+    }
 }
