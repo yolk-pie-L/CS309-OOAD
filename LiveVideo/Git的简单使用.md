@@ -43,14 +43,14 @@ git init
 
 ## Git合并分支
 
-```
+```bash
 > git checkout master   # 切换到master分支
 > git merge dev         # 将dev分支合并到master上
 ```
 
 ## Git删除文件
 
-```
+```bash
 > git rm readme.md
 ```
 

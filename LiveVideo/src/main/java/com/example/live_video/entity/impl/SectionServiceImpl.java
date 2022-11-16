@@ -1,4 +1,4 @@
-package com.example.live_video.service.impl;
+package com.example.live_video.entity.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

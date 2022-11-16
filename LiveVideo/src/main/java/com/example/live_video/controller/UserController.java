@@ -4,12 +4,19 @@ import com.example.live_video.dto.ExceptionMessage;
 import com.example.live_video.dto.UserForm;
 import com.example.live_video.entity.User;
 import com.example.live_video.entity.UserType;
+import com.example.live_video.exception.MyException;
+import com.example.live_video.exception.SQLCoursenameConflictException;
 import com.example.live_video.service.UserService;
+import com.example.live_video.wrapper.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+
+@ResponseResult
 @RestController
 public class UserController {
 
@@ -25,7 +32,7 @@ public class UserController {
         userService.register(user);
     }
 
-    @PostMapping("/register")
+    @PostMapping("/api/register")
     public ExceptionMessage registerUser(UserForm userForm) {
         userService.register(userForm.convertToUser());
         return new ExceptionMessage("OK");
