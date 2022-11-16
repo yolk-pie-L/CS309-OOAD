@@ -140,11 +140,11 @@ CREATE TABLE user_payment_log
 CREATE TABLE stu_assign
 (
     user_id int not null,
-    ass_id  int not null,
+    assign_id  int not null,
     grade   int,
-    ass_url varchar(50),
+    assign_url varchar(50),
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (ass_id) REFERENCES assignment (id) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (assign_id) REFERENCES assignment (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE stu_course

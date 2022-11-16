@@ -56,4 +56,15 @@ public class AssignmentServiceImpl extends ServiceImpl<AssignmentMapper, Assignm
         assignment.setAssignUrls(assignmentMapper.getAssignUrls(courseId, assignName));
         return assignment;
     }
+
+    @Override
+    public Long getAssignmentIdByCourseNameTeacherNameAssignName(String courseName, String teacherName, String assignName) {
+        Long courseId = courseMapper.getCourseIdByTeacherNameCourseName(teacherName, courseName);
+        QueryWrapper<Assignment> assignQueryWrapper = new QueryWrapper<>();
+        assignQueryWrapper.eq("course_id", courseId);
+        assignQueryWrapper.eq("assignment_name", assignName);
+        assignQueryWrapper.select("id");
+        Assignment assignment = assignmentMapper.selectOne(assignQueryWrapper);
+        return assignment.getId();
+    }
 }

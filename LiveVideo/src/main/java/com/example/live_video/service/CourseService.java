@@ -29,8 +29,6 @@ public interface CourseService extends IService<Course> {
 
     public boolean removeCourse(String teacherName, String courseName);
 
-//    public Boolean getCourseIdByCourseNameTeacherName(String courseName, String teacherName);
-
     /**
      * Get the courses that has status REVIEWING.
      *

@@ -90,4 +90,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User resUser = userMapper.selectOne(userQueryWrapper);
         return resUser.getUserType();
     }
+
+    @Override
+    public Long getUserAccountByUsername(String userName) {
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("username", userName);
+        userQueryWrapper.select("account");
+        User resUser = userMapper.selectOne(userQueryWrapper);
+        return resUser.getAccount();
+    }
+
+    @Override
+    public Boolean updateUser(User user) {
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("username", user.getUserName());
+        return userMapper.update(user, userQueryWrapper) == 1;
+    }
 }

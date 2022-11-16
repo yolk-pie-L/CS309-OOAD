@@ -18,14 +18,18 @@ public class User {
     @TableField(value = "username")
     private String userName;
 
-    @TableField(value = "usertype")
+    @TableField(value = "usertype", updateStrategy = FieldStrategy.NOT_EMPTY)
     private UserType userType;
 
+    @TableField(updateStrategy = FieldStrategy.NOT_EMPTY)
     private String mail;
+    @TableField(updateStrategy = FieldStrategy.NOT_EMPTY)
     private String password;
 
-    @TableField(value = "photo_url")
+    @TableField(value = "photo_url", updateStrategy = FieldStrategy.NOT_EMPTY)
     private String photoUrl;
+
+    @TableField(updateStrategy = FieldStrategy.NOT_EMPTY)
     private Long account;
 
     @TableField(value = "create_time", insertStrategy = FieldStrategy.NOT_EMPTY)

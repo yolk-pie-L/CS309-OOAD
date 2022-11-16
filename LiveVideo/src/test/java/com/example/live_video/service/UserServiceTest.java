@@ -1,5 +1,6 @@
 package com.example.live_video.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.live_video.entity.User;
 import com.example.live_video.entity.UserType;
 import com.example.live_video.exception.MyException;
@@ -127,5 +128,32 @@ public class UserServiceTest {
             assert Objects.equals(id, user.getId());
         }
         tearDown();
+    }
+
+    @Test
+    void getUserAccountByUsername() {
+        User user1 = new User("user1", UserType.Administrator, "user1@mail.com", "123456");
+        user1.setAccount(10L);
+        userMapper.insert(user1);
+        Long account = userService.getUserAccountByUsername(user1.getUserName());
+        assert account.equals(10L);
+        userMapper.deleteById(user1);
+    }
+
+    @Test
+    void updateUser() {
+        User user1 = new User("user1", UserType.Administrator, "user1@mail.com", "123456");
+        user1.setAccount(10L);
+        userMapper.insert(user1);
+        User user2 = new User("user1", null, null, "12336", "url", 1L);
+        userService.updateUser(user2);
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("username", user2.getUserName());
+        User res = userMapper.selectOne(userQueryWrapper);
+        System.out.println(res);
+        assert res.getMail().equals(user1.getMail());
+        assert res.getUserType().equals(user1.getUserType());
+        assert res.getPhotoUrl().equals(user2.getPhotoUrl());
+        assert res.getAccount().equals(user2.getAccount());
     }
 }

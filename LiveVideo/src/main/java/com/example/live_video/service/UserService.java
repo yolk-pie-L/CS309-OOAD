@@ -55,4 +55,8 @@ public interface UserService extends IService<User> {
     public User getUserByUsername(String userName);
     
     public UserType getUserTypeByUsername(String userName);
+
+    public Long getUserAccountByUsername(String userName);
+
+    public Boolean updateUser(User user);
 }
