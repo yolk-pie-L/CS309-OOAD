@@ -34,7 +34,7 @@ CREATE TABLE course
     update_time timestamp                                null     default null on update CURRENT_TIMESTAMP,
     is_delete   int                                               default 0,
     CONSTRAINT unique (course_name, teacher_id, is_delete),
-    FOREIGN KEY (teacher_id) REFERENCES user (id)
+    FOREIGN KEY (teacher_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE assignment
@@ -49,14 +49,14 @@ CREATE TABLE assignment
     create_time     timestamp   not null default CURRENT_TIMESTAMP,
     update_time     timestamp   null     default null on update CURRENT_TIMESTAMP,
     CONSTRAINT unique (assignment_name, course_id),
-    FOREIGN KEY (course_id) REFERENCES course (id)
+    FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE assign_urls
 (
     assign_id  int         not null,
     assign_url varchar(50) not null,
-    FOREIGN KEY (assign_id) REFERENCES assignment(id)
+    FOREIGN KEY (assign_id) REFERENCES assignment (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE administrator
@@ -64,7 +64,7 @@ CREATE TABLE administrator
     user_id   int not null,
     canAdd    boolean default false,
     canRemove boolean default false,
-    FOREIGN KEY (user_id) REFERENCES user(id)
+    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE section
@@ -77,7 +77,7 @@ CREATE TABLE section
     update_time  timestamp   null     default null on update CURRENT_TIMESTAMP,
     is_delete    int                  default 0,
     CONSTRAINT unique (section_name, course_id, is_delete),
-    FOREIGN KEY (course_id) REFERENCES course(id)
+    FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE announcement
@@ -86,7 +86,7 @@ CREATE TABLE announcement
     course_id int      not null,
     date      datetime not null,
     context   text     not null,
-    FOREIGN KEY (course_id) REFERENCES course(id)
+    FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE danmu
@@ -96,7 +96,7 @@ CREATE TABLE danmu
     section_id int  not null,
     color      char default 'w',
     send_time  int  not null,
-    FOREIGN KEY (section_id) REFERENCES section(id)
+    FOREIGN KEY (section_id) REFERENCES section (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE comment
@@ -106,17 +106,17 @@ CREATE TABLE comment
     reply_id   int      not null references comment (id),
     context    text     not null,
     user_id    int      not null,
-    section_id int ,
+    section_id int,
     date       datetime not null,
-    FOREIGN KEY(user_id) REFERENCES user(id),
-    FOREIGN KEY (section_id) REFERENCES section(id)
+    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (section_id) REFERENCES section (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE course_invitation
 (
     course_id       int      not null,
     invitation_code char(20) not null unique,
-    FOREIGN KEY (course_id) REFERENCES course(id)
+    FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE user_login_log
@@ -125,7 +125,7 @@ CREATE TABLE user_login_log
     login_time   datetime    not null,
     session_id   varchar(25) not null,
     login_status char default 'y',
-    FOREIGN KEY (user_id) REFERENCES user(id)
+    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE user_payment_log
@@ -133,8 +133,8 @@ CREATE TABLE user_payment_log
     user_id   int      not null,
     pay_time  datetime not null,
     course_id int      not null,
-    FOREIGN KEY (user_id) REFERENCES user(id),
-    FOREIGN KEY (course_id) REFERENCES course(id)
+    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE stu_assign
@@ -143,8 +143,8 @@ CREATE TABLE stu_assign
     ass_id  int not null,
     grade   int,
     ass_url varchar(50),
-    FOREIGN KEY (user_id) REFERENCES user(id),
-    FOREIGN KEY (ass_id) REFERENCES assignment(id)
+    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (ass_id) REFERENCES assignment (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE stu_course
@@ -152,8 +152,8 @@ CREATE TABLE stu_course
     user_id   int not null,
     course_id int not null,
     star      int check (star between 0 and 5),
-    FOREIGN KEY (user_id) REFERENCES user(id),
-    FOREIGN KEY (course_id) REFERENCES course(id)
+    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE stu_section
@@ -161,6 +161,6 @@ CREATE TABLE stu_section
     user_id    int not null,
     section_id int not null,
     rate       int not null default 0,
-    FOREIGN KEY (user_id) REFERENCES user(id),
-    FOREIGN KEY (section_id) REFERENCES section(id)
+    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (section_id) REFERENCES section (id) ON DELETE CASCADE ON UPDATE CASCADE
 );

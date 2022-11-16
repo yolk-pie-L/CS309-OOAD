@@ -1,13 +1,14 @@
 package com.example.live_video.service;
 
 import com.example.live_video.entity.Course;
-import com.example.live_video.entity.User;
+
+import java.util.List;
 
 public interface StudentService {
 
     public Boolean enrollCourse(String teacherName, String courseName, String studentName);
 
-    public void exitCourse(Course course, User student);
+    public Boolean exitCourse(String teacherName, String courseName, String studentName);
 
-    public void getEnrolledCourse(String studentName);
+    public List<Course> getEnrolledCourse(String studentName);
 }
