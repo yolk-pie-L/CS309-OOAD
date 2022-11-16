@@ -18,7 +18,7 @@ public class Course {
     @TableField(value = "course_name")
     private String courseName;
 
-    @TableField(value = "user_id")
+    @TableField(value = "teacher_id")
     private Long teacherId;
 
     @TableField(exist = false)

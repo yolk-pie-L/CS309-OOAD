@@ -11,7 +11,6 @@ import com.example.live_video.service.CourseService;
 import com.example.live_video.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -46,7 +45,7 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
         course.setTeacherId(teacherId);
         QueryWrapper<Course> courseQueryWrapper = new QueryWrapper<>();
         courseQueryWrapper.eq("course_name", course.getCourseName());
-        courseQueryWrapper.eq("user_id", teacherId);
+        courseQueryWrapper.eq("teacher_id", teacherId);
         return super.update(course, courseQueryWrapper);
     }
 
@@ -89,4 +88,10 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
         int offset = recordsPerPage * (pageNum - 1);
         return courseMapper.getReviewingCoursesOfTeacher(limit, offset, teacherName);
     }
+
+    @Override
+    public Course getCourseByTeacherNameCourseName(String teacherName, String courseName) {
+        return courseMapper.getCourseByTeacherNameCourseName(teacherName, courseName);
+    }
+
 }

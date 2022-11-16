@@ -70,7 +70,6 @@ public class CourseServiceTest {
     }
 
 
-
     @Test
     void createCourse() {
         Course course = new Course("course", "teacher1", "test", 0L, null, null, null);
@@ -181,5 +180,14 @@ public class CourseServiceTest {
         assert flag;
         Long count2 = courseMapper.selectCount(null);
         assert count1 == count2 + 1;
+    }
+
+    @Test
+    void getCourseByTeacherNameCourseName() {
+        setUp();
+        Course course = courseService.getCourseByTeacherNameCourseName(allUsers.get(0).getUserName(), allCourses.get(0).getCourseName());
+        assert course.getCourseName().equals("rc1_t1");
+        System.out.println(course);
+        tearDown();
     }
 }
