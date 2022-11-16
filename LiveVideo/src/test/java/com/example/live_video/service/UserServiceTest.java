@@ -3,7 +3,6 @@ package com.example.live_video.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.live_video.entity.User;
 import com.example.live_video.entity.UserType;
-import com.example.live_video.exception.MyException;
 import com.example.live_video.exception.SQLMailConflictException;
 import com.example.live_video.exception.SQLUserNotFoundException;
 import com.example.live_video.exception.SQLUsernameConflictException;
@@ -71,26 +70,13 @@ public class UserServiceTest {
         User user3 = new User("user1", UserType.Administrator, "user1@mail.com", "password");
         userMapper.insert(user1);
         boolean res1;
-        boolean res2;
+        Object res2;
         boolean res3;
-        try {
-            res1 = userService.compareUserPassword(user1);
-        }catch (MyException e){
-            res1 = false;
-        }
-        try{
-            userService.compareUserPassword(user2);
-            res2 = false;
-        }catch (MyException e){
-            res2 = e instanceof SQLUserNotFoundException;
-        }
-        try{
-            res3 = userService.compareUserPassword(user3);
-        }catch (MyException e){
-            res3 = true;
-        }
+        res1 = (boolean) userService.compareUserPassword(user1);
+        res2 = userService.compareUserPassword(user2);
+        res3 = (boolean) userService.compareUserPassword(user3);
         assert res1;
-        assert res2;
+        assert res2 instanceof SQLUserNotFoundException;
         assert !res3;
         userMapper.deleteById(user1);
     }

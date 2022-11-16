@@ -42,14 +42,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 
     @Override
-    public boolean compareUserPassword(User user) throws MyException {
+    public Object compareUserPassword(User user) {
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("username", user.getUserName());
         userQueryWrapper.select("password");
         User resUser = userMapper.selectOne(userQueryWrapper);
         // 如果不存在该用户，则抛出异常
         if(resUser == null){
-            throw new SQLUserNotFoundException();
+            return new SQLUserNotFoundException();
         }
         return resUser.getPassword().equals(user.getPassword());
     }
@@ -109,7 +109,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public String login(User user) throws MyException {
-        if (compareUserPassword(user)) {
+        if ((boolean) compareUserPassword(user)) {
             return getUserTypeByUsername(user.getUserName()).name();
         } else {
             return null;

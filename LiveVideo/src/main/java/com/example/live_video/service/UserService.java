@@ -25,12 +25,13 @@ public interface UserService extends IService<User> {
 
     /**
      * Return true if the user has the same password with the record in database
+     *
      * @param user
      * @return boolean
      * @throws MyException
      * @throws SQLUserNotFoundException
      */
-    public boolean compareUserPassword(User user) throws MyException;
+    public Object compareUserPassword(User user);
 
     /**
      * @param userName
