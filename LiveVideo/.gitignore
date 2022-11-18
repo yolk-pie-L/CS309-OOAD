@@ -37,4 +37,6 @@ build/
 vue/package.json
 
 ###配置###
-LiveVideo/src/main/resources/application.yml
+/src/main/resources/application.yml
+.gitignore
+/.run/
