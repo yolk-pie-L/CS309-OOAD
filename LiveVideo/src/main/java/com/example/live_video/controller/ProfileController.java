@@ -9,6 +9,7 @@ import com.example.live_video.service.StudentService;
 import com.example.live_video.service.UserService;
 import com.example.live_video.wrapper.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,6 +51,8 @@ public class ProfileController {
                                                @RequestParam String photoUrl) throws Exception{
         User user = new User();
         user.setUserName(userName);
+        // fixme: 可能需要用newPassword加密后重置?
+        String encodedPassword = DigestUtils.md5DigestAsHex(newPassword.getBytes());
         user.setPassword(password);
         user.setPhotoUrl(photoUrl);
         Object result = userService.compareUserPassword(user);
