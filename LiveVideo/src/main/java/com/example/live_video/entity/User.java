@@ -3,7 +3,7 @@ package com.example.live_video.entity;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
+import org.springframework.util.DigestUtils;
 
 import java.sql.Timestamp;
 
@@ -46,7 +46,7 @@ public class User {
         this.userName = userName;
         this.userType = userType;
         this.mail = mail;
-        this.password = password;
+        this.password = DigestUtils.md5DigestAsHex(password.getBytes());
         this.photoUrl = photoUrl;
         this.account = account;
     }
