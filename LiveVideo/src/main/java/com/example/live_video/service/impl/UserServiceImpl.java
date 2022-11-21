@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.live_video.entity.User;
 import com.example.live_video.entity.UserType;
-import com.example.live_video.exception.MyException;
 import com.example.live_video.exception.SQLMailConflictException;
 import com.example.live_video.exception.SQLUserNotFoundException;
 import com.example.live_video.exception.SQLUsernameConflictException;
@@ -12,6 +11,8 @@ import com.example.live_video.mapper.UserMapper;
 import com.example.live_video.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
@@ -26,6 +27,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         boolean existsFlag = userMapper.exists(userQueryWrapper);
         // 如果存在该用户名，则抛出异常
         if(existsFlag){
+//            bindingResult.addError(new ObjectError("SQLException", "User not found in the database"));
             return new SQLUsernameConflictException();
         }
         userQueryWrapper.clear();
@@ -108,7 +110,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public String login(User user) throws MyException {
+    public String login(User user) {
         if ((boolean) compareUserPassword(user)) {
             return getUserTypeByUsername(user.getUserName()).name();
         } else {

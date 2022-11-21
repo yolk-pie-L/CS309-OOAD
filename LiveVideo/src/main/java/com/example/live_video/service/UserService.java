@@ -7,6 +7,7 @@ import com.example.live_video.exception.MyException;
 import com.example.live_video.exception.SQLMailConflictException;
 import com.example.live_video.exception.SQLUsernameConflictException;
 import com.example.live_video.exception.SQLUserNotFoundException;
+import org.springframework.validation.BindingResult;
 
 public interface UserService extends IService<User> {
 
@@ -54,7 +55,7 @@ public interface UserService extends IService<User> {
      * @return User instance
      */
     public User getUserByUsername(String userName);
-    
+
     public UserType getUserTypeByUsername(String userName);
 
     public Long getUserAccountByUsername(String userName);
