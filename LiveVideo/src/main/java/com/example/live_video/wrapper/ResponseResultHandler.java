@@ -34,6 +34,7 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object o, MethodParameter methodParameter, MediaType mediaType, Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
         //根据controller返回的响应类型 进行返回结果包装。controller可返回各种类型的exception或各类型数据 然后此处控制返回不同的响应：code、msg都不同
+        System.out.println("Before Body Write"+o);
         if (o instanceof MyException) {
             return Response.fail(((MyException) o).getMessage());
             //如果自身产生异常。LinkedHashMap为http异常
@@ -45,4 +46,6 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
             return Response.success(o);
         }
     }
+
+
 }

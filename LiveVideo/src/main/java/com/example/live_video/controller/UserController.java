@@ -11,12 +11,12 @@ import com.example.live_video.service.UserService;
 import com.example.live_video.wrapper.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.MapBindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
 
 @ResponseResult
@@ -36,37 +36,26 @@ public class UserController {
     }
 
     @PostMapping("/api/register")
-    public Object registerUser(@Valid UserForm userForm, BindingResult bindingResult) {
-        JSONObject result = new JSONObject();
+    public Object registerUser(@Valid UserForm userForm, BindingResult bindingResult) throws Exception {
         if (bindingResult.hasErrors()) {
             List<ObjectError> list = bindingResult.getAllErrors();
-            return new MyException(list.get(0).getDefaultMessage());
-        } else {
-            Object obj = userService.register(userForm.convertToUser());
-            if (obj instanceof MyException) {
-                result.put("msg", ((MyException) obj).getMessage());
-            }
+            throw new MyException(list.get(0).getDefaultMessage());
         }
-        return result;
+        return userService.register(userForm.convertToUser());
     }
 
     @PostMapping("/api/login")
-    public ExceptionMessage loginUser(UserForm userForm) {
-        try {
-            String type = userService.login(userForm.convertToUser());
-            return new ExceptionMessage("OK", type, null);
-        } catch (MyException e) {
-            return new ExceptionMessage("error", e.getMessage());
-        }
+    public Object loginUser(UserForm userForm) throws Exception {
+        return userService.login(userForm.convertToUser());
     }
 
     @PostMapping("/api/index")
-    public Object hello(@Valid ExampleForm form, BindingResult bindingResult) {
+    public Object hello(@Valid ExampleForm form, BindingResult bindingResult) throws Exception {
         if (form.getPassword().equals("helloworld"))
             bindingResult.addError(new ObjectError("This is a name", "This is default massage."));
         if (bindingResult.hasErrors()) {
             List<ObjectError> list = bindingResult.getAllErrors();
-            return new MyException(list.get(0).getDefaultMessage());
+            throw new MyException(list.get(0).getDefaultMessage());
         }
         return form;
     }
