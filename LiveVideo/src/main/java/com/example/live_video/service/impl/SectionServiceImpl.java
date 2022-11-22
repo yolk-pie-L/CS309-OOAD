@@ -22,14 +22,14 @@ public class SectionServiceImpl extends ServiceImpl<SectionMapper, Section> impl
     CourseMapper courseMapper;
 
     @Override
-    public Object createSection(Section section) {
+    public Boolean createSection(Section section) throws SQLSectionnameConflictException {
         Long courseId = courseMapper.getCourseIdByTeacherNameCourseName(section.getTeacherName(), section.getCourseName());
         section.setCourseId(courseId);
         QueryWrapper<Section> sectionQueryWrapper = new QueryWrapper<>();
         sectionQueryWrapper.eq("section_name", section.getSectionName());
         sectionQueryWrapper.eq("course_id", section.getCourseId());
         if(sectionMapper.exists(sectionQueryWrapper)){
-            return new SQLSectionnameConflictException();
+            throw new SQLSectionnameConflictException();
         }
         return sectionMapper.insert(section) == 1;
     }

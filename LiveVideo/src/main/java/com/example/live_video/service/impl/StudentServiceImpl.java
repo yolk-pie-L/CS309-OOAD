@@ -36,7 +36,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
-    public Object enrollCourse(String teacherName, String courseName, String studentName) {
+    public Boolean enrollCourse(String teacherName, String courseName, String studentName) throws EnrollCourseException {
         Long courseId = courseMapper.getCourseIdByTeacherNameCourseName(teacherName, courseName);
         Long studentId = userService.getUserIdByUsername(studentName);
         Long courseCharge = courseMapper.getCourseChargeByTeacherNameCourseName(teacherName, courseName);
@@ -48,7 +48,7 @@ public class StudentServiceImpl implements StudentService {
             studentMapper.enrollCourse(studentId, courseId);
             return true;
         }
-        return new EnrollCourseException("student account not enough");
+        throw new EnrollCourseException("student account not enough");
     }
 
     @Override

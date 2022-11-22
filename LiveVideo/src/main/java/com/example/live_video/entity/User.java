@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.util.DigestUtils;
+import org.springframework.util.StringUtils;
 
 import java.sql.Timestamp;
 
@@ -46,12 +47,24 @@ public class User {
         this.userName = userName;
         this.userType = userType;
         this.mail = mail;
-        this.password = DigestUtils.md5DigestAsHex(password.getBytes());
+        if(StringUtils.hasText(password)) {
+            this.password = DigestUtils.md5DigestAsHex(password.getBytes());
+        }else {
+            this.password = password;
+        }
         this.photoUrl = photoUrl;
         this.account = account;
     }
 
     public User(String userName, UserType userType, String mail, String password) {
         this(userName, userType, mail, password, null, 0L);
+    }
+
+    public void setPassword(String password) {
+        if(StringUtils.hasText(password)) {
+            this.password = DigestUtils.md5DigestAsHex(password.getBytes());
+        }else {
+            this.password = password;
+        }
     }
 }

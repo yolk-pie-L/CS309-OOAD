@@ -71,14 +71,19 @@ public class CourseServiceTest {
 
 
     @Test
-    void createCourse() {
+    void createCourse() throws SQLCoursenameConflictException {
         Course course = new Course("course", "teacher1", "test", 0L, null, null, null);
         User teacher = new User("teacher1", UserType.Teacher, "teacher1@mail", "123456");
         userMapper.insert(teacher);
         boolean flag = false;
-        flag = (boolean) courseService.createCourse(course);
+        flag = courseService.createCourse(course);
         assert flag;
-        flag = courseService.createCourse(course) instanceof SQLCoursenameConflictException;
+        flag = false;
+        try {
+            courseService.createCourse(course);
+        }catch (SQLCoursenameConflictException e){
+            flag = true;
+        }
         assert flag;
         courseMapper.deleteById(course);
         userMapper.deleteById(teacher);

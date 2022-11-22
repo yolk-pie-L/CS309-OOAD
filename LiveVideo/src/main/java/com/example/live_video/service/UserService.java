@@ -7,7 +7,6 @@ import com.example.live_video.exception.MyException;
 import com.example.live_video.exception.SQLMailConflictException;
 import com.example.live_video.exception.SQLUsernameConflictException;
 import com.example.live_video.exception.SQLUserNotFoundException;
-import org.springframework.validation.BindingResult;
 
 public interface UserService extends IService<User> {
 
@@ -22,7 +21,7 @@ public interface UserService extends IService<User> {
      * @throws SQLMailConflictException     If there's another user has the same mail, it will throw
      *                                      SQLMailConflictException
      */
-    public Object register(User user);
+    public Boolean register(User user) throws MyException;
 
     /**
      * Return true if the user has the same password with the record in database
@@ -32,7 +31,7 @@ public interface UserService extends IService<User> {
      * @throws MyException
      * @throws SQLUserNotFoundException
      */
-    public Object compareUserPassword(User user);
+    public Boolean compareUserPassword(User user) throws SQLUserNotFoundException;
 
     /**
      * @param userName
@@ -40,7 +39,7 @@ public interface UserService extends IService<User> {
      * @throws MyException
      * @throws SQLUserNotFoundException
      */
-    public Object removeUser(String userName);
+    public Boolean removeUser(String userName) throws SQLUserNotFoundException;
 
     /**
      * Get the id of the user in the database. If the user not in the database, it will return null
