@@ -1,0 +1,221 @@
+{
+  "HomePage": {
+    "GetAllSuccessCourseByTeacher": {
+      "Method": "GET",
+      "Path": "~/api/course/success",
+      "InputForm": {
+        "recordsPerPage": "12",
+        "pageNum": "11451"
+      },
+      "OutputForm": {
+        "courseList": [
+          {
+            "courseName": "course",
+            "teacherName": "teacher",
+            "introduction": "intro",
+            "coursePicture": "url",
+            "privateKeyUrl": "ababa"
+          },
+          {
+            "courseName": "course",
+            "teacherName": "teacher",
+            "introduction": "intro",
+            "coursePicture": "url",
+            "privateKeyUrl": "ababa"
+          }
+        ]
+      }
+    },
+    "GetCoursesByCourseName": {
+      "Method": "GET",
+      "Path": "~/api/course/success?courseName={courseName}",
+      "InputForm": {
+        "recordsPerPage": "12",
+        "pageNum": "11451"
+      },
+      "OutputForm": {
+        "result": [
+          {
+            "courseName": "course",
+            "teacherName": "teacher",
+            "introduction": "intro",
+            "coursePicture": "url"
+          },
+          {
+            "courseName": "course",
+            "teacherName": "teacher",
+            "introduction": "intro",
+            "coursePicture": "url"
+          }
+        ]
+      }
+    }
+  },
+  "LoginPage": {
+    "Login": {
+      "Method": "POST",
+      "Path": "~/api/login",
+      "InputForm": {
+        "userName": "checker",
+        "password": "123456",
+        "remember": "remember",
+        "code": "code",
+        "codeToken": "code"
+      },
+      "OutputForm": {
+        "userType": "Student"
+      },
+      "ErrorOutput": {
+        "result": "This is an error"
+      }
+    }
+  },
+  "SignupPage": {
+    "Register": {
+      "Method": "POST",
+      "Path": "~/api/register",
+      "InputForm": {
+        "userName": "checker",
+        "password": "123456",
+        "repeatPassword": "123456",
+        "userType": "Student",
+        "mail": "example@xx.com",
+        "code": "code",
+        "codeToken": "code"
+      },
+      "OutputForm": {
+        "userType": "Student"
+      },
+      "ErrorOutput": {
+        "result": "This is an error"
+      }
+    }
+  },
+  "ProfilePage": {
+    "queryUserInfo": {
+      "Method": "GET",
+      "Path": "~/api/user?userName={checker}",
+      "InputForm": {
+      },
+      "OutputForm": {
+        "userName": "checker",
+        "userType": "Student",
+        "mail": "example@xx.com",
+        "photoUrl": "url",
+        "account": 0
+      }
+    },
+    "queryAllNoticeByUserNameAndCourseName": {
+      "Method": "GET",
+      "Path": "~/api/notice/all?userName={userName}&courseName={courseName}",
+      "OutputForm": {
+        "result": [
+          {
+            "title": "Da Jia Hao",
+            "date": "2022-11-10",
+            "context": "Hao Ye"
+          },
+          {
+
+          }
+        ]
+      }
+    },
+    "modifyUserInfo": {
+      "Method": "POST",
+      "Path": "~/api/user",
+      "InputForm": {
+        "userName": "checker",
+        "userType": "Student",
+        "mail": "example@xx.com",
+        "photoUrl": "url"
+      },
+      "OutputForm": {}
+    },
+    "queryAllCourseByUserName": {
+      "Method": "GET",
+      "Path": "~/api/course/all?userName={userName}",
+      "OutputForm": {
+        "result": [
+          {
+            "courseName": "course",
+            "privateKeyUrl": "ababa",
+            "status": "OK"
+          },
+          {
+
+          }
+        ]
+      }
+    },
+    "modifyCourseOfTeacher": {
+      "Method": "POST",
+      "Path": "~/api/course",
+      "InputForm": {
+        "courseName": "",
+        "teacherName": "",
+        "tag": "",
+        "charge": "",
+        "description": "",
+        "pictureUrl": ""
+      },
+      "OutputForm": {
+
+      }
+    },
+    "queryCourseOfAdministrator": {
+      "Method": "GET",
+      "Path": "~/api/course/waiting?administrator={ababa}",
+      "OutputForm": {
+        "courseName": "",
+        "teacherName": "",
+        "tag": "",
+        "charge": "",
+        "description": ""
+      }
+    },
+    "queryUserLikeUserName": {
+      "Method": "GET",
+      "Path": "~/api/user/all?userName={user}&type={student or teacher}",
+      "OutputForm": {
+        "result": [
+          {
+            "userName": "user",
+            "photoUrl": "url"
+          }
+        ]
+      }
+    },
+    "updatePrivilege": {
+      "Method": "POST",
+      "Path": "~/api/privilege",
+      "InputForm": {
+        "administrator": "admin",
+        "userName": "user",
+        "privilegeType": "give or transform or remove"
+      }
+    },
+    "updateCourseStatusByAdministrator": {
+      "Method": "POST",
+      "Path": "~/api/course/admin",
+      "InputForm": {
+        "courseName": "course",
+        "courseStatus": "APPROVED or FAILED or REVIEWING"
+      },
+      "OutputForm": {
+      }
+    }
+  },
+  "CoursePage": {
+    "enroll": {
+      "Method": "POST",
+      "Path": "~/api/enroll-course",
+      "InputForm": {
+        "studentName": "checker",
+        "courseName": "course"
+      },
+      "OutputForm": {
+      }
+    }
+  }
+}
