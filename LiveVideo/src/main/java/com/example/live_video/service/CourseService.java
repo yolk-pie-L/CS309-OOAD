@@ -1,11 +1,7 @@
 package com.example.live_video.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.live_video.entity.Course;
-import com.example.live_video.entity.CourseStatus;
-import com.example.live_video.entity.User;
-import com.example.live_video.exception.MyException;
 import com.example.live_video.exception.SQLCoursenameConflictException;
 
 import java.util.List;
@@ -15,11 +11,12 @@ public interface CourseService extends IService<Course> {
     /**
      * Teacher creates his course. After course creation, the course will be inserted in to the
      * database with status REVIEWING
+     *
      * @param course the course to be created
      * @return true if the course is created successfully
      * @throws SQLCoursenameConflictException
      */
-    public boolean createCourse(Course course) throws MyException;
+    public Boolean createCourse(Course course) throws SQLCoursenameConflictException;
 
 
     /**
@@ -32,15 +29,12 @@ public interface CourseService extends IService<Course> {
 
     public boolean removeCourse(String teacherName, String courseName);
 
-//    public Boolean getCourseIdByCourseNameTeacherName(String courseName, String teacherName);
-
     /**
-     * Get the courses that has status REVIEWING.实现了分页
-     * @param  recordsPerPage 每一页的记录数量
-     * @param pageNum 第几页（从1开始）
+     * Get the courses that has status REVIEWING.
+     *
      * @return A list of course
      */
-    public List<Course> getReviewingCourses(int recordsPerPage, int pageNum);
+    public List<Course> getReviewingCourses();
 
 
     /**
@@ -56,4 +50,6 @@ public interface CourseService extends IService<Course> {
     public List<Course> getFailedCoursesOfTeacher(int recordsPerPage, int pageNum, String teacherName);
 
     public List<Course> getReviewingCoursesOfTeacher(int recordsPerPage, int pageNum, String teacherName);
+
+    public Course getCourseByTeacherNameCourseName(String teacherName, String courseName);
 }

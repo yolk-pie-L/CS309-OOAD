@@ -1,5 +1,6 @@
 package com.example.live_video.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.live_video.entity.User;
 import com.example.live_video.entity.UserType;
 import com.example.live_video.exception.MyException;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +31,16 @@ public class UserServiceTest {
     UserService userService;
 
     List<User> allUsers = new ArrayList<>();
+
+    @Test
+    void md5Tests() {
+        // 关于DigestUtils工具类
+        // 在spring系列包中的DigestUtils工具类只有md5算法的api
+        // 在commons-code系列包中的DigestUtils工具类中有md系列和sha家族的多种算法的api
+        String password = "1234";
+        String encodePassword = DigestUtils.md5DigestAsHex(password.getBytes());
+        System.out.println("[md5] encode password=" + encodePassword);
+    }
 
     void setUp(){
         User user1 = new User("user1", UserType.Administrator, "user1@mail.com", "123456");
@@ -56,22 +68,18 @@ public class UserServiceTest {
         boolean res3 = false;
         try {
             res1 = userService.register(user1);
-        }catch (MyException e){
-            res1 = false;
+        } catch (MyException e) {
+
         }
-        try{
+        try {
             res2 = userService.register(user2);
-        }catch (MyException e){
-            if(e instanceof SQLUsernameConflictException)
-                res2 = true;
+        } catch (MyException e) {
+            res2 = e instanceof SQLUsernameConflictException;
         }
-        try{
+        try {
             res3 = userService.register(user3);
-        }catch (MyException e){
-            if(e instanceof SQLUsernameConflictException)
-                res3 = false;
-            else if(e instanceof SQLMailConflictException)
-                res3 = true;
+        } catch (MyException e) {
+            res3 = e instanceof SQLMailConflictException;
         }
         assert res1;
         assert res2;
@@ -93,17 +101,17 @@ public class UserServiceTest {
         }catch (MyException e){
             res1 = false;
         }
-        try{
-            userService.compareUserPassword(user2);
-            res2 = false;
+        try {
+            res2 = userService.compareUserPassword(user2);
         }catch (MyException e){
-            res2 = e instanceof SQLUserNotFoundException;
+            res2 = true;
         }
-        try{
+        try {
             res3 = userService.compareUserPassword(user3);
         }catch (MyException e){
             res3 = true;
         }
+
         assert res1;
         assert res2;
         assert !res3;
@@ -125,10 +133,11 @@ public class UserServiceTest {
         assert removeFlag;
         assert newCount == oldCount - 1;
         userMapper.deleteById(user1);
-        try{
+        removeFlag = false;
+        try {
             removeFlag = userService.removeUser(user1.getUserName());
         }catch (MyException e){
-            removeFlag = e instanceof SQLUserNotFoundException;
+            removeFlag = true;
         }
         assert removeFlag;
     }
@@ -151,5 +160,32 @@ public class UserServiceTest {
             assert Objects.equals(id, user.getId());
         }
         tearDown();
+    }
+
+    @Test
+    void getUserAccountByUsername() {
+        User user1 = new User("user1", UserType.Administrator, "user1@mail.com", "123456");
+        user1.setAccount(10L);
+        userMapper.insert(user1);
+        Long account = userService.getUserAccountByUsername(user1.getUserName());
+        assert account.equals(10L);
+        userMapper.deleteById(user1);
+    }
+
+    @Test
+    void updateUser() {
+        User user1 = new User("user1", UserType.Administrator, "user1@mail.com", "123456");
+        user1.setAccount(10L);
+        userMapper.insert(user1);
+        User user2 = new User("user1", null, null, "12336", "url", 1L);
+        userService.updateUser(user2);
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("username", user2.getUserName());
+        User res = userMapper.selectOne(userQueryWrapper);
+        System.out.println(res);
+        assert res.getMail().equals(user1.getMail());
+        assert res.getUserType().equals(user1.getUserType());
+        assert res.getPhotoUrl().equals(user2.getPhotoUrl());
+        assert res.getAccount().equals(user2.getAccount());
     }
 }

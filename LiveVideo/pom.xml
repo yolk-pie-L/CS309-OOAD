@@ -46,7 +46,6 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus</artifactId>
             <version>3.5.2</version>
@@ -56,14 +55,10 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <!--摘要算法工具包-->
-        <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
         <dependency>
-                 <groupId>commons-codec</groupId>
-                 <artifactId>commons-codec</artifactId>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -82,4 +77,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

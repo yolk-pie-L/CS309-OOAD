@@ -2,13 +2,13 @@ package com.example.live_video.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.live_video.entity.Section;
-import com.example.live_video.exception.MyException;
+import com.example.live_video.exception.SQLSectionnameConflictException;
 
 import java.util.List;
 
 public interface SectionService extends IService<Section> {
 
-    public Boolean createSection(Section section) throws MyException;
+    public Boolean createSection(Section section) throws SQLSectionnameConflictException;
 
     public Boolean updateSection(Section section);
 

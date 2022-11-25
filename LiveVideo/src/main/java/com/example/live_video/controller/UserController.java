@@ -1,20 +1,23 @@
 package com.example.live_video.controller;
 
+import com.example.live_video.dto.ExampleForm;
 import com.example.live_video.dto.ExceptionMessage;
+import com.example.live_video.dto.JSONObject;
 import com.example.live_video.dto.UserForm;
 import com.example.live_video.entity.User;
 import com.example.live_video.entity.UserType;
 import com.example.live_video.exception.MyException;
-import com.example.live_video.exception.SQLCoursenameConflictException;
 import com.example.live_video.service.UserService;
 import com.example.live_video.wrapper.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.MapBindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.List;
 
 @ResponseResult
 @RestController
@@ -26,48 +29,34 @@ public class UserController {
 
     @GetMapping("/")
     public void index() {
-        User user = new User("jkljlk", UserType.Administrator, "12013029@.com", "23", "phto_url", 0L);
+        User user = new User("shey", UserType.Administrator, "12012138@.com", "23", "phto_url", 0L);
         int a = 0;
         System.out.println("a" + a);
-        try {
-            userService.register(user);
-        } catch (MyException e) {
-            e.printStackTrace();
-        }
+//        userService.register(user, );
     }
 
     @PostMapping("/api/register")
-    public ExceptionMessage registerUser(UserForm userForm) {
-        System.out.println(userForm);
-        try {
-            userService.register(userForm.convertToUser());
-        } catch (MyException e) {
-            return new ExceptionMessage("error", e.getMessage());
+    public Object registerUser(@Valid UserForm userForm, BindingResult bindingResult) throws Exception {
+        if (bindingResult.hasErrors()) {
+            List<ObjectError> list = bindingResult.getAllErrors();
+            throw new MyException(list.get(0).getDefaultMessage());
         }
-        return new ExceptionMessage("OK");
+        return userService.register(userForm.convertToUser());
     }
 
     @PostMapping("/api/login")
-    public ExceptionMessage loginUser(UserForm userForm) {
-        try {
-            String type = userService.login(userForm.convertToUser());
-            return new ExceptionMessage("OK", type, null);
-        } catch (MyException e) {
-            return new ExceptionMessage("error", e.getMessage());
-        }
+    public Object loginUser(UserForm userForm) throws Exception {
+        return userService.login(userForm.convertToUser());
     }
 
     @PostMapping("/api/index")
-    public Object hello(@RequestParam String code) {
-        if (code.equals("HelloWorld!")) {
-            return new MyException("HelloWorld!");
+    public Object hello(@Valid ExampleForm form, BindingResult bindingResult) throws Exception {
+        if (form.getPassword().equals("helloworld"))
+            bindingResult.addError(new ObjectError("This is a name", "This is default massage."));
+        if (bindingResult.hasErrors()) {
+            List<ObjectError> list = bindingResult.getAllErrors();
+            throw new MyException(list.get(0).getDefaultMessage());
         }
-        if (code.equals("list")) {
-            ArrayList<User> arrayList = new ArrayList<>();
-            arrayList.add(new User("Hello", UserType.Student, "World", "Password"));
-            arrayList.add(new User());
-            return arrayList;
-        }
-        return new ExceptionMessage("OK");
+        return form;
     }
 }

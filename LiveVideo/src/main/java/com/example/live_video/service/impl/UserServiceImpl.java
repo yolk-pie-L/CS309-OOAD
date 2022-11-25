@@ -1,4 +1,4 @@
-package com.example.live_video.entity.impl;
+package com.example.live_video.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -20,7 +20,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     UserMapper userMapper;
 
     @Override
-    public boolean register(User user) throws MyException {
+    public Boolean register(User user) throws MyException {
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("username", user.getUserName());
         boolean existsFlag = userMapper.exists(userQueryWrapper);
@@ -29,7 +29,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new SQLUsernameConflictException();
         }
         userQueryWrapper.clear();
-
         userQueryWrapper.eq("mail", user.getMail());
         existsFlag = userMapper.exists(userQueryWrapper);
         if(existsFlag){
@@ -43,7 +42,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 
     @Override
-    public boolean compareUserPassword(User user) throws MyException {
+    public Boolean compareUserPassword(User user) throws SQLUserNotFoundException {
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("username", user.getUserName());
         userQueryWrapper.select("password");
@@ -56,7 +55,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public boolean removeUser(String userName) throws SQLUserNotFoundException {
+    public Boolean removeUser(String userName) throws SQLUserNotFoundException {
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("username", userName);
         User resUser = userMapper.selectOne(userQueryWrapper);
@@ -93,8 +92,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public String login(User user) throws MyException {
-        if (compareUserPassword(user)) {
+    public Long getUserAccountByUsername(String userName) {
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("username", userName);
+        userQueryWrapper.select("account");
+        User resUser = userMapper.selectOne(userQueryWrapper);
+        return resUser.getAccount();
+    }
+
+    @Override
+    public Boolean updateUser(User user) {
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("username", user.getUserName());
+        return userMapper.update(user, userQueryWrapper) == 1;
+    }
+
+    @Override
+    public String login(User user) throws SQLUserNotFoundException {
+        if ((boolean) compareUserPassword(user)) {
             return getUserTypeByUsername(user.getUserName()).name();
         } else {
             return null;

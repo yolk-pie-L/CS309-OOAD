@@ -3,7 +3,8 @@ package com.example.live_video.entity;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
+import org.springframework.util.DigestUtils;
+import org.springframework.util.StringUtils;
 
 import java.sql.Timestamp;
 
@@ -18,14 +19,18 @@ public class User {
     @TableField(value = "username")
     private String userName;
 
-    @TableField(value = "usertype")
+    @TableField(value = "usertype", updateStrategy = FieldStrategy.NOT_EMPTY)
     private UserType userType;
 
+    @TableField(updateStrategy = FieldStrategy.NOT_EMPTY)
     private String mail;
+    @TableField(updateStrategy = FieldStrategy.NOT_EMPTY)
     private String password;
 
-    @TableField(value = "photo_url")
+    @TableField(value = "photo_url", updateStrategy = FieldStrategy.NOT_EMPTY)
     private String photoUrl;
+
+    @TableField(updateStrategy = FieldStrategy.NOT_EMPTY)
     private Long account;
 
     @TableField(value = "create_time", insertStrategy = FieldStrategy.NOT_EMPTY)
@@ -42,12 +47,24 @@ public class User {
         this.userName = userName;
         this.userType = userType;
         this.mail = mail;
-        this.password = password;
+        if(StringUtils.hasText(password)) {
+            this.password = DigestUtils.md5DigestAsHex(password.getBytes());
+        }else {
+            this.password = password;
+        }
         this.photoUrl = photoUrl;
         this.account = account;
     }
 
     public User(String userName, UserType userType, String mail, String password) {
         this(userName, userType, mail, password, null, 0L);
+    }
+
+    public void setPassword(String password) {
+        if(StringUtils.hasText(password)) {
+            this.password = DigestUtils.md5DigestAsHex(password.getBytes());
+        }else {
+            this.password = password;
+        }
     }
 }
