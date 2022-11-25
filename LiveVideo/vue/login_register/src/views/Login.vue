@@ -15,20 +15,6 @@
       <el-col :span="7" class="login-card">
         <!--loginForm-->
         <el-form :model="loginForm" :rules="rules" ref="loginForm" label-width="21%" class="loginForm">
-          <el-form-item label="账户" prop="username" style="width: 380px">
-            <el-input v-model="loginForm.username"></el-input>
-          </el-form-item>
-          <el-form-item label="密码" prop="password" style="width: 380px">
-            <el-input type="password" v-model="loginForm.password"></el-input>
-          </el-form-item>
-          <el-form-item label="验证码" prop="code" style="width: 380px">
-            <el-input v-model="loginForm.code" class="code-input" style="width: 70%;float: left"></el-input>
-            <!--验证码图片-->
-            <el-image :src="codeImg" class="codeImg"></el-image>
-          </el-form-item>
-          <el-form-item label="记住密码" prop="remember">
-            <el-switch v-model="loginForm.remember"></el-switch>
-          </el-form-item>
           <el-form-item class="btn-ground">
             <el-button type="primary" @click="submitForm('loginForm')">立即登陆</el-button>
             <el-button @click="resetForm('loginForm')">重置</el-button>
@@ -85,6 +71,10 @@ export default {
   methods: {
     // 提交表单
     submitForm(formName) {
+      // this.$axios.get('http://localhost:8082/exer/record').then((response) => {
+      //   console.log(response)
+      // }
+      // )
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // 表单验证成功

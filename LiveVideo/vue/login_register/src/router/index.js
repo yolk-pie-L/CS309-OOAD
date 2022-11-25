@@ -1,9 +1,7 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import Login from '../views/Login.vue'
 import HomeView from "@/views/HomeView";
 import regist from "@/views/regist";
-Vue.use(VueRouter)
 
 const routes = [
   // 配置登陆页面的路由
@@ -24,7 +22,8 @@ const routes = [
   }
 ]
 
-const router = new VueRouter({
+const router = createRouter({
+  history: createWebHashHistory(),
   routes
 })
 
