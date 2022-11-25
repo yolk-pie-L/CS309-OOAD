@@ -27,10 +27,10 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
 
 
     @Override
-    public Object createCourse(Course course) {
+    public Boolean createCourse(Course course) throws SQLCoursenameConflictException {
         Boolean existsFlag = courseMapper.existCourse(course.getTeacherName(), course.getCourseName());
         if(existsFlag){
-            return new SQLCoursenameConflictException();
+            throw new SQLCoursenameConflictException();
         }
         // 查询teacher的id
         Long teacherId = userService.getUserIdByUsername(course.getTeacherName());

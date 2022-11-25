@@ -60,20 +60,25 @@ class AssignmentServiceTest {
     }
 
     @Test
-    void createAssignment() {
+    void createAssignment() throws SQLAssignNameConflictException {
         List<String> urls = new ArrayList<>();
         urls.add("url1");
         urls.add("url2");
         Assignment assignment = new Assignment("ass1", courses.get(0).getCourseName(), users.get(0).getUserName(), null, 100, true, null, urls);
-        boolean flag1 = (boolean) assignmentService.createAssignment(assignment);
-        boolean flag2 = assignmentService.createAssignment(assignment) instanceof SQLAssignNameConflictException;
+        boolean flag1 = assignmentService.createAssignment(assignment);
+        boolean flag2 = false;
+        try {
+            assignmentService.createAssignment(assignment);
+        }catch (SQLAssignNameConflictException e){
+            flag2 = true;
+        }
         assert flag1;
         assert flag2;
         assignmentMapper.deleteById(assignment);
     }
 
     @Test
-    void removeAssignment() {
+    void removeAssignment() throws SQLAssignNameConflictException {
         List<String> urls = new ArrayList<>();
         urls.add("url1");
         urls.add("url2");
@@ -83,14 +88,13 @@ class AssignmentServiceTest {
     }
 
     @Test
-    void getAssignmentByCourseNameTeacherNameAssignName() {
+    void getAssignmentByCourseNameTeacherNameAssignName() throws SQLAssignNameConflictException {
         List<String> urls = new ArrayList<>();
         urls.add("url1");
         urls.add("url2");
         Assignment assignment = new Assignment("ass1", courses.get(0).getCourseName(), users.get(0).getUserName(), null, 100, true, null, urls);
         assignmentService.createAssignment(assignment);
-        Object assignment1 = assignmentService.getAssignmentByCourseNameTeacherNameAssignName(courses.get(0).getCourseName(), users.get(0).getUserName(), assignment.getAssignmentName());
-        assert assignment1 instanceof Assignment;
+        Assignment assignment1 = assignmentService.getAssignmentByCourseNameTeacherNameAssignName(courses.get(0).getCourseName(), users.get(0).getUserName(), assignment.getAssignmentName());
         System.out.println(assignment1);
     }
 }

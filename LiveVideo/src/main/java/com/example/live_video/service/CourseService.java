@@ -16,7 +16,7 @@ public interface CourseService extends IService<Course> {
      * @return true if the course is created successfully
      * @throws SQLCoursenameConflictException
      */
-    public Object createCourse(Course course);
+    public Boolean createCourse(Course course) throws SQLCoursenameConflictException;
 
 
     /**

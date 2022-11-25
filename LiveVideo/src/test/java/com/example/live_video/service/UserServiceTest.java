@@ -3,6 +3,7 @@ package com.example.live_video.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.live_video.entity.User;
 import com.example.live_video.entity.UserType;
+import com.example.live_video.exception.MyException;
 import com.example.live_video.exception.SQLMailConflictException;
 import com.example.live_video.exception.SQLUserNotFoundException;
 import com.example.live_video.exception.SQLUsernameConflictException;
@@ -65,9 +66,21 @@ public class UserServiceTest {
         boolean res1 = false;
         boolean res2 = false;
         boolean res3 = false;
-        res1 = (boolean) userService.register(user1);
-        res2 = userService.register(user2) instanceof SQLUsernameConflictException;
-        res3 = userService.register(user3) instanceof SQLMailConflictException;
+        try {
+            res1 = userService.register(user1);
+        } catch (MyException e) {
+
+        }
+        try {
+            res2 = userService.register(user2);
+        } catch (MyException e) {
+            res2 = e instanceof SQLUsernameConflictException;
+        }
+        try {
+            res3 = userService.register(user3);
+        } catch (MyException e) {
+            res3 = e instanceof SQLMailConflictException;
+        }
         assert res1;
         assert res2;
         assert res3;
@@ -81,13 +94,26 @@ public class UserServiceTest {
         User user3 = new User("user1", UserType.Administrator, "user1@mail.com", "password");
         userMapper.insert(user1);
         boolean res1;
-        Object res2;
+        boolean res2;
         boolean res3;
-        res1 = (boolean) userService.compareUserPassword(user1);
-        res2 = userService.compareUserPassword(user2);
-        res3 = (boolean) userService.compareUserPassword(user3);
+        try {
+            res1 = userService.compareUserPassword(user1);
+        }catch (MyException e){
+            res1 = false;
+        }
+        try {
+            res2 = userService.compareUserPassword(user2);
+        }catch (MyException e){
+            res2 = true;
+        }
+        try {
+            res3 = userService.compareUserPassword(user3);
+        }catch (MyException e){
+            res3 = true;
+        }
+
         assert res1;
-        assert res2 instanceof SQLUserNotFoundException;
+        assert res2;
         assert !res3;
         userMapper.deleteById(user1);
     }
@@ -98,12 +124,21 @@ public class UserServiceTest {
         userMapper.insert(user1);
         long oldCount = userService.count();
         boolean removeFlag;
-        removeFlag = (boolean) userService.removeUser(user1.getUserName());
+        try {
+            removeFlag = userService.removeUser(user1.getUserName());
+        }catch (MyException e){
+            removeFlag = false;
+        }
         long newCount = userService.count();
         assert removeFlag;
         assert newCount == oldCount - 1;
         userMapper.deleteById(user1);
-        removeFlag = userService.removeUser(user1.getUserName()) instanceof SQLUserNotFoundException;
+        removeFlag = false;
+        try {
+            removeFlag = userService.removeUser(user1.getUserName());
+        }catch (MyException e){
+            removeFlag = true;
+        }
         assert removeFlag;
     }
 

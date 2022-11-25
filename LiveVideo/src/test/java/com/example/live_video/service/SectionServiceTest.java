@@ -79,14 +79,19 @@ class SectionServiceTest {
     }
 
     @Test
-    void createSection() {
+    void createSection() throws SQLSectionnameConflictException {
         Course course2 = allCourses.get(1);
         User teacher = allUsers.get(0);
         Section section5 = new Section("s5", course2.getCourseName(), teacher.getUserName(), "assign_url");
         boolean flag = false;
-        flag = (boolean) sectionService.createSection(section5);
+        flag = sectionService.createSection(section5);
         assert flag;
-        flag = sectionService.createSection(section5) instanceof SQLSectionnameConflictException;
+        flag = false;
+        try {
+            sectionService.createSection(section5);
+        }catch (SQLSectionnameConflictException e){
+            flag = true;
+        }
         assert flag;
         sectionMapper.deleteById(section5);
     }

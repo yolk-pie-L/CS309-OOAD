@@ -3,6 +3,8 @@ package com.example.live_video.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.live_video.entity.*;
 import com.example.live_video.exception.EnrollCourseException;
+import com.example.live_video.exception.SQLAssignNameConflictException;
+import com.example.live_video.exception.SQLCoursenameConflictException;
 import com.example.live_video.mapper.AssignmentMapper;
 import com.example.live_video.mapper.CourseMapper;
 import com.example.live_video.mapper.StudentMapper;
@@ -51,7 +53,7 @@ class StudentServiceTest {
     AssignmentService assignmentService;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws SQLCoursenameConflictException {
         User teacher1 = new User("t1", UserType.Teacher, "t1mail", "123456");
         User teacher2 = new User("t2", UserType.Teacher, "t2mail", "123");
         teachers.add(teacher1);
@@ -68,7 +70,9 @@ class StudentServiceTest {
         courses.add(course1);
         courses.add(course2);
         courses.add(course3);
-        courses.forEach(courseService::createCourse);
+        for(Course c: courses){
+            courseService.createCourse(c);
+        }
     }
 
     @AfterEach
@@ -81,7 +85,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void enrollCourse() {
+    void enrollCourse() throws EnrollCourseException {
         User s1 = students.get(0);
         User s2 = students.get(1);
         Course c1 = courses.get(0);
@@ -91,8 +95,13 @@ class StudentServiceTest {
         studentService.enrollCourse(c2.getTeacherName(), c2.getCourseName(),s1.getUserName());
         studentService.enrollCourse(c3.getTeacherName(), c3.getCourseName(), s1.getUserName());
         studentService.enrollCourse(c1.getTeacherName(), c1.getCourseName(),s2.getUserName());
-        Object res = studentService.enrollCourse(c3.getTeacherName(), c3.getCourseName(), s2.getUserName());
-        assert res instanceof EnrollCourseException;
+        boolean res = false;
+        try {
+            studentService.enrollCourse(c3.getTeacherName(), c3.getCourseName(), s2.getUserName());
+        }catch (EnrollCourseException e){
+            res = true;
+        }
+        assert res;
         List<Course> courses1 = studentService.getEnrolledCourses(s1.getUserName());
         assert courses1.size() == 3;
         List<Course> courses2 = studentService.getEnrolledCourses(s2.getUserName());
@@ -126,7 +135,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void setStudentAssignGrade() {
+    void setStudentAssignGrade() throws SQLAssignNameConflictException {
         User s1 = students.get(0);
         User s2 = students.get(1);
         Course c1 = courses.get(0);

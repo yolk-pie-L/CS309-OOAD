@@ -20,7 +20,7 @@ public class AssignmentServiceImpl extends ServiceImpl<AssignmentMapper, Assignm
     CourseMapper courseMapper;
 
     @Override
-    public Object createAssignment(Assignment assignment) {
+    public Boolean createAssignment(Assignment assignment) throws SQLAssignNameConflictException {
         Long courseId = courseMapper.getCourseIdByTeacherNameCourseName(assignment.getTeacherName(), assignment.getCourseName());
         assignment.setCourseId(courseId);
         QueryWrapper<Assignment> assignQueryWrapper = new QueryWrapper<>();
@@ -28,11 +28,11 @@ public class AssignmentServiceImpl extends ServiceImpl<AssignmentMapper, Assignm
         assignQueryWrapper.eq("assignment_name", assignment.getAssignmentName());
         boolean existFlag = assignmentMapper.exists(assignQueryWrapper);
         if(existFlag){
-            return new SQLAssignNameConflictException();
+            throw new SQLAssignNameConflictException();
         }
         int flag = assignmentMapper.insert(assignment);
         if(assignment.getAssignUrls() == null){
-            return flag;
+            return flag == 1;
         }
         for(String assign_url: assignment.getAssignUrls()){
             assignmentMapper.insertAssignUrls(assignment.getId(), assign_url);
@@ -41,13 +41,13 @@ public class AssignmentServiceImpl extends ServiceImpl<AssignmentMapper, Assignm
     }
 
     @Override
-    public Object removeAssignment(Assignment assignment) {
+    public Boolean removeAssignment(Assignment assignment) {
         Long courseId = courseMapper.getCourseIdByTeacherNameCourseName(assignment.getTeacherName(), assignment.getCourseName());
-        return assignmentMapper.deleteAssignment(courseId, assignment.getAssignmentName());
+        return assignmentMapper.deleteAssignment(courseId, assignment.getAssignmentName()) == 1;
     }
 
     @Override
-    public Object getAssignmentByCourseNameTeacherNameAssignName(String courseName, String teacherName, String assignName) {
+    public Assignment getAssignmentByCourseNameTeacherNameAssignName(String courseName, String teacherName, String assignName) {
         Long courseId = courseMapper.getCourseIdByTeacherNameCourseName(teacherName, courseName);
         QueryWrapper<Assignment> assignQueryWrapper = new QueryWrapper<>();
         assignQueryWrapper.eq("course_id", courseId);

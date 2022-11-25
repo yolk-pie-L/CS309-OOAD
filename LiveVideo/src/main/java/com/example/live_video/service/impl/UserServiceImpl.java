@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.live_video.entity.User;
 import com.example.live_video.entity.UserType;
+import com.example.live_video.exception.MyException;
 import com.example.live_video.exception.SQLMailConflictException;
 import com.example.live_video.exception.SQLUserNotFoundException;
 import com.example.live_video.exception.SQLUsernameConflictException;
@@ -11,8 +12,6 @@ import com.example.live_video.mapper.UserMapper;
 import com.example.live_video.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
@@ -21,21 +20,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     UserMapper userMapper;
 
     @Override
-    public Object register(User user) {
+    public Boolean register(User user) throws MyException {
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("username", user.getUserName());
         boolean existsFlag = userMapper.exists(userQueryWrapper);
         // 如果存在该用户名，则抛出异常
         if(existsFlag){
-//            bindingResult.addError(new ObjectError("SQLException", "User not found in the database"));
-            return new SQLUsernameConflictException();
+            throw new SQLUsernameConflictException();
         }
         userQueryWrapper.clear();
-
         userQueryWrapper.eq("mail", user.getMail());
         existsFlag = userMapper.exists(userQueryWrapper);
         if(existsFlag){
-            return new SQLMailConflictException();
+            throw new SQLMailConflictException();
         }
         // 如果不存在该用户，则顺利执行插入
         int res = userMapper.insert(user);
@@ -44,26 +41,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 
     @Override
-    public Object compareUserPassword(User user) {
+    public Boolean compareUserPassword(User user) throws SQLUserNotFoundException {
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("username", user.getUserName());
         userQueryWrapper.select("password");
         User resUser = userMapper.selectOne(userQueryWrapper);
         // 如果不存在该用户，则抛出异常
         if(resUser == null){
-            return new SQLUserNotFoundException();
+            throw new SQLUserNotFoundException();
         }
         return resUser.getPassword().equals(user.getPassword());
     }
 
     @Override
-    public Object removeUser(String userName) {
+    public Boolean removeUser(String userName) throws SQLUserNotFoundException {
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("username", userName);
         User resUser = userMapper.selectOne(userQueryWrapper);
         // 如果不存在该用户，则抛出异常
         if(resUser == null){
-            return new SQLUserNotFoundException();
+            throw new SQLUserNotFoundException();
         }
         return userMapper.deleteById(resUser) == 1;
     }
@@ -110,7 +107,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public String login(User user) {
+    public String login(User user) throws SQLUserNotFoundException {
         if ((boolean) compareUserPassword(user)) {
             return getUserTypeByUsername(user.getUserName()).name();
         } else {
