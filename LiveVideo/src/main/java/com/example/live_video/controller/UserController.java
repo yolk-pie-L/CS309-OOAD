@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.MapBindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -36,7 +37,7 @@ public class UserController {
     }
 
     @PostMapping("/api/register")
-    public Object registerUser(@Valid UserForm userForm, BindingResult bindingResult) throws Exception {
+    public Boolean registerUser(@RequestBody @Valid UserForm userForm, BindingResult bindingResult) throws Exception {
         if (bindingResult.hasErrors()) {
             List<ObjectError> list = bindingResult.getAllErrors();
             throw new MyException(list.get(0).getDefaultMessage());
@@ -45,7 +46,7 @@ public class UserController {
     }
 
     @PostMapping("/api/login")
-    public Object loginUser(UserForm userForm) throws Exception {
+    public String loginUser(@RequestBody UserForm userForm) throws Exception {
         return userService.login(userForm.convertToUser());
     }
 
@@ -58,5 +59,15 @@ public class UserController {
             throw new MyException(list.get(0).getDefaultMessage());
         }
         return form;
+    }
+
+    @GetMapping("/api/user/all")
+    public ModelAndView queryUserLikeUserName(@RequestParam String userName,
+                                              @RequestParam String type) {
+        ModelAndView modelAndView = new ModelAndView();
+        // FIXME: 也许可以支持模糊搜索？（可以之后再说）
+        modelAndView.addObject("userName", userName);
+        modelAndView.addObject("photoUrl", "url");
+        return modelAndView;
     }
 }
