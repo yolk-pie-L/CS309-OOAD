@@ -1,4 +1,8 @@
 <template>
+  <nav>
+    <router-link to="/login">Login</router-link> |
+    <router-link to="/register">Register</router-link>
+  </nav>
   <div :xl="6" :lg="7" class="bg-login">
     <!--logo-->
     <!--标题-->

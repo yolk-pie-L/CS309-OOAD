@@ -1,7 +1,8 @@
 <template>
   <nav>
-    <router-link to="/studentHome">Home</router-link> |
-    <router-link to="/studentinfoUpdate">student info Update</router-link>
+    <router-link to="/teacherHomeView">Home</router-link> |
+    <router-link to="/courseUpdate">UpdateCourse</router-link> |
+    <router-link to="/infoUpdate">UpdateInfo</router-link>
   </nav>
   <div :xl="6" :lg="7" class="bg-login">
     <!--logo-->
@@ -19,13 +20,13 @@
       <el-col :span="7" class="login-card">
         <!--loginForm-->
         <el-form :model="infoForm" :rules="rules" ref="loginForm" label-width="21%" class="loginForm">
-          <el-form-item label="Name" prop="teacherName" style="width: 380px">
+          <el-form-item label="老师名字" prop="teacherName" style="width: 380px">
             <el-input v-model="infoForm.userName"></el-input>
           </el-form-item>
-          <el-form-item label="Mail" prop="courseLabel" style="width: 380px">
+          <el-form-item label="邮箱" prop="courseLabel" style="width: 380px">
             <el-input v-model="infoForm.mail"></el-input>
           </el-form-item>
-          <el-form-item label="User" prop="username" style="width: 380px">
+          <el-form-item label="课程图片" prop="username" style="width: 380px">
             <el-upload
                 :action="uploadURL"
                 :style="{backgroundImage:'url(' + dialogImageUrl + ')', backgroundRepeat:'no-repeat', backgroundPosition:'center center', backgroundSize: 'contain'}"
@@ -37,8 +38,8 @@
             </el-upload>
           </el-form-item>
           <el-form-item class="btn-ground">
-            <el-button type="primary" @click="submitForm('loginForm')">Update</el-button>
-            <el-button @click="resetForm('loginForm')">Reset</el-button>
+            <el-button type="primary" @click="submitForm('loginForm')">立即注册</el-button>
+            <el-button @click="resetForm('loginForm')">重置</el-button>
           </el-form-item>
         </el-form>
       </el-col>

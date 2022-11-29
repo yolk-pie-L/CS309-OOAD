@@ -1,5 +1,6 @@
 <template>
   <!--导航-->
+  <nav></nav>
   <div>
     <div class="animate__animated animate__fadeIn title"  :style="{'background-image': bgUrl}"></div>
     <el-header  class="animate__animated animate__fadeIn">
@@ -56,7 +57,7 @@
 <!--        </a>-->
 <!--      </li>-->
       <li>
-        <a href="javascript:">
+        <a href="/#/courseMainPage">
           <h3>Course name</h3>
           <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
           <div className="word">

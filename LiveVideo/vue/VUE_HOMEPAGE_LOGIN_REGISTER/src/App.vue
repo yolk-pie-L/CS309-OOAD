@@ -1,10 +1,5 @@
 <template>
   <div id="app" v-title data-title="hello!">
-    <nav>
-      <router-link to="/login">Login</router-link> |
-      <router-link to="/register">Register</router-link>
-    </nav>
-
     <!--路由页面-->
     <router-view/>
   </div>

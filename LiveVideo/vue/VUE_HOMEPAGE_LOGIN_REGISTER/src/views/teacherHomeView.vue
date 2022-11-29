@@ -1,12 +1,7 @@
 <template>
-  <nav>
-    <router-link to="/studentHome">Home</router-link> |
-    <router-link to="/studentinfoUpdate">student info Update</router-link>
-  </nav>
   <div :xl="6" :lg="7" class="bg-login">
     <!--logo-->
     <el-image :src="teacherForm.photoUrl" alt="暂无图片"></el-image>
-
     <!--标题-->
     <el-row type="flex" class="row-bg row-two" justify="center" align="top">
       <el-col :span="1">
@@ -17,7 +12,28 @@
     <el-row type="flex" class="row-bg card" justify="center" align="middle">
       <el-card class="box-card">
         <el-table :data="tableData" border stripe style="width: 100% ">
-          <el-table-column prop="courseName" label="Courses enrolled" align="center" min-width="500px"></el-table-column>
+          <el-table-column prop="courseName" label="Courses Taught" align="center" min-width="500px"></el-table-column>
+          <el-table-column prop="status" label="Courses State" align="center" min-width="500px"></el-table-column>
+        </el-table>
+        <el-row :gutter="20">
+          <el-col :span="6" :offset="12">
+            <div class="block">
+              <el-pagination
+                  background
+                  :current-page.sync="currentPage"
+                  :page-size="pageSize"
+                  layout="total, prev, next, jumper, pager"
+                  :total="total"
+              ></el-pagination>
+            </div>
+          </el-col>
+        </el-row>
+      </el-card>
+    </el-row>
+    <el-row type="flex" class="row-bg card" justify="center" align="middle">
+      <el-card class="box-card">
+        <el-table :data="friendData" border stripe style="width: 100% ">
+          <el-table-column prop="userName" label="Friend Name" align="center" min-width="500px"></el-table-column>
         </el-table>
         <el-row :gutter="20">
           <el-col :span="6" :offset="12">

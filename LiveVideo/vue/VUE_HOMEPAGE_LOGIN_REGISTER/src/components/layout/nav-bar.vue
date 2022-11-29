@@ -1,5 +1,7 @@
 <template>
   <!--导航-->
+  <nav></nav>
+
   <div>
     <div class="animate__animated animate__fadeIn title"  :style="{'background-image': bgUrl}"></div>
     <el-header  class="animate__animated animate__fadeIn">
@@ -243,7 +245,7 @@ export default {
       })
     },
     into(){
-      router.push('/student');
+      router.push('/studentHome');
     }
   },
 }
