@@ -7,8 +7,7 @@
         <i class="el-icon-menu"></i>
       </div>
       <div class="user_show">
-        <el-image :src="userForm.photoUrl" alt="暂无图片" class="user_pic"></el-image>
-        <el-link href="https://element.eleme.io" type="success" class="user_name" v-text="userForm.userName"></el-link>
+        <el-link type="success" class="user_name" @click="login()">login/register</el-link>
       </div>
       <div class="search_input">
         <el-input
@@ -16,112 +15,13 @@
             placeholder="搜点什么"
             prefix-icon="el-icon-search">
         </el-input>
-        <el-button round icon="el-icon-search" circle class="el-search" @click="submit"></el-button>
+        <el-button round icon="el-icon-search" circle class="el-search" @click="login"></el-button>
       </div>
     </el-header>
   </div>
 
   <div className="business wrap">
     <ul className="box clearfix">
-      <li>
-        <a href="javascript:">
-          <h3>Course name</h3>
-          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
-          <div className="word">
-            <h4>Teacher</h4>
-            <i className="border"></i>
-            <p>Introduction</p>
-          </div>
-        </a>
-      </li>
-      <li>
-        <a href="javascript:">
-          <h3>Course name</h3>
-          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
-          <div className="word">
-            <h4>Teacher</h4>
-            <i className="border"></i>
-            <p>Introduction</p>
-          </div>
-        </a>
-      </li>
-      <li>
-        <a href="javascript:">
-          <h3>Course name</h3>
-          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
-          <div className="word">
-            <h4>Teacher</h4>
-            <i className="border"></i>
-            <p>Introduction</p>
-          </div>
-        </a>
-      </li>
-      <li>
-        <a href="javascript:">
-          <h3>Course name</h3>
-          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
-          <div className="word">
-            <h4>Teacher</h4>
-            <i className="border"></i>
-            <p>Introduction</p>
-          </div>
-        </a>
-      </li>
-      <li>
-        <a href="javascript:">
-          <h3>Course name</h3>
-          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
-          <div className="word">
-            <h4>Teacher</h4>
-            <i className="border"></i>
-            <p>Introduction</p>
-          </div>
-        </a>
-      </li>
-      <li>
-        <a href="javascript:">
-          <h3>Course name</h3>
-          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
-          <div className="word">
-            <h4>Teacher</h4>
-            <i className="border"></i>
-            <p>Introduction</p>
-          </div>
-        </a>
-      </li>
-      <li>
-        <a href="javascript:">
-          <h3>Course name</h3>
-          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
-          <div className="word">
-            <h4>Teacher</h4>
-            <i className="border"></i>
-            <p>Introduction</p>
-          </div>
-        </a>
-      </li>
-      <li>
-        <a href="javascript:">
-          <h3>Course name</h3>
-          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
-          <div className="word">
-            <h4>Teacher</h4>
-            <i className="border"></i>
-            <p>Introduction</p>
-          </div>
-        </a>
-      </li>
-      <li>
-        <a href="javascript:">
-          <h3>Course name</h3>
-          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
-          <div className="word">
-            <h4>Teacher</h4>
-            <i className="border"></i>
-            <p>Introduction</p>
-          </div>
-        </a>
-      </li>
 <!--      <li>-->
 <!--        <a href="javascript:">-->
 <!--          <el-header v-text="classForm.at(0).courseName"  justify="center"></el-header>-->
@@ -155,23 +55,113 @@
 <!--          </div>-->
 <!--        </a>-->
 <!--      </li>-->
-<!--      <li>-->
-<!--        <a href="javascript:">-->
-<!--          <h3>Course name</h3>-->
-<!--          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>-->
-<!--          <div className="word">-->
-<!--            <h4>Teacher</h4>-->
-<!--            <i className="border"></i>-->
-<!--            <p>Introduction</p>-->
-<!--          </div>-->
-<!--        </a>-->
-<!--      </li>-->
+      <li>
+        <a href="javascript:">
+          <h3>Course name</h3>
+          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
+          <div className="word">
+            <h4>Teacher</h4>
+            <i className="border"></i>
+            <p>Introduction</p>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:">
+          <h3>Course name</h3>
+          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
+          <div className="word">
+            <h4>Teacher</h4>
+            <i className="border"></i>
+            <p>Introduction</p>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:">
+          <h3>Course name</h3>
+          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
+          <div className="word">
+            <h4>Teacher</h4>
+            <i className="border"></i>
+            <p>Introduction</p>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:">
+          <h3>Course name</h3>
+          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
+          <div className="word">
+            <h4>Teacher</h4>
+            <i className="border"></i>
+            <p>Introduction</p>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:">
+          <h3>Course name</h3>
+          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
+          <div className="word">
+            <h4>Teacher</h4>
+            <i className="border"></i>
+            <p>Introduction</p>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:">
+          <h3>Course name</h3>
+          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
+          <div className="word">
+            <h4>Teacher</h4>
+            <i className="border"></i>
+            <p>Introduction</p>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:">
+          <h3>Course name</h3>
+          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
+          <div className="word">
+            <h4>Teacher</h4>
+            <i className="border"></i>
+            <p>Introduction</p>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:">
+          <h3>Course name</h3>
+          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
+          <div className="word">
+            <h4>Teacher</h4>
+            <i className="border"></i>
+            <p>Introduction</p>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:">
+          <h3>Course name</h3>
+          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
+          <div className="word">
+            <h4>Teacher</h4>
+            <i className="border"></i>
+            <p>Introduction</p>
+          </div>
+        </a>
+      </li>
     </ul>
   </div>
 
 </template>
 
 <script>
+import router from "@/router";
+
 export default {
   name: "Homepage",
   data() {
@@ -201,6 +191,9 @@ export default {
     this.fetchCourseOrigin()
   },
   methods: {
+    login(){
+      router.push('/login')
+    },
     fetchCourseOrigin() {
       this.$axios.get('api/course/success?recordsPerPage={\' + this.Page + \'}&pageNum={\' + this.pageNum + \'}\'').then(res => {
         let result = JSON.parse(res.data.data);
@@ -306,7 +299,7 @@ export default {
 .user_show {
   position: absolute;
   top: -20px;
-  left: 1000px;
+  left: 1200px;
 }
 
 .user_pic{
@@ -318,7 +311,7 @@ export default {
 .user_name{
   position: absolute;
   top:10px;
-  left: 50px;
+  left: 100px;
 }
 
 /deep/ .el-link{

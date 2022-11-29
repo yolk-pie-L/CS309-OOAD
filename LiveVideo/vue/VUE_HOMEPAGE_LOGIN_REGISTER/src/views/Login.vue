@@ -108,7 +108,7 @@ export default {
       //     return false;
       //   }
       // });
-      router.push('/')
+      router.push('/1')
     },
     // 重置表单
     resetForm(formName) {
