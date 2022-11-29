@@ -7,8 +7,10 @@ import com.example.live_video.service.StudentService;
 import com.example.live_video.vo.CourseVo;
 import com.example.live_video.wrapper.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @ResponseResult
@@ -24,13 +26,19 @@ public class CourseController {
     @GetMapping("/api/course/success")
     List<CourseVo> getAllSuccessCourseByTeacher(@RequestParam int recordsPerPage,
                                                 @RequestParam int pageNum,
-                                                @RequestParam(required = false) String courseName) {
-        if (courseName == null)
-            return CourseVo.parse(courseService.getApprovedCourses(recordsPerPage, pageNum));
-        else {
-            // FIXME: Maybe it is courseName but not teacherName?
-            return CourseVo.parse(courseService.getApprovedCoursesOfTeacher(recordsPerPage, pageNum, courseName));
+                                                @RequestParam(required = false) String courseName,
+                                                @RequestParam(required = false) String teacherName) {
+        // FIXME: Two methods may wrong
+        if (StringUtils.hasText(courseName) && StringUtils.hasText(teacherName)) {
+            return CourseVo.parse(courseService.getApprovedCoursesByCourseName(courseName));
         }
+        if (StringUtils.hasText(courseName)) {
+            return CourseVo.parse(courseService.getApprovedCoursesByCourseName(courseName));
+        }
+        if (StringUtils.hasText(teacherName)) {
+            return CourseVo.parse(courseService.getApprovedCoursesOfTeacher(recordsPerPage, pageNum, teacherName));
+        }
+        return CourseVo.parse(courseService.getApprovedCourses(recordsPerPage, pageNum));
     }
 
     @GetMapping("/api/course/all")
@@ -45,8 +53,7 @@ public class CourseController {
 
     @GetMapping("/api/course/waiting")
     public List<CourseVo> queryCourseOfAdministrator(@RequestParam String administrator) {
-        //TODO: return CourseVo.parse(courseService.getReviewingCourses());
-        return null;
+        return CourseVo.parse(courseService.getReviewingCourses());
     }
 
     @PostMapping("api/course/admin")
