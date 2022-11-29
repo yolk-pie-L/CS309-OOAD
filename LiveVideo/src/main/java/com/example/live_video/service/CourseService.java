@@ -54,4 +54,10 @@ public interface CourseService extends IService<Course> {
     public Course getCourseByTeacherNameCourseName(String teacherName, String courseName);
 
     public String getCoursePrivateKeyUrl(String teacherName, String courseName);
+
+    public List<Course> getCoursesByCourseName(String courseName);
+
+    public List<Course> getCoursesByTeacherName(String teacherName);
+
+
 }
