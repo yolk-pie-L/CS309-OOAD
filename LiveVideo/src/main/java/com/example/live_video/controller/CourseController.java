@@ -67,9 +67,9 @@ public class CourseController {
 
     @PostMapping("api/enroll-course")
     public Boolean enroll(@RequestParam String studentName,
-                          @RequestParam String courseName) throws Exception {
-        // TODO: 也许不用提供老师名字？
-        return studentService.enrollCourse(null, courseName, studentName);
+                          @RequestParam String courseName,
+                          @RequestParam String teacherName) throws Exception {
+        return studentService.enrollCourse(teacherName, courseName, studentName);
     }
 
 }
