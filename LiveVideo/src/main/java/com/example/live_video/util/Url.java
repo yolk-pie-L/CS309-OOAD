@@ -1,14 +1,18 @@
 package com.example.live_video.util;
 
+import com.example.live_video.wrapper.ResponseResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.UUID;
 
+@ResponseResult
+@RestController
 public class Url {
-    @PostMapping("/upload")
+    @PostMapping("/api/upload")
     public String upload(@RequestParam("filename") MultipartFile file) {
         /*
         上传头像图片到静态资源文件夹中

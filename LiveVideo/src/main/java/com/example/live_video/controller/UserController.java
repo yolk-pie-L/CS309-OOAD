@@ -38,6 +38,7 @@ public class UserController {
 
     @PostMapping("/api/register")
     public Boolean registerUser(@RequestBody @Valid UserForm userForm, BindingResult bindingResult) throws Exception {
+        System.out.println(userForm);
         if (bindingResult.hasErrors()) {
             List<ObjectError> list = bindingResult.getAllErrors();
             throw new MyException(list.get(0).getDefaultMessage());
