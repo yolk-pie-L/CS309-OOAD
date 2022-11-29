@@ -39,6 +39,8 @@ public class Course {
     @TableField(value = "picture_url", updateStrategy = FieldStrategy.NOT_EMPTY)
     private String pictureUrl;
 
+    @TableField(value = "private_key_url", updateStrategy = FieldStrategy.NOT_EMPTY)
+    private String privateKeyUrl;
 
     @TableField(value = "create_time", insertStrategy = FieldStrategy.NOT_EMPTY)
     private Timestamp createTime;
@@ -49,6 +51,17 @@ public class Course {
     @TableLogic(value = "0", delval = "id")
     @TableField(value = "is_delete", insertStrategy = FieldStrategy.NOT_EMPTY)
     private Integer deleteFlag;
+
+    public Course(String courseName, String teacherName, String tag, Long charge, String description, CourseStatus status, String pictureUrl, String privateKeyUrl) {
+        this.courseName = courseName;
+        this.teacherName = teacherName;
+        this.tag = tag;
+        this.charge = charge;
+        this.description = description;
+        this.status = status;
+        this.pictureUrl = pictureUrl;
+        this.privateKeyUrl = privateKeyUrl;
+    }
 
     /**
      * <p>

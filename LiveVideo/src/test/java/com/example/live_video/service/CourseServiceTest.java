@@ -195,4 +195,26 @@ public class CourseServiceTest {
         System.out.println(course);
         tearDown();
     }
+
+    @Test
+    void getCoursePrivateKeyUrl() {
+        User teacher1 = new User("teacher1", UserType.Teacher, "teacher1@mail", "123456");
+        userMapper.insert(teacher1);
+        Course rc1_t1 = new Course("rc1_t1", teacher1.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "assign_url");
+        rc1_t1.setPrivateKeyUrl("privatekey");
+        rc1_t1.setTeacherName(teacher1.getUserName());
+        courseMapper.insert(rc1_t1);
+        String key = courseService.getCoursePrivateKeyUrl(teacher1.getUserName(), rc1_t1.getCourseName());
+        assert key.equals("privatekey");
+        rc1_t1.setStatus(CourseStatus.APPROVED);
+        courseService.updateCourse(rc1_t1);
+        key = courseService.getCoursePrivateKeyUrl(teacher1.getUserName(), rc1_t1.getCourseName());
+        assert key.equals("privatekey");
+        rc1_t1.setPrivateKeyUrl("new pr key");
+        courseService.updateCourse(rc1_t1);
+        key= courseService.getCoursePrivateKeyUrl(teacher1.getUserName(), rc1_t1.getCourseName());
+        assert key.equals("new pr key");
+        courseMapper.deleteById(rc1_t1);
+        userMapper.deleteById(teacher1);
+    }
 }

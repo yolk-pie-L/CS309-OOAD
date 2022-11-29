@@ -22,17 +22,18 @@ CREATE TABLE user
 
 CREATE TABLE course
 (
-    id          int auto_increment primary key,
-    course_name varchar(20)                              not null,
-    teacher_id  int                                      not null,
-    tag         varchar(20),
-    charge      bigint                                   not null,
-    description text,
-    status      enum ('APPROVED', 'FAILED', 'REVIEWING') not null,
-    picture_url varchar(50),
-    create_time timestamp                                not null default CURRENT_TIMESTAMP,
-    update_time timestamp                                null     default null on update CURRENT_TIMESTAMP,
-    is_delete   int                                               default 0,
+    id              int auto_increment primary key,
+    course_name     varchar(20)                              not null,
+    teacher_id      int                                      not null,
+    tag             varchar(20),
+    charge          bigint                                   not null,
+    description     text,
+    status          enum ('APPROVED', 'FAILED', 'REVIEWING') not null,
+    picture_url     varchar(50),
+    private_key_url varchar(50),
+    create_time     timestamp                                not null default CURRENT_TIMESTAMP,
+    update_time     timestamp                                null     default null on update CURRENT_TIMESTAMP,
+    is_delete       int                                               default 0,
     CONSTRAINT unique (course_name, teacher_id, is_delete),
     FOREIGN KEY (teacher_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -139,9 +140,9 @@ CREATE TABLE user_payment_log
 
 CREATE TABLE stu_assign
 (
-    user_id int not null,
+    user_id    int not null,
     assign_id  int not null,
-    grade   int,
+    grade      int,
     assign_url varchar(50),
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (assign_id) REFERENCES assignment (id) ON DELETE CASCADE ON UPDATE CASCADE
