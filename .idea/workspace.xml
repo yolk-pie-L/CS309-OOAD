@@ -4,19 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="040d5963-020e-49eb-a09c-285573158850" name="Changes" comment="Changes">
-      <change afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/courseDetailPage.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/courseMainPage.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/infoUpdate.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/teacherHomeView.vue" afterDir="false" />
+    <list default="true" id="040d5963-020e-49eb-a09c-285573158850" name="Changes" comment="中期答辩前端代码">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/App.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/components/layout/nav-bar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/components/layout/nav-bar.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/components/layout/nav-bar1.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/components/layout/nav-bar1.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/router/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/Login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/Login.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/StudentHome.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/StudentHome.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/StudentinfoUpdate.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/StudentinfoUpdate.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/courseMainPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/courseMainPage.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/regist.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/regist.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -63,6 +56,14 @@
       <updated>1664441664123</updated>
       <workItem from="1664441665520" duration="792000" />
     </task>
+    <task id="LOCAL-00001" summary="中期答辩前端代码">
+      <created>1669724591751</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1669724591751</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -81,7 +82,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changes" />
+    <MESSAGE value="中期答辩前端代码" />
+    <option name="LAST_COMMIT_MESSAGE" value="中期答辩前端代码" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

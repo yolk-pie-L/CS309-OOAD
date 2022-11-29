@@ -74,13 +74,13 @@ export default {
     };
     return {
       options: [{
-      value: '学生',
+      value: 'Student',
       label: '学生',
     }, {
-      value: '老师',
+      value: 'Teacher',
       label: '老师',
     }, {
-      value: '管理员',
+      value: 'Administrator',
       label: '管理员',
     }
       ],
