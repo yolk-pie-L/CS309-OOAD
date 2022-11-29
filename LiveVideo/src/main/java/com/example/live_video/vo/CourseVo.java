@@ -15,16 +15,22 @@ public class CourseVo {
 
     private String introduction;
 
+    private Long charge;
+
+    private String tag;
+
     private String coursePicture;
 
     private String privateKeyUrl;
 
     private String status;
 
-    public CourseVo(String courseName, String teacherName, String introduction, String coursePicture, String privateKeyUrl, String status) {
+    public CourseVo(String courseName, String teacherName, String introduction, Long charge, String tag, String coursePicture, String privateKeyUrl, String status) {
         this.courseName = courseName;
         this.teacherName = teacherName;
         this.introduction = introduction;
+        this.charge = charge;
+        this.tag = tag;
         this.coursePicture = coursePicture;
         this.privateKeyUrl = privateKeyUrl;
         this.status = status;
@@ -38,9 +44,7 @@ public class CourseVo {
 
     public static List<CourseVo> parse(List<Course> courseList) {
         List<CourseVo> courseVoList = new ArrayList<>();
-        courseList.forEach(course -> {
-            courseVoList.add(CourseVo.parse(course));
-        });
+        courseList.forEach(course -> courseVoList.add(CourseVo.parse(course)));
         return courseVoList;
     }
 
@@ -49,6 +53,8 @@ public class CourseVo {
                 course.getCourseName(),
                 course.getTeacherName(),
                 course.getDescription(),
+                course.getCharge(),
+                course.getTag(),
                 course.getPictureUrl(),
                 null, //FIXME: course.getPrivateKeyUrl()
                 course.getStatus().toString()
