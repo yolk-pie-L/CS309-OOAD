@@ -63,6 +63,16 @@ public interface CourseMapper extends BaseMapper<Course> {
             "  AND user.is_delete = 0"})
     public Course getCourseByTeacherNameCourseName(String teacherName, String courseName);
 
+    @Select({"SELECT course.*\n" +
+            "FROM course\n" +
+            "         JOIN user ON course.teacher_id = user.id\n" +
+            "WHERE username = #{teacherName}\n" +
+            "  AND course_name = #{courseName}\n" +
+            "  AND status = 'APPROVED'\n"+
+            "  AND course.is_delete = 0\n" +
+            "  AND user.is_delete = 0"})
+    public Course getApprovedCourseByTeacherNameCourseName(String teacherName, String courseName);
+
     @Select("SELECT * FROM course WHERE status = 'REVIEWING' AND is_delete = 0 LIMIT #{limit} OFFSET #{offset}")
     public List<Course> getReviewingCourses(int limit, int offset);
 

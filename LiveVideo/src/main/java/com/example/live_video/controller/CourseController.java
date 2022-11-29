@@ -1,6 +1,7 @@
 package com.example.live_video.controller;
 
 import com.example.live_video.dto.CourseDto;
+import com.example.live_video.entity.Course;
 import com.example.live_video.entity.CourseStatus;
 import com.example.live_video.service.CourseService;
 import com.example.live_video.service.StudentService;
@@ -28,12 +29,14 @@ public class CourseController {
                                                 @RequestParam int pageNum,
                                                 @RequestParam(required = false) String courseName,
                                                 @RequestParam(required = false) String teacherName) {
-        // FIXME: Two methods may wrong
         if (StringUtils.hasText(courseName) && StringUtils.hasText(teacherName)) {
-            return CourseVo.parse(courseService.getApprovedCoursesByCourseName(courseName));
+            //FIXME: perhaps not elegant?
+            List<Course> courses = new ArrayList<>();
+            courses.add(courseService.getApprovedCourseByTeacherNameCourseName(teacherName, courseName));
+            return CourseVo.parse(courses);
         }
         if (StringUtils.hasText(courseName)) {
-            return CourseVo.parse(courseService.getApprovedCoursesByCourseName(courseName));
+            return CourseVo.parse(courseService.getApprovedCoursesByCourseName(recordsPerPage, pageNum, courseName));
         }
         if (StringUtils.hasText(teacherName)) {
             return CourseVo.parse(courseService.getApprovedCoursesOfTeacher(recordsPerPage, pageNum, teacherName));

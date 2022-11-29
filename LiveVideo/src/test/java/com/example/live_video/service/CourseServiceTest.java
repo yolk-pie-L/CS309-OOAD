@@ -73,6 +73,7 @@ public class CourseServiceTest {
         allUsers.add(teacher1);
         allUsers.add(teacher2);
         allUsers.add(teacher3);
+        allUsers.add(teacher4);
     }
 
     void tearDown(){
@@ -241,4 +242,12 @@ public class CourseServiceTest {
         tearDown();
     }
 
+    @Test
+    void testGetApprovedCoursesByCourseName() {
+        setUp();
+        Course c = courseService.getApprovedCourseByTeacherNameCourseName("teacher3", "rc1_t1");
+        assert c.getStatus().equals(CourseStatus.APPROVED);
+        assert c.getTeacherId().equals(allUsers.get(2).getId());
+        tearDown();
+    }
 }
