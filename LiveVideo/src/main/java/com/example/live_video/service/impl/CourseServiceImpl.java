@@ -104,17 +104,10 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
     }
 
     @Override
-    public List<Course> getCoursesByCourseName(String courseName) {
+    public List<Course> getApprovedCoursesByCourseName(String courseName) {
         QueryWrapper<Course> courseQueryWrapper = new QueryWrapper<>();
         courseQueryWrapper.eq("course_name", courseName);
-        return courseMapper.selectList(courseQueryWrapper);
-    }
-
-    @Override
-    public List<Course> getCoursesByTeacherName(String teacherName) {
-        Long teacherId = userService.getUserIdByUsername(teacherName);
-        QueryWrapper<Course> courseQueryWrapper = new QueryWrapper<>();
-        courseQueryWrapper.eq("teacher_id", teacherId);
+        courseQueryWrapper.eq("status", CourseStatus.APPROVED);
         return courseMapper.selectList(courseQueryWrapper);
     }
 
