@@ -146,12 +146,12 @@ export default {
             // 判断结果
             if (result) {
               /*登陆成功*/
-              Element.Message.success(message);
+              // Element.Message.success(message);
               /*跳转页面*/
               router.push('/')
             } else {
               /*打印错误信息*/
-              Element.Message.error(message);
+              // Element.Message.error(message);
             }
           })
         } else {

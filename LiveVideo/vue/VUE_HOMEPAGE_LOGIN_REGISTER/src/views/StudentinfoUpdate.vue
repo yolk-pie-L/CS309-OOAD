@@ -84,7 +84,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // 表单验证成功
-          this.$axios.post('api/user', this.infoForm).then(res => {
+          this.$axios.post('http://localhost:8082/api/user', this.infoForm).then(res => {
             // 拿到结果
             let result = JSON.parse(res.data.data);
             let message = res.data.msg;

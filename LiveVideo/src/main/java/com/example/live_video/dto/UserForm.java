@@ -18,7 +18,7 @@ public class UserForm {
 
     private String mail;
 
-    private UserType userType;
+    private String userType;
 
     private String photoUrl;
 
@@ -30,9 +30,9 @@ public class UserForm {
 
     public User convertToUser(){
         if (account != null)
-            return new User(userName, userType, mail, password, photoUrl, account);
+            return new User(userName, UserType.valueOf(userType), mail, password, photoUrl, account);
         else
-            return new User(userName, userType, mail, password);
+            return new User(userName, UserType.valueOf(userType), mail, password);
     }
 
     @Override

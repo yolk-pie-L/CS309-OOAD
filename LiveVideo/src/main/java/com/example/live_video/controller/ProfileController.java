@@ -29,6 +29,7 @@ public class ProfileController {
 
     @PostMapping("/api/user")
     public Boolean modifyUserInfo(@RequestBody UserForm userForm) {
+        System.out.println(userForm);
         return userService.updateUser(userForm.convertToUser());
     }
 }
