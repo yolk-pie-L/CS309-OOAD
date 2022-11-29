@@ -7,13 +7,11 @@ import com.example.live_video.entity.User;
 import com.example.live_video.service.CourseService;
 import com.example.live_video.service.StudentService;
 import com.example.live_video.service.UserService;
+import com.example.live_video.vo.UserVo;
 import com.example.live_video.wrapper.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,41 +22,13 @@ public class ProfileController {
     @Autowired
     UserService userService;
 
-    @Autowired
-    CourseService courseService;
-
-    @Autowired
-    StudentService studentService;
-
-    @GetMapping("/api/student")
-    public Object queryStudentInfo(@RequestParam String userName) {
-        User user = userService.getUserByUsername(userName);
-        List<Course> courseList = studentService.getEnrolledCourses(userName);
-        return null;
+    @GetMapping("/api/user")
+    public UserVo queryUserInfo(@RequestParam String userName) {
+        return UserVo.convert(userService.getUserByUsername(userName));
     }
 
-    @GetMapping("/api/teacher")
-    public UserForm queryTeacherInfo(@RequestParam String userName) {
-        User user = userService.getUserByUsername(userName);
-        List<Course> courseList = courseService.getApprovedCourses(0, 0);
-        return null;
-    }
-
-    @PostMapping("/api/person")
-    public ExceptionMessage modifyPersonalInfo(@RequestParam String userName,
-                                               @RequestParam String password,
-                                               @RequestParam String newPassword,
-                                               @RequestParam String photoUrl) throws Exception{
-        User user = new User();
-        user.setUserName(userName);
-        // fixme: 可能需要用newPassword加密后重置?
-        String encodedPassword = DigestUtils.md5DigestAsHex(newPassword.getBytes());
-        user.setPassword(password);
-        user.setPhotoUrl(photoUrl);
-        Object result = userService.compareUserPassword(user);
-        if (result instanceof Exception) {
-            userService.updateUser(user);
-        }
-        return null;
+    @PostMapping("/api/user")
+    public Boolean modifyUserInfo(@RequestBody UserForm userForm) {
+        return userService.updateUser(userForm.convertToUser());
     }
 }

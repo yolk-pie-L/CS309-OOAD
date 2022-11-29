@@ -40,9 +40,12 @@ public class CourseServiceTest {
     void setUp() {
         User teacher1 = new User("teacher1", UserType.Teacher, "teacher1@mail", "123456");
         User teacher2 = new User("teacher2", UserType.Teacher, "teacher2@mail", "123456");
+        User teacher3 = new User("teacher3", UserType.Teacher, "t3@mail", "32");
         userMapper.insert(teacher1);
         userMapper.insert(teacher2);
+        userMapper.insert(teacher3);
         Course rc1_t1 = new Course("rc1_t1", teacher1.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "assign_url");
+        Course rc1_t3 = new Course("rc1_t1", teacher3.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "assign_url");
         Course rc2_t1 = new Course("rc2_t1", teacher1.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "assign_url");
         Course rc3_t1 = new Course("rc3_t1", teacher1.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "assign_url");
         Course ac1_t1 = new Course("ac_t1", teacher1.getId(), "test", 0L, "approve", CourseStatus.APPROVED, "assign_url");
@@ -54,14 +57,17 @@ public class CourseServiceTest {
         courseMapper.insert(ac1_t1);
         courseMapper.insert(fc1_t1);
         courseMapper.insert(rc1_t2);
+        courseMapper.insert(rc1_t3);
         allCourses.add(rc1_t1);
         allCourses.add(rc2_t1);
         allCourses.add(rc3_t1);
         allCourses.add(ac1_t1);
         allCourses.add(fc1_t1);
         allCourses.add(rc1_t2);
+        allCourses.add(rc1_t3);
         allUsers.add(teacher1);
         allUsers.add(teacher2);
+        allUsers.add(teacher3);
     }
 
     void tearDown(){
@@ -110,6 +116,7 @@ public class CourseServiceTest {
         User teacher = new User("teacher1", UserType.Teacher, "teacher1@mail", "123456");
         userMapper.insert(teacher);
         Course rc1 = new Course("rc1", teacher.getId(), "test", 0L, "HELLP", CourseStatus.REVIEWING, "assign_url");
+        rc1.setTeacherName(teacher.getUserName());
         Course rc2 = new Course("rc2", teacher.getId(), "test", 0L, "HELLP", CourseStatus.REVIEWING, "assign_url");
         Course rc3 = new Course("rc3", teacher.getId(), "test", 0L, "HELLP", CourseStatus.REVIEWING, "assign_url");
         Course ac = new Course("ac", teacher.getId(), "test", 0L, "HELLP", CourseStatus.APPROVED, "assign_url");
@@ -170,7 +177,7 @@ public class CourseServiceTest {
         assert courseList.get(0).getStatus() == CourseStatus.REVIEWING;
         courseList = courseService.getReviewingCoursesOfTeacher(4, 1, "teacher2");
         assert courseList.size() == 1;
-        assert Objects.equals(courseList.get(0).getId(), allCourses.get(allCourses.size() - 1).getId());
+        assert Objects.equals(courseList.get(0).getId(), allCourses.get(5).getId());
         tearDown();
     }
 
@@ -195,4 +202,47 @@ public class CourseServiceTest {
         System.out.println(course);
         tearDown();
     }
+
+    @Test
+    void getCoursePrivateKeyUrl() {
+        User teacher1 = new User("teacher1", UserType.Teacher, "teacher1@mail", "123456");
+        userMapper.insert(teacher1);
+        Course rc1_t1 = new Course("rc1_t1", teacher1.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "assign_url");
+        rc1_t1.setPrivateKeyUrl("privatekey");
+        rc1_t1.setTeacherName(teacher1.getUserName());
+        courseMapper.insert(rc1_t1);
+        String key = courseService.getCoursePrivateKeyUrl(teacher1.getUserName(), rc1_t1.getCourseName());
+        assert key.equals("privatekey");
+        rc1_t1.setStatus(CourseStatus.APPROVED);
+        courseService.updateCourse(rc1_t1);
+        key = courseService.getCoursePrivateKeyUrl(teacher1.getUserName(), rc1_t1.getCourseName());
+        assert key.equals("privatekey");
+        rc1_t1.setPrivateKeyUrl("new pr key");
+        courseService.updateCourse(rc1_t1);
+        key= courseService.getCoursePrivateKeyUrl(teacher1.getUserName(), rc1_t1.getCourseName());
+        assert key.equals("new pr key");
+        courseMapper.deleteById(rc1_t1);
+        userMapper.deleteById(teacher1);
+    }
+
+    @Test
+    void getCoursesByCourseName() {
+//        setUp();
+//        Course c1 = allCourses.get(0);
+//        List<Course> courses = courseService.getCoursesByCourseName(c1.getCourseName());
+//        assert courses.size() == 3;
+//        tearDown();
+    }
+
+    @Test
+    void getCoursesByTeacherName() {
+//        setUp();
+//        User teacher = allUsers.get(0);
+//        List<Course> courses = courseService.getCoursesByTeacherName(teacher.getUserName());
+//        assert courses.size() == 5;
+//        System.out.println("getCoursesByTeacherName");
+//        courses.forEach(System.out::println);
+//        tearDown();
+    }
+
 }

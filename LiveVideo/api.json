@@ -13,15 +13,21 @@
             "courseName": "course",
             "teacherName": "teacher",
             "introduction": "intro",
+            "charge": 10,
+            "tag": "tag",
             "coursePicture": "url",
-            "privateKeyUrl": "ababa"
+            "privateKeyUrl": "ababa",
+            "status": "OK"
           },
           {
             "courseName": "course",
             "teacherName": "teacher",
             "introduction": "intro",
+            "charge": 10,
+            "tag": "tag",
             "coursePicture": "url",
-            "privateKeyUrl": "ababa"
+            "privateKeyUrl": "ababa",
+            "status": "OK"
           }
         ]
       }
@@ -166,13 +172,16 @@
     "queryCourseOfAdministrator": {
       "Method": "GET",
       "Path": "~/api/course/waiting?administrator={ababa}",
-      "OutputForm": {
-        "courseName": "",
-        "teacherName": "",
-        "tag": "",
-        "charge": "",
-        "description": ""
-      }
+      "OutputForm": [{
+        "courseName": "course",
+        "teacherName": "teacher",
+        "introduction": "intro",
+        "charge": 10,
+        "tag": "tag",
+        "coursePicture": "url",
+        "privateKeyUrl": "ababa",
+        "status": "OK"
+      }]
     },
     "queryUserLikeUserName": {
       "Method": "GET",
