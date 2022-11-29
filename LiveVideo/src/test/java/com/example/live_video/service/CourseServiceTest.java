@@ -41,11 +41,14 @@ public class CourseServiceTest {
         User teacher1 = new User("teacher1", UserType.Teacher, "teacher1@mail", "123456");
         User teacher2 = new User("teacher2", UserType.Teacher, "teacher2@mail", "123456");
         User teacher3 = new User("teacher3", UserType.Teacher, "t3@mail", "32");
+        User teacher4 = new User("teacher4", UserType.Teacher, "t4", "3234");
         userMapper.insert(teacher1);
         userMapper.insert(teacher2);
         userMapper.insert(teacher3);
+        userMapper.insert(teacher4);
         Course rc1_t1 = new Course("rc1_t1", teacher1.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "assign_url");
-        Course rc1_t3 = new Course("rc1_t1", teacher3.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "assign_url");
+        Course ac1_t3 = new Course("rc1_t1", teacher3.getId(), "test", 0L, "review", CourseStatus.APPROVED, "assign_url");
+        Course ac1_t4 = new Course("rc1_t1", teacher4.getId(), "test", 0L, "review", CourseStatus.APPROVED, "assign_url");
         Course rc2_t1 = new Course("rc2_t1", teacher1.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "assign_url");
         Course rc3_t1 = new Course("rc3_t1", teacher1.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "assign_url");
         Course ac1_t1 = new Course("ac_t1", teacher1.getId(), "test", 0L, "approve", CourseStatus.APPROVED, "assign_url");
@@ -54,17 +57,19 @@ public class CourseServiceTest {
         courseMapper.insert(rc1_t1);
         courseMapper.insert(rc2_t1);
         courseMapper.insert(rc3_t1);
+        courseMapper.insert(ac1_t3);
+        courseMapper.insert(ac1_t4);
         courseMapper.insert(ac1_t1);
         courseMapper.insert(fc1_t1);
         courseMapper.insert(rc1_t2);
-        courseMapper.insert(rc1_t3);
         allCourses.add(rc1_t1);
         allCourses.add(rc2_t1);
         allCourses.add(rc3_t1);
         allCourses.add(ac1_t1);
         allCourses.add(fc1_t1);
         allCourses.add(rc1_t2);
-        allCourses.add(rc1_t3);
+        allCourses.add(ac1_t3);
+        allCourses.add(ac1_t4);
         allUsers.add(teacher1);
         allUsers.add(teacher2);
         allUsers.add(teacher3);
@@ -226,22 +231,13 @@ public class CourseServiceTest {
     }
 
     @Test
-    void getCoursesByCourseName() {
+    void getApprovedCoursesByCourseName() {
         setUp();
         Course c1 = allCourses.get(0);
-        List<Course> courses = courseService.getCoursesByCourseName(c1.getCourseName());
-        assert courses.size() == 3;
-        tearDown();
-    }
-
-    @Test
-    void getCoursesByTeacherName() {
-        setUp();
-        User teacher = allUsers.get(0);
-        List<Course> courses = courseService.getCoursesByTeacherName(teacher.getUserName());
-        assert courses.size() == 5;
-        System.out.println("getCoursesByTeacherName");
+        List<Course> courses = courseService.getApprovedCoursesByCourseName(10, 1, c1.getCourseName());
+        System.out.println(courses.size());
         courses.forEach(System.out::println);
+        assert courses.size() == 2;
         tearDown();
     }
 
