@@ -8,7 +8,7 @@
       </div>
       <div class="user_show">
         <el-image :src="userForm.photoUrl" alt="暂无图片" class="user_pic"></el-image>
-        <el-link href="https://element.eleme.io" type="success" class="user_name" v-text="userForm.userName"></el-link>
+        <el-link type="success" class="user_name" v-text="userForm.userName" @click="into()"></el-link>
       </div>
       <div class="search_input">
         <el-input
@@ -172,6 +172,8 @@
 </template>
 
 <script>
+import router from "@/router";
+
 export default {
   name: "Homepage",
   data() {
@@ -240,7 +242,9 @@ export default {
         }
       })
     },
-
+    into(){
+      router.push('/student');
+    }
   },
 }
 </script>

@@ -4,6 +4,7 @@ import HomeView from "@/views/HomeView";
 import register from "@/views/regist";
 import Home from '@/views/home'
 import Home1 from '@/views/home1'
+import studentHome from "@/views/StudentHome";
 
 const routes = [
   {
@@ -30,7 +31,12 @@ const routes = [
     path: '/register',
     name: 'register',
     component: register
-  }
+  },
+  {
+    path: '/student',
+    name: 'student',
+    component: studentHome
+  },
 ]
 
 const router = createRouter({
