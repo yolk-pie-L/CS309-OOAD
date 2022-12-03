@@ -5,6 +5,7 @@ import com.example.live_video.entity.CourseStatus;
 import com.example.live_video.service.CourseService;
 import com.example.live_video.service.StudentService;
 import com.example.live_video.vo.CourseVo;
+import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @ResponseResult
 @RestController
+@PassToken
 public class CourseController {
 
     @Autowired

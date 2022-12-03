@@ -5,7 +5,6 @@ import com.example.live_video.entity.User;
 import com.example.live_video.entity.UserType;
 import com.example.live_video.exception.MyException;
 import com.example.live_video.exception.SQLMailConflictException;
-import com.example.live_video.exception.SQLUserNotFoundException;
 import com.example.live_video.exception.SQLUsernameConflictException;
 import com.example.live_video.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
@@ -97,17 +96,17 @@ public class UserServiceTest {
         boolean res2;
         boolean res3;
         try {
-            res1 = userService.compareUserPassword(user1);
+            res1 = userService.compareUserPassword(user1.getUserName(), user1.getPassword());
         }catch (MyException e){
             res1 = false;
         }
         try {
-            res2 = userService.compareUserPassword(user2);
+            res2 = userService.compareUserPassword(user2.getUserName(), user2.getPassword());
         }catch (MyException e){
             res2 = true;
         }
         try {
-            res3 = userService.compareUserPassword(user3);
+            res3 = userService.compareUserPassword(user3.getUserName(), user3.getPassword());
         }catch (MyException e){
             res3 = true;
         }
