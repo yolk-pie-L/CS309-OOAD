@@ -21,7 +21,7 @@ public class AssignmentServiceImpl extends ServiceImpl<AssignmentMapper, Assignm
 
     @Override
     public Boolean createAssignment(Assignment assignment) throws SQLAssignNameConflictException {
-        Long courseId = courseMapper.getCourseIdByTeacherNameCourseName(assignment.getTeacherName(), assignment.getCourseName());
+        Long courseId = courseMapper.getCourseId(assignment.getTeacherName(), assignment.getCourseName());
         assignment.setCourseId(courseId);
         QueryWrapper<Assignment> assignQueryWrapper = new QueryWrapper<>();
         assignQueryWrapper.eq("course_id", courseId);
@@ -35,31 +35,31 @@ public class AssignmentServiceImpl extends ServiceImpl<AssignmentMapper, Assignm
             return flag == 1;
         }
         for(String assign_url: assignment.getAssignUrls()){
-            assignmentMapper.insertAssignUrls(assignment.getId(), assign_url);
+            assignmentMapper.insertAssignUrlList(assignment.getId(), assign_url);
         }
         return flag == 1;
     }
 
     @Override
     public Boolean removeAssignment(Assignment assignment) {
-        Long courseId = courseMapper.getCourseIdByTeacherNameCourseName(assignment.getTeacherName(), assignment.getCourseName());
+        Long courseId = courseMapper.getCourseId(assignment.getTeacherName(), assignment.getCourseName());
         return assignmentMapper.deleteAssignment(courseId, assignment.getAssignmentName()) == 1;
     }
 
     @Override
-    public Assignment getAssignmentByCourseNameTeacherNameAssignName(String courseName, String teacherName, String assignName) {
-        Long courseId = courseMapper.getCourseIdByTeacherNameCourseName(teacherName, courseName);
+    public Assignment getOneAssignment(String courseName, String teacherName, String assignName) {
+        Long courseId = courseMapper.getCourseId(teacherName, courseName);
         QueryWrapper<Assignment> assignQueryWrapper = new QueryWrapper<>();
         assignQueryWrapper.eq("course_id", courseId);
         assignQueryWrapper.eq("assignment_name", assignName);
         Assignment assignment = assignmentMapper.selectOne(assignQueryWrapper);
-        assignment.setAssignUrls(assignmentMapper.getAssignUrls(courseId, assignName));
+        assignment.setAssignUrls(assignmentMapper.getAssignUrlList(courseId, assignName));
         return assignment;
     }
 
     @Override
-    public Long getAssignmentIdByCourseNameTeacherNameAssignName(String courseName, String teacherName, String assignName) {
-        Long courseId = courseMapper.getCourseIdByTeacherNameCourseName(teacherName, courseName);
+    public Long getAssignmentId(String courseName, String teacherName, String assignName) {
+        Long courseId = courseMapper.getCourseId(teacherName, courseName);
         QueryWrapper<Assignment> assignQueryWrapper = new QueryWrapper<>();
         assignQueryWrapper.eq("course_id", courseId);
         assignQueryWrapper.eq("assignment_name", assignName);

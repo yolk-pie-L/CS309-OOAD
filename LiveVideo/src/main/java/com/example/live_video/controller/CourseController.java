@@ -1,6 +1,7 @@
 package com.example.live_video.controller;
 
 import com.example.live_video.dto.CourseDto;
+import com.example.live_video.entity.Course;
 import com.example.live_video.entity.CourseStatus;
 import com.example.live_video.service.CourseService;
 import com.example.live_video.service.StudentService;
@@ -30,22 +31,24 @@ public class CourseController {
                                                 @RequestParam int pageNum,
                                                 @RequestParam(required = false) String courseName,
                                                 @RequestParam(required = false) String teacherName) {
-        // FIXME: Two methods may wrong
         if (StringUtils.hasText(courseName) && StringUtils.hasText(teacherName)) {
-            return CourseVo.parse(courseService.getApprovedCoursesByCourseName(courseName));
+            //FIXME: perhaps not elegant?
+            List<Course> courses = new ArrayList<>();
+            courses.add(courseService.getOneApprovedCourse(teacherName, courseName));
+            return CourseVo.parse(courses);
         }
         if (StringUtils.hasText(courseName)) {
-            return CourseVo.parse(courseService.getApprovedCoursesByCourseName(courseName));
+            return CourseVo.parse(courseService.getApprovedCourseList(recordsPerPage, pageNum, courseName));
         }
         if (StringUtils.hasText(teacherName)) {
-            return CourseVo.parse(courseService.getApprovedCoursesOfTeacher(recordsPerPage, pageNum, teacherName));
+            return CourseVo.parse(courseService.getApprovedCourseListOfTeacher(recordsPerPage, pageNum, teacherName));
         }
-        return CourseVo.parse(courseService.getApprovedCourses(recordsPerPage, pageNum));
+        return CourseVo.parse(courseService.getApprovedCourseList(recordsPerPage, pageNum));
     }
 
     @GetMapping("/api/course/all")
     public CourseVo queryAllCourseByUsername(@RequestParam String userName) {
-        return CourseVo.parseEasy(courseService.getCourseByTeacherNameCourseName(userName, null));
+        return CourseVo.parseEasy(courseService.getOneCourse(userName, null));
     }
 
     @PostMapping ("/api/course")
@@ -55,7 +58,7 @@ public class CourseController {
 
     @GetMapping("/api/course/waiting")
     public List<CourseVo> queryCourseOfAdministrator(@RequestParam String administrator) {
-        return CourseVo.parse(courseService.getReviewingCourses());
+        return CourseVo.parse(courseService.getReviewingCourseList());
     }
 
     @PostMapping("api/course/admin")

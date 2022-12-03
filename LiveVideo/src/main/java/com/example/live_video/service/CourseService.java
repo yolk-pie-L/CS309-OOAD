@@ -34,7 +34,7 @@ public interface CourseService extends IService<Course> {
      *
      * @return A list of course
      */
-    public List<Course> getReviewingCourses();
+    public List<Course> getReviewingCourseList();
 
 
     /**
@@ -43,20 +43,20 @@ public interface CourseService extends IService<Course> {
      * @param pageNum 第几页（从1开始）
      * @return A list of course
      */
-    public List<Course> getApprovedCourses(int recordsPerPage, int pageNum);
+    public List<Course> getApprovedCourseList(int recordsPerPage, int pageNum);
 
-    public List<Course> getApprovedCoursesOfTeacher(int recordsPerPage, int pageNum, String teacherName);
+    public List<Course> getApprovedCourseListOfTeacher(int recordsPerPage, int pageNum, String teacherName);
 
-    public List<Course> getFailedCoursesOfTeacher(int recordsPerPage, int pageNum, String teacherName);
+    public List<Course> getFailedCourseListOfTeacher(int recordsPerPage, int pageNum, String teacherName);
 
-    public List<Course> getReviewingCoursesOfTeacher(int recordsPerPage, int pageNum, String teacherName);
+    public List<Course> getReviewingCourseListOfTeacher(int recordsPerPage, int pageNum, String teacherName);
 
-    public Course getCourseByTeacherNameCourseName(String teacherName, String courseName);
+    public Course getOneCourse(String teacherName, String courseName);
+
+    public Course getOneApprovedCourse(String teacherName, String courseName);
 
     public String getCoursePrivateKeyUrl(String teacherName, String courseName);
 
-    public List<Course> getApprovedCoursesByCourseName(String courseName);
-
-
+    public List<Course> getApprovedCourseList(int recordsPerPage, int pageNum, String courseName);
 
 }

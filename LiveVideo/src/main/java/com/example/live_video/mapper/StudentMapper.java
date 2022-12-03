@@ -17,7 +17,7 @@ public interface StudentMapper {
 
     @Select("SELECT course.* FROM course JOIN stu_course ON course.id = stu_course.course_id " +
             "WHERE user_id = #{userId}")
-    public List<Course> getEnrolledCourses(Long userId);
+    public List<Course> getEnrolledCourseList(Long userId);
 
     @Update("UPDATE stu_assign SET grade = #{grade} WHERE user_id = #{studentId} AND assign_id = #{assignId}")
     public void setStudentAssignGrade(Long studentId, Long assignId, int grade);
@@ -26,7 +26,7 @@ public interface StudentMapper {
     public void submitAssignment(Long studentId, Long assignId, String assign_url);
 
     @Select("SELECT assign_url FROM stu_assign WHERE user_id = #{studentId} AND assign_id = #{assignId}")
-    public List<String> getStudentSubmittedAssignUrls(Long studentId, Long assignId);
+    public List<String> getStudentSubmittedAssignUrlList(Long studentId, Long assignId);
 
     @Delete("DELETE FROM stu_assign WHERE user_id = #{studentId} AND assign_id = #{assignId}")
     public void deleteStudentAssignment(Long studentId, Long assignId);

@@ -43,7 +43,7 @@ public interface CourseMapper extends BaseMapper<Course> {
             "  AND course_name = #{courseName}\n" +
             "  AND course.is_delete = 0\n" +
             "  AND user.is_delete = 0"})
-    public Long getCourseIdByTeacherNameCourseName(String teacherName, String courseName);
+    public Long getCourseId(String teacherName, String courseName);
 
     @Select({"SELECT course.charge\n" +
             "FROM course\n" +
@@ -52,7 +52,7 @@ public interface CourseMapper extends BaseMapper<Course> {
             "  AND course_name = #{courseName}\n" +
             "  AND course.is_delete = 0\n" +
             "  AND user.is_delete = 0"})
-    public Long getCourseChargeByTeacherNameCourseName(String teacherName, String courseName);
+    public Long getCourseCharge(String teacherName, String courseName);
 
     @Select({"SELECT course.*\n" +
             "FROM course\n" +
@@ -61,13 +61,23 @@ public interface CourseMapper extends BaseMapper<Course> {
             "  AND course_name = #{courseName}\n" +
             "  AND course.is_delete = 0\n" +
             "  AND user.is_delete = 0"})
-    public Course getCourseByTeacherNameCourseName(String teacherName, String courseName);
+    public Course getOneCourse(String teacherName, String courseName);
+
+    @Select({"SELECT course.*\n" +
+            "FROM course\n" +
+            "         JOIN user ON course.teacher_id = user.id\n" +
+            "WHERE username = #{teacherName}\n" +
+            "  AND course_name = #{courseName}\n" +
+            "  AND status = 'APPROVED'\n"+
+            "  AND course.is_delete = 0\n" +
+            "  AND user.is_delete = 0"})
+    public Course getOneApprovedCourse(String teacherName, String courseName);
 
     @Select("SELECT * FROM course WHERE status = 'REVIEWING' AND is_delete = 0 LIMIT #{limit} OFFSET #{offset}")
-    public List<Course> getReviewingCourses(int limit, int offset);
+    public List<Course> getReviewingCourseList(int limit, int offset);
 
     @Select("SELECT * FROM course WHERE status = 'APPROVED' AND is_delete = 0 LIMIT #{limit} OFFSET #{offset}")
-    public List<Course> getApprovedCourses(int limit, int offset);
+    public List<Course> getApprovedCourseList(int limit, int offset);
 
 
     @Select("SELECT course.*\n" +
@@ -78,7 +88,7 @@ public interface CourseMapper extends BaseMapper<Course> {
             "  AND user.is_delete = 0\n" +
             "  AND course.is_delete = 0\n" +
             "LIMIT #{limit} OFFSET #{offset}")
-    public List<Course> getApprovedCoursesOfTeacher(int limit, int offset, String teacherName);
+    public List<Course> getApprovedCourseListOfTeacher(int limit, int offset, String teacherName);
 
     @Select("SELECT course.*\n" +
             "FROM course\n" +
@@ -88,7 +98,7 @@ public interface CourseMapper extends BaseMapper<Course> {
             "  AND user.is_delete = 0\n" +
             "  AND course.is_delete = 0\n" +
             "LIMIT #{limit} OFFSET #{offset}")
-    public List<Course> getReviewingCoursesOfTeacher(int limit, int offset, String teacherName);
+    public List<Course> getReviewingCourseListOfTeacher(int limit, int offset, String teacherName);
 
     @Select("SELECT course.*\n" +
             "FROM course\n" +
@@ -98,5 +108,15 @@ public interface CourseMapper extends BaseMapper<Course> {
             "  AND user.is_delete = 0\n" +
             "  AND course.is_delete = 0\n" +
             "LIMIT #{limit} OFFSET #{offset}")
-    public List<Course> getFailedCoursesOfTeacher(int limit, int offset, String teacherName);
+    public List<Course> getFailedCourseListOfTeacher(int limit, int offset, String teacherName);
+
+    @Select("SELECT course.*\n" +
+            "FROM course\n" +
+            "         JOIN user ON course.teacher_id = user.id\n" +
+            "WHERE course_name = #{courseName}\n" +
+            "  AND status = 'APPROVED'\n" +
+            "  AND user.is_delete = 0\n" +
+            "  AND course.is_delete = 0\n" +
+            "LIMIT #{limit} OFFSET #{offset}")
+    public List<Course> getApprovedCourseList(int limit, int offset, String courseName);
 }

@@ -11,13 +11,13 @@ public interface StudentService {
 
     public Boolean exitCourse(String teacherName, String courseName, String studentName);
 
-    public List<Course> getEnrolledCourses(String studentName);
+    public List<Course> getEnrolledCourseList(String studentName);
 
     public Boolean setStudentAssignGrade(String studentName, String courseName, String teacherName, String assignName, int grade);
 
     public Boolean submitAssignment(String studentName, String courseName, String teacherName, String assignName, List<String> assignUrls);
 
-    public List<String> getStudentAssignmentUrls(String studentName, String courseName, String teacherName, String assignName);
+    public List<String> getStudentAssignmentUrlList(String studentName, String courseName, String teacherName, String assignName);
 
     public Boolean resubmitAssignment(String studentName, String courseName, String teacherName, String assignName, List<String> assignUrls);
 }

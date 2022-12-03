@@ -10,7 +10,7 @@ public interface AssignmentService extends IService<Assignment> {
 
     public Boolean removeAssignment(Assignment assignment);
 
-    public Assignment getAssignmentByCourseNameTeacherNameAssignName(String courseName, String teacherName, String assignName);
+    public Assignment getOneAssignment(String courseName, String teacherName, String assignName);
 
-    public Long getAssignmentIdByCourseNameTeacherNameAssignName(String courseName, String teacherName, String assignName);
+    public Long getAssignmentId(String courseName, String teacherName, String assignName);
 }

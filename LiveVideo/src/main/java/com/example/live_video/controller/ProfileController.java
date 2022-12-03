@@ -1,6 +1,5 @@
 package com.example.live_video.controller;
 
-import com.example.live_video.dto.ExceptionMessage;
 import com.example.live_video.dto.UserForm;
 import com.example.live_video.entity.Course;
 import com.example.live_video.entity.User;
@@ -33,7 +32,7 @@ public class ProfileController {
 
     @GetMapping("/api/user")
     public UserVo queryUserInfo(@RequestHeader String token) throws Exception{
-        return UserVo.convert(userService.getUserByUsername(TokenUtils.getUserName(token)));
+        return UserVo.convert(userService.getUser(TokenUtils.getUserName(token)));
     }
 
     @PostMapping("/api/user")

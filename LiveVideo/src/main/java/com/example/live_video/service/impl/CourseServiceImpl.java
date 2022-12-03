@@ -33,7 +33,7 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
             throw new SQLCoursenameConflictException();
         }
         // 查询teacher的id
-        Long teacherId = userService.getUserIdByUsername(course.getTeacherName());
+        Long teacherId = userService.getUserId(course.getTeacherName());
         course.setTeacherId(teacherId);
         course.setStatus(CourseStatus.REVIEWING);
         return courseMapper.insert(course) == 1;
@@ -41,7 +41,7 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
 
     @Override
     public boolean updateCourse(Course course) {
-        Long teacherId = userService.getUserIdByUsername(course.getTeacherName());
+        Long teacherId = userService.getUserId(course.getTeacherName());
         course.setTeacherId(teacherId);
         QueryWrapper<Course> courseQueryWrapper = new QueryWrapper<>();
         courseQueryWrapper.eq("course_name", course.getCourseName());
@@ -55,48 +55,53 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
     }
 
     @Override
-    public List<Course> getReviewingCourses() {
+    public List<Course> getReviewingCourseList() {
         QueryWrapper<Course> courseQueryWrapper = new QueryWrapper<>();
         courseQueryWrapper.eq("status", CourseStatus.REVIEWING);
         return courseMapper.selectList(courseQueryWrapper);
     }
 
     @Override
-    public List<Course> getApprovedCourses(int recordsPerPage, int pageNum) {
+    public List<Course> getApprovedCourseList(int recordsPerPage, int pageNum) {
         int limit = recordsPerPage;
         int offset = recordsPerPage * (pageNum - 1);
-        return courseMapper.getApprovedCourses(limit, offset);
+        return courseMapper.getApprovedCourseList(limit, offset);
     }
 
     @Override
-    public List<Course> getApprovedCoursesOfTeacher(int recordsPerPage, int pageNum, String teacherName) {
+    public List<Course> getApprovedCourseListOfTeacher(int recordsPerPage, int pageNum, String teacherName) {
         int limit = recordsPerPage;
         int offset = recordsPerPage * (pageNum - 1);
-        return courseMapper.getApprovedCoursesOfTeacher(limit, offset, teacherName);
+        return courseMapper.getApprovedCourseListOfTeacher(limit, offset, teacherName);
     }
 
     @Override
-    public List<Course> getFailedCoursesOfTeacher(int recordsPerPage, int pageNum, String teacherName) {
+    public List<Course> getFailedCourseListOfTeacher(int recordsPerPage, int pageNum, String teacherName) {
         int limit = recordsPerPage;
         int offset = recordsPerPage * (pageNum - 1);
-        return courseMapper.getFailedCoursesOfTeacher(limit, offset, teacherName);
+        return courseMapper.getFailedCourseListOfTeacher(limit, offset, teacherName);
     }
 
     @Override
-    public List<Course> getReviewingCoursesOfTeacher(int recordsPerPage, int pageNum, String teacherName) {
+    public List<Course> getReviewingCourseListOfTeacher(int recordsPerPage, int pageNum, String teacherName) {
         int limit = recordsPerPage;
         int offset = recordsPerPage * (pageNum - 1);
-        return courseMapper.getReviewingCoursesOfTeacher(limit, offset, teacherName);
+        return courseMapper.getReviewingCourseListOfTeacher(limit, offset, teacherName);
     }
 
     @Override
-    public Course getCourseByTeacherNameCourseName(String teacherName, String courseName) {
-        return courseMapper.getCourseByTeacherNameCourseName(teacherName, courseName);
+    public Course getOneCourse(String teacherName, String courseName) {
+        return courseMapper.getOneCourse(teacherName, courseName);
+    }
+
+    @Override
+    public Course getOneApprovedCourse(String teacherName, String courseName) {
+        return courseMapper.getOneApprovedCourse(teacherName, courseName);
     }
 
     @Override
     public String getCoursePrivateKeyUrl(String teacherName, String courseName) {
-        Long courseId = courseMapper.getCourseIdByTeacherNameCourseName(teacherName, courseName);
+        Long courseId = courseMapper.getCourseId(teacherName, courseName);
         QueryWrapper<Course> courseQueryWrapper = new QueryWrapper<>();
         courseQueryWrapper.eq("id", courseId);
         courseQueryWrapper.select("private_key_url");
@@ -104,12 +109,9 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
     }
 
     @Override
-    public List<Course> getApprovedCoursesByCourseName(String courseName) {
-        QueryWrapper<Course> courseQueryWrapper = new QueryWrapper<>();
-        courseQueryWrapper.eq("course_name", courseName);
-        courseQueryWrapper.eq("status", CourseStatus.APPROVED);
-        return courseMapper.selectList(courseQueryWrapper);
+    public List<Course> getApprovedCourseList(int recordsPerPage, int pageNum, String courseName) {
+        int limit = recordsPerPage;
+        int offset = recordsPerPage * (pageNum - 1);
+        return courseMapper.getApprovedCourseList(limit, offset, courseName);
     }
-
-
 }
