@@ -37,9 +37,9 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional
     public Boolean enrollCourse(String teacherName, String courseName, String studentName) throws EnrollCourseException {
-        Long courseId = courseMapper.getCourseIdByTeacherNameCourseName(teacherName, courseName);
+        Long courseId = courseMapper.getCourseId(teacherName, courseName);
         Long studentId = userService.getUserId(studentName);
-        Long courseCharge = courseMapper.getCourseChargeByTeacherNameCourseName(teacherName, courseName);
+        Long courseCharge = courseMapper.getCourseCharge(teacherName, courseName);
         Long studentAccount = userService.getUserAccount(studentName);
         if (courseCharge <= studentAccount) {
             User user = new User(studentName, null, null, null, null,
@@ -53,7 +53,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Boolean exitCourse(String teacherName, String courseName, String studentName) {
-        Long courseId = courseMapper.getCourseIdByTeacherNameCourseName(teacherName, courseName);
+        Long courseId = courseMapper.getCourseId(teacherName, courseName);
         Long studentId = userService.getUserId(studentName);
         studentMapper.exitCourse(studentId, courseId);
         return true;
@@ -62,7 +62,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<Course> getEnrolledCourseList(String studentName) {
         Long studentId = userService.getUserId(studentName);
-        List<Course> courses = studentMapper.getEnrolledCourses(studentId);
+        List<Course> courses = studentMapper.getEnrolledCourseList(studentId);
         return courses;
     }
 
@@ -89,7 +89,7 @@ public class StudentServiceImpl implements StudentService {
     public List<String> getStudentAssignmentUrlList(String studentName, String courseName, String teacherName, String assignName) {
         Long assignId = assignmentService.getAssignmentId(courseName, teacherName, assignName);
         Long studentId = userService.getUserId(studentName);
-        List<String> assignUrls = studentMapper.getStudentSubmittedAssignUrls(studentId, assignId);
+        List<String> assignUrls = studentMapper.getStudentSubmittedAssignUrlList(studentId, assignId);
         return assignUrls;
     }
 

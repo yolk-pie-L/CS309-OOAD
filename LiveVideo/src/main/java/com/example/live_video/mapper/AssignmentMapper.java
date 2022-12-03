@@ -14,7 +14,7 @@ public interface AssignmentMapper extends BaseMapper<Assignment> {
 
     @Insert("INSERT INTO assign_urls(assign_id, assign_url)\n" +
             "VALUES (#{assignId}, #{assignUrl})")
-    public void insertAssignUrls(Long assignId, String assignUrl);
+    public void insertAssignUrlList(Long assignId, String assignUrl);
 
     @Delete("DELETE assignment, assign_urls\n" +
             "FROM assignment\n" +
@@ -27,7 +27,7 @@ public interface AssignmentMapper extends BaseMapper<Assignment> {
             "         JOIN assignment ON assign_urls.assign_id = assignment.id\n" +
             "WHERE assignment.course_id = #{courseId}\n" +
             "  AND assignment.assignment_name = #{assignName}")
-    public List<String> getAssignUrls(Long courseId, String assignName);
+    public List<String> getAssignUrlList(Long courseId, String assignName);
 
 
 }

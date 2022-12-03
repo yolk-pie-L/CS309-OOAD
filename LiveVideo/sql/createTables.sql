@@ -1,7 +1,33 @@
-drop table user, course, assignment, assign_urls, administrator, section;
-drop table announcement, danmu, comment, course_invitation;
-drop table user_login_log, user_payment_log;
-drop table stu_assign, stu_course, stu_section;
+drop table if exists administrator cascade;
+
+drop table if exists assign_urls cascade;
+
+drop table if exists comment cascade;
+
+drop table if exists course_invitation cascade;
+
+drop table if exists danmu cascade;
+
+drop table if exists notice cascade;
+
+drop table if exists stu_assign cascade;
+
+drop table if exists assignment cascade;
+
+drop table if exists stu_course cascade;
+
+drop table if exists stu_section cascade;
+
+drop table if exists section cascade;
+
+drop table if exists user_login_log cascade;
+
+drop table if exists user_payment_log cascade;
+
+drop table if exists course cascade;
+
+drop table if exists user cascade;
+
 
 
 CREATE TABLE user
@@ -81,12 +107,13 @@ CREATE TABLE section
     FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE announcement
+CREATE TABLE notice
 (
-    id        int auto_increment primary key,
-    course_id int      not null,
-    date      datetime not null,
-    context   text     not null,
+    id          int auto_increment primary key,
+    notice_name varchar(25),
+    course_id   int       not null,
+    create_time timestamp not null default CURRENT_TIMESTAMP,
+    context     text      not null,
     FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
