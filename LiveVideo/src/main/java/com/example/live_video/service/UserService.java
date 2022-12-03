@@ -26,12 +26,13 @@ public interface UserService extends IService<User> {
     /**
      * Return true if the user has the same password with the record in database
      *
-     * @param user
+     * @param userName
+     * @param password
      * @return boolean
      * @throws MyException
      * @throws SQLUserNotFoundException
      */
-    public Boolean compareUserPassword(User user) throws SQLUserNotFoundException;
+    public Boolean compareUserPassword(String userName, String password) throws SQLUserNotFoundException;
 
     /**
      * @param userName
@@ -63,9 +64,9 @@ public interface UserService extends IService<User> {
 
     /**
      *
-     * @param user
+     * @param userName, password
      * @return the type of user: Student, Teacher, Administrator. Return null if no user exists.
      * @throws MyException
      */
-    public String login(User user) throws MyException;
+    public String login(String userName, String password) throws MyException;
 }

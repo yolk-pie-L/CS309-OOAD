@@ -6,6 +6,9 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
+
 @Data
 public class UserForm {
     @NotBlank(message = "Username is empty")
@@ -16,9 +19,11 @@ public class UserForm {
 
     private String repeatPassword;
 
+    @Email
     private String mail;
 
-    private UserType userType;
+    @Pattern(regexp = "^Student$|^Teacher$|^Administrator$")
+    private String userType;
 
     private String photoUrl;
 
@@ -30,8 +35,19 @@ public class UserForm {
 
     public User convertToUser(){
         if (account != null)
-            return new User(userName, userType, mail, password, photoUrl, account);
+            return new User(userName, UserType.valueOf(userType), mail, password, photoUrl, account);
         else
-            return new User(userName, userType, mail, password);
+            return new User(userName, UserType.valueOf(userType), mail, password);
+    }
+
+    @Override
+    public String toString() {
+        return "UserForm{" +
+                "userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", repeatPassword='" + repeatPassword + '\'' +
+                ", mail='" + mail + '\'' +
+                ", userType='" + userType + '\'' +
+                '}';
     }
 }
