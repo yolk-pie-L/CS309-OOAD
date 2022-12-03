@@ -30,8 +30,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
         //addPathPatterns为拦截此请求路径的请求
         //excludePathPatterns为不拦截此路径的请求
 //        System.out.println("拦截器");
-//        registry.addInterceptor(loginInterceptor).addPathPatterns("/api/*").excludePathPatterns("/api/login")
-//                .excludePathPatterns("/api/register");
+        registry.addInterceptor(loginInterceptor).addPathPatterns("/api/*").excludePathPatterns("/api/login")
+                .excludePathPatterns("/api/register");
     }
 }
 

@@ -133,6 +133,8 @@
       "InputForm": {
         "userName": "checker",
         "userType": "Student",
+        "password": "123456",
+        "repeatPassword": "Blank or 123456789",
         "mail": "example@xx.com",
         "photoUrl": "url"
       },
