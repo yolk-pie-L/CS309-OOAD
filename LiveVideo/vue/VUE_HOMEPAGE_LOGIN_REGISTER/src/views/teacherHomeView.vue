@@ -1,4 +1,9 @@
 <template>
+  <nav>
+    <router-link to="/teacherHomeView">Home</router-link> |
+    <router-link to="/courseUpdate">UpdateCourse</router-link> |
+    <router-link to="/infoUpdate">UpdateInfo</router-link>
+  </nav>
   <div :xl="6" :lg="7" class="bg-login">
     <!--logo-->
     <el-image :src="teacherForm.photoUrl" alt="暂无图片"></el-image>

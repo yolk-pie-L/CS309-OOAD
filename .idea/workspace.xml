@@ -4,13 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="040d5963-020e-49eb-a09c-285573158850" name="Changes" comment="中期答辩前端代码">
+    <list default="true" id="040d5963-020e-49eb-a09c-285573158850" name="Changes" comment="中期答辩前端代码二次更新，包括注销及部分文本更新">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/components/layout/nav-bar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/components/layout/nav-bar.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/StudentHome.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/StudentHome.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/StudentinfoUpdate.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/StudentinfoUpdate.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/courseMainPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/courseMainPage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/TeacherHome.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/TeacherInfoUpdate.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/courseUpdate.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/courseUpdate.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/regist.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/regist.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/teacherHomeView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/teacherHomeView.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,11 +34,13 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
+    "aspect.path.notification.shown": "true",
     "last_opened_file_path": "C:/Users/15807/CS309-OOAD/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -55,6 +58,8 @@
       <option name="presentableId" value="Default" />
       <updated>1664441664123</updated>
       <workItem from="1664441665520" duration="792000" />
+      <workItem from="1669876138852" duration="618000" />
+      <workItem from="1670048201280" duration="286000" />
     </task>
     <task id="LOCAL-00001" summary="中期答辩前端代码">
       <created>1669724591751</created>
@@ -63,7 +68,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669724591751</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="中期答辩前端代码二次更新，包括注销及部分文本更新">
+      <created>1669727619123</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1669727619123</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -83,7 +95,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Changes" />
     <MESSAGE value="中期答辩前端代码" />
-    <option name="LAST_COMMIT_MESSAGE" value="中期答辩前端代码" />
+    <MESSAGE value="中期答辩前端代码二次更新，包括注销及部分文本更新" />
+    <option name="LAST_COMMIT_MESSAGE" value="中期答辩前端代码二次更新，包括注销及部分文本更新" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -91,7 +104,6 @@
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/router/index.js</url>
           <line>60</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
