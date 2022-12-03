@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="040d5963-020e-49eb-a09c-285573158850" name="Changes" comment="对teacher pages的导航栏修改，并且删除部分重复文件">
-      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/StudentHome.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/StudentHome.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/teacherHomeView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/teacherHomeView.vue" afterDir="false" />
+    <list default="true" id="040d5963-020e-49eb-a09c-285573158850" name="Changes" comment="对个人主页面的返回按钮做更新">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/StudentinfoUpdate.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/StudentinfoUpdate.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/infoUpdate.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/infoUpdate.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,23 +26,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "aspect.path.notification.shown": "true",
-    "last_opened_file_path": "C:/Users/15807/CS309-OOAD/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;aspect.path.notification.shown&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/15807/login_token_test&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2022.2.1\\plugins\\JavaScriptLanguage\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\15807\CS309-OOAD\LiveVideo\vue\VUE_HOMEPAGE_LOGIN_REGISTER\src\views" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\15807\CS309-OOAD\LiveVideo\vue\VUE_HOMEPAGE_LOGIN_REGISTER\src\views" />
     </key>
   </component>
@@ -54,7 +60,8 @@
       <updated>1664441664123</updated>
       <workItem from="1664441665520" duration="792000" />
       <workItem from="1669876138852" duration="618000" />
-      <workItem from="1670048201280" duration="498000" />
+      <workItem from="1670048201280" duration="6946000" />
+      <workItem from="1670068814069" duration="320000" />
     </task>
     <task id="LOCAL-00001" summary="中期答辩前端代码">
       <created>1669724591751</created>
@@ -77,7 +84,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670048553092</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="对个人主页面的返回按钮做更新">
+      <created>1670048729640</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1670048729640</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -99,7 +113,8 @@
     <MESSAGE value="中期答辩前端代码" />
     <MESSAGE value="中期答辩前端代码二次更新，包括注销及部分文本更新" />
     <MESSAGE value="对teacher pages的导航栏修改，并且删除部分重复文件" />
-    <option name="LAST_COMMIT_MESSAGE" value="对teacher pages的导航栏修改，并且删除部分重复文件" />
+    <MESSAGE value="对个人主页面的返回按钮做更新" />
+    <option name="LAST_COMMIT_MESSAGE" value="对个人主页面的返回按钮做更新" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
