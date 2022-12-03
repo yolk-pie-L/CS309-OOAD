@@ -66,7 +66,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public Long getUserIdByUsername(String userName){
+    public Long getUserId(String userName){
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("username", userName);
         userQueryWrapper.select("id");
@@ -75,14 +75,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public User getUserByUsername(String userName) {
+    public User getUser(String userName) {
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("username", userName);
         return userMapper.selectOne(userQueryWrapper);
     }
 
     @Override
-    public UserType getUserTypeByUsername(String userName) {
+    public UserType getUserType(String userName) {
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("username", userName);
         userQueryWrapper.select("usertype");
@@ -91,7 +91,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public Long getUserAccountByUsername(String userName) {
+    public Long getUserAccount(String userName) {
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("username", userName);
         userQueryWrapper.select("account");
@@ -109,7 +109,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public String login(User user) throws SQLUserNotFoundException {
         if ((boolean) compareUserPassword(user)) {
-            return getUserTypeByUsername(user.getUserName()).name();
+            return getUserType(user.getUserName()).name();
         } else {
             return null;
         }

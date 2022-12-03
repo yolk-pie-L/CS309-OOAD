@@ -5,7 +5,6 @@ import com.example.live_video.entity.User;
 import com.example.live_video.entity.UserType;
 import com.example.live_video.exception.MyException;
 import com.example.live_video.exception.SQLMailConflictException;
-import com.example.live_video.exception.SQLUserNotFoundException;
 import com.example.live_video.exception.SQLUsernameConflictException;
 import com.example.live_video.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
@@ -146,7 +145,7 @@ public class UserServiceTest {
     void getUserTypeByUsername(){
         setUp();
         for(User user: allUsers){
-            UserType userType = userService.getUserTypeByUsername(user.getUserName());
+            UserType userType = userService.getUserType(user.getUserName());
             assert userType == user.getUserType();
         }
         tearDown();
@@ -156,7 +155,7 @@ public class UserServiceTest {
     void getUserIdByUsername(){
         setUp();
         for (User user : allUsers) {
-            Long id = userService.getUserIdByUsername(user.getUserName());
+            Long id = userService.getUserId(user.getUserName());
             assert Objects.equals(id, user.getId());
         }
         tearDown();
@@ -167,7 +166,7 @@ public class UserServiceTest {
         User user1 = new User("user1", UserType.Administrator, "user1@mail.com", "123456");
         user1.setAccount(10L);
         userMapper.insert(user1);
-        Long account = userService.getUserAccountByUsername(user1.getUserName());
+        Long account = userService.getUserAccount(user1.getUserName());
         assert account.equals(10L);
         userMapper.deleteById(user1);
     }

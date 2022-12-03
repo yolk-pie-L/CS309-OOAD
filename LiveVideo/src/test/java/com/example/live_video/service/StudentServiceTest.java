@@ -102,9 +102,9 @@ class StudentServiceTest {
             res = true;
         }
         assert res;
-        List<Course> courses1 = studentService.getEnrolledCourses(s1.getUserName());
+        List<Course> courses1 = studentService.getEnrolledCourseList(s1.getUserName());
         assert courses1.size() == 3;
-        List<Course> courses2 = studentService.getEnrolledCourses(s2.getUserName());
+        List<Course> courses2 = studentService.getEnrolledCourseList(s2.getUserName());
         assert courses2.size() == 1;
         courses2.forEach(System.out::println);
         assert courses2.get(0).getCourseName().equals(c1.getCourseName());
@@ -118,9 +118,9 @@ class StudentServiceTest {
         studentService.exitCourse(c3.getTeacherName(), c3.getCourseName(), s1.getUserName());
         studentService.exitCourse(c1.getTeacherName(), c1.getCourseName(), s2.getUserName());
         studentService.exitCourse(c3.getTeacherName(), c3.getCourseName(), s2.getUserName());
-        courses1 = studentService.getEnrolledCourses(s1.getUserName());
+        courses1 = studentService.getEnrolledCourseList(s1.getUserName());
         assert courses1.size() == 0;
-        courses2 = studentService.getEnrolledCourses(s2.getUserName());
+        courses2 = studentService.getEnrolledCourseList(s2.getUserName());
         assert courses2.size() == 0;
     }
 
@@ -150,13 +150,13 @@ class StudentServiceTest {
         urls1.add("l2");
         studentService.submitAssignment(s1.getUserName(), c1.getCourseName(), c1.getTeacherName(), assignment1.getAssignmentName(), urls1);
         studentService.setStudentAssignGrade(s1.getUserName(), c1.getCourseName(), c1.getTeacherName(), assignment1.getAssignmentName(), 100);
-        List<String> res = studentService.getStudentAssignmentUrls(s1.getUserName(), c1.getCourseName(), c1.getTeacherName(), assignment1.getAssignmentName());
+        List<String> res = studentService.getStudentAssignmentUrlList(s1.getUserName(), c1.getCourseName(), c1.getTeacherName(), assignment1.getAssignmentName());
         System.out.println(res);
         assert res.contains("l1");
         assert res.contains("l2");
         urls1.add("l3");
         studentService.resubmitAssignment(s1.getUserName(), c1.getCourseName(), c1.getTeacherName(), assignment1.getAssignmentName(), urls1);
-        res = studentService.getStudentAssignmentUrls(s1.getUserName(), c1.getCourseName(), c1.getTeacherName(), assignment1.getAssignmentName());
+        res = studentService.getStudentAssignmentUrlList(s1.getUserName(), c1.getCourseName(), c1.getTeacherName(), assignment1.getAssignmentName());
         assert res.size() == 3;
         studentService.setStudentAssignGrade(s1.getUserName(), c1.getCourseName(), c1.getTeacherName(), assignment1.getAssignmentName(), 100);
     }

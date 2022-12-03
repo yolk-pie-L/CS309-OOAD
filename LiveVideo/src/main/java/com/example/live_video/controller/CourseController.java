@@ -32,21 +32,21 @@ public class CourseController {
         if (StringUtils.hasText(courseName) && StringUtils.hasText(teacherName)) {
             //FIXME: perhaps not elegant?
             List<Course> courses = new ArrayList<>();
-            courses.add(courseService.getApprovedCourseByTeacherNameCourseName(teacherName, courseName));
+            courses.add(courseService.getOneApprovedCourse(teacherName, courseName));
             return CourseVo.parse(courses);
         }
         if (StringUtils.hasText(courseName)) {
-            return CourseVo.parse(courseService.getApprovedCoursesByCourseName(recordsPerPage, pageNum, courseName));
+            return CourseVo.parse(courseService.getApprovedCourseList(recordsPerPage, pageNum, courseName));
         }
         if (StringUtils.hasText(teacherName)) {
-            return CourseVo.parse(courseService.getApprovedCoursesOfTeacher(recordsPerPage, pageNum, teacherName));
+            return CourseVo.parse(courseService.getApprovedCourseListOfTeacher(recordsPerPage, pageNum, teacherName));
         }
-        return CourseVo.parse(courseService.getApprovedCourses(recordsPerPage, pageNum));
+        return CourseVo.parse(courseService.getApprovedCourseList(recordsPerPage, pageNum));
     }
 
     @GetMapping("/api/course/all")
     public CourseVo queryAllCourseByUsername(@RequestParam String userName) {
-        return CourseVo.parseEasy(courseService.getCourseByTeacherNameCourseName(userName, null));
+        return CourseVo.parseEasy(courseService.getOneCourse(userName, null));
     }
 
     @PostMapping ("/api/course")
@@ -56,7 +56,7 @@ public class CourseController {
 
     @GetMapping("/api/course/waiting")
     public List<CourseVo> queryCourseOfAdministrator(@RequestParam String administrator) {
-        return CourseVo.parse(courseService.getReviewingCourses());
+        return CourseVo.parse(courseService.getReviewingCourseList());
     }
 
     @PostMapping("api/course/admin")

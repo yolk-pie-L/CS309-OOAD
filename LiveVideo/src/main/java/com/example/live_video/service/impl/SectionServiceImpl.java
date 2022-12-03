@@ -54,10 +54,19 @@ public class SectionServiceImpl extends ServiceImpl<SectionMapper, Section> impl
     }
 
     @Override
-    public List<Section> getAllSections(String teacherName, String courseName) {
+    public List<Section> getSectionList(String teacherName, String courseName) {
         Long courseId = courseMapper.getCourseIdByTeacherNameCourseName(teacherName, courseName);
         QueryWrapper<Section> sectionQueryWrapper = new QueryWrapper<>();
         sectionQueryWrapper.eq("course_id", courseId);
         return sectionMapper.selectList(sectionQueryWrapper);
+    }
+
+    @Override
+    public Section getOneSection(String teacherName, String courseName, String sectionName) {
+        Long courseId = courseMapper.getCourseIdByTeacherNameCourseName(teacherName, courseName);
+        QueryWrapper<Section> sectionQueryWrapper = new QueryWrapper<>();
+        sectionQueryWrapper.eq("course_id", courseId);
+        sectionQueryWrapper.eq("section_name", sectionName);
+        return sectionMapper.selectOne(sectionQueryWrapper);
     }
 }

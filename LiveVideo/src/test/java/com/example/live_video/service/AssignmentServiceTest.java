@@ -13,11 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -94,7 +91,7 @@ class AssignmentServiceTest {
         urls.add("url2");
         Assignment assignment = new Assignment("ass1", courses.get(0).getCourseName(), users.get(0).getUserName(), null, 100, true, null, urls);
         assignmentService.createAssignment(assignment);
-        Assignment assignment1 = assignmentService.getAssignmentByCourseNameTeacherNameAssignName(courses.get(0).getCourseName(), users.get(0).getUserName(), assignment.getAssignmentName());
+        Assignment assignment1 = assignmentService.getOneAssignment(courses.get(0).getCourseName(), users.get(0).getUserName(), assignment.getAssignmentName());
         System.out.println(assignment1);
     }
 }

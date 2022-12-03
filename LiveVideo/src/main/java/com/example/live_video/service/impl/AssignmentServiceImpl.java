@@ -47,7 +47,7 @@ public class AssignmentServiceImpl extends ServiceImpl<AssignmentMapper, Assignm
     }
 
     @Override
-    public Assignment getAssignmentByCourseNameTeacherNameAssignName(String courseName, String teacherName, String assignName) {
+    public Assignment getOneAssignment(String courseName, String teacherName, String assignName) {
         Long courseId = courseMapper.getCourseIdByTeacherNameCourseName(teacherName, courseName);
         QueryWrapper<Assignment> assignQueryWrapper = new QueryWrapper<>();
         assignQueryWrapper.eq("course_id", courseId);
@@ -58,7 +58,7 @@ public class AssignmentServiceImpl extends ServiceImpl<AssignmentMapper, Assignm
     }
 
     @Override
-    public Long getAssignmentIdByCourseNameTeacherNameAssignName(String courseName, String teacherName, String assignName) {
+    public Long getAssignmentId(String courseName, String teacherName, String assignName) {
         Long courseId = courseMapper.getCourseIdByTeacherNameCourseName(teacherName, courseName);
         QueryWrapper<Assignment> assignQueryWrapper = new QueryWrapper<>();
         assignQueryWrapper.eq("course_id", courseId);

@@ -46,18 +46,18 @@ public interface UserService extends IService<User> {
      * @param userName name of the user
      * @return userId
      */
-    public Long getUserIdByUsername(String userName);
+    public Long getUserId(String userName);
 
     /**
      * Get all information about the user through userName
      * @param userName
      * @return User instance
      */
-    public User getUserByUsername(String userName);
+    public User getUser(String userName);
 
-    public UserType getUserTypeByUsername(String userName);
+    public UserType getUserType(String userName);
 
-    public Long getUserAccountByUsername(String userName);
+    public Long getUserAccount(String userName);
 
     public Boolean updateUser(User user);
 

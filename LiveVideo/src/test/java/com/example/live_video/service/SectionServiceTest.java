@@ -124,4 +124,12 @@ class SectionServiceTest {
         }
         allSections.remove(testSection);
     }
+
+    @Test
+    void getOneSection() {
+        Section origin = allSections.get(0);
+        Section s = sectionService.getOneSection(origin.getTeacherName(), origin.getCourseName(), origin.getSectionName());
+        assert s.getVideoUrl().equals(origin.getVideoUrl());
+        assert s.getId().equals(origin.getId());
+    }
 }

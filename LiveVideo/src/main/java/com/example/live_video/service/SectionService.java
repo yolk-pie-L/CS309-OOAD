@@ -14,5 +14,7 @@ public interface SectionService extends IService<Section> {
 
     public Boolean removeSection(String teacherName, String courseName, String sectionName);
 
-    public List<Section> getAllSections(String teacherName, String courseName);
+    public List<Section> getSectionList(String teacherName, String courseName);
+
+    public Section getOneSection(String teacherName, String courseName, String sectionName);
 }
