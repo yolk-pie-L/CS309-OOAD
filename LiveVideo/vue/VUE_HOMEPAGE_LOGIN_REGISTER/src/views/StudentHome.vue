@@ -59,7 +59,9 @@
     </el-row>
     <el-row>
       <el-button type="primary" @click="logOut()">注销</el-button>
+      <el-button type="primary" @click="back()">返回主界面</el-button>
     </el-row>
+
   </div>
 </template>
 
@@ -182,6 +184,9 @@ export default {
     },
     logOut () {
       router.push("/")
+    },
+    back () {
+      router.push("/1")
     }
   },
 }
