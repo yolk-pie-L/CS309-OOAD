@@ -11,6 +11,8 @@ import courseMainPage from "@/views/courseMainPage";
 import courseDetailPage from "@/views/courseDetailPage";
 import studentHome from "@/views/StudentHome";
 import studentinfoUpdate from "@/views/StudentinfoUpdate";
+import TeacherHome from "@/views/TeacherHome";
+import TeacherInfoUpdate from "@/views/TeacherInfoUpdate";
 const routes = [
   {
     path:'/1',
@@ -63,6 +65,11 @@ const routes = [
     component: courseDetailPage
   },
   {
+    path: '/infoUpdate',
+    name: TeacherInfoUpdate,
+    component: TeacherInfoUpdate
+  },
+  {
     path: '/studentHome',
     name: studentHome,
     component: studentHome
@@ -72,7 +79,6 @@ const routes = [
     name: studentinfoUpdate,
     component: studentinfoUpdate
   }
-
 ]
 
 const router = createRouter({
