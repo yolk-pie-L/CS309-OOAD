@@ -56,7 +56,7 @@ public class CourseVo {
                 course.getCharge(),
                 course.getTag(),
                 course.getPictureUrl(),
-                null, //FIXME: course.getPrivateKeyUrl()
+                course.getPrivateKeyUrl(),
                 course.getStatus().toString()
                 );
     }

@@ -1,4 +1,4 @@
-drop table if exists administrator cascade;
+drop table if exists admin cascade;
 
 drop table if exists assign_urls cascade;
 
@@ -86,11 +86,11 @@ CREATE TABLE assign_urls
     FOREIGN KEY (assign_id) REFERENCES assignment (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE administrator
+CREATE TABLE admin
 (
     user_id   int not null,
-    canAdd    boolean default false,
-    canRemove boolean default false,
+    can_add    boolean default false,
+    can_remove boolean default false,
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
