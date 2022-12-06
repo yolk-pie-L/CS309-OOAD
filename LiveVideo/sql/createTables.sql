@@ -32,16 +32,17 @@ drop table if exists user cascade;
 
 CREATE TABLE user
 (
-    id          int auto_increment primary key,
-    username    varchar(20)                                not null,
-    usertype    enum ('Administrator','Student','Teacher') not null,
-    mail        varchar(50),
-    password    varchar(50)                                not null,
-    photo_url   varchar(50),
-    account     bigint                                              default 0,
-    create_time timestamp                                  not null default CURRENT_TIMESTAMP,
-    update_time timestamp                                  null     default null on update CURRENT_TIMESTAMP,
-    is_delete   int                                                 default 0,
+    id           int auto_increment primary key,
+    username     varchar(20)                                not null,
+    usertype     enum ('Administrator','Student','Teacher') not null,
+    admin_right enum ('SuperAdmin', 'Admin', 'NonAdmin')   not null,
+    mail         varchar(50),
+    password     varchar(50)                                not null,
+    photo_url    varchar(50),
+    account      bigint                                              default 0,
+    create_time  timestamp                                  not null default CURRENT_TIMESTAMP,
+    update_time  timestamp                                  null     default null on update CURRENT_TIMESTAMP,
+    is_delete    int                                                 default 0,
     CONSTRAINT unique (username, is_delete),
     CONSTRAINT unique (mail, is_delete)
 );
@@ -86,13 +87,6 @@ CREATE TABLE assign_urls
     FOREIGN KEY (assign_id) REFERENCES assignment (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE admin
-(
-    user_id   int not null,
-    can_add    boolean default false,
-    can_remove boolean default false,
-    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
-);
 
 CREATE TABLE section
 (
