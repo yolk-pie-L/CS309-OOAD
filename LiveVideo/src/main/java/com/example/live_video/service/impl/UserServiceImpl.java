@@ -108,6 +108,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    public User verifyUser(String mail) {
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("mail", mail);
+        return userMapper.selectOne(userQueryWrapper);
+    }
+
+    @Override
     public String login(String userName, String password) throws SQLUserNotFoundException {
         if ((boolean) compareUserPassword(userName, password)) {
             return getUserType(userName).name();

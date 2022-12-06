@@ -62,6 +62,8 @@ public interface UserService extends IService<User> {
 
     public Boolean updateUser(User user);
 
+    public User verifyUser(String mail);
+
     /**
      *
      * @param userName, password
