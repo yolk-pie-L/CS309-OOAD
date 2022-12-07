@@ -2,7 +2,9 @@ package com.example.live_video.controller;
 
 import com.example.live_video.config.NonStaticResourceHttpRequestHandler;
 import com.example.live_video.exception.MyException;
+import com.example.live_video.service.SectionService;
 import com.example.live_video.service.VideoService;
+import com.example.live_video.util.RandomUtils;
 import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +39,12 @@ public class VideoController {
     @Autowired
     private NonStaticResourceHttpRequestHandler requestHandler;
 
-    @Autowired(required = false)
-    private VideoService videoService;
+    @Autowired
+    private SectionService sectionService;
 
     @GetMapping("")
     public void videoPreview(HttpServletRequest request, HttpServletResponse response, @RequestParam String courseName, @RequestParam String sectionName) throws Exception {
-//        String videoUrl = videoService.getVideoUrl(courseName, sectionName);
+//        String videoUrl = sectionService.get(courseName, sectionName);
         String videoUrl = "src/main/resources/static/video/demo1.mp4";
 
         Path filePath = Paths.get(videoUrl);
@@ -70,8 +72,9 @@ public class VideoController {
             throw new MyException("视频格式不正确");
         }
 
-        String savePath = defaultPath + courseName + '/' + sectionName + '/';
-        String videoName = "ababa" + fileExt;
+        String savePath = defaultPath + '/';
+        String videoName = RandomUtils.VID(10) + fileExt;
+//        videoService.upload(courseName, sectionName);
         File filePath = new File(savePath, videoName);
         if (!filePath.getParentFile().exists()) {
             filePath.getParentFile().mkdirs();
