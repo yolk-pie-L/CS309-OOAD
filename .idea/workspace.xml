@@ -4,19 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="040d5963-020e-49eb-a09c-285573158850" name="Changes" comment="对用户信息页面更新">
-      <change afterPath="$PROJECT_DIR$/.idea/checkstyle-idea.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jpa-buddy.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/res/full_res.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/res/video1.mp4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/videoPage.vue" afterDir="false" />
+    <list default="true" id="040d5963-020e-49eb-a09c-285573158850" name="Changes" comment="视频页面实现（注，在token实现完成前不要激活导航守卫，否则将无法前往大多数页面）">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/router/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/regist.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/regist.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/videoPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/videoPage.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,6 +80,7 @@
       <workItem from="1670329133773" duration="4239000" />
       <workItem from="1670379755548" duration="151000" />
       <workItem from="1670380578885" duration="1228000" />
+      <workItem from="1670405979495" duration="1653000" />
     </task>
     <task id="LOCAL-00001" summary="中期答辩前端代码">
       <created>1669724591751</created>
@@ -126,7 +117,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670069155420</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="视频页面实现（注，在token实现完成前不要激活导航守卫，否则将无法前往大多数页面）">
+      <created>1670406256708</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1670406256708</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -150,7 +148,8 @@
     <MESSAGE value="对teacher pages的导航栏修改，并且删除部分重复文件" />
     <MESSAGE value="对个人主页面的返回按钮做更新" />
     <MESSAGE value="对用户信息页面更新" />
-    <option name="LAST_COMMIT_MESSAGE" value="对用户信息页面更新" />
+    <MESSAGE value="视频页面实现（注，在token实现完成前不要激活导航守卫，否则将无法前往大多数页面）" />
+    <option name="LAST_COMMIT_MESSAGE" value="视频页面实现（注，在token实现完成前不要激活导航守卫，否则将无法前往大多数页面）" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

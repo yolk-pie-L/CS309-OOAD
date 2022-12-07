@@ -50,7 +50,7 @@ export default {
       ],
       playerOptions: {
         playbackRates: [0.5, 1.0, 1.5, 2.0], // 可选的播放速度
-        autoplay: true,  // 如果为true,浏览器准备好时开始回放
+        autoplay: false,  // 如果为true,浏览器准备好时开始回放
         muted: false,     // 默认情况下将会消除任何音频。
         loop: false,      // 是否视频一结束就重新开始。
         preload: 'auto',  // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
@@ -63,12 +63,13 @@ export default {
         }],
         poster: '',  // 封面地址
         notSupportedMessage: '此视频暂无法播放，请稍后再试',  // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
-        controlBar: {
-          timeDivider: true,           // 当前时间和持续时间的分隔符
-          durationDisplay: true,       // 显示持续时间
-          remainingTimeDisplay: true, // 是否显示剩余时间功能
-          fullscreenToggle: true       // 是否显示全屏按钮
-        }
+        controls: true
+        // controlBar: {
+        //   timeDivider: true,           // 当前时间和持续时间的分隔符
+        //   durationDisplay: true,       // 显示持续时间
+        //   remainingTimeDisplay: true, // 是否显示剩余时间功能
+        //   fullscreenToggle: true       // 是否显示全屏按钮
+        // }
       }
     }
   },
@@ -95,7 +96,8 @@ export default {
     },
     reFetch(row) {
       // router.push("/")
-      this.$axios.get('api/video/' + row).then(res => {
+      console.log(row.sessionName)
+      this.$axios.get('api/video/' + row.sessionName).then(res => {
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         this.tableData = result
