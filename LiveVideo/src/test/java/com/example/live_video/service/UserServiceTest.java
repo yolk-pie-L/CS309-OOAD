@@ -58,6 +58,14 @@ public class UserServiceTest {
     }
 
     @Test
+    public void verifyUser(){
+        setUp();
+        User u = userService.verifyUser("user1@mail.com");
+        assert u.getUserName().equals("user1");
+        tearDown();
+    }
+
+    @Test
     public void testRegister(){
         User user1 = new User("user1", UserType.Administrator, "user1@mail.com", "123456");
         User user2 = new User("user1", UserType.Administrator, "user1@mail.com1", "123456");

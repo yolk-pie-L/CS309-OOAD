@@ -3,8 +3,6 @@ package com.example.live_video.entity;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.util.DigestUtils;
-import org.springframework.util.StringUtils;
 
 import java.sql.Timestamp;
 
@@ -32,6 +30,9 @@ public class User {
 
     @TableField(updateStrategy = FieldStrategy.NOT_EMPTY)
     private Long account;
+
+    @TableField(value = "admin_right", updateStrategy = FieldStrategy.NOT_EMPTY)
+    private AdminRight adminRight = AdminRight.NonAdmin;
 
     @TableField(value = "create_time", insertStrategy = FieldStrategy.NOT_EMPTY)
     private Timestamp createTime;
