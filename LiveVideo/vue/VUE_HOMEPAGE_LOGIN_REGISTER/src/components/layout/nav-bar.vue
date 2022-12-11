@@ -206,7 +206,7 @@ export default {
   },
   methods: {
     fetchCourseOrigin() {
-      this.$axios.get('api/course/success?recordsPerPage={\' + this.Page + \'}&pageNum={\' + this.pageNum + \'}\'').then(res => {
+      this.$axios.get('http://localhost:8082/api/course/success?recordsPerPage={\' + this.Page + \'}&pageNum={\' + this.pageNum + \'}\'').then(res => {
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         this.classForm = result
@@ -223,9 +223,10 @@ export default {
       })
     },
     fetchUser() {
-      this.$axios.get('api/user').then(res => {
+      this.$axios.get('http://localhost:8082/api/user/').then(res => {
+
         // 拿到结果
-        let result = JSON.parse(res.data.data);
+        let result = res.data.result;
         let message = res.data.msg;
         this.userName = result.userName
         this.userType = result.userType
