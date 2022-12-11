@@ -12,6 +12,7 @@ import courseDetailPage from "@/views/courseDetailPage";
 import studentHome from "@/views/StudentHome";
 import studentinfoUpdate from "@/views/StudentinfoUpdate";
 import videoPage from "@/views/videoPage";
+import addSection from "@/views/addSection";
 const routes = [
   {
     path:'/1',
@@ -77,8 +78,12 @@ const routes = [
     path: '/videoPage',
     name: videoPage,
     component: videoPage
+  },
+  {
+    path: '/addSection',
+    name: addSection,
+    component: addSection
   }
-
 ]
 
 const router = createRouter({

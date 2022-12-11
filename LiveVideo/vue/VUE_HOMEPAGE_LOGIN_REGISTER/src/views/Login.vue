@@ -89,30 +89,30 @@ export default {
   methods: {
     // 提交表单
     submitForm(formName) {
-      // this.$refs[formName].validate((valid) => {
-      //   if (valid) {
-      //     // 表单验证成功
-      //     this.$axios.post('http://localhost:8082/user/checkLogin', this.loginForm).then(res => {
-      //       // 拿到结果
-      //       let result = JSON.parse(res.data.data);
-      //       let message = res.data.msg;
-      //       // 判断结果
-      //       if (result) {
-      //         /*登陆成功*/
-      //         Element.Message.success(message);
-      //         /*跳转页面*/
-      //         router.push('/')
-      //       } else {
-      //         /*打印错误信息*/
-      //         Element.Message.error(message);
-      //       }
-      //     })
-      //   } else {
-      //     console.log('error submit!!');
-      //     return false;
-      //   }
-      // });
-      router.push('/1')
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          // 表单验证成功
+          this.$axios.post('http://localhost:8082/api/login', this.loginForm).then(res => {
+            // 拿到结果
+            let result = JSON.parse(res.data.data);
+            let message = res.data.msg;
+            let token = result.token
+            // 判断结果
+            if (result) {
+              /*登陆成功*/
+              localStorage.setItem("token", token)
+              /*跳转页面*/
+              router.push('/1')
+            } else {
+              /*打印错误信息*/
+              Element.Message.error(message);
+            }
+          })
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
     },
     // 重置表单
     resetForm(formName) {
