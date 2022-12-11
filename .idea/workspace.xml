@@ -83,7 +83,7 @@
       <workItem from="1670410540119" duration="6731000" />
       <workItem from="1670479202384" duration="620000" />
       <workItem from="1670573356309" duration="1221000" />
-      <workItem from="1670670755051" duration="9523000" />
+      <workItem from="1670670755051" duration="9601000" />
     </task>
     <task id="LOCAL-00001" summary="中期答辩前端代码">
       <created>1669724591751</created>
@@ -155,7 +155,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670751379436</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="实现报名退出">
+      <created>1670751758309</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1670751758309</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
