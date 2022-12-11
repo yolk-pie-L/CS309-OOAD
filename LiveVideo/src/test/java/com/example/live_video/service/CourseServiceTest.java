@@ -194,7 +194,7 @@ public class CourseServiceTest {
         Course course = new Course("aa", teacher.getId(), "cs", 1L, "aab", CourseStatus.APPROVED, "assign_url");
         courseMapper.insert(course);
         Long count1 = courseMapper.selectCount(null);
-        boolean flag = courseService.removeCourse(teacher.getUserName(), course.getCourseName());
+        boolean flag = courseService.removeCourse(course.getId());
         assert flag;
         Long count2 = courseMapper.selectCount(null);
         assert count1 == count2 + 1;
@@ -203,7 +203,7 @@ public class CourseServiceTest {
     @Test
     void getCourseByTeacherNameCourseName() {
         setUp();
-        Course course = courseService.getOneCourse(allUsers.get(0).getUserName(), allCourses.get(0).getCourseName());
+        Course course = courseService.getOneCourse(allCourses.get(0).getId());
         assert course.getCourseName().equals("rc1_t1");
         System.out.println(course);
         tearDown();
@@ -239,15 +239,6 @@ public class CourseServiceTest {
         System.out.println(courses.size());
         courses.forEach(System.out::println);
         assert courses.size() == 2;
-        tearDown();
-    }
-
-    @Test
-    void testGetApprovedCoursesByCourseName() {
-        setUp();
-        Course c = courseService.getOneApprovedCourse("teacher3", "rc1_t1");
-        assert c.getStatus().equals(CourseStatus.APPROVED);
-        assert c.getTeacherId().equals(allUsers.get(2).getId());
         tearDown();
     }
 }

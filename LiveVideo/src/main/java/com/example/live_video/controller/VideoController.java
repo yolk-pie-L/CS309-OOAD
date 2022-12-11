@@ -2,7 +2,6 @@ package com.example.live_video.controller;
 
 import com.example.live_video.config.NonStaticResourceHttpRequestHandler;
 import com.example.live_video.exception.MyException;
-import com.example.live_video.service.VideoService;
 import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,15 +11,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.websocket.server.PathParam;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import static com.example.live_video.config.NonStaticResourceHttpRequestHandler.ATTR_FILE;
 

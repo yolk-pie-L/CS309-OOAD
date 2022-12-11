@@ -27,7 +27,7 @@ public interface CourseService extends IService<Course> {
      */
     public boolean updateCourse(Course course);
 
-    public boolean removeCourse(String teacherName, String courseName);
+    public boolean removeCourse(Long courseId);
 
     /**
      * Get the courses that has status REVIEWING.
@@ -51,9 +51,7 @@ public interface CourseService extends IService<Course> {
 
     public List<Course> getReviewingCourseListOfTeacher(int recordsPerPage, int pageNum, String teacherName);
 
-    public Course getOneCourse(String teacherName, String courseName);
-
-    public Course getOneApprovedCourse(String teacherName, String courseName);
+    public Course getOneCourse(Long courseId);
 
     public String getCoursePrivateKeyUrl(String teacherName, String courseName);
 

@@ -6,7 +6,6 @@ import com.example.live_video.entity.CourseStatus;
 import com.example.live_video.service.CourseService;
 import com.example.live_video.service.StudentService;
 import com.example.live_video.vo.CourseVo;
-import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
 import com.example.live_video.wrapper.UserLoginToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,8 @@ public class CourseController {
         if (StringUtils.hasText(courseName) && StringUtils.hasText(teacherName)) {
             //FIXME: perhaps not elegant?
             List<Course> courses = new ArrayList<>();
-            courses.add(courseService.getOneApprovedCourse(teacherName, courseName));
+            //FIXME:courseService.getOneCourse(courseId);
+//            courses.add(courseService.getOneApprovedCourse(teacherName, courseName));
             return CourseVo.parse(courses);
         }
         if (StringUtils.hasText(courseName)) {
@@ -49,7 +49,9 @@ public class CourseController {
 
     @GetMapping("/api/course/all")
     public CourseVo queryAllCourseByUsername(@RequestParam String userName) {
-        return CourseVo.parseEasy(courseService.getOneCourse(userName, null));
+        return null;
+        //FIXME
+//        return CourseVo.parseEasy(courseService.getOneCourse(userName));
     }
 
     @PostMapping ("/api/course")
@@ -75,7 +77,9 @@ public class CourseController {
     public Boolean enroll(@RequestParam String studentName,
                           @RequestParam String courseName,
                           @RequestParam String teacherName) throws Exception {
-        return studentService.enrollCourse(teacherName, courseName, studentName);
+//        return studentService.enrollCourse(, teacherName, studentName);
+        //FIXME:
+        return null;
     }
 
 }

@@ -50,8 +50,8 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
     }
 
     @Override
-    public boolean removeCourse(String teacherName, String courseName) {
-        return courseMapper.removeCourse(teacherName, courseName);
+    public boolean removeCourse(Long courseId) {
+        return courseMapper.deleteById(courseId) == 1;
     }
 
     @Override
@@ -90,14 +90,10 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
     }
 
     @Override
-    public Course getOneCourse(String teacherName, String courseName) {
-        return courseMapper.getOneCourse(teacherName, courseName);
+    public Course getOneCourse(Long courseId) {
+        return courseMapper.selectById(courseId);
     }
 
-    @Override
-    public Course getOneApprovedCourse(String teacherName, String courseName) {
-        return courseMapper.getOneApprovedCourse(teacherName, courseName);
-    }
 
     @Override
     public String getCoursePrivateKeyUrl(String teacherName, String courseName) {

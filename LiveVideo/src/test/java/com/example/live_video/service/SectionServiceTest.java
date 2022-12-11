@@ -115,7 +115,7 @@ class SectionServiceTest {
     void removeSection() {
         Section testSection = allSections.get(0);
         long count = sectionMapper.selectCount(null);
-        sectionService.removeSection(testSection.getTeacherName(), testSection.getCourseName(), testSection.getSectionName());
+        sectionService.removeSection(count);
         long count2 = sectionMapper.selectCount(null);
         assert count2 == count - 1;
         List<Section> sectionList = sectionMapper.selectList(null);
@@ -128,7 +128,7 @@ class SectionServiceTest {
     @Test
     void getOneSection() {
         Section origin = allSections.get(0);
-        Section s = sectionService.getOneSection(origin.getTeacherName(), origin.getCourseName(), origin.getSectionName());
+        Section s = sectionService.getOneSection(origin.getId());
         assert s.getVideoUrl().equals(origin.getVideoUrl());
         assert s.getId().equals(origin.getId());
     }

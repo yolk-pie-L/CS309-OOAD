@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest
 @Transactional
 @Rollback
@@ -48,10 +50,10 @@ class AssignmentServiceTest {
 
     @AfterEach
     void tearDown() {
-        for(Course course: courses){
+        for (Course course : courses) {
             courseMapper.deleteById(course);
         }
-        for(User user: users){
+        for (User user : users) {
             userMapper.deleteById(user);
         }
     }
@@ -61,12 +63,12 @@ class AssignmentServiceTest {
         List<String> urls = new ArrayList<>();
         urls.add("url1");
         urls.add("url2");
-        Assignment assignment = new Assignment("ass1", courses.get(0).getCourseName(), users.get(0).getUserName(), null, 100, true, null, urls);
+        Assignment assignment = new Assignment("ass1", courses.get(0).getId(), null, 100, urls, true, null);
         boolean flag1 = assignmentService.createAssignment(assignment);
         boolean flag2 = false;
         try {
             assignmentService.createAssignment(assignment);
-        }catch (SQLAssignNameConflictException e){
+        } catch (SQLAssignNameConflictException e) {
             flag2 = true;
         }
         assert flag1;
@@ -79,9 +81,9 @@ class AssignmentServiceTest {
         List<String> urls = new ArrayList<>();
         urls.add("url1");
         urls.add("url2");
-        Assignment assignment = new Assignment("ass1", courses.get(0).getCourseName(), users.get(0).getUserName(), null, 100, true, null, urls);
+        Assignment assignment = new Assignment("ass1", courses.get(0).getId(), null, 100, urls, true, null);
         assignmentService.createAssignment(assignment);
-        assignmentService.removeAssignment(assignment);
+        assignmentService.removeAssignment(assignment.getId());
     }
 
     @Test
@@ -89,9 +91,11 @@ class AssignmentServiceTest {
         List<String> urls = new ArrayList<>();
         urls.add("url1");
         urls.add("url2");
-        Assignment assignment = new Assignment("ass1", courses.get(0).getCourseName(), users.get(0).getUserName(), null, 100, true, null, urls);
+        Assignment assignment = new Assignment("ass1", courses.get(0).getId(), null, 100, urls, true, null);
         assignmentService.createAssignment(assignment);
-        Assignment assignment1 = assignmentService.getOneAssignment(courses.get(0).getCourseName(), users.get(0).getUserName(), assignment.getAssignmentName());
+        Assignment assignment1 = assignmentService.getOneAssignment(assignment.getId());
         System.out.println(assignment1);
+        assertEquals(assignment.getId(), assignment1.getId());
+        assertEquals(assignment.getAssignUrls(), assignment1.getAssignUrls());
     }
 }

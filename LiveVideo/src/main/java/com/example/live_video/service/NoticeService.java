@@ -10,7 +10,7 @@ public interface NoticeService extends IService<Notice> {
 
     public boolean createNotice(Notice notice);
 
-    public List<Notice> getNoticeListOfCourse(String teacherName, String courseName);
+    public List<Notice> getNoticeListOfCourse(Long courseId);
 
-    public boolean deleteNotice(String teacherName, String courseName, Timestamp createTime);
+    public boolean deleteNotice(Long noticeId);
 }

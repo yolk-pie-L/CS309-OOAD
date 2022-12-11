@@ -24,24 +24,17 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
 
     @Override
     public boolean createNotice(Notice notice) {
-        Long courseId = courseMapper.getCourseId(notice.getTeacherName(), notice.getCourseName());
-        notice.setCourseId(courseId);
         return noticeMapper.insert(notice) == 1;
     }
 
     @Override
-    public List<Notice> getNoticeListOfCourse(String teacherName, String courseName) {
-        Long courseId = courseMapper.getCourseId(teacherName, courseName);
+    public List<Notice> getNoticeListOfCourse(Long courseId) {
         return noticeMapper.getNoticeListOfCourse(courseId);
     }
 
     @Override
     @Transactional
-    public boolean deleteNotice(String teacherName, String courseName, Timestamp createTime) {
-        Long courseId = courseMapper.getCourseId(teacherName, courseName);
-        QueryWrapper<Notice> noticeQueryWrapper = new QueryWrapper<>();
-        noticeQueryWrapper.eq("course_id", courseId);
-        noticeQueryWrapper.eq("create_time", createTime);
-        return noticeMapper.delete(noticeQueryWrapper) == 1;
+    public boolean deleteNotice(Long noticeId) {
+        return noticeMapper.deleteById(noticeId) == 1;
     }
 }

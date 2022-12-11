@@ -48,11 +48,8 @@ public interface CourseMapper extends BaseMapper<Course> {
     @Select({"SELECT course.charge\n" +
             "FROM course\n" +
             "         JOIN user ON course.teacher_id = user.id\n" +
-            "WHERE username = #{teacherName}\n" +
-            "  AND course_name = #{courseName}\n" +
-            "  AND course.is_delete = 0\n" +
-            "  AND user.is_delete = 0"})
-    public Long getCourseCharge(String teacherName, String courseName);
+            "WHERE course.id = #{courseId}"})
+    public Long getCourseCharge(Long courseId);
 
     @Select({"SELECT course.*\n" +
             "FROM course\n" +
