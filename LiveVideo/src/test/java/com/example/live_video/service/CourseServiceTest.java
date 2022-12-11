@@ -243,4 +243,9 @@ public class CourseServiceTest {
         assert courses.size() == 2;
         tearDown();
     }
+
+    @Test
+    void getOneApprovedCourse() {
+        setUp();
+    }
 }

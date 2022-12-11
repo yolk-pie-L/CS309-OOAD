@@ -11,6 +11,8 @@ import com.example.live_video.service.CourseService;
 import com.example.live_video.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
 import java.util.List;
 
 @Service
@@ -95,6 +97,20 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
         String teacherName = userMapper.selectById(course.getTeacherId()).getUserName();
         course.setTeacherName(teacherName);
         return courseMapper.selectById(courseId);
+    }
+
+    @Override
+    public Course getOneApprovedCourse(String teacherName, String courseName) {
+        QueryWrapper<Course> courseQueryWrapper = new QueryWrapper<>();
+        if(StringUtils.hasText(teacherName)){
+            Long teacherId = userService.getUserId(teacherName);
+            courseQueryWrapper.eq("teacher_id", teacherId);
+        }
+        if(StringUtils.hasText(courseName)){
+            courseQueryWrapper.eq("course_name", courseName);
+        }
+        courseQueryWrapper.eq("status", CourseStatus.APPROVED);
+        return courseMapper.selectOne(courseQueryWrapper);
     }
 
 

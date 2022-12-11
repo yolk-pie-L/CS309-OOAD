@@ -53,6 +53,8 @@ public interface CourseService extends IService<Course> {
 
     public Course getOneCourse(Long courseId);
 
+    public Course getOneApprovedCourse(String teacherName, String courseName);
+
     public String getCoursePrivateKeyUrl(String teacherName, String courseName);
 
     public List<Course> getApprovedCourseList(int recordsPerPage, int pageNum, String courseName);

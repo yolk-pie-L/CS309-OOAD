@@ -32,17 +32,17 @@ drop table if exists user cascade;
 
 CREATE TABLE user
 (
-    id           int auto_increment primary key,
-    username     varchar(20)                                not null,
-    usertype     enum ('Administrator','Student','Teacher') not null,
+    id          int auto_increment primary key,
+    username    varchar(20)                                not null,
+    usertype    enum ('Administrator','Student','Teacher') not null,
     admin_right enum ('SuperAdmin', 'Admin', 'NonAdmin')   not null,
-    mail         varchar(50),
-    password     varchar(50)                                not null,
-    photo_url    varchar(50),
-    account      bigint                                              default 0,
-    create_time  timestamp                                  not null default CURRENT_TIMESTAMP,
-    update_time  timestamp                                  null     default null on update CURRENT_TIMESTAMP,
-    is_delete    int                                                 default 0,
+    mail        varchar(50),
+    password    varchar(50)                                not null,
+    photo_url   varchar(50),
+    account     bigint                                              default 0,
+    create_time timestamp                                  not null default CURRENT_TIMESTAMP,
+    update_time timestamp                                  null     default null on update CURRENT_TIMESTAMP,
+    is_delete   int                                                 default 0,
     CONSTRAINT unique (username, is_delete),
     CONSTRAINT unique (mail, is_delete)
 );
@@ -123,13 +123,12 @@ CREATE TABLE danmu
 
 CREATE TABLE comment
 (
-    id         int auto_increment primary key,
-    parent_id  int      not null references comment (id),
-    reply_id   int      not null references comment (id),
-    context    text     not null,
-    user_id    int      not null,
-    section_id int,
-    create_time       timestamp not null,
+    id          int auto_increment primary key,
+    parent_id   int       not null,
+    context     text      not null,
+    user_id     int       not null,
+    section_id  int,
+    create_time timestamp not null default CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (section_id) REFERENCES section (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
