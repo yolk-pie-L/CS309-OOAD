@@ -88,7 +88,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     }
 
     @Override
-    public Comment getComment(Long commentId) {
+    public Comment getOneComment(Long commentId) {
         Comment comment = commentMapper.selectById(commentId);
         comment.setThisUser(userMapper.selectById(comment.getId()));
         if(comment.getParentId() != -1){

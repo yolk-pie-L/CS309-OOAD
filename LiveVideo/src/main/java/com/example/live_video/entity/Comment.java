@@ -13,30 +13,58 @@ import java.util.List;
 @TableName(value = "comment")
 public class Comment {
 
+    /*
+    this id of comment
+     */
     @TableId(type = IdType.AUTO)
     private Long id;
 
+    /*
+    所回复的评论的id
+     */
     @TableField(value = "parent_id")
     private Long parentId;
 
+    /*
+    评论内容
+     */
     @TableField(value = "context")
     private String context;
 
+    /*
+    发表评论的用户
+     */
     @TableField(value = "user_id")
     private Long userId;
 
+    /*
+    所属于的章节
+     */
     @TableField(value = "section_id")
     private Long sectionId;
 
+    /*
+    创建评论的时间
+     */
     @TableField(value = "create_time", insertStrategy = FieldStrategy.NOT_EMPTY)
     private Timestamp createTime;
 
+    /*
+    发表评论的用户
+     */
     @TableField(exist = false)
     User thisUser;
 
+    /*
+    被回复的用户
+     */
     @TableField(exist = false)
     User parentUser;
 
+    /*
+    如果这是根节点，replyCommentList就不为空，如果不是根节点，该field为空
+    对于根节点，该field表示其下的所有评论
+     */
     @TableField(exist = false)
     List<Comment> replyCommentList = new ArrayList<>();
 
