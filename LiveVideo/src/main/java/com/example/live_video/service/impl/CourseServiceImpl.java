@@ -93,26 +93,8 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
 
     @Override
     public Course getOneCourse(Long courseId) {
-        Course course = courseMapper.selectById(courseId);
-        String teacherName = userMapper.selectById(course.getTeacherId()).getUserName();
-        course.setTeacherName(teacherName);
         return courseMapper.selectById(courseId);
     }
-
-    @Override
-    public Course getOneApprovedCourse(String teacherName, String courseName) {
-        QueryWrapper<Course> courseQueryWrapper = new QueryWrapper<>();
-        if(StringUtils.hasText(teacherName)){
-            Long teacherId = userService.getUserId(teacherName);
-            courseQueryWrapper.eq("teacher_id", teacherId);
-        }
-        if(StringUtils.hasText(courseName)){
-            courseQueryWrapper.eq("course_name", courseName);
-        }
-        courseQueryWrapper.eq("status", CourseStatus.APPROVED);
-        return courseMapper.selectOne(courseQueryWrapper);
-    }
-
 
     @Override
     public String getCoursePrivateKeyUrl(String teacherName, String courseName) {
