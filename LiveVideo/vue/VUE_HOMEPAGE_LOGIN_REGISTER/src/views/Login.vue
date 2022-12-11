@@ -19,8 +19,8 @@
       <el-col :span="7" class="login-card">
         <!--loginForm-->
         <el-form :model="loginForm" :rules="rules" ref="loginForm" label-width="21%" class="loginForm">
-          <el-form-item label="账户" prop="username" style="width: 380px">
-            <el-input v-model="loginForm.username"></el-input>
+          <el-form-item label="账户" prop="userName" style="width: 380px">
+            <el-input v-model="loginForm.userName"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password" style="width: 380px">
             <el-input type="password" v-model="loginForm.password"></el-input>
@@ -54,7 +54,7 @@ export default {
       // 表单信息
       loginForm: {
         // 账户数据
-        username: '',
+        userName: '',
         // 密码数据
         password: '',
         // 验证码数据
@@ -67,7 +67,7 @@ export default {
       // 表单验证
       rules: {
         // 设置账户效验规则
-        username: [
+        userName: [
           {required: true, message: '请输入账户', trigger: 'blur'},
           {min: 3, max: 10, message: '长度在 3 到 10 个字符的账户', trigger: 'blur'}
         ],
@@ -105,7 +105,7 @@ export default {
               router.push('/1')
             } else {
               /*打印错误信息*/
-              Element.Message.error(message);
+              alert(message)
             }
           })
         } else {

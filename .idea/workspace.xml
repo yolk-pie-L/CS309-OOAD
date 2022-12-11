@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="040d5963-020e-49eb-a09c-285573158850" name="Changes" comment="实现报名退出">
-      <change afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/addSection.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/Login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/Login.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +84,7 @@
       <workItem from="1670410540119" duration="6731000" />
       <workItem from="1670479202384" duration="620000" />
       <workItem from="1670573356309" duration="1221000" />
-      <workItem from="1670670755051" duration="9159000" />
+      <workItem from="1670670755051" duration="9805000" />
     </task>
     <task id="LOCAL-00001" summary="中期答辩前端代码">
       <created>1669724591751</created>
@@ -148,7 +149,28 @@
       <option name="project" value="LOCAL" />
       <updated>1670750941151</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="实现报名退出">
+      <created>1670751379436</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1670751379436</updated>
+    </task>
+    <task id="LOCAL-00011" summary="实现报名退出">
+      <created>1670751758309</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1670751758309</updated>
+    </task>
+    <task id="LOCAL-00012" summary="实现报名退出">
+      <created>1670751828321</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1670751828321</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
