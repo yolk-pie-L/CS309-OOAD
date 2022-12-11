@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 
 import static com.example.live_video.config.NonStaticResourceHttpRequestHandler.ATTR_FILE;
 
@@ -89,13 +90,12 @@ public class VideoController {
 
     @PostMapping("remove/{sectionId}")
     public Boolean remove(@PathVariable Long sectionId) {
-//        sectionService.removeSection(sectionId);
+        sectionService.removeSection(sectionId);
         return true;
     }
 
     @GetMapping("all/{courseId}")
-    public Boolean getSectionList(@PathVariable Long courseId) {
-//        sectionService.getSectionList(courseId);
-        return true;
+    public List<Section> getSectionList(@PathVariable Long courseId) {
+        return sectionService.getSectionList(courseId);
     }
 }
