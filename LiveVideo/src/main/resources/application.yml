@@ -1,11 +1,11 @@
 server:
-  port: 18900
+  port: 8082
 
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/LiveVideo?serverTimeZone=GMT%2b8
     username: root
-    password: 123456
+    password: root
 
 
