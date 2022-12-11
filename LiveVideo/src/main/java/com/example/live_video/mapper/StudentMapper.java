@@ -30,4 +30,7 @@ public interface StudentMapper {
 
     @Delete("DELETE FROM stu_assign WHERE user_id = #{studentId} AND assign_id = #{assignId}")
     public void deleteStudentAssignment(Long studentId, Long assignId);
+
+    @Select("SELECT grade FROM stu_assign WHERE assign_id = #{assignId} AND user_id = #{studentId}")
+    public int getStudentAssignGrade(Long assignId, Long studentId);
 }

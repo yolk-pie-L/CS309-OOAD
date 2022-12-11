@@ -15,7 +15,7 @@ public interface StudentService {
 
     public Boolean setStudentAssignGrade(String studentName, Long assignId, int grade);
 
-    public Boolean getStudentAssignGrade(String studentName, Long assignId);
+    public int getStudentAssignGrade(String studentName, Long assignId);
 
     public Boolean submitAssignment(String studentName, Long assignId, List<String> assignUrls);
 
