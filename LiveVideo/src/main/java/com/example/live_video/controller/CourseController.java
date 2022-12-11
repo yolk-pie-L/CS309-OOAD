@@ -10,7 +10,6 @@ import com.example.live_video.service.CourseService;
 import com.example.live_video.service.StudentService;
 import com.example.live_video.service.UserService;
 import com.example.live_video.vo.CourseVo;
-import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
 import com.example.live_video.wrapper.UserLoginToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +46,11 @@ public class CourseController {
                                                 @RequestParam(required = false) String courseName,
                                                 @RequestParam(required = false) String teacherName) {
         if (StringUtils.hasText(courseName) && StringUtils.hasText(teacherName)) {
+            //FIXME: perhaps not elegant?
+            List<Course> courses = new ArrayList<>();
+            //FIXME:courseService.getOneCourse(courseId);
+//            courses.add(courseService.getOneApprovedCourse(teacherName, courseName));
+            return CourseVo.parse(courses);
             return Collections.singletonList(CourseVo.parse(courseService.getOneApprovedCourse(teacherName, courseName)));
         }
         if (StringUtils.hasText(courseName)) {

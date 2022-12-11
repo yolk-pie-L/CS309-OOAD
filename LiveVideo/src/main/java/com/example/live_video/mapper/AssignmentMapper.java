@@ -25,9 +25,8 @@ public interface AssignmentMapper extends BaseMapper<Assignment> {
     @Select("SELECT assign_url\n" +
             "FROM assign_urls\n" +
             "         JOIN assignment ON assign_urls.assign_id = assignment.id\n" +
-            "WHERE assignment.course_id = #{courseId}\n" +
-            "  AND assignment.assignment_name = #{assignName}")
-    public List<String> getAssignUrlList(Long courseId, String assignName);
+            "WHERE assign_urls.assign_id = #{assignId}")
+    public List<String> getAssignUrlList(Long assignId);
 
 
 }

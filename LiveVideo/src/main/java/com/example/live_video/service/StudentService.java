@@ -7,17 +7,19 @@ import java.util.List;
 
 public interface StudentService {
 
-    public Boolean enrollCourse(String teacherName, String courseName, String studentName) throws EnrollCourseException;
+    public Boolean enrollCourse(Long courseId, String studentName) throws EnrollCourseException;
 
-    public Boolean exitCourse(String teacherName, String courseName, String studentName);
+    public Boolean exitCourse(Long courseId, String studentName);
 
     public List<Course> getEnrolledCourseList(String studentName);
 
-    public Boolean setStudentAssignGrade(String studentName, String courseName, String teacherName, String assignName, int grade);
+    public Boolean setStudentAssignGrade(String studentName, Long assignId, int grade);
 
-    public Boolean submitAssignment(String studentName, String courseName, String teacherName, String assignName, List<String> assignUrls);
+    public Boolean getStudentAssignGrade(String studentName, Long assignId);
 
-    public List<String> getStudentAssignmentUrlList(String studentName, String courseName, String teacherName, String assignName);
+    public Boolean submitAssignment(String studentName, Long assignId, List<String> assignUrls);
 
-    public Boolean resubmitAssignment(String studentName, String courseName, String teacherName, String assignName, List<String> assignUrls);
+    public List<String> getStudentAssignmentUrlList(String studentName, Long assignId);
+
+    public Boolean resubmitAssignment(String studentName, Long assignId, List<String> assignUrls);
 }

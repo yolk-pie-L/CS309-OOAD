@@ -23,8 +23,6 @@ public class SectionServiceImpl extends ServiceImpl<SectionMapper, Section> impl
 
     @Override
     public Boolean createSection(Section section) throws SQLSectionnameConflictException {
-        Long courseId = courseMapper.getCourseId(section.getTeacherName(), section.getCourseName());
-        section.setCourseId(courseId);
         QueryWrapper<Section> sectionQueryWrapper = new QueryWrapper<>();
         sectionQueryWrapper.eq("section_name", section.getSectionName());
         sectionQueryWrapper.eq("course_id", section.getCourseId());
@@ -36,8 +34,6 @@ public class SectionServiceImpl extends ServiceImpl<SectionMapper, Section> impl
 
     @Override
     public Boolean updateSection(Section section) {
-        Long courseId = courseMapper.getCourseId(section.getTeacherName(), section.getCourseName());
-        section.setCourseId(courseId);
         QueryWrapper<Section> sectionQueryWrapper = new QueryWrapper<>();
         sectionQueryWrapper.eq("section_name", section.getSectionName());
         sectionQueryWrapper.eq("course_id", section.getCourseId());
@@ -45,29 +41,20 @@ public class SectionServiceImpl extends ServiceImpl<SectionMapper, Section> impl
     }
 
     @Override
-    public Boolean removeSection(String teacherName, String courseName, String sectionName) {
-        Long courseId = courseMapper.getCourseId(teacherName, courseName);
-        QueryWrapper<Section> sectionQueryWrapper = new QueryWrapper<>();
-        sectionQueryWrapper.eq("section_name", sectionName);
-        sectionQueryWrapper.eq("course_id", courseId);
-        return sectionMapper.delete(sectionQueryWrapper) == 1;
+    public Boolean removeSection(Long sectionId) {
+        return sectionMapper.deleteById(sectionId) == 1;
     }
 
     @Override
-    public List<Section> getSectionList(String teacherName, String courseName) {
-        Long courseId = courseMapper.getCourseId(teacherName, courseName);
+    public List<Section> getSectionList(Long courseId) {
         QueryWrapper<Section> sectionQueryWrapper = new QueryWrapper<>();
         sectionQueryWrapper.eq("course_id", courseId);
         return sectionMapper.selectList(sectionQueryWrapper);
     }
 
     @Override
-    public Section getOneSection(String teacherName, String courseName, String sectionName) {
-        Long courseId = courseMapper.getCourseId(teacherName, courseName);
-        QueryWrapper<Section> sectionQueryWrapper = new QueryWrapper<>();
-        sectionQueryWrapper.eq("course_id", courseId);
-        sectionQueryWrapper.eq("section_name", sectionName);
-        return sectionMapper.selectOne(sectionQueryWrapper);
+    public Section getOneSection(Long sectionId) {
+        return sectionMapper.selectById(sectionId);
     }
 
     @Override

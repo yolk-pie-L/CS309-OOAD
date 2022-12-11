@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.Objects;
 
 @SpringBootTest
-//@Transactional
-//@Rollback
+@Transactional
+@Rollback
 public class CourseServiceTest {
 
     @Autowired
@@ -34,46 +34,6 @@ public class CourseServiceTest {
     List<Course> allCourses = new ArrayList<>();
 
     List<User> allUsers = new ArrayList<>();
-
-    @Test
-    void initial(){
-        User teacher1 = new User("teacher1", UserType.Teacher, "teacher1@mail", "123456");
-        User teacher2 = new User("teacher2", UserType.Teacher, "teacher2@mail", "123456");
-        User teacher3 = new User("teacher3", UserType.Teacher, "t3@mail", "32");
-        User teacher4 = new User("teacher4", UserType.Teacher, "t4", "3234");
-        userMapper.insert(teacher1);
-        userMapper.insert(teacher2);
-        userMapper.insert(teacher3);
-        userMapper.insert(teacher4);
-        Course rc1_t1 = new Course("rc1_t1", teacher1.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "assign_url");
-        Course ac1_t3 = new Course("rc1_t1", teacher3.getId(), "test", 0L, "review", CourseStatus.APPROVED, "assign_url");
-        Course ac1_t4 = new Course("rc1_t1", teacher4.getId(), "test", 0L, "review", CourseStatus.APPROVED, "assign_url");
-        Course rc2_t1 = new Course("rc2_t1", teacher1.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "assign_url");
-        Course rc3_t1 = new Course("rc3_t1", teacher1.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "assign_url");
-        Course ac1_t1 = new Course("ac_t1", teacher1.getId(), "test", 0L, "approve", CourseStatus.APPROVED, "assign_url");
-        Course fc1_t1 = new Course("fc_t1", teacher1.getId(), "test", 0L, "fail", CourseStatus.FAILED, "assign_url");
-        Course rc1_t2 = new Course("rc1_t1", teacher2.getId(), "test", 0L, "the same name as rc1_t1", CourseStatus.REVIEWING, "assign_url");
-        courseMapper.insert(rc1_t1);
-        courseMapper.insert(rc2_t1);
-        courseMapper.insert(rc3_t1);
-        courseMapper.insert(ac1_t3);
-        courseMapper.insert(ac1_t4);
-        courseMapper.insert(ac1_t1);
-        courseMapper.insert(fc1_t1);
-        courseMapper.insert(rc1_t2);
-        allCourses.add(rc1_t1);
-        allCourses.add(rc2_t1);
-        allCourses.add(rc3_t1);
-        allCourses.add(ac1_t1);
-        allCourses.add(fc1_t1);
-        allCourses.add(rc1_t2);
-        allCourses.add(ac1_t3);
-        allCourses.add(ac1_t4);
-        allUsers.add(teacher1);
-        allUsers.add(teacher2);
-        allUsers.add(teacher3);
-        allUsers.add(teacher4);
-    }
 
     // teacher1有三个review, 一个failed, 一个approved
     // teacher2有一个review
@@ -234,7 +194,7 @@ public class CourseServiceTest {
         Course course = new Course("aa", teacher.getId(), "cs", 1L, "aab", CourseStatus.APPROVED, "assign_url");
         courseMapper.insert(course);
         Long count1 = courseMapper.selectCount(null);
-        boolean flag = courseService.removeCourse(teacher.getUserName(), course.getCourseName());
+        boolean flag = courseService.removeCourse(course.getId());
         assert flag;
         Long count2 = courseMapper.selectCount(null);
         assert count1 == count2 + 1;
@@ -243,7 +203,7 @@ public class CourseServiceTest {
     @Test
     void getCourseByTeacherNameCourseName() {
         setUp();
-        Course course = courseService.getOneCourse(allUsers.get(0).getUserName(), allCourses.get(0).getCourseName());
+        Course course = courseService.getOneCourse(allCourses.get(0).getId());
         assert course.getCourseName().equals("rc1_t1");
         System.out.println(course);
         tearDown();
@@ -279,15 +239,6 @@ public class CourseServiceTest {
         System.out.println(courses.size());
         courses.forEach(System.out::println);
         assert courses.size() == 2;
-        tearDown();
-    }
-
-    @Test
-    void testGetApprovedCoursesByCourseName() {
-        setUp();
-        Course c = courseService.getOneApprovedCourse("teacher3", "rc1_t1");
-        assert c.getStatus().equals(CourseStatus.APPROVED);
-        assert c.getTeacherId().equals(allUsers.get(2).getId());
         tearDown();
     }
 }

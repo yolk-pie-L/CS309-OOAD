@@ -45,10 +45,9 @@ public class Notice {
         this.context = context;
     }
 
-    public Notice(Long id, Long courseId, String noticeName, Timestamp createTime, String context) {
-        this.id = id;
-        this.courseId = courseId;
+    public Notice(String noticeName, Long courseId, Timestamp createTime, String context) {
         this.noticeName = noticeName;
+        this.courseId = courseId;
         this.createTime = createTime;
         this.context = context;
     }

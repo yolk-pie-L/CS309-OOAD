@@ -36,10 +36,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
-    public Boolean enrollCourse(String teacherName, String courseName, String studentName) throws EnrollCourseException {
-        Long courseId = courseMapper.getCourseId(teacherName, courseName);
+    public Boolean enrollCourse(Long courseId, String studentName) throws EnrollCourseException {
         Long studentId = userService.getUserId(studentName);
-        Long courseCharge = courseMapper.getCourseCharge(teacherName, courseName);
+        Long courseCharge = courseMapper.getCourseCharge(courseId);
         Long studentAccount = userService.getUserAccount(studentName);
         if (courseCharge <= studentAccount) {
             User user = new User(studentName, null, null, null, null,
@@ -52,8 +51,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Boolean exitCourse(String teacherName, String courseName, String studentName) {
-        Long courseId = courseMapper.getCourseId(teacherName, courseName);
+    public Boolean exitCourse(Long courseId, String studentName) {
         Long studentId = userService.getUserId(studentName);
         studentMapper.exitCourse(studentId, courseId);
         return true;
@@ -67,17 +65,22 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Boolean setStudentAssignGrade(String studentName, String courseName, String teacherName, String assignName, int grade) {
-        Long assignId = assignmentService.getAssignmentId(courseName, teacherName, assignName);
+    public Boolean setStudentAssignGrade(String studentName, Long assignId, int grade) {
         Long studentId = userService.getUserId(studentName);
         studentMapper.setStudentAssignGrade(studentId, assignId, grade);
         return true;
     }
 
     @Override
+    public Boolean getStudentAssignGrade(String studentName, Long assignId) {
+        Long studentId = userService.getUserId(studentName);
+        //TODO: implement the method
+        return null;
+    }
+
+    @Override
     @Transactional
-    public Boolean submitAssignment(String studentName, String courseName, String teacherName, String assignName, List<String> assignUrls) {
-        Long assignId = assignmentService.getAssignmentId(courseName, teacherName, assignName);
+    public Boolean submitAssignment(String studentName, Long assignId, List<String> assignUrls) {
         Long studentId = userService.getUserId(studentName);
         for (String assignUrl : assignUrls) {
             studentMapper.submitAssignment(studentId, assignId, assignUrl);
@@ -86,18 +89,17 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<String> getStudentAssignmentUrlList(String studentName, String courseName, String teacherName, String assignName) {
-        Long assignId = assignmentService.getAssignmentId(courseName, teacherName, assignName);
+    public List<String> getStudentAssignmentUrlList(String studentName, Long assignId) {
         Long studentId = userService.getUserId(studentName);
         List<String> assignUrls = studentMapper.getStudentSubmittedAssignUrlList(studentId, assignId);
         return assignUrls;
     }
 
     @Override
-    public Boolean resubmitAssignment(String studentName, String courseName, String teacherName, String assignName, List<String> assignUrls) {
-        Long assignId = assignmentService.getAssignmentId(courseName, teacherName, assignName);
+    @Transactional
+    public Boolean resubmitAssignment(String studentName, Long assignId, List<String> assignUrls) {
         Long studentId = userService.getUserId(studentName);
         studentMapper.deleteStudentAssignment(studentId, assignId);
-        return this.submitAssignment(studentName, courseName, teacherName, assignName, assignUrls);
+        return this.submitAssignment(studentName, assignId, assignUrls);
     }
 }

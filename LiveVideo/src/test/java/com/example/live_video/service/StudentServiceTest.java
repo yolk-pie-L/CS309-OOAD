@@ -65,20 +65,20 @@ class StudentServiceTest {
         students.add(student2);
         students.forEach(userMapper::insert);
         Course course1 = new Course("c1", teacher1.getUserName(), "t", 10L, "d", CourseStatus.APPROVED, null);
-        Course course2 = new Course("c2",teacher1.getUserName(), "t", 10L, "d", CourseStatus.APPROVED, null);
-        Course course3 = new Course("c3",teacher2.getUserName(), "t", 10L, "d", CourseStatus.APPROVED, null);
+        Course course2 = new Course("c2", teacher1.getUserName(), "t", 10L, "d", CourseStatus.APPROVED, null);
+        Course course3 = new Course("c3", teacher2.getUserName(), "t", 10L, "d", CourseStatus.APPROVED, null);
         courses.add(course1);
         courses.add(course2);
         courses.add(course3);
-        for(Course c: courses){
+        for (Course c : courses) {
             courseService.createCourse(c);
         }
     }
 
     @AfterEach
     void tearDown() {
-        for(Course c: courses){
-            courseService.removeCourse(c.getTeacherName(), c.getCourseName());
+        for (Course c : courses) {
+            courseService.removeCourse(c.getId());
         }
         students.forEach(userMapper::deleteById);
         teachers.forEach(userMapper::deleteById);
@@ -91,14 +91,14 @@ class StudentServiceTest {
         Course c1 = courses.get(0);
         Course c2 = courses.get(1);
         Course c3 = courses.get(2);
-        studentService.enrollCourse(c1.getTeacherName(), c1.getCourseName(), s1.getUserName());
-        studentService.enrollCourse(c2.getTeacherName(), c2.getCourseName(),s1.getUserName());
-        studentService.enrollCourse(c3.getTeacherName(), c3.getCourseName(), s1.getUserName());
-        studentService.enrollCourse(c1.getTeacherName(), c1.getCourseName(),s2.getUserName());
+        studentService.enrollCourse(c1.getId(), s1.getUserName());
+        studentService.enrollCourse(c2.getId(), s1.getUserName());
+        studentService.enrollCourse(c3.getId(), s1.getUserName());
+        studentService.enrollCourse(c1.getId(), s2.getUserName());
         boolean res = false;
         try {
-            studentService.enrollCourse(c3.getTeacherName(), c3.getCourseName(), s2.getUserName());
-        }catch (EnrollCourseException e){
+            studentService.enrollCourse(c3.getId(), s2.getUserName());
+        } catch (EnrollCourseException e) {
             res = true;
         }
         assert res;
@@ -113,11 +113,11 @@ class StudentServiceTest {
         User u1 = userMapper.selectOne(userQueryWrapper);
         assert u1.getAccount().equals(70L);
         System.out.println(u1);
-        studentService.exitCourse(c1.getTeacherName(), c1.getCourseName(), s1.getUserName());
-        studentService.exitCourse(c2.getTeacherName(), c2.getCourseName(), s1.getUserName());
-        studentService.exitCourse(c3.getTeacherName(), c3.getCourseName(), s1.getUserName());
-        studentService.exitCourse(c1.getTeacherName(), c1.getCourseName(), s2.getUserName());
-        studentService.exitCourse(c3.getTeacherName(), c3.getCourseName(), s2.getUserName());
+        studentService.exitCourse(c1.getId(), s1.getUserName());
+        studentService.exitCourse(c2.getId(), s1.getUserName());
+        studentService.exitCourse(c3.getId(), s1.getUserName());
+        studentService.exitCourse(c1.getId(), s2.getUserName());
+        studentService.exitCourse(c3.getId(), s2.getUserName());
         courses1 = studentService.getEnrolledCourseList(s1.getUserName());
         assert courses1.size() == 0;
         courses2 = studentService.getEnrolledCourseList(s2.getUserName());
@@ -141,33 +141,33 @@ class StudentServiceTest {
         Course c1 = courses.get(0);
         Course c2 = courses.get(1);
         Course c3 = courses.get(2);
-        Assignment assignment1 = new Assignment("assi1", c1.getCourseName(), c1.getTeacherName(), null, 100, true, null, null);
-        Assignment assignment2 = new Assignment("assi2", c1.getCourseName(), c1.getTeacherName(), null, 120, false, null, null);
+        Assignment assignment1 = new Assignment("assi1", c1.getId(), null, 100, null,true, null);
+        Assignment assignment2 = new Assignment("assi2", c1.getId(), null, 120, null, false, null);
         assignmentService.createAssignment(assignment1);
         assignmentService.createAssignment(assignment2);
         List<String> urls1 = new ArrayList<>();
         urls1.add("l1");
         urls1.add("l2");
-        studentService.submitAssignment(s1.getUserName(), c1.getCourseName(), c1.getTeacherName(), assignment1.getAssignmentName(), urls1);
-        studentService.setStudentAssignGrade(s1.getUserName(), c1.getCourseName(), c1.getTeacherName(), assignment1.getAssignmentName(), 100);
-        List<String> res = studentService.getStudentAssignmentUrlList(s1.getUserName(), c1.getCourseName(), c1.getTeacherName(), assignment1.getAssignmentName());
+        studentService.submitAssignment(s1.getUserName(), assignment1.getId(), urls1);
+        studentService.setStudentAssignGrade(s1.getUserName(), assignment1.getId(), 100);
+        List<String> res = studentService.getStudentAssignmentUrlList(s1.getUserName(),  assignment1.getId());
         System.out.println(res);
         assert res.contains("l1");
         assert res.contains("l2");
         urls1.add("l3");
-        studentService.resubmitAssignment(s1.getUserName(), c1.getCourseName(), c1.getTeacherName(), assignment1.getAssignmentName(), urls1);
-        res = studentService.getStudentAssignmentUrlList(s1.getUserName(), c1.getCourseName(), c1.getTeacherName(), assignment1.getAssignmentName());
+        studentService.resubmitAssignment(s1.getUserName(), assignment1.getId(), urls1);
+        res = studentService.getStudentAssignmentUrlList(s1.getUserName(), assignment1.getId());
         assert res.size() == 3;
-        studentService.setStudentAssignGrade(s1.getUserName(), c1.getCourseName(), c1.getTeacherName(), assignment1.getAssignmentName(), 100);
+        studentService.setStudentAssignGrade(s1.getUserName(), assignment1.getId(), 100);
     }
 
     @Test
     void submitAssignment() {
-        //setStudentAssignGrade
+        //in setStudentAssignGrade
     }
 
     @Test
     void getStudentAssignmentUrls() {
-        //setStudentAssignGrade
+        //in setStudentAssignGrade
     }
 }

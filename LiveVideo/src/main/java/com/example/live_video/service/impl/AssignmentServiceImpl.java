@@ -21,10 +21,8 @@ public class AssignmentServiceImpl extends ServiceImpl<AssignmentMapper, Assignm
 
     @Override
     public Boolean createAssignment(Assignment assignment) throws SQLAssignNameConflictException {
-        Long courseId = courseMapper.getCourseId(assignment.getTeacherName(), assignment.getCourseName());
-        assignment.setCourseId(courseId);
         QueryWrapper<Assignment> assignQueryWrapper = new QueryWrapper<>();
-        assignQueryWrapper.eq("course_id", courseId);
+        assignQueryWrapper.eq("course_id", assignment.getCourseId());
         assignQueryWrapper.eq("assignment_name", assignment.getAssignmentName());
         boolean existFlag = assignmentMapper.exists(assignQueryWrapper);
         if(existFlag){
@@ -41,19 +39,14 @@ public class AssignmentServiceImpl extends ServiceImpl<AssignmentMapper, Assignm
     }
 
     @Override
-    public Boolean removeAssignment(Assignment assignment) {
-        Long courseId = courseMapper.getCourseId(assignment.getTeacherName(), assignment.getCourseName());
-        return assignmentMapper.deleteAssignment(courseId, assignment.getAssignmentName()) == 1;
+    public Boolean removeAssignment(Long id) {
+        return assignmentMapper.deleteById(id) == 1;
     }
 
     @Override
-    public Assignment getOneAssignment(String courseName, String teacherName, String assignName) {
-        Long courseId = courseMapper.getCourseId(teacherName, courseName);
-        QueryWrapper<Assignment> assignQueryWrapper = new QueryWrapper<>();
-        assignQueryWrapper.eq("course_id", courseId);
-        assignQueryWrapper.eq("assignment_name", assignName);
-        Assignment assignment = assignmentMapper.selectOne(assignQueryWrapper);
-        assignment.setAssignUrls(assignmentMapper.getAssignUrlList(courseId, assignName));
+    public Assignment getOneAssignment(Long assignId) {
+        Assignment assignment = assignmentMapper.selectById(assignId);
+        assignment.setAssignUrls(assignmentMapper.getAssignUrlList(assignId));
         return assignment;
     }
 

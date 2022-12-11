@@ -65,14 +65,14 @@ class NoticeServiceTest {
         noticeList.add(n2);
         noticeList.add(n3);
         noticeList.forEach(n -> noticeService.createNotice(n));
-        List<Notice> notices1 = noticeService.getNoticeListOfCourse(teacher.getUserName(), course.getCourseName());
-        List<Notice> notices2 = noticeService.getNoticeListOfCourse(teacher.getUserName(), course1.getCourseName());
+        List<Notice> notices1 = noticeService.getNoticeListOfCourse(course.getId());
+        List<Notice> notices2 = noticeService.getNoticeListOfCourse(course1.getId());
         assert notices1.size() == 2;
         assert notices2.size() == 1;
         assert notices1.get(0).getNoticeName().equals("n1");
-        noticeService.deleteNotice(teacher.getUserName(), course.getCourseName(), notices1.get(0).getCreateTime());
-        noticeService.deleteNotice(teacher.getUserName(), course.getCourseName(), notices1.get(1).getCreateTime());
-        noticeService.deleteNotice(teacher.getUserName(), course1.getCourseName(), notices2.get(0).getCreateTime());
+        noticeService.deleteNotice(notices1.get(0).getId());
+        noticeService.deleteNotice(notices1.get(1).getId());
+        noticeService.deleteNotice(notices2.get(0).getId());
         long count2 = noticeService.count();
         assert count2 == count;
 

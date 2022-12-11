@@ -12,13 +12,9 @@ public interface SectionService extends IService<Section> {
 
     public Boolean updateSection(Section section);
 
-    public Boolean removeSection(String teacherName, String courseName, String sectionName);
+    public Boolean removeSection(Long sectionId);
 
-    public List<Section> getSectionList(String teacherName, String courseName);
+    public List<Section> getSectionList(Long courseId);
 
-    public Section getOneSection(String teacherName, String courseName, String sectionName);
-
-    public Section getOneSection(Long courseId, String sectionName);
-
-    Boolean uploadVideo(Long courseId, String sectionName, String videoUrl);
+    public Section getOneSection(Long sectionId);
 }
