@@ -91,6 +91,9 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
 
     @Override
     public Course getOneCourse(Long courseId) {
+        Course course = courseMapper.selectById(courseId);
+        String teacherName = userMapper.selectById(course.getTeacherId()).getUserName();
+        course.setTeacherName(teacherName);
         return courseMapper.selectById(courseId);
     }
 
@@ -108,7 +111,7 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
     public List<Course> getApprovedCourseList(int recordsPerPage, int pageNum, String courseName) {
         int limit = recordsPerPage;
         int offset = recordsPerPage * (pageNum - 1);
-        return courseMapper.getApprovedCourseList(limit, offset, courseName);
+        return courseMapper.getApprovedCourseListByCourseName(limit, offset, courseName);
     }
 
     @Override

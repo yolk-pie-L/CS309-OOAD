@@ -13,8 +13,9 @@ public interface CourseMapper extends BaseMapper<Course> {
 
     /**
      * if the course exists in the teacher's courseList, it will return false
+     *
      * @param teacherName the name of the teacher who creates the course
-     * @param courseName the name of the course
+     * @param courseName  the name of the course
      * @return true if exists
      */
     @Select({"SELECT EXISTS(" +
@@ -65,7 +66,7 @@ public interface CourseMapper extends BaseMapper<Course> {
             "         JOIN user ON course.teacher_id = user.id\n" +
             "WHERE username = #{teacherName}\n" +
             "  AND course_name = #{courseName}\n" +
-            "  AND status = 'APPROVED'\n"+
+            "  AND status = 'APPROVED'\n" +
             "  AND course.is_delete = 0\n" +
             "  AND user.is_delete = 0"})
     public Course getOneApprovedCourse(String teacherName, String courseName);
@@ -107,13 +108,10 @@ public interface CourseMapper extends BaseMapper<Course> {
             "LIMIT #{limit} OFFSET #{offset}")
     public List<Course> getFailedCourseListOfTeacher(int limit, int offset, String teacherName);
 
-    @Select("SELECT course.*\n" +
-            "FROM course\n" +
-            "         JOIN user ON course.teacher_id = user.id\n" +
-            "WHERE course_name = #{courseName}\n" +
+    @Select("SELECT * FROM course\n" +
+            "WHERE course_name = #{courseName} \n"+
             "  AND status = 'APPROVED'\n" +
-            "  AND user.is_delete = 0\n" +
             "  AND course.is_delete = 0\n" +
             "LIMIT #{limit} OFFSET #{offset}")
-    public List<Course> getApprovedCourseList(int limit, int offset, String courseName);
+    public List<Course> getApprovedCourseListByCourseName(int limit, int offset, String courseName);
 }

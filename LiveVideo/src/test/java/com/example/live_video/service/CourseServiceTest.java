@@ -51,7 +51,7 @@ public class CourseServiceTest {
         Course ac1_t4 = new Course("rc1_t1", teacher4.getId(), "test", 0L, "review", CourseStatus.APPROVED, "assign_url");
         Course rc2_t1 = new Course("rc2_t1", teacher1.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "assign_url");
         Course rc3_t1 = new Course("rc3_t1", teacher1.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "assign_url");
-        Course ac1_t1 = new Course("ac_t1", teacher1.getId(), "test", 0L, "approve", CourseStatus.APPROVED, "assign_url");
+        Course ac1_t1 = new Course("awsss", teacher1.getId(), "test", 0L, "approve", CourseStatus.APPROVED, "assign_url");
         Course fc1_t1 = new Course("fc_t1", teacher1.getId(), "test", 0L, "fail", CourseStatus.FAILED, "assign_url");
         Course rc1_t2 = new Course("rc1_t1", teacher2.getId(), "test", 0L, "the same name as rc1_t1", CourseStatus.REVIEWING, "assign_url");
         courseMapper.insert(rc1_t1);
@@ -145,9 +145,10 @@ public class CourseServiceTest {
     @Test
     void getApprovedCourses() {
         setUp();
-        List<Course> courseList = courseService.getApprovedCourseList(2, 2);
-        assert courseList.size() == 0;
+        List<Course> courseList = courseService.getApprovedCourseList(2, 1);
+        assert courseList.size() == 2;
         courseList = courseService.getApprovedCourseList(1, 1);
+        System.out.println(courseList);
         assert courseList.size() == 1;
         tearDown();
     }
@@ -235,6 +236,7 @@ public class CourseServiceTest {
     void getApprovedCoursesByCourseName() {
         setUp();
         Course c1 = allCourses.get(0);
+        System.out.println(c1.getCourseName());
         List<Course> courses = courseService.getApprovedCourseList(10, 1, c1.getCourseName());
         System.out.println(courses.size());
         courses.forEach(System.out::println);
