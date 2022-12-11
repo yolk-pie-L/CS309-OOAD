@@ -107,27 +107,26 @@ export default {
   },
   mounted() {
     this.fetchData()
-    this.fetchCourse()
-    this.fetchMessage()
   },
   methods: {
     //获取后端数据
     fetchData() {
-      this.$axios.get('api/user').then(res => {
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
+      this.$axios.get('http://localhost:8082/api/user').then(res => {
         // 拿到结果
-        let result = JSON.parse(res.data.data);
+        let result = res.data.result;
         let message = res.data.msg;
-        this.userName = result.userName
-        this.userType = result.userType
-        this.mail = result.mail
-        this.photoUrl = result.photoUrl
-        this.account = result.account
+        this.teacherForm.userName = result.userName
+        this.teacherForm.userType = result.userType
+        this.teacherForm.mail = result.mail
+        this.teacherForm.photoUrl = result.photoUrl
+        this.teacherForm.account = result.account
         // 判断结果
         if (result) {
           /*登陆成功*/
-
+          console.log(this.teacherForm.userName)
+          this.fetchCourse()
           /*跳转页面*/
-          router.push('/')
         } else {
           /*打印错误信息*/
           alert(message);
@@ -135,9 +134,15 @@ export default {
       })
     },
     fetchCourse() {
-      this.$axios.get('api/notice/all?userName={' + this.username + '}&page={' + this.currentPage + '}&o={' + this.pageSize +
-          '}').then(res => {
-        let result = JSON.parse(res.data.data);
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
+      this.$axios.get('http://localhost:8082/api/course/', {
+        params: {
+          o: this.pageSize,
+          page: this.currentPage,
+          userName: this.teacherForm.userName
+        }
+      }).then(res => {
+        let result = res.data.result;
         let message = res.data.msg;
         this.tableData = result
 
@@ -145,7 +150,7 @@ export default {
           /*登陆成功*/
 
           /*跳转页面*/
-          router.push('/')
+          this.fetchMessage()
         } else {
           /*打印错误信息*/
           alert(message);
@@ -153,7 +158,8 @@ export default {
       })
     },
     fetchMessage() {
-      this.$axios.get('api/notice/all?userName={' + this.username + '}&courseName={' + this.tableData.at(0).courseName + '}').then(res => {
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
+      this.$axios.get('http://localhost:8082/api/notice/all?userName={' + this.username + '}&courseName={' + this.tableData.at(0).courseName + '}').then(res => {
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         this.messageTable = result

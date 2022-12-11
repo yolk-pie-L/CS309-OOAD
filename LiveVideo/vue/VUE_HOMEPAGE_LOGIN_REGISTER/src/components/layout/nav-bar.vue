@@ -84,7 +84,7 @@ export default {
         pageNum:"9",
       },
       userForm: {
-        userName: "black",
+        userName: "teacher1",
         userType: "Teacher",
         mail: "",
         photoUrl: "https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg",
@@ -112,8 +112,10 @@ export default {
   },
   methods: {
     fetchCourse() {
-      this.$axios.get('api/course/success/all?o=\''+this.pageNum+'&page=\'' + this.currentPage + '&courseName=\''+this.queryInfo.course+'&teacherName=\'' + this.queryInfo.teacher + '\'}\'').then(res => {
-        let result = JSON.parse(res.data.data);
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
+
+      this.$axios.get('http://localhost:8082/api/course/success/all?o=\''+this.pageNum+'&page=\'' + this.currentPage + '&courseName=\''+this.queryInfo.course+'&teacherName=\'' + this.queryInfo.teacher + '\'}\'').then(res => {
+        let result = res.data.data;
         let message = res.data.msg;
         this.classForm.id = result.id
         this.classForm.courseName = result.courseName
@@ -129,9 +131,11 @@ export default {
       })
     },
     fetchUser() {
+      console.log(localStorage.getItem('token'))
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
       this.$axios.get('http://localhost:8082/api/user').then(res => {
         // 拿到结果
-        let result = JSON.parse(res.data.data);
+        let result = res.data;
         let message = res.data.msg;
         this.userName = result.userName
         this.userType = result.userType
