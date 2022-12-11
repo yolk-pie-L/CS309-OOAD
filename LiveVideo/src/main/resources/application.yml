@@ -4,10 +4,14 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/LiveVideo?serverTimeZone=GMT%2b8
-#    url: jdbc:mysql://localhost:3306/test_db?serverTimeZone=GMT%2b8
+#    url: jdbc:mysql://localhost:3306/LiveVideo?serverTimeZone=GMT%2b8
+    url: jdbc:mysql://localhost:3306/test_db?serverTimeZone=GMT%2b8
     username: root
 #    password: 123456
     password: ??????
 
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 1000MB
 

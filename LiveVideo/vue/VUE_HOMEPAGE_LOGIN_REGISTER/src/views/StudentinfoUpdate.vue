@@ -1,6 +1,7 @@
 <template>
   <nav>
-    <router-link to="/studentHome">Home</router-link> |
+    <router-link to="/studentHome">Home</router-link>
+    |
     <router-link to="/studentinfoUpdate">student info Update</router-link>
   </nav>
   <div :xl="6" :lg="7" class="bg-login">
@@ -25,16 +26,16 @@
           <el-form-item label="Mail" prop="courseLabel" style="width: 380px">
             <el-input v-model="infoForm.mail"></el-input>
           </el-form-item>
-          <el-form-item label="User" prop="username" style="width: 380px">
+          <el-form-item label="Pic" style="width: 380px">
+
             <el-upload
-                :action="uploadURL"
-                :style="{backgroundImage:'url(' + dialogImageUrl + ')', backgroundRepeat:'no-repeat', backgroundPosition:'center center', backgroundSize: 'contain'}"
-                list-type="picture-card"
-                class="uploadImg"
-                name="files"
-                :before-upload="beforeUpload">
+                action="/"
+                :on-change="handleChange"
+                :auto-upload="false"
+                list-type="picture-card">
               <i class="el-icon-plus"></i>
             </el-upload>
+
           </el-form-item>
           <el-form-item class="btn-ground">
             <el-button type="primary" @click="submitForm('loginForm')">Update</el-button>
@@ -65,21 +66,26 @@ export default {
         mail: 'example@xx.com',
 
         photoUrl: 'url',
+
+        fileList: []
       },
       // 表单验证
-      rules: {
-
-      },
+      rules: {},
     };
   },
   methods: {
-    beforeUpload (file) {
+    handleChange(file, fileList) {
 
-      this.infoForm.append('file', file)
-
-      return false
+      let formdata = new FormData()
+      fileList.map(item => { //fileList本来就是数组，就不用转为真数组了
+        formdata.append("file", item.raw)  //将每一个文件图片都加进formdata
+      })
+      console.log(file.size)
+      this.$axios.post("http://localhost:8082/api/getPhoto", formdata).then(res => {
+        console.log(res)
+      })
     },
-    // 提交表单
+
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
