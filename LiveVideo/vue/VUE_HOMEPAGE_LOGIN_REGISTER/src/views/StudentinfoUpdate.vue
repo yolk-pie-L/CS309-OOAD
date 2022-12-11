@@ -26,7 +26,6 @@
             <el-input v-model="infoForm.mail"></el-input>
           </el-form-item>
           <el-form-item label="Pic" style="width: 380px">
-
             <el-upload
                 action="/"
                 :on-change="handleChange"

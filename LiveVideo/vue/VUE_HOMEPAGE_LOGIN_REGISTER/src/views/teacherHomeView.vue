@@ -129,7 +129,7 @@ export default {
   methods: {
     //获取后端数据
     fetchData() {
-      this.$axios.get('api/user?userName={' + this.username + '}').then(res => {
+      this.$axios.get('api/user').then(res => {
         // 拿到结果
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
@@ -141,7 +141,6 @@ export default {
         // 判断结果
         if (result) {
           /*登陆成功*/
-
           /*跳转页面*/
           router.push('/')
         } else {
@@ -151,7 +150,8 @@ export default {
       })
     },
     fetchCourse() {
-      this.$axios.get('localhost:8082/api/course/success/all', ).then(res => {
+      this.$axios.get('api/notice/all?teacherName={' + this.teacherForm.username + '&page={' + this.currentPage +
+          '}&o={' + this.pageSize +'}').then(res => {
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         this.tableData = result

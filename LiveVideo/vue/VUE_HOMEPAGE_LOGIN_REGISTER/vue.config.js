@@ -1,5 +1,5 @@
 const { defineConfig } = require('@vue/cli-service')
-// module.exports = defineConfig({
+module.exports = defineConfig({
 //   transpileDependencies: true,
 //   lintOnSave:false,
 //   // 开启代理服务器（方式一）
@@ -8,21 +8,20 @@ const { defineConfig } = require('@vue/cli-service')
 //   // }
 //
 //   //第二种
-//   devServer:{
-//     proxy:{
-//       // 以api为前缀才开启代理,可修改
-//       // 可以配置多个
-//       '/api':{
-//         target: 'http://localhost:8082',
-//         //正则表达式判断，将路径中的/api转换为""
-//         pathRewrite:{'^/api':''},
-//         //用于支持websocket
-//         // ws:true,
-//         //用于控制请求头中的host值
-//         changeOrigin: true
-//       }
-//     }
-//   }
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8082',
+        //正则表达式判断，将路径中的/api转换为""
+        pathRewrite: {'^/api': 'http://localhost:8082/api'},
+        //用于支持websocket
+        ws: true,
+        //用于控制请求头中的host值
+        changeOrigin: true
+      }
+    }
+  }
+})
 //
 // })
 

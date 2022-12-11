@@ -14,24 +14,20 @@
     <el-row type="flex" class="row-bg card" justify="center" align="bottom">
       <el-col :span="7" class="login-card">
         <!--loginForm-->
-        <el-form :model="sectionForm" :rules="rules" ref="loginForm" label-width="21%" class="loginForm">
+        <el-form :model="sectionForm" ref="loginForm" label-width="21%" class="loginForm">
           <el-form-item label="章节名称" prop="sectionName" style="width: 380px">
             <el-input v-model="sectionForm.sectionName"></el-input>
           </el-form-item>
-          <el-upload
-              action="#"
-              multiple
-              :auto-upload="false"
-              :show-file-list="true"
-              :on-change="handleChange"
-              drag
-          >
-            <!-- 这个图标的书写方式，element-plus和element有区别，注意一下！ -->
-            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-            <div class="el-upload__text">
-              将文件拖到此处，或<em>点击上传</em>
-            </div>
-          </el-upload>
+          <el-form-item>
+            <el-upload  class="upload-demo"
+                        drag
+                        multiple
+                        :http-request="upload">
+              <i class="el-icon-upload"></i>
+              <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+              <div class="el-upload__tip" slot="tip">    只能上传video文件，且不超过500kb  </div>
+            </el-upload>
+          </el-form-item>
           <el-form-item class="btn-ground">
             <el-button type="primary" @click="submitForm('loginForm')">Update</el-button>
             <el-button @click="resetForm('loginForm')">Reset</el-button>
@@ -62,12 +58,17 @@ export default {
     };
   },
   methods: {
-
-    uploading() {
-      this.$message({
-        message: '请等待上传完成',
-        type: 'error'
-      })
+    upload(item) {
+      let formData = new FormData();
+      formData.append("file", item.file);
+      axios({
+        url: "/bao",        // 接口
+        method: "post",
+        data: formData,
+        processData: false // 告诉axios不要去处理发送的数据(重要参数)
+      }).then(res => {
+        this.setSrc(res.data.data);   // 返回视频连接地址
+      });
     },
     handleChange(file, fileList) {
 

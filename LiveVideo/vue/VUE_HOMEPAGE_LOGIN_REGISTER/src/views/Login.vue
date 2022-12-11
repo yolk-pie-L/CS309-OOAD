@@ -94,14 +94,15 @@ export default {
           // 表单验证成功
           this.$axios.post('http://localhost:8082/api/login', this.loginForm).then(res => {
             // 拿到结果
-            let message = res.data.result;
-            let token = res.data.result.token
+            let result = res.data;
+            let message = res.data.msg;
+            let token = result.token
             // 判断结果
-            if (token) {
+            if (result) {
               /*登陆成功*/
               localStorage.setItem('token', token)
               /*跳转页面*/
-              router.push('/1')
+              router.push('/')
             } else {
               /*打印错误信息*/
               console.log(message)

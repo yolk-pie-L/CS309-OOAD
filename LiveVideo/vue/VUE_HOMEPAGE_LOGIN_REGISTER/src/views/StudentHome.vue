@@ -113,7 +113,7 @@ export default {
   methods: {
     //获取后端数据
     fetchData() {
-      this.$axios.get('api/user?userName={' + this.username + '}').then(res => {
+      this.$axios.get('api/user').then(res => {
         // 拿到结果
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
@@ -190,7 +190,7 @@ export default {
       router.push("/")
     },
     back () {
-      router.push("/1")
+      router.push("/")
     }
   },
 }
