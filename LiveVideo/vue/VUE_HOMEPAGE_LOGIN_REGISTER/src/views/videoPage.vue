@@ -115,9 +115,10 @@ export default {
       total: '总评论数： 7',
       courseName: 'black',
       videoURL: "url",
+      sectionId: 1,
       sectionData: [
         {
-          sectionName: "course",
+          sectionIdIn: "1",
           videoURL: "ababa",
           status: "OK"
         }
@@ -134,7 +135,7 @@ export default {
         sources: [{
           type: "video/mp4",  // 类型
           src: 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4'             // url地址
-       // src: 'http://localhost:8082/api/video/?courseName=aba&sectionName=ababa'             // url地址
+       // src: 'http://localhost:8082/api/video/?sectionId=${sectionId}'             // url地址
         }],
         poster: '',  // 封面地址
         notSupportedMessage: '此视频暂无法播放，请稍后再试',  // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
@@ -236,6 +237,7 @@ export default {
     this.fetchTotalComment()
   },
   methods: {
+
     fetchData() {
       this.courseName = this.$route.query.courseName
       console.log(this.courseName)
@@ -243,6 +245,7 @@ export default {
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         this.sectionData = result
+        this.sectionId = result[0].sectionIdIn
         if (result) {
           /*登陆成功*/
 
@@ -260,6 +263,7 @@ export default {
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         this.sectionData = result
+
         if (result) {
           /*登陆成功*/
 
@@ -289,7 +293,7 @@ export default {
       })
     },
     reFetch(row) {
-      router.push("/videoPage?courseName=" + "white" + "&sectionName={" + row.sectionName + "}")
+      router.push("/videoPage?courseName=" + "white" + "&sectionId={" + row.sectionIdIn + "}")
       this.courseName = this.$route.query.courseName
     },
     inputFocus(){

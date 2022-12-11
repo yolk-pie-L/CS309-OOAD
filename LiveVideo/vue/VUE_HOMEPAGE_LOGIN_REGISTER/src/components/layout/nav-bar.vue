@@ -26,8 +26,7 @@
   <div className="business wrap">
     <ul className="box clearfix">
       <li>
-        <a href="/#/courseMainPage+
-">
+        <a href="/#/courseMainPage">
           <h3>Course name</h3>
           <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
           <div className="word">

@@ -73,6 +73,9 @@ export default {
   name: "Login",
   data() {
     return {
+      currentPage: 1,
+      pageSize: 5,
+      total: 5,
       teacherForm: {
         userName: "black",
         userType: "Teacher",
@@ -132,7 +135,8 @@ export default {
       })
     },
     fetchCourse() {
-      this.$axios.get('api/notice/all?userName={' + this.username + '}').then(res => {
+      this.$axios.get('api/notice/all?userName={' + this.username + '}&page={' + this.currentPage + '}&o={' + this.pageSize +
+          '}').then(res => {
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         this.tableData = result
