@@ -92,7 +92,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // 表单验证成功
-          this.$axios.post('http://localhost:8082/user/checkLogin', this.loginForm).then(res => {
+          this.$axios.post('http://localhost:8082/user/login', this.loginForm).then(res => {
             // 拿到结果
             let result = JSON.parse(res.data.data);
             let message = res.data.msg;
@@ -102,7 +102,7 @@ export default {
               /*登陆成功*/
               localStorage.setItem("token", token)
               /*跳转页面*/
-              router.push('/')
+              router.push('/1')
             } else {
               /*打印错误信息*/
               Element.Message.error(message);
@@ -113,7 +113,6 @@ export default {
           return false;
         }
       });
-      router.push('/1')
     },
     // 重置表单
     resetForm(formName) {
