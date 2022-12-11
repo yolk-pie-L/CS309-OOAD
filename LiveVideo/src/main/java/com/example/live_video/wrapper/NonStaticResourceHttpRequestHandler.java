@@ -1,4 +1,4 @@
-package com.example.live_video.config;
+package com.example.live_video.wrapper;
 
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -15,7 +15,7 @@ public class NonStaticResourceHttpRequestHandler extends ResourceHttpRequestHand
 
     @Override
     protected Resource getResource(HttpServletRequest request) {
-        Path filePath = (Path) request.getAttribute(ATTR_FILE);
+        String filePath = (String) request.getAttribute(ATTR_FILE);
         return new FileSystemResource(filePath);
     }
 }

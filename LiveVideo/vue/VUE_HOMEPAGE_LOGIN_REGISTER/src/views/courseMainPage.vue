@@ -12,7 +12,7 @@
       </el-col>
     </el-row>
     <el-row  type="flex" justify="space-around" align="middle">
-      <el-button type="primary" @click="this.$router.push('/courseDetailPage')">立即注册</el-button>
+      <el-button type="primary" @click="this.$router.push('/courseDetailPage')">课程信息</el-button>
     </el-row>
   </div>
 </template>

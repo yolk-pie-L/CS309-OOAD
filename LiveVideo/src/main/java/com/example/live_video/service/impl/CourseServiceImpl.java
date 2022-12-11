@@ -129,4 +129,15 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
         int offset = recordsPerPage * (pageNum - 1);
         return courseMapper.getApprovedCourseListByCourseName(limit, offset, courseName);
     }
+
+    @Override
+    public Course getOneCourse(String teacherName, String courseName) {
+        return courseMapper.getOneCourse(teacherName, courseName);
+    }
+
+    @Override
+    public Course getOneApprovedCourse(String teacherName, String courseName) {
+        return courseMapper.getOneApprovedCourse(teacherName, courseName);
+    }
 }
+

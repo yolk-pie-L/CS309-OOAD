@@ -58,11 +58,10 @@
       </el-card>
     </el-row>
     <el-row>
-      <el-button type="primary" @click="logOut()" class="btn-ground">注销</el-button>
+      <el-button type="primary" @click="logOut()">注销</el-button>
+      <el-button type="primary" @click="back()">返回主界面</el-button>
     </el-row>
-    <el-row>
-      <el-button type="primary" @click="logOut1()" class="btn-ground">回到主界面</el-button>
-    </el-row>
+
   </div>
 </template>
 
@@ -186,10 +185,10 @@ export default {
     logOut () {
       router.push("/")
     },
-    logOut1 () {
+    back () {
       router.push("/1")
     }
-    },
+  },
 }
 </script>
 
@@ -205,10 +204,5 @@ export default {
   margin-top: 0px;
   color: black;
   font-size: 40px;
-}
-
-
-.btn-ground {
-  text-align: center;
 }
 </style>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <file url="file://$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER" libraries="{CS309-OOAD/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/node_modules}" />
+    <file url="PROJECT" libraries="{CS309-OOAD/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/node_modules}" />
+  </component>
+</project>
