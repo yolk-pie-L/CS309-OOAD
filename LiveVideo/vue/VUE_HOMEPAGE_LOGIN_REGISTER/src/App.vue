@@ -1,5 +1,5 @@
 <template>
-  <div id="app" v-title data-title="hello!">
+  <div id="app">
     <!--路由页面-->
     <router-view/>
   </div>

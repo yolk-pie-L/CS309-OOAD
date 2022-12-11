@@ -55,6 +55,9 @@
       <el-button type="primary" @click="">Assignment</el-button>
       <el-button type="primary" @click="">Quiz</el-button>
       <el-button type="primary" @click="">Grade</el-button>
+      <el-button type="primary" @click="videoPage">lessons</el-button>
+      <el-button type="primary" @click="addSection">Add Section</el-button>
+
     </el-row>
   </div>
 </template>
@@ -81,6 +84,14 @@ export default {
           sectionUrl: "url"
         }
       ]
+    }
+  },
+  methods: {
+    videoPage() {
+      router.push("/videoPage")
+    },
+    addSection() {
+      router.push("/addSection")
     }
   }
 }

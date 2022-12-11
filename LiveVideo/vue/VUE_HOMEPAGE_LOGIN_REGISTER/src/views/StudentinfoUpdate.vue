@@ -1,13 +1,12 @@
 <template>
   <nav>
-    <router-link to="/studentHome">Home</router-link>
-    |
+    <router-link to="/studentHome">Home</router-link> |
     <router-link to="/studentinfoUpdate">student info Update</router-link>
   </nav>
-  <div :lg="7" :xl="6" class="bg-login">
+  <div :xl="6" :lg="7" class="bg-login">
     <!--logo-->
     <!--标题-->
-    <el-row align="middle" class="row-bg row-two" justify="center" type="flex">
+    <el-row type="flex" class="row-bg row-two" justify="center" align="middle">
       <el-col :span="6"></el-col>
       <el-col :span="6">
         <!--标题-->
@@ -16,26 +15,50 @@
       <el-col :span="6"></el-col>
     </el-row>
     <!--form表单-->
-    <el-row align="bottom" class="row-bg card" justify="center" type="flex">
+    <el-row type="flex" class="row-bg card" justify="center" align="bottom">
       <el-col :span="7" class="login-card">
         <!--loginForm-->
-        <el-form ref="loginForm" :model="infoForm" :rules="rules" class="loginForm" label-width="21%">
-          <el-form-item label="Name" prop="teacherName" style="width: 380px">
-            <el-input v-model="infoForm.userName"></el-input>
+        <el-form :model="loginForm" :rules="rules" ref="loginForm" label-width="21%" class="loginForm">
+          <el-form-item label="角色" prop="person" style="width: 380px">
+            <el-select v-model="loginForm.person">
+              <el-option v-for="item in options"
+                         :key="item.value"
+                         :label="item.label"
+                         :value="item.value"
+                         :disabled="item.disabled">
+              </el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="Mail" prop="courseLabel" style="width: 380px">
-            <el-input v-model="infoForm.mail"></el-input>
+          <el-form-item label="邮箱" prop="mail" style="width: 380px">
+            <el-input v-model="loginForm.mail"></el-input>
           </el-form-item>
-          <el-form-item label="User" prop="username" style="width: 380px">
+          <el-form-item label="账户" prop="userName" style="width: 380px">
+            <el-input v-model="loginForm.userName"></el-input>
+          </el-form-item>
+          <el-form-item label="密码" prop="password" style="width: 380px">
+            <el-input type="password" v-model="loginForm.password"></el-input>
+          </el-form-item>
+          <el-form-item label="重复密码" prop="password" style="width: 380px">
+            <el-input type="password" v-model="loginForm.repeatPassword"></el-input>
+          </el-form-item>
+          <el-form-item label="验证码" prop="code" style="width: 380px">
+            <el-input v-model="loginForm.code" class="code-input" style="width: 70%;float: left"></el-input>
+            <!--验证码图片-->
+            <el-image :src="codeImg" class="codeImg"></el-image>
+          </el-form-item>
+          <el-form-item class="btn-ground">
+            <el-button type="primary" @click="submitForm('loginForm')">立即登陆</el-button>
+            <el-button @click="resetForm('loginForm')">重置</el-button>
+          </el-form-item>
+          <el-form-item label="Pic" style="width: 380px">
             <el-upload
-                :action="uploadURL"
-                :before-upload="beforeUpload"
-                :style="{backgroundImage:'url(' + dialogImageUrl + ')', backgroundRepeat:'no-repeat', backgroundPosition:'center center', backgroundSize: 'contain'}"
-                class="uploadImg"
-                list-type="picture-card"
-                name="files">
+                action="/"
+                :on-change="handleChange"
+                :auto-upload="false"
+                list-type="picture-card">
               <i class="el-icon-plus"></i>
             </el-upload>
+
           </el-form-item>
           <el-form-item class="btn-ground">
             <el-button type="primary" @click="submitForm('loginForm')">Update</el-button>
@@ -55,35 +78,101 @@ export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Login",
   data() {
+    var validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'));
+      } else if (value !== this.ruleForm.newPwd) {
+        callback(new Error('两次输入密码不一致!'));
+      } else {
+        callback();
+      }
+    };
     return {
+      options: [{
+        value: 'Student',
+        label: '学生',
+      }, {
+        value: 'Teacher',
+        label: '老师',
+      }, {
+        value: 'Administrator',
+        label: '管理员',
+      }
+      ],
       // 表单信息
-      infoForm: {
+      loginForm: {
+        person: '',
+        // 邮箱数据
+        mail: '',
         // 账户数据
-        userName: 'checker',
+        userName: '',
         // 密码数据
-        userType: 'Teacher',
-
-        mail: 'example@xx.com',
-
-        photoUrl: 'url',
+        password: '',
+        // 重复的密码数据
+        repeatPassword: '',
+        // 验证码数据
+        code: '',
+        // 验证码的key，因为前后端分离，这里验证码不能由后台存入session，所以交给vue状态管理
+        codeToken: ''
       },
       // 表单验证
-      rules: {},
+      rules: {
+        person: [
+          {required: true, message: '请输入角色', trigger: 'blur'}
+        ],
+        mail: [
+          {required: true, message: '请输入邮箱', trigger: 'blur'}
+        ],
+        // 设置账户效验规则
+        userName: [
+          {required: true, message: '请输入账户', trigger: 'blur'},
+          {min: 3, max: 10, message: '长度在 3 到 10 个字符的账户', trigger: 'blur'}
+        ],
+        // 设置密码效验规则
+        password: [
+          {required: true, message: '请输入密码', trigger: 'blur'},
+          {min: 6, max: 15, message: '长度在 6 到 15 个字符的密码', trigger: 'blur'}
+        ],
+        // 设置验证码效验规则
+        code: [
+          {required: true, message: '请输入验证码', trigger: 'blur'},
+          {min: 5, max: 5, message: '长度为 5 个字符', trigger: 'blur'}
+        ],
+        repeatPassword: [
+          {required: true, message: '请再次输入密码', trigger: 'blur'},
+          { validator: validatePass2, trigger: 'blur', required: true }
+        ]
+      },
+      // 绑定验证码图片
+      codeImg: null
     };
   },
   methods: {
-    beforeUpload(file) {
+    handleChange(file, fileList) {
 
-      this.infoForm.append('file', file)
-
-      return false
+      let formdata = new FormData()
+      fileList.map(item => { //fileList本来就是数组，就不用转为真数组了
+        formdata.append("file", item.raw)  //将每一个文件图片都加进formdata
+      })
+      console.log(file.size)
+      this.$axios.post("http://localhost:8082/api/getPhoto", formdata).then(res => {
+        console.log(res)
+      })
     },
+
+    // beforeUpload (file) {
+    //   // alert(file)
+    //   this.infoForm.append('file', file)
+    //   alert(this.infoForm.file)
+    //   return true
+    // },
     // 提交表单
+
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // 表单验证成功
-          this.$axios.post('http://localhost:8082/user', this.infoForm).then(res => {
+          this.$axios.post('http://localhost:8082/api/upload', this.loginForm).then(res => {
             // 拿到结果
             let result = JSON.parse(res.data.data);
             let message = res.data.msg;
