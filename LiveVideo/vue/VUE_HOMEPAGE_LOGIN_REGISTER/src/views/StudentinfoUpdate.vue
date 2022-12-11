@@ -20,7 +20,7 @@
         <!--loginForm-->
         <el-form :model="loginForm" :rules="rules" ref="loginForm" label-width="21%" class="loginForm">
           <el-form-item label="角色" prop="person" style="width: 380px">
-            <el-select v-model="loginForm.person">
+            <el-select v-model="loginForm.userType">
               <el-option v-for="item in options"
                          :key="item.value"
                          :label="item.label"
@@ -101,7 +101,7 @@ export default {
       ],
       // 表单信息
       loginForm: {
-        person: '',
+        userType: '',
         // 邮箱数据
         mail: '',
         // 账户数据
@@ -117,7 +117,7 @@ export default {
       },
       // 表单验证
       rules: {
-        person: [
+        userType: [
           {required: true, message: '请输入角色', trigger: 'blur'}
         ],
         mail: [
