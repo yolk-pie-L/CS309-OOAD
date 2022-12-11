@@ -4,15 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="040d5963-020e-49eb-a09c-285573158850" name="Changes" comment="视频页面实现评论，包括二级评论">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/components/layout/nav-bar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/components/layout/nav-bar.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/router/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/Login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/Login.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/StudentHome.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/StudentHome.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/courseDetailPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/courseDetailPage.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/courseMainPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/courseMainPage.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/videoPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/videoPage.vue" afterDir="false" />
+    <list default="true" id="040d5963-020e-49eb-a09c-285573158850" name="Changes" comment="实现报名退出">
+      <change afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/addSection.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,7 +83,7 @@
       <workItem from="1670410540119" duration="6731000" />
       <workItem from="1670479202384" duration="620000" />
       <workItem from="1670573356309" duration="1221000" />
-      <workItem from="1670670755051" duration="8701000" />
+      <workItem from="1670670755051" duration="9159000" />
     </task>
     <task id="LOCAL-00001" summary="中期答辩前端代码">
       <created>1669724591751</created>
@@ -148,7 +141,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670739992495</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="实现报名退出">
+      <created>1670750941151</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1670750941151</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -175,7 +175,8 @@
     <MESSAGE value="视频页面实现（注，在token实现完成前不要激活导航守卫，否则将无法前往大多数页面）" />
     <MESSAGE value="视频页面实现进度条" />
     <MESSAGE value="视频页面实现评论，包括二级评论" />
-    <option name="LAST_COMMIT_MESSAGE" value="视频页面实现评论，包括二级评论" />
+    <MESSAGE value="实现报名退出" />
+    <option name="LAST_COMMIT_MESSAGE" value="实现报名退出" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
