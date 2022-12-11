@@ -151,7 +151,7 @@ export default {
       })
     },
     fetchCourse() {
-      this.$axios.get('api/notice/all?userName={' + this.username + '}').then(res => {
+      this.$axios.get('localhost:8082/api/course/success/all', ).then(res => {
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         this.tableData = result

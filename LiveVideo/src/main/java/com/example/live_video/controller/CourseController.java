@@ -95,6 +95,7 @@ public class CourseController {
     }
 
     @PostMapping("enroll")
+    @CrossOrigin
     public Boolean enroll(@RequestParam String studentName,
                           @RequestParam Long courseId) throws Exception {
         return studentService.enrollCourse(courseId, studentName);

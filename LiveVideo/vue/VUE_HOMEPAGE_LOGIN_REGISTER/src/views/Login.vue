@@ -100,12 +100,11 @@ export default {
             if (token) {
               /*登陆成功*/
               localStorage.setItem('token', token)
-
               /*跳转页面*/
               router.push('/1')
             } else {
               /*打印错误信息*/
-              alert(message)
+              console.log(message)
             }
           })
         } else {

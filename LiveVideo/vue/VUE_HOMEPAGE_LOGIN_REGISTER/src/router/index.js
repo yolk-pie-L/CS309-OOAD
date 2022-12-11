@@ -96,21 +96,11 @@ const router = createRouter({
 // 使用 router.beforeEach 注册一个全局前置守卫，判断用户是否登陆
 router.beforeEach((to, from, next) => {
 //如果去往登录页则放行
-  console.log(to)
-  console.log(from)
-  console.log(next)
-
   if (to.path === '/login'|| to.path ==='/' ||to.path==='/register'||to.path==='/administer'||to.path==='/teacher') {
-    console.log('kkk')
-    console.log(to)
-    console.log(from)
-    console.log(next)
     next();
   } else {
     // 从本地存储里获取token
-    console.log('111')
     let token = localStorage.getItem('token');
-    console.log(token)
     // 判断token是否为空如果为空则跳转到登录页 如果有则放行
     if (token === null || token === '') {
       next({path:'/'});

@@ -215,7 +215,7 @@ export default {
           /*登陆成功*/
 
           /*跳转页面*/
-          router.push('/')
+          router.push('/1')
         } else {
           /*打印错误信息*/
           alert(message);
@@ -238,7 +238,7 @@ export default {
           /*登陆成功*/
 
           /*跳转页面*/
-          router.push('/')
+          router.push('/1')
         } else {
           /*打印错误信息*/
           alert(message);

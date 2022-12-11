@@ -28,7 +28,7 @@ export default {
   data() {
     return {
       studentName: 'black',
-      courseId: 'checker',
+      courseId: '123',
       courseForm: {
         courseName: "checker",
         teacherName: "black",
@@ -41,37 +41,36 @@ export default {
   },
   methods: {
     fetchData() {
-      this.$axios.get('api/user').then(res => {
+      this.$axios.get('http://localhost:8082/api/user').then(res => {
         // 拿到结果
-        let result = JSON.parse(res.data.data);
-        let message = res.data.msg;
-        this.studentName = result.userName
+        // let message = res.data.msg;
+        console.log(res)
         // 判断结果
-        if (result) {
+        if (res.data.userName) {
           /*登陆成功*/
-
+          this.studentName = res.data.result.userName
           /*跳转页面*/
-          router.push('/')
+          router.push('/1')
         } else {
           /*打印错误信息*/
-          alert(message);
+          alert(this.studentName);
         }
       })
     },
     joinCourse() {
-      this.$axios.post('http://localhost:8082/api/course/enroll?studentName=${studentName}&courseId=${courseId}').then(res => {
+      this.$axios.post('http://localhost:8082/api/course/enroll', {
+        studentName: this.studentName,
+        courseId: this.courseId
+      }).then(res => {
         // 拿到结果
-        let result = JSON.parse(res.data.data);
-        let message = res.data.msg;
+        let result = res.data.code
+        let message = res.data;
         // 判断结果
-        if (result) {
-          /*登陆成功*/
-          Element.Message.success(message);
+        if (result === 200) {
           /*跳转页面*/
-          router.push('/')
+          router.push('/1')
         } else {
-          /*打印错误信息*/
-          Element.Message.error(message);
+          alert(message)
         }
       })
     },
