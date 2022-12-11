@@ -50,7 +50,7 @@ CREATE TABLE user
 CREATE TABLE course
 (
     id              int auto_increment primary key,
-    course_name     varchar(20)                              not null,
+    course_name     varchar(50)                              not null,
     teacher_id      int                                      not null,
     tag             varchar(20),
     charge          bigint                                   not null,
@@ -129,7 +129,7 @@ CREATE TABLE comment
     context    text     not null,
     user_id    int      not null,
     section_id int,
-    date       datetime not null,
+    create_time       timestamp not null,
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (section_id) REFERENCES section (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
