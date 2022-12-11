@@ -21,6 +21,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .allowedOrigins("*")
                 .allowedHeaders("*")
                 .allowedMethods("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH")
+                .allowCredentials(true)
+                .allowedHeaders("token")
                 .maxAge(3600);
     }
 
@@ -30,7 +32,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         //addPathPatterns为拦截此请求路径的请求
         //excludePathPatterns为不拦截此路径的请求
 //        System.out.println("拦截器");
-        registry.addInterceptor(loginInterceptor).addPathPatterns("/api/*").excludePathPatterns("/api/login")
+        registry.addInterceptor(loginInterceptor).addPathPatterns("/api/**").excludePathPatterns("/api/login")
                 .excludePathPatterns("/api/register");
     }
 }

@@ -9,6 +9,7 @@ import com.example.live_video.service.CourseService;
 import com.example.live_video.service.StudentService;
 import com.example.live_video.service.UserService;
 import com.example.live_video.vo.CourseVo;
+import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
 import com.example.live_video.wrapper.UserLoginToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import java.util.List;
 
 @ResponseResult
 @RestController
-@UserLoginToken
+@PassToken
 @RequestMapping("/api/course")
 public class CourseController {
 
