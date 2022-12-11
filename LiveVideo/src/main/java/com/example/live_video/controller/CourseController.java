@@ -3,7 +3,6 @@ package com.example.live_video.controller;
 import com.example.live_video.dto.CourseDto;
 import com.example.live_video.entity.Course;
 import com.example.live_video.entity.CourseStatus;
-import com.example.live_video.entity.User;
 import com.example.live_video.entity.UserType;
 import com.example.live_video.exception.SQLCoursenameConflictException;
 import com.example.live_video.service.CourseService;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -40,17 +38,12 @@ public class CourseController {
         return CourseVo.parse(courseService.getOneCourse((long) courseId));
     }
 
-    @GetMapping("/success")
+    @GetMapping("/success/all")
     List<CourseVo> getAllSuccessCourseByTeacher(@RequestParam int o,
                                                 @RequestParam int page,
                                                 @RequestParam(required = false) String courseName,
                                                 @RequestParam(required = false) String teacherName) {
         if (StringUtils.hasText(courseName) && StringUtils.hasText(teacherName)) {
-            //FIXME: perhaps not elegant?
-            List<Course> courses = new ArrayList<>();
-            //FIXME:courseService.getOneCourse(courseId);
-//            courses.add(courseService.getOneApprovedCourse(teacherName, courseName));
-            return CourseVo.parse(courses);
             return Collections.singletonList(CourseVo.parse(courseService.getOneApprovedCourse(teacherName, courseName)));
         }
         if (StringUtils.hasText(courseName)) {
@@ -64,10 +57,10 @@ public class CourseController {
 
     @GetMapping("/all")
     public List<CourseVo> queryAllCourseByUsername(@RequestParam String userName,
-                                                   @RequestParam int page,
-                                                   @RequestParam int o) {
+                                                   @RequestParam(required = false) int page,
+                                                   @RequestParam(required = false) int o) {
         if (userService.getUserType(userName) == UserType.Student) {
-            return CourseVo.parse(courseService.getRegisteredCourseListOfStudent(o, page, userName));
+            return CourseVo.parse(studentService.getEnrolledCourseList(userName));
         }
         if (userService.getUserType(userName) == UserType.Teacher) {
             return CourseVo.parse(courseService.getApprovedCourseListOfTeacher(o, page, userName));
@@ -103,15 +96,13 @@ public class CourseController {
 
     @PostMapping("enroll")
     public Boolean enroll(@RequestParam String studentName,
-                          @RequestParam String courseName,
-                          @RequestParam String teacherName) throws Exception {
-        return studentService.enrollCourse(teacherName, courseName, studentName);
+                          @RequestParam Long courseId) throws Exception {
+        return studentService.enrollCourse(courseId, studentName);
     }
 
     @PostMapping("exit")
     public Boolean exit(@RequestParam String studentName,
-                        @RequestParam String courseName,
-                        @RequestParam String teacherName) throws Exception {
-        return studentService.exitCourse(teacherName, courseName, studentName);
+                        @RequestParam Long courseId) throws Exception {
+        return studentService.exitCourse(courseId, studentName);
     }
 }

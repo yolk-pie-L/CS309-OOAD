@@ -56,16 +56,4 @@ public class SectionServiceImpl extends ServiceImpl<SectionMapper, Section> impl
     public Section getOneSection(Long sectionId) {
         return sectionMapper.selectById(sectionId);
     }
-
-    @Override
-    public Section getOneSection(Long courseId, String sectionName) {
-        // TODO: 获取课程中的小节
-        return null;
-    }
-
-    @Override
-    public Boolean uploadVideo(Long courseId, String sectionName, String videoUrl) {
-        // TODO: 上次视频URL
-        return null;
-    }
 }

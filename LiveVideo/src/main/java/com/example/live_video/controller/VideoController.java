@@ -6,7 +6,6 @@ import com.example.live_video.entity.Section;
 import com.example.live_video.exception.MyException;
 import com.example.live_video.service.CourseService;
 import com.example.live_video.service.SectionService;
-import com.example.live_video.service.VideoService;
 import com.example.live_video.util.RandomUtils;
 import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
@@ -80,11 +79,10 @@ public class VideoController {
         String savePath = defaultPath + '/';
         String videoName = RandomUtils.VID(10) + fileExt;
         File filePath = new File(savePath, videoName);
-        sectionService.uploadVideo(courseId, secName, filePath.getPath());
         if (!filePath.getParentFile().exists()) {
             filePath.getParentFile().mkdirs();
         }
-        Section section = new Section(secName, course.getCourseName(), course.getTeacherName(), null);
+        Section section = new Section(secName, course.getCourseName(), course.getTeacherName(), filePath.getPath());
         sectionService.createSection(section);
         return true;
     }
