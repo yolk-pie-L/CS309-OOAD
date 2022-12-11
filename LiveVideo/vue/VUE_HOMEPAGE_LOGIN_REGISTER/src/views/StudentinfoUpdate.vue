@@ -1,12 +1,13 @@
 <template>
   <nav>
-    <router-link to="/studentHome">Home</router-link> |
+    <router-link to="/studentHome">Home</router-link>
+    |
     <router-link to="/studentinfoUpdate">student info Update</router-link>
   </nav>
-  <div :xl="6" :lg="7" class="bg-login">
+  <div :lg="7" :xl="6" class="bg-login">
     <!--logo-->
     <!--标题-->
-    <el-row type="flex" class="row-bg row-two" justify="center" align="middle">
+    <el-row align="middle" class="row-bg row-two" justify="center" type="flex">
       <el-col :span="6"></el-col>
       <el-col :span="6">
         <!--标题-->
@@ -15,10 +16,10 @@
       <el-col :span="6"></el-col>
     </el-row>
     <!--form表单-->
-    <el-row type="flex" class="row-bg card" justify="center" align="bottom">
+    <el-row align="bottom" class="row-bg card" justify="center" type="flex">
       <el-col :span="7" class="login-card">
         <!--loginForm-->
-        <el-form :model="infoForm" :rules="rules" ref="loginForm" label-width="21%" class="loginForm">
+        <el-form ref="loginForm" :model="infoForm" :rules="rules" class="loginForm" label-width="21%">
           <el-form-item label="Name" prop="teacherName" style="width: 380px">
             <el-input v-model="infoForm.userName"></el-input>
           </el-form-item>
@@ -28,11 +29,11 @@
           <el-form-item label="User" prop="username" style="width: 380px">
             <el-upload
                 :action="uploadURL"
+                :before-upload="beforeUpload"
                 :style="{backgroundImage:'url(' + dialogImageUrl + ')', backgroundRepeat:'no-repeat', backgroundPosition:'center center', backgroundSize: 'contain'}"
-                list-type="picture-card"
                 class="uploadImg"
-                name="files"
-                :before-upload="beforeUpload">
+                list-type="picture-card"
+                name="files">
               <i class="el-icon-plus"></i>
             </el-upload>
           </el-form-item>
@@ -67,13 +68,11 @@ export default {
         photoUrl: 'url',
       },
       // 表单验证
-      rules: {
-
-      },
+      rules: {},
     };
   },
   methods: {
-    beforeUpload (file) {
+    beforeUpload(file) {
 
       this.infoForm.append('file', file)
 

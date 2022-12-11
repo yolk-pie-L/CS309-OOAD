@@ -31,7 +31,16 @@ export default {
         coursePic: "url"
       }
     }
+  },
+  mounted() {
+    this.getAA()
+  },
+  methods:{
+    getAA(){
+      this.courseForm.courseName=router.query.id;
+    }
   }
+
 }
 </script>
 <style scoped>
