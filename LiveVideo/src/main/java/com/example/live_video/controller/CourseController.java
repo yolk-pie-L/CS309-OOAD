@@ -3,9 +3,12 @@ package com.example.live_video.controller;
 import com.example.live_video.dto.CourseDto;
 import com.example.live_video.entity.Course;
 import com.example.live_video.entity.CourseStatus;
+import com.example.live_video.entity.User;
+import com.example.live_video.entity.UserType;
 import com.example.live_video.exception.SQLCoursenameConflictException;
 import com.example.live_video.service.CourseService;
 import com.example.live_video.service.StudentService;
+import com.example.live_video.service.UserService;
 import com.example.live_video.vo.CourseVo;
 import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
@@ -28,28 +31,43 @@ public class CourseController {
     private CourseService courseService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private StudentService studentService;
 
+    @GetMapping("/{courseId}")
+    CourseVo getCourse(@PathVariable int courseId) {
+        return CourseVo.parse(courseService.getOneCourse((long) courseId));
+    }
+
     @GetMapping("/success")
-    List<CourseVo> getAllSuccessCourseByTeacher(@RequestParam int recordsPerPage,
-                                                @RequestParam int pageNum,
+    List<CourseVo> getAllSuccessCourseByTeacher(@RequestParam int o,
+                                                @RequestParam int page,
                                                 @RequestParam(required = false) String courseName,
                                                 @RequestParam(required = false) String teacherName) {
         if (StringUtils.hasText(courseName) && StringUtils.hasText(teacherName)) {
             return Collections.singletonList(CourseVo.parse(courseService.getOneApprovedCourse(teacherName, courseName)));
         }
         if (StringUtils.hasText(courseName)) {
-            return CourseVo.parse(courseService.getApprovedCourseList(recordsPerPage, pageNum, courseName));
+            return CourseVo.parse(courseService.getApprovedCourseList(o, page, courseName));
         }
         if (StringUtils.hasText(teacherName)) {
-            return CourseVo.parse(courseService.getApprovedCourseListOfTeacher(recordsPerPage, pageNum, teacherName));
+            return CourseVo.parse(courseService.getApprovedCourseListOfTeacher(o, page, teacherName));
         }
-        return CourseVo.parse(courseService.getApprovedCourseList(recordsPerPage, pageNum));
+        return CourseVo.parse(courseService.getApprovedCourseList(o, page));
     }
 
-    @GetMapping("/all{userName}")
-    public List<CourseVo> queryAllCourseByUsername(@PathVariable String userName) {
-        // FIXME(by Li Kai to Li Xin): It contains two type, one for student, one for teacher. And It should return a list of course.
+    @GetMapping("/all")
+    public List<CourseVo> queryAllCourseByUsername(@RequestParam String userName,
+                                                   @RequestParam int page,
+                                                   @RequestParam int o) {
+        if (userService.getUserType(userName) == UserType.Student) {
+            return CourseVo.parse(courseService.getRegisteredCourseListOfStudent(o, page, userName));
+        }
+        if (userService.getUserType(userName) == UserType.Teacher) {
+            return CourseVo.parse(courseService.getApprovedCourseListOfTeacher(o, page, userName));
+        }
 //        return CourseVo.parseEasy(courseService.getOneCourse(userName, null));
         return null;
     }

@@ -17,4 +17,8 @@ public interface SectionService extends IService<Section> {
     public List<Section> getSectionList(String teacherName, String courseName);
 
     public Section getOneSection(String teacherName, String courseName, String sectionName);
+
+    public Section getOneSection(Long courseId, String sectionName);
+
+    Boolean uploadVideo(Long courseId, String sectionName, String videoUrl);
 }

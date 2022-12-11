@@ -9,6 +9,8 @@ import java.util.List;
 @Data
 public class CourseVo {
 
+    private Long id;
+
     private String courseName;
 
     private String teacherName;
@@ -25,7 +27,8 @@ public class CourseVo {
 
     private String status;
 
-    public CourseVo(String courseName, String teacherName, String introduction, Long charge, String tag, String coursePicture, String privateKeyUrl, String status) {
+    public CourseVo(Long id, String courseName, String teacherName, String introduction, Long charge, String tag, String coursePicture, String privateKeyUrl, String status) {
+        this.id = id;
         this.courseName = courseName;
         this.teacherName = teacherName;
         this.introduction = introduction;
@@ -50,6 +53,7 @@ public class CourseVo {
 
     public static CourseVo parse(Course course) {
         return new CourseVo(
+                course.getId(),
                 course.getCourseName(),
                 course.getTeacherName(),
                 course.getDescription(),

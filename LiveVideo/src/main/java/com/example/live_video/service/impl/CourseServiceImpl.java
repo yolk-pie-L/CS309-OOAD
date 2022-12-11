@@ -90,8 +90,20 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
     }
 
     @Override
+    public List<Course> getRegisteredCourseListOfStudent(int recodesPerPage, int pageNum, String stduentName) {
+        // TODO: 获取学生包报名参加的所有课程
+        return null;
+    }
+
+    @Override
     public Course getOneCourse(String teacherName, String courseName) {
         return courseMapper.getOneCourse(teacherName, courseName);
+    }
+
+    @Override
+    public Course getOneCourse(Long id) {
+        // TODO: 根据ID查询课程
+        return null;
     }
 
     @Override

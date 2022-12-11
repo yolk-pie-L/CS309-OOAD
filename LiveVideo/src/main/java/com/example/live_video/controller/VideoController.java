@@ -1,7 +1,10 @@
 package com.example.live_video.controller;
 
 import com.example.live_video.config.NonStaticResourceHttpRequestHandler;
+import com.example.live_video.entity.Course;
+import com.example.live_video.entity.Section;
 import com.example.live_video.exception.MyException;
+import com.example.live_video.service.CourseService;
 import com.example.live_video.service.SectionService;
 import com.example.live_video.service.VideoService;
 import com.example.live_video.util.RandomUtils;
@@ -42,9 +45,13 @@ public class VideoController {
     @Autowired
     private SectionService sectionService;
 
-    @GetMapping("")
-    public void videoPreview(HttpServletRequest request, HttpServletResponse response, @RequestParam String courseName, @RequestParam String sectionName) throws Exception {
-//        String videoUrl = sectionService.get(courseName, sectionName);
+    @Autowired
+    private CourseService courseService;
+
+    @GetMapping("/{sectionId}")
+    public void videoPreview(HttpServletRequest request, HttpServletResponse response, @PathVariable Long sectionId) throws Exception {
+//        String videoUrl = sectionService.getOneSection(sectionId).getVideoUrl();
+        System.out.println("Hello world");
         String videoUrl = "src/main/resources/static/video/demo1.mp4";
 
         Path filePath = Paths.get(videoUrl);
@@ -62,11 +69,12 @@ public class VideoController {
         }
     }
 
-    @PostMapping("")
+    @PostMapping("/upload")
     public Boolean saveVideo(@RequestParam MultipartFile file,
-                             @RequestParam String courseName,
-                             @RequestParam String sectionName) throws Exception {
+                             @RequestParam Long courseId,
+                             @RequestParam String secName) throws Exception {
         // 获取后缀名
+        Course course = courseService.getOneCourse(courseId);
         String fileExt = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1).toLowerCase();
         if (!Arrays.asList(extList).contains(fileExt)) {
             throw new MyException("视频格式不正确");
@@ -74,12 +82,25 @@ public class VideoController {
 
         String savePath = defaultPath + '/';
         String videoName = RandomUtils.VID(10) + fileExt;
-//        videoService.upload(courseName, sectionName);
         File filePath = new File(savePath, videoName);
+        sectionService.uploadVideo(courseId, secName, filePath.getPath());
         if (!filePath.getParentFile().exists()) {
             filePath.getParentFile().mkdirs();
         }
+        Section section = new Section(secName, course.getCourseName(), course.getTeacherName(), null);
+        sectionService.createSection(section);
         return true;
     }
 
+    @PostMapping("remove/{sectionId}")
+    public Boolean remove(@PathVariable Long sectionId) {
+//        sectionService.removeSection(sectionId);
+        return true;
+    }
+
+    @GetMapping("all/{courseId}")
+    public Boolean getSectionList(@PathVariable Long courseId) {
+//        sectionService.getSectionList(courseId);
+        return true;
+    }
 }

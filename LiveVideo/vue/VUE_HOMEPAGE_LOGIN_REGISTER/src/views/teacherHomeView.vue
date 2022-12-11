@@ -12,8 +12,6 @@
       <el-col :span="1">
         <!--标题-->
         <el-row v-text="this.teacherForm.userName" class="title"></el-row>
-        <el-row v-text="this.teacherForm.mail" class="title"></el-row>
-
       </el-col>
     </el-row>
     <el-row type="flex" class="row-bg card" justify="center" align="middle">
@@ -80,10 +78,8 @@
       </el-card>
     </el-row>
     <el-row>
-      <el-button type="primary" @click="logOut()" class="btn-ground">注销</el-button>
-    </el-row>
-    <el-row>
-      <el-button type="primary" @click="logOut1()" class="btn-ground">回到主界面</el-button>
+      <el-button type="primary" @click="logOut()">注销</el-button>
+      <el-button type="primary" @click="back()">返回主界面</el-button>
     </el-row>
   </div>
 </template>
@@ -99,7 +95,7 @@ export default {
       teacherForm: {
         userName: "black",
         userType: "Teacher",
-        mail: "example@qq.com",
+        mail: "",
         photoUrl: "https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg",
         account: "0",
       },
@@ -208,7 +204,7 @@ export default {
     logOut () {
       router.push("/")
     },
-    logOut1 () {
+    back () {
       router.push("/1")
     }
     },
