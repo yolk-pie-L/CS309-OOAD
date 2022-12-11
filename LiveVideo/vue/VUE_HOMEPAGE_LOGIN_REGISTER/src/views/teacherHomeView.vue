@@ -205,7 +205,7 @@ export default {
       router.push("/")
     },
     back () {
-      router.push("/1")
+      router.push("/")
     }
     },
 }
