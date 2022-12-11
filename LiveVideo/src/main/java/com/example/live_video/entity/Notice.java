@@ -32,12 +32,7 @@ public class Notice {
     @TableField(value = "context", insertStrategy = FieldStrategy.NOT_EMPTY)
     private String context;
 
-    /**
-     * For upper layer, you should use this constructor
-     * @param teacherName
-     * @param courseName
-     * @param context
-     */
+
     public Notice(String teacherName, String courseName, String noticeName, String context) {
         this.teacherName = teacherName;
         this.courseName = courseName;
@@ -45,10 +40,9 @@ public class Notice {
         this.context = context;
     }
 
-    public Notice(String noticeName, Long courseId, Timestamp createTime, String context) {
+    public Notice(String noticeName, Long courseId, String context) {
         this.noticeName = noticeName;
         this.courseId = courseId;
-        this.createTime = createTime;
         this.context = context;
     }
 }

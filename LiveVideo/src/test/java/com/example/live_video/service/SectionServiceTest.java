@@ -82,7 +82,7 @@ class SectionServiceTest {
     void createSection() throws SQLSectionnameConflictException {
         Course course2 = allCourses.get(1);
         User teacher = allUsers.get(0);
-        Section section5 = new Section("s5", course2.getCourseName(), teacher.getUserName(), "assign_url");
+        Section section5 = new Section("s5", course2.getId(), "assign_url");
         boolean flag = false;
         flag = sectionService.createSection(section5);
         assert flag;
@@ -99,9 +99,8 @@ class SectionServiceTest {
     @Test
     void updateSection() {
         Course course1 = allCourses.get(0);
-        User teacher = allUsers.get(0);
         Section ansSection = allSections.get(0);
-        Section section1 = new Section("s1", course1.getCourseName(), teacher.getUserName(), null);
+        Section section1 = new Section("s1", course1.getId(), null);
         sectionService.updateSection(section1);
         Section section = sectionMapper.selectById(ansSection.getId());
         assert Objects.equals(section.getVideoUrl(), ansSection.getVideoUrl());
@@ -115,7 +114,7 @@ class SectionServiceTest {
     void removeSection() {
         Section testSection = allSections.get(0);
         long count = sectionMapper.selectCount(null);
-        sectionService.removeSection(count);
+        sectionService.removeSection(testSection.getId());
         long count2 = sectionMapper.selectCount(null);
         assert count2 == count - 1;
         List<Section> sectionList = sectionMapper.selectList(null);

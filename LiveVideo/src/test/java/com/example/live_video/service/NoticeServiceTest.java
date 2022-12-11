@@ -58,9 +58,9 @@ class NoticeServiceTest {
         courseMapper.insert(course1);
 
 
-        Notice n1 = new Notice(teacher.getUserName(), course.getCourseName(), "n1", "blabla");
-        Notice n2 = new Notice(teacher.getUserName(), course.getCourseName(), "n2", "blabla");
-        Notice n3 = new Notice(teacher.getUserName(), course1.getCourseName(), "n3", "ahahaha");
+        Notice n1 = new Notice( "n1",course.getId(), "blabla");
+        Notice n2 = new Notice("n2", course.getId(), "blabla");
+        Notice n3 = new Notice("n3", course1.getId(), "ahahaha");
         noticeList.add(n1);
         noticeList.add(n2);
         noticeList.add(n3);

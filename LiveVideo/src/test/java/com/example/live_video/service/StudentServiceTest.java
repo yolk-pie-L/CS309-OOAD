@@ -150,6 +150,8 @@ class StudentServiceTest {
         urls1.add("l2");
         studentService.submitAssignment(s1.getUserName(), assignment1.getId(), urls1);
         studentService.setStudentAssignGrade(s1.getUserName(), assignment1.getId(), 100);
+        int grade = studentService.getStudentAssignGrade(s1.getUserName(), assignment1.getId());
+        assert grade==100;
         List<String> res = studentService.getStudentAssignmentUrlList(s1.getUserName(),  assignment1.getId());
         System.out.println(res);
         assert res.contains("l1");
@@ -169,5 +171,9 @@ class StudentServiceTest {
     @Test
     void getStudentAssignmentUrls() {
         //in setStudentAssignGrade
+    }
+
+    @Test
+    void getStudentAssignGrade() {
     }
 }

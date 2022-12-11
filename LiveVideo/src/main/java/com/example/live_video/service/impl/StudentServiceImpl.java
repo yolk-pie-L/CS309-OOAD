@@ -72,10 +72,9 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Boolean getStudentAssignGrade(String studentName, Long assignId) {
+    public int getStudentAssignGrade(String studentName, Long assignId) {
         Long studentId = userService.getUserId(studentName);
-        //TODO: implement the method
-        return null;
+        return studentMapper.getStudentAssignGrade(studentId, assignId);
     }
 
     @Override
