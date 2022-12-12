@@ -1,48 +1,85 @@
 <template>
   <div>
-    <div class="animate__animated animate__fadeIn title"  :style="{'background-image': bgUrl}"></div>
-    <el-header  class="animate__animated animate__fadeIn">
+    <div :style="{'background-image': bgUrl}" class="animate__animated animate__fadeIn title"></div>
+    <el-header class="animate__animated animate__fadeIn">
       <div class="menu-expend">
         <i class="el-icon-menu"></i>
       </div>
       <div class="user_show">
-        <img :alt="item" src="https://p0.meituan.net/dpplatform/e03c1cef70236dd3beb7a12c17d18c3d8912.jpg" class="user_pic">
+        <el-image :src="userForm.photoUrl" alt="暂无图片" class="user_pic"></el-image>
       </div>
-
     </el-header>
+
     <div class="tableD">
       <el-table :data="tableData" height="300">
-        <el-table-column prop="teacherName" label="TeacherName" width="150" />
-        <el-table-column prop="courseName" label="CourseName" width="150" />
-        <el-table-column prop="tag" label="Tag" width="150" />
-        <el-table-column prop="charge" label="Charge" width="150" />
-        <el-table-column prop="introduction" label="Introduction" width="400" />
-        <el-table-column prop="coursePicture" label="CoursePic" width="400" />
+        <el-table-column label="TeacherName" prop="teacherName" width="150"/>
+        <el-table-column label="CourseName" prop="courseName" width="150"/>
+        <el-table-column label="Tag" prop="tag" width="150"/>
+        <el-table-column label="Charge" prop="charge" width="150"/>
+        <el-table-column label="Introduction" prop="introduction" width="400"/>
+        <el-table-column label="CoursePic" prop="coursePicture" width="400"/>
         <el-table-column fixed="right" label="Operation1" width="120">
           <template #default>
-            <el-button link type="primary" size="small" @click="handleReject(scope.$index, scope.row)">Reject</el-button>
+            <el-button link size="small" type="primary" @click="handleReject(scope.$index)">Reject
+            </el-button>
           </template>
         </el-table-column>
         <el-table-column fixed="right" label="Operation1" width="120">
+          <template slot-scope="scope" #default>
+            <el-button link size="small" type="primary" @click="handleAgree(scope.$index)">Agree</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+
+    <div class="query">
+      <el-input v-model="queryInfo.query" clearable placeholder="Search for user"
+                @clear="getUserList"></el-input>
+        <el-select v-model="queryInfo.type" placeholder="请选择">
+          <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+          </el-option>
+        </el-select>
+      <el-button slot="append" icon="el-icon-search" @click="getUserList"></el-button>
+    </div>
+
+    <div class="tableU">
+      <el-table :data="tableUser" height="300">
+        <el-table-column label="UserName" prop="userName" width="300"/>
+        <el-table-column label="UserType" prop="userType" width="390"/>
+        <el-table-column label="Privilege" prop="isAdm" width="300"/>
+        <el-table-column fixed="right" label="Operation1" width="300">
           <template #default>
-            <el-button link type="primary" size="small" @click="handleAgree(scope.$index, scope.row)">Agree</el-button>
+            <el-button link size="small" type="primary" @click="handleChangePrivilege(scope.$index)">
+              Change
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
   </div>
+
 </template>
 
 <script>
-import router from "@/router";
 
 export default {
   name: "Administer",
   data() {
     return {
-      bgUrl:'url(https://i.imgtg.com/2022/11/10/tWWMg.webp)',
+      bgUrl: 'url(https://i.imgtg.com/2022/11/10/tWWMg.webp)',
       loading: true,
-      tableData : [
+      userForm: {
+        userName: "black",
+        userType: "Teacher",
+        mail: "",
+        photoUrl: "https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg",
+        account: "0",
+      },
+      tableData: [
         {
           teacherName: 'Tom',
           courseName: 'CS101',
@@ -123,14 +160,49 @@ export default {
           tag: '',
           charge: ''
         },
-      ]
+      ],
+      tableUser: [
+        {
+          userName: "black",
+          userType: "Teacher",
+          photoUrl: "https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg",
+          isAdm: "yes"
+        },
+        {
+          userName: "black",
+          userType: "Teacher",
+          photoUrl: "https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg",
+          isAdm: "yes"
+        },
+      ],
+      InputForm1: {
+        userName: "user"
+      },
+      InputForm2: {
+        courseName: "course",
+        approved: "true"
+      },
+      queryInfo: {
+        name: '',
+        type: ''
+      },
+      options: [{
+        value: '选项1',
+        label: 'student'
+      }, {
+        value: '选项2',
+        label: 'teacher'
+      }, {
+        value: '选项3',
+        label: 'all'
+      }],
     }
   },
   mounted() {
     this.fetchClass()
   },
-  methods:{
-    fetchClass(){
+  methods: {
+    fetchClass() {
       this.$axios.get('api/user?userName={' + this.username + '}').then(res => {
         // 拿到结果
         let result = JSON.parse(res.data.data);
@@ -150,11 +222,65 @@ export default {
         }
       })
     },
-    handleReject(index, row) {
-      this.tableData.splice(index, 1);
+    handleReject(index) {
+      this.InputForm2.courseName = this.tableData.at(index).courseName;
+      this.InputForm2.approved = "false";
+      this.$axios.post('api/course/admin', this.InputForm2).then(res => {
+        let result = JSON.parse(res.data.data);
+        let message = res.data.msg;
+        if (result) {
+          this.tableData.splice(index, 1);
+        } else {
+          /*打印错误信息*/
+          alert(message);
+        }
+      })
     },
     handleAgree(index, row) {
-      this.tableData.splice(index, 1);
+      this.InputForm2.courseName = this.tableData.at(index).courseName;
+      this.InputForm2.approved = "true";
+      this.$axios.post('api/course/admin', this.InputForm2).then(res => {
+        let result = JSON.parse(res.data.data);
+        let message = res.data.msg;
+        if (result) {
+          this.tableData.splice(index, 1);
+        } else {
+          /*打印错误信息*/
+          alert(message);
+        }
+      })
+    },
+    handleChangePrivilege(index) {
+      this.$axios.post('/api/privilege?userName={' + this.userForm.at(index).username + '}').then(res => {
+        let result = JSON.parse(res.data.data);
+        let message = res.data.msg;
+        if (result) {
+          this.fetchClass();
+          // if (this.userForm.at(index).isAdm.equals("yes")) {
+          //   this.userForm.at(index).isAdm = "no";
+          // } else {
+          //   this.userForm.at(index).isAdm = "yes";
+          // }
+        } else {
+          /*打印错误信息*/
+          alert(message);
+        }
+      })
+    },
+    async getUserList() {
+      this.$axios.post('all?userName={' + this.queryInfo.name + '}&type={student or teacher or all}' + this.queryInfo.type + '}').then(res => {
+        let result = JSON.parse(res.data.data);
+        let message = res.data.msg;
+        this.tableUser.userName = result.userName
+        this.tableUser.userType = result.userType
+        this.tableUser.photoUrl = result.photoUrl
+        this.tableUser.isAdm = result.isAdm
+        if (result) {
+        } else {
+          /*打印错误信息*/
+          alert(message);
+        }
+      })
     },
   }
 }
@@ -162,7 +288,7 @@ export default {
 
 
 <style>
-*{
+* {
   margin: 0;
   padding: 0;
 }
@@ -183,7 +309,8 @@ export default {
 .tableD td {
   background-color: transparent;
 }
-.tableD{
+
+.tableD {
   background-color: transparent;
   position: absolute;
   top: 350px;
@@ -194,8 +321,34 @@ export default {
 
 </style>
 
+<style>
+.tableU th,
+.tableU tr,
+.tableU td {
+  background-color: transparent;
+}
 
-<style scoped lang="less">
+.tableU {
+  background-color: transparent;
+  position: absolute;
+  top: 800px;
+  left: 50px;
+  width: 90%;
+  border-radius: 50%
+}
+
+</style>
+
+<style lang="less" scoped>
+
+.query {
+  background-color: transparent;
+  position: absolute;
+  top: 700px;
+  left: 30%;
+  width: 20%;
+  border-radius: 50%
+}
 
 .title {
   position: fixed;
@@ -219,7 +372,7 @@ export default {
   background-color: rgba(0, 0, 0, 0) !important;
 }
 
-.el-menu /deep/ .el-menu-item{
+.el-menu /deep/ .el-menu-item {
   background-color: rgba(0, 0, 0, 0) !important;
 }
 
@@ -242,7 +395,7 @@ export default {
   left: 1200px;
 }
 
-/deep/.user_pic{
+/deep/ .user_pic {
   width: 200px;
   height: 200px;
   border-radius: 50%

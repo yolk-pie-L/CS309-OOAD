@@ -1,9 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Login from '@/views/Login';
-import HomeView from "@/views/HomeView";
 import register from "@/views/regist";
 import Home from '@/views/home'
-import Home1 from '@/views/home1'
 import teacherHomeView from "@/views/teacherHomeView";
 import infoUpdate from "@/views/infoUpdate";
 import courseUpdate from "@/views/courseUpdate";
@@ -11,28 +9,25 @@ import courseMainPage from "@/views/courseMainPage";
 import courseDetailPage from "@/views/courseDetailPage";
 import studentHome from "@/views/StudentHome";
 import studentinfoUpdate from "@/views/StudentinfoUpdate";
+import homeworkHome from "@/views/HomeworkHome";
+import homeworkPage from "@/views/HomeworkPage";
+import administer from "@/views/Administer";
+import quizHome from "@/views/QuizHome";
+import quizPage from "@/views/QuizPage";
+import quizUpload from "@/views/QuizUpload";
+import homeworkUpload from "@/views/HomeworkUpload";
 import videoPage from "@/views/videoPage";
 import addSection from "@/views/addSection";
 const routes = [
   {
-    path:'/1',
+    path:'/',
     name:'home',
     component:Home
-  },
-  {
-    path:'/',
-    name:'home1',
-    component:Home1
   },
   {
     path: '/login',
     name: 'login',
     component: Login
-  },
-  {
-    path: '/home',
-    name: 'HomeView',
-    component: HomeView
   },
   {
     path: '/register',
@@ -75,6 +70,41 @@ const routes = [
     component: studentinfoUpdate
   },
   {
+    path: '/homeworkHome',
+    name: homeworkHome,
+    component: homeworkHome
+  },
+  {
+    path: '/homeworkPage',
+    name: homeworkPage,
+    component: homeworkPage
+  },
+  {
+    path: '/homeworkUpload',
+    name: homeworkUpload,
+    component: homeworkUpload
+  },
+  {
+    path: "/administer",
+    name: administer,
+    component: administer
+  },
+  {
+    path: "/quizHome",
+    name: quizHome,
+    component: quizHome
+  },
+  {
+    path: "/quizPage",
+    name: quizPage,
+    component: quizPage
+  },
+  {
+    path: "/quizUpload",
+    name: quizUpload,
+    component: quizUpload
+  },
+  {
     path: '/videoPage',
     name: videoPage,
     component: videoPage
@@ -84,6 +114,7 @@ const routes = [
     name: addSection,
     component: addSection
   }
+
 ]
 
 const router = createRouter({

@@ -27,12 +27,14 @@ export default {
   name: 'courseMainPage',
   data() {
     return {
-      studentName: 'black',
-      courseId: '123',
       courseForm: {
-        courseName: "checker",
-        teacherName: "black",
+        courseName: "DSAA",
+        teacherName: "李开",
         coursePic: "url"
+      },
+      joinForm: {
+        studentName: 'black',
+        courseId: '123'
       }
     }
   },
@@ -41,53 +43,52 @@ export default {
   },
   methods: {
     fetchData() {
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
       this.$axios.get('http://localhost:8082/api/user').then(res => {
         // 拿到结果
+
         // let message = res.data.msg;
-        console.log(res)
         // 判断结果
-        if (res.data.userName) {
+        if (res.data.result.userName) {
           /*登陆成功*/
-          this.studentName = res.data.result.userName
+          this.joinForm.studentName = res.data.result.userName
           /*跳转页面*/
-          router.push('/1')
         } else {
           /*打印错误信息*/
-          alert(this.studentName);
+          alert(this.joinForm.studentName);
         }
       })
     },
     joinCourse() {
-      this.$axios.post('http://localhost:8082/api/course/enroll', {
-        studentName: this.studentName,
-        courseId: this.courseId
-      }).then(res => {
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
+      this.$axios.post('http://localhost:8082/api/course/enroll', this.joinForm).then(res => {
         // 拿到结果
         let result = res.data.code
         let message = res.data;
         // 判断结果
         if (result === 200) {
           /*跳转页面*/
-          router.push('/1')
+          router.push('/')
         } else {
           alert(message)
         }
       })
     },
     leave() {
-      this.$axios.post('http://localhost:8082/api/course/exit?studentName=${studentName}&courseId=${courseId}').then(res => {
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
+      this.$axios.post('http://localhost:8082/api/course/exit', this.joinForm).then(res => {
         // 拿到结果
-        let result = JSON.parse(res.data.data);
-        let message = res.data.msg;
+        let code = res.data.code;
+        let message = res.data.message;
         // 判断结果
-        if (result) {
+        if (code === 200) {
           /*登陆成功*/
-          Element.Message.success(message);
+
           /*跳转页面*/
           router.push('/')
         } else {
           /*打印错误信息*/
-          Element.Message.error(message);
+          alert(message)
         }
       })
     }

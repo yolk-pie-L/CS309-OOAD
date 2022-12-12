@@ -241,7 +241,7 @@ export default {
     fetchData() {
       this.courseName = this.$route.query.courseName
       console.log(this.courseName)
-      this.$axios.get('api/video/').then(res => {
+      this.$axios.get('api/video/sectionId=${sectionId}').then(res => {
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         this.sectionData = result
@@ -294,7 +294,6 @@ export default {
     },
     reFetch(row) {
       router.push("/videoPage?courseName=" + "white" + "&sectionId={" + row.sectionIdIn + "}")
-      this.courseName = this.$route.query.courseName
     },
     inputFocus(){
       var replyInput = document.getElementById('replyInput');
