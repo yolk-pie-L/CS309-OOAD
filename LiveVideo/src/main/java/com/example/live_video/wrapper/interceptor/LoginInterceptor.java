@@ -1,7 +1,9 @@
-package com.example.live_video.wrapper;
+package com.example.live_video.wrapper.interceptor;
 
 import com.example.live_video.exception.MyException;
 import com.example.live_video.util.TokenUtils;
+import com.example.live_video.wrapper.PassToken;
+import com.example.live_video.wrapper.UserLoginToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -18,6 +20,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws  Exception {
+        assert request.getHeader("token") != null;
         String token = request.getHeader("token");
         if (!(handler instanceof HandlerMethod))
             return true;

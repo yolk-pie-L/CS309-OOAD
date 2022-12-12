@@ -61,7 +61,6 @@ public class CourseController {
     }
 
     @GetMapping("/all")
-    @CrossOrigin
     public List<CourseVo> queryAllCourseByUsername(@RequestParam String userName,
                                                    @RequestParam(required = false) int page,
                                                    @RequestParam(required = false) int o) {
@@ -107,7 +106,6 @@ public class CourseController {
 //        return studentService.enrollCourse(courseId, studentName);
 //    }
     @PostMapping("enroll")
-    @CrossOrigin
     public Boolean enroll(@RequestBody JoinForm joinForm) throws Exception {
         Long courseId = joinForm.getCourseId();
         String studentName = joinForm.getStudentName();
