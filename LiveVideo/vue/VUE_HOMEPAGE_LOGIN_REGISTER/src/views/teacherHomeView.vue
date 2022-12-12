@@ -210,6 +210,7 @@ export default {
       })
     },
     logOut () {
+      localStorage.removeItem('token')
       router.push("/")
     },
     back () {

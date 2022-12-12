@@ -20,10 +20,10 @@
       </div>
       <div class="query">
         <el-input v-model="queryInfo.course" clearable placeholder="Course"
-                  @clear="getSelectCourse"></el-input>
+                  @clear="fetchCourse"></el-input>
         <el-input v-model="queryInfo.teacher" clearable placeholder="Teacher"
-                  @clear="getSelectCourse"></el-input>
-        <el-button slot="append" icon="el-icon-search" @click="getSelectCourse()"></el-button>
+                  @clear="fetchUser"></el-input>
+        <el-button slot="append" icon="el-icon-search" @click="fetchCourse"></el-button>
       </div>
     </el-header>
   </div>
@@ -114,15 +114,17 @@ export default {
     fetchCourse() {
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
 
-      this.$axios.get('http://localhost:8082/api/course/success/all?o=\''+this.pageNum+'&page=\'' + this.currentPage + '&courseName=\''+this.queryInfo.course+'&teacherName=\'' + this.queryInfo.teacher + '\'}\'').then(res => {
-        let result = res.data.data;
+      this.$axios.get('http://localhost:8082/api/course/success/all', {
+        params: {
+          o: this.pageForm.pageNum,
+          page: this.pageForm.page,
+          courseName: this.queryInfo.course,
+          teacherName: this.queryInfo.teacher
+        }
+      }).then(res => {
+        let result = res.data.result;
         let message = res.data.msg;
-        this.classForm.id = result.id
-        this.classForm.courseName = result.courseName
-        this.classForm.teacherName = result.teacherName
-        this.classForm.introduction = result.introduction
-        this.classForm.coursePicture = result.coursePicture
-        this.classForm.privateKeyUrl = result.privateKeyUrl
+        this.classForm = result;
         if (result) {
         } else {
           /*打印错误信息*/

@@ -6,7 +6,7 @@
       <el-col :span="6"></el-col>
       <el-col :span="6">
         <!--标题-->
-        <h1 class="title">Personal Information Update</h1>
+        <h1 class="title">Add Section</h1>
       </el-col>
       <el-col :span="6"></el-col>
     </el-row>

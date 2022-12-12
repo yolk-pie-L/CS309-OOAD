@@ -38,11 +38,13 @@ public class CourseController {
     private StudentService studentService;
 
     @GetMapping("/{courseId}")
+    @CrossOrigin
     CourseVo getCourse(@PathVariable int courseId) {
         return CourseVo.parse(courseService.getOneCourse((long) courseId));
     }
 
     @GetMapping("/success/all")
+    @CrossOrigin
     List<CourseVo> getAllSuccessCourseByTeacher(@RequestParam int o,
                                                 @RequestParam int page,
                                                 @RequestParam(required = false) String courseName,
