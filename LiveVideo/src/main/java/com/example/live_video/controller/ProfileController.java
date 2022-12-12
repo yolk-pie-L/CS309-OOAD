@@ -24,7 +24,7 @@ import java.util.List;
 
 @RestController
 @ResponseResult
-@UserLoginToken
+@PassToken
 public class ProfileController {
 
     @Autowired

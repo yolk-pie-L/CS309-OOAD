@@ -1,4 +1,4 @@
-package com.example.live_video.config;
+package com.example.live_video.wrapper;
 
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;

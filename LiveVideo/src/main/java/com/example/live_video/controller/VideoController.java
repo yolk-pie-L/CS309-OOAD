@@ -1,6 +1,6 @@
 package com.example.live_video.controller;
 
-import com.example.live_video.config.NonStaticResourceHttpRequestHandler;
+import com.example.live_video.wrapper.NonStaticResourceHttpRequestHandler;
 import com.example.live_video.entity.Course;
 import com.example.live_video.entity.Section;
 import com.example.live_video.exception.MyException;
@@ -24,7 +24,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.example.live_video.config.NonStaticResourceHttpRequestHandler.ATTR_FILE;
+import static com.example.live_video.wrapper.NonStaticResourceHttpRequestHandler.ATTR_FILE;
 
 @ResponseResult
 @RestController

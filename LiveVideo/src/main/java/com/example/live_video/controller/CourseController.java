@@ -12,6 +12,7 @@ import com.example.live_video.service.CourseService;
 import com.example.live_video.service.StudentService;
 import com.example.live_video.service.UserService;
 import com.example.live_video.vo.CourseVo;
+import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
 import com.example.live_video.wrapper.UserLoginToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ import java.util.List;
 
 @ResponseResult
 @RestController
-@UserLoginToken
+@PassToken
 @RequestMapping("/api/course")
 public class CourseController {
 
@@ -62,7 +63,6 @@ public class CourseController {
     }
 
     @GetMapping("/all")
-    @CrossOrigin
     public List<CourseVo> queryAllCourseByUsername(@RequestParam String userName,
                                                    @RequestParam(required = false) int page,
                                                    @RequestParam(required = false) int o) {
@@ -108,7 +108,6 @@ public class CourseController {
 //        return studentService.enrollCourse(courseId, studentName);
 //    }
     @PostMapping("enroll")
-    @CrossOrigin
     public Boolean enroll(@RequestBody JoinForm joinForm) throws Exception {
         Long courseId = joinForm.getCourseId();
         String studentName = joinForm.getStudentName();
