@@ -9,11 +9,13 @@ import com.example.live_video.service.SectionService;
 import com.example.live_video.util.RandomUtils;
 import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
+import org.apache.catalina.core.ApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -34,7 +36,7 @@ public class VideoController {
 
     private final String defaultPath = "src/main/resources/static/video/";
 
-    private final String[] extList = new String[]{".mp4", ".avi", ".mkv", ".wmv"};
+    private final String[] extList = new String[]{"mp4", "avi", "mkv", "wmv"};
 
     @Autowired
     private NonStaticResourceHttpRequestHandler requestHandler;
@@ -71,19 +73,19 @@ public class VideoController {
                              @RequestParam Long courseId,
                              @RequestParam String secName) throws Exception {
         // 获取后缀名
-        Course course = courseService.getOneCourse(courseId);
         String fileExt = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1).toLowerCase();
         if (!Arrays.asList(extList).contains(fileExt)) {
             throw new MyException("视频格式不正确");
         }
 
-        String savePath = defaultPath + '/';
-        String videoName = RandomUtils.VID(10) + fileExt;
+        String savePath = defaultPath;
+        String videoName = RandomUtils.VID(10) + "." + fileExt;
         File filePath = new File(savePath, videoName);
         if (!filePath.getParentFile().exists()) {
             filePath.getParentFile().mkdirs();
         }
-        Section section = new Section(secName, course.getCourseName(), course.getTeacherName(), filePath.getPath());
+        file.transferTo(filePath);
+        Section section = new Section(secName, courseId, filePath.getPath());
         sectionService.createSection(section);
         return true;
     }

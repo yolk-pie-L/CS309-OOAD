@@ -1,6 +1,7 @@
-package com.example.live_video.wrapper;
+package com.example.live_video.wrapper.interceptor;
 
 import com.example.live_video.exception.MyException;
+import com.example.live_video.wrapper.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;

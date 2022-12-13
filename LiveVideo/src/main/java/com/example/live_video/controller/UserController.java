@@ -48,6 +48,7 @@ public class UserController {
     @PostMapping("/api/login")
     public JSONObject loginUser(@RequestBody UserForm userForm) throws Exception {
         JSONObject jsonObject = new JSONObject();
+        System.out.println(userForm);
         if (userService.compareUserPassword(userForm.getUserName(), userForm.getPassword())) {
             jsonObject.put("token", TokenUtils.sign(userForm.getUserName()));
             return jsonObject;

@@ -122,7 +122,6 @@
             "context": "Hao Ye"
           },
           {
-
           }
         ]
       }
@@ -151,7 +150,6 @@
             "status": "OK"
           },
           {
-
           }
         ]
       }
@@ -168,22 +166,23 @@
         "pictureUrl": ""
       },
       "OutputForm": {
-
       }
     },
     "queryCourseOfAdministrator": {
       "Method": "GET",
       "Path": "~/api/course/waiting?administrator={ababa}",
-      "OutputForm": [{
-        "courseName": "course",
-        "teacherName": "teacher",
-        "introduction": "intro",
-        "charge": 10,
-        "tag": "tag",
-        "coursePicture": "url",
-        "privateKeyUrl": "ababa",
-        "status": "OK"
-      }]
+      "OutputForm": [
+        {
+          "courseName": "course",
+          "teacherName": "teacher",
+          "introduction": "intro",
+          "charge": 10,
+          "tag": "tag",
+          "coursePicture": "url",
+          "privateKeyUrl": "ababa",
+          "status": "OK"
+        }
+      ]
     },
     "queryUserLikeUserName": {
       "Method": "GET",
@@ -226,6 +225,207 @@
         "courseName": "course"
       },
       "OutputForm": {
+      }
+    }
+  },
+  "AssignmentPage":{
+    "queryAssignmentByCourseName":{
+      "Method":"GET",
+      "Path":"~/api/course/allAssignment?courseId={courseId}",
+      "OutputForm":[
+        {
+          "id":"aa",
+          "assignmentName": "homework1",
+          "deadline": "date",
+          "status": "notStarted/return/submitted"
+        }
+      ]
+    },
+    "queryAssignmentById":{
+      "Method":"GET",
+      "Path":"~/api/course/assignment?AssignmentId={AssignmentId}",
+      "OutputForm":{
+        "assignmentId":"aa",
+        "courseName": "course",
+        "teacherName": "teacher",
+        "assignmentName": "homework1",
+        "deadline": "date",
+        "description": "Intro",
+        "status": "notStarted/return/submitted",
+        "score":"",
+        "totalGrade": "",
+        "createTime": "date",
+        "updateTime": "date",
+        "additionalResources": [
+          {
+            "resourceName": "",
+            "resourceUrl": ""
+          }
+        ],
+        "answerStatus":"yes/no",
+        "answer": [
+          {
+            "answerName": "",
+            "answerUrl": ""
+          }
+        ]
+      }
+    },
+    "submitAssignment":{
+      "Method":"POST",
+      "Path":"~/api/course/assignment/submitAssignment",
+      "InputForm":{
+        "assignmentId":"aaa",
+        "answerFile": [
+          {
+            "answerUrl": ""
+          }
+        ]
+      },
+      "OutputForm":{
+        "result":"(yes/no)"
+      }
+    },
+    "uploadFile":{
+      "Method":"POST",
+      "Path":"~/api/uploadFile",
+      "InputForm":{
+        "file":"file"
+      },
+      "OutputForm":{
+        "url":"http://"
+      }
+    },
+    "createAssignment":{
+      "Method":"POST",
+      "Path":"~/api/course/createAssignment",
+      "InputForm":{
+        "courseId":"",
+        "assignmentName": "homework1",
+        "deadline": "date",
+        "description": "Intro",
+        "totalGrade": "",
+        "additionalResources": [
+          {
+            "resourceName": "",
+            "resourceUrl": ""
+          }
+        ]
+      },
+      "OutputForm":{
+        "result":"(yes/no)"
+      }
+    }
+  },
+  "Quiz":{
+    "createQuizJson":{
+      "Method":"POST",
+      "Path":"~/api/course/createQuizJson",
+      "InputForm":{
+        "num":"10",
+        "problems":[
+          {
+            "problem":"xxxx",
+            "A":"sdfa",
+            "B":"sss",
+            "C":"ddd",
+            "D":"ddd",
+            "answer":"A/B/C/D"
+          }
+        ]
+      },
+      "OutputForm":{
+        "quizUrl":""
+      }
+    },
+    "createQuiz":{
+      "Method":"POST",
+      "Path":"~/api/course/createQuiz",
+      "InputForm":{
+        "courseId":"",
+        "assignmentName": "homework1",
+        "deadline": "date",
+        "description": "Intro",
+        "totalGrade": "",
+        "additionalResources": {
+          "resourceName": "",
+          "resourceUrl": ""
+        }
+      },
+      "OutputForm":{
+        "result":"(yes/no)"
+      }
+    },
+    "queryQuizByCourseName":{
+      "Method":"GET",
+      "Path":"~/api/course/allQuiz?courseId={courseId}",
+      "OutputForm":[
+        {
+          "Quizid":"aa",
+          "QuizName": "homework1",
+          "deadline": "date",
+          "status": "notStarted/return/submitted",
+          "score":""
+        }
+      ]
+    },
+    "queryQuizById":{
+      "Method":"GET",
+      "Path":"~/api/course/quiz?QuizId={QuizId}",
+      "OutputForm":{
+        "quizId":"aa",
+        "courseName": "course",
+        "teacherName": "teacher",
+        "QuizName": "quiz1",
+        "deadline": "date",
+        "description": "Intro",
+        "status": "notStarted/return/submitted",
+        "score":"",
+        "totalGrade": "",
+        "createTime": "date",
+        "updateTime": "date",
+        "num":"10",
+        "problems":[
+          {
+            "problem":"xxxx",
+            "A":"sdfa",
+            "B":"sss",
+            "C":"ddd",
+            "D":"ddd",
+            "answer":"A/B/C/D"
+          }
+        ]
+      }
+    },
+    "submitQuiz":{
+      "Method":"POST",
+      "Path":"~/api/course/submitQuiz",
+      "InputForm":{
+        "quizId":" ",
+        "answer":[
+          {
+            "choice":"A/B/C/D"
+          }
+        ]
+      },
+      "OutputForm":{
+        "score":""
+      }
+    }
+  },
+  "ThirdParty":{
+    "securityCodeCreate":{
+      "Method":"GET",
+      "Path":"~/api/securityCodeCreate",
+      "OutputForm":{
+        "result":"(yes/no)"
+      }
+    },
+    "securityCodeVerify":{
+      "Method":"GET",
+      "Path":"~/api/securityCodeVerify?code={inputCode}",
+      "OutputForm":{
+        "result":"(yes/no)"
       }
     }
   }

@@ -55,6 +55,9 @@
       <el-button type="primary" @click="">Assignment</el-button>
       <el-button type="primary" @click="">Quiz</el-button>
       <el-button type="primary" @click="">Grade</el-button>
+      <el-button type="primary" @click="videoPage">lessons</el-button>
+      <el-button type="primary" @click="addSection">Add Section</el-button>
+
     </el-row>
   </div>
 </template>
@@ -67,11 +70,15 @@ export default {
   name: 'courseMainPage',
   data() {
     return {
+      courseId: 2,
       courseForm: {
         courseName: "checker",
+        tag: "CS202",
         teacherName: "black",
-        coursePic: "url"
+        coursePic: "url",
+        charge: "0"
       },
+
       infoTable: [{
         info: "empty hello"
       }],
@@ -81,6 +88,44 @@ export default {
           sectionUrl: "url"
         }
       ]
+    }
+  },
+  mounted() {
+    this.fetchCourse()
+  },
+  methods: {
+    fetchCourse() {
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
+      this.$axios.get('http://localhost:8082/api/course', {
+        params: {
+          courseId: this.courseId
+        }
+      }).then(res => {
+        // 拿到结果
+        let result = res.data.result
+        this.courseForm.courseName = result.courseName
+        this.courseForm.tag = result.tag
+        this.courseForm.coursePic = result.coursePicture
+        this.courseForm.teacherName = result.teacherName
+        this.infoTable[0] = result.introduction
+        this.courseForm.charge = result.charge
+        // let message = res.data.msg;
+        // 判断结果
+        if (result) {
+          /*登陆成功*/
+
+          /*跳转页面*/
+        } else {
+          /*打印错误信息*/
+          alert(this.courseId);
+        }
+      })
+    },
+    videoPage() {
+      router.push("/videoPage")
+    },
+    addSection() {
+      router.push("/addSection")
     }
   }
 }

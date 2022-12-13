@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="040d5963-020e-49eb-a09c-285573158850" name="Changes" comment="视频页面实现（注，在token实现完成前不要激活导航守卫，否则将无法前往大多数页面）">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/videoPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/videoPage.vue" afterDir="false" />
+    <list default="true" id="040d5963-020e-49eb-a09c-285573158850" name="Changes" comment="实现报名退出">
+      <change beforePath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/Login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LiveVideo/vue/VUE_HOMEPAGE_LOGIN_REGISTER/src/views/Login.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +37,7 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;aspect.path.notification.shown&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/15807/Downloads/demoJava2&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/15807/Downloads/adapter-source-code&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -81,6 +80,10 @@
       <workItem from="1670379755548" duration="151000" />
       <workItem from="1670380578885" duration="1228000" />
       <workItem from="1670405979495" duration="1653000" />
+      <workItem from="1670410540119" duration="6731000" />
+      <workItem from="1670479202384" duration="620000" />
+      <workItem from="1670573356309" duration="1221000" />
+      <workItem from="1670670755051" duration="11335000" />
     </task>
     <task id="LOCAL-00001" summary="中期答辩前端代码">
       <created>1669724591751</created>
@@ -124,7 +127,63 @@
       <option name="project" value="LOCAL" />
       <updated>1670406256708</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="视频页面实现进度条">
+      <created>1670410827579</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1670410827579</updated>
+    </task>
+    <task id="LOCAL-00008" summary="视频页面实现评论，包括二级评论">
+      <created>1670739992495</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1670739992495</updated>
+    </task>
+    <task id="LOCAL-00009" summary="实现报名退出">
+      <created>1670750941151</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1670750941151</updated>
+    </task>
+    <task id="LOCAL-00010" summary="实现报名退出">
+      <created>1670751379436</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1670751379436</updated>
+    </task>
+    <task id="LOCAL-00011" summary="实现报名退出">
+      <created>1670751758309</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1670751758309</updated>
+    </task>
+    <task id="LOCAL-00012" summary="实现报名退出">
+      <created>1670751828321</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1670751828321</updated>
+    </task>
+    <task id="LOCAL-00013" summary="实现报名退出">
+      <created>1670752031266</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1670752031266</updated>
+    </task>
+    <task id="LOCAL-00014" summary="实现报名退出">
+      <created>1670753951173</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1670753951173</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -149,7 +208,10 @@
     <MESSAGE value="对个人主页面的返回按钮做更新" />
     <MESSAGE value="对用户信息页面更新" />
     <MESSAGE value="视频页面实现（注，在token实现完成前不要激活导航守卫，否则将无法前往大多数页面）" />
-    <option name="LAST_COMMIT_MESSAGE" value="视频页面实现（注，在token实现完成前不要激活导航守卫，否则将无法前往大多数页面）" />
+    <MESSAGE value="视频页面实现进度条" />
+    <MESSAGE value="视频页面实现评论，包括二级评论" />
+    <MESSAGE value="实现报名退出" />
+    <option name="LAST_COMMIT_MESSAGE" value="实现报名退出" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

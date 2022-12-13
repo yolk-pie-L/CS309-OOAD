@@ -12,9 +12,9 @@
       </el-col>
     </el-row>
   </div>
-  <div>
-    <el-pagination background layout="prev, pager, next" :total="1000" class="pagema"/>
-  </div>
+<!--  <div>-->
+<!--    <el-pagination background layout="prev, pager, next" :total="1000" class="pagema"/>-->
+<!--  </div>-->
 
 </template>
 
@@ -27,13 +27,13 @@ export default {
 }
 </script>
 
-<style>
-.pagema{
-  position: absolute;
-  top: 1200px;
-  left: 510px;
-}
-</style>
+<!--<style>-->
+<!--.pagema{-->
+<!--  position: absolute;-->
+<!--  top: 1200px;-->
+<!--  left: 510px;-->
+<!--}-->
+<!--</style>-->
 <style scoped lang="less">
 
 body {

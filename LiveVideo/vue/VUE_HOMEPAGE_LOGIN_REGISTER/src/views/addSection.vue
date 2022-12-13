@@ -1,8 +1,4 @@
 <template>
-  <nav>
-    <router-link to="/studentHome">Home</router-link> |
-    <router-link to="/studentinfoUpdate">student info Update</router-link>
-  </nav>
   <div :xl="6" :lg="7" class="bg-login">
     <!--logo-->
     <!--标题-->
@@ -18,20 +14,18 @@
     <el-row type="flex" class="row-bg card" justify="center" align="bottom">
       <el-col :span="7" class="login-card">
         <!--loginForm-->
-        <el-form :model="infoForm" :rules="rules" ref="loginForm" label-width="21%" class="loginForm">
-          <el-form-item label="Name" prop="teacherName" style="width: 380px">
-            <el-input v-model="infoForm.userName"></el-input>
+        <el-form :model="sectionForm" ref="loginForm" label-width="21%" class="loginForm">
+          <el-form-item label="章节名称" prop="sectionName" style="width: 380px">
+            <el-input v-model="sectionForm.sectionName"></el-input>
           </el-form-item>
-          <el-form-item label="Mail" prop="courseLabel" style="width: 380px">
-            <el-input v-model="infoForm.mail"></el-input>
-          </el-form-item>
-          <el-form-item label="Pic" style="width: 380px">
-            <el-upload
-                action="/"
-                :on-change="handleChange"
-                :auto-upload="false"
-                list-type="picture-card">
-              <i class="el-icon-plus"></i>
+          <el-form-item>
+            <el-upload  class="upload-demo"
+                        drag
+                        multiple
+                        :http-request="upload">
+              <i class="el-icon-upload"></i>
+              <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+              <div class="el-upload__tip" slot="tip">    只能上传video文件，且不超过500kb  </div>
             </el-upload>
           </el-form-item>
           <el-form-item class="btn-ground">
@@ -53,24 +47,29 @@ export default {
   name: "Login",
   data() {
     return {
+      exception: '-', //进度条当前状态
+      videolist: [], // 视频合集
+      progress: 0, // 进度条
+      video: '',  // 保存预览地址
       // 表单信息
-      infoForm: {
-        // 账户数据
-        userName: 'checker',
-        // 密码数据
-        userType: 'Teacher',
-
-        mail: 'example@xx.com',
-
-        photoUrl: 'url',
-      },
-      // 表单验证
-      rules: {
-
+      sectionForm: {
+        sectionName: 'blank'
       },
     };
   },
   methods: {
+    upload(item) {
+      let formData = new FormData();
+      formData.append("file", item.file);
+      axios({
+        url: "/bao",        // 接口
+        method: "post",
+        data: formData,
+        processData: false // 告诉axios不要去处理发送的数据(重要参数)
+      }).then(res => {
+        this.setSrc(res.data.data);   // 返回视频连接地址
+      });
+    },
     handleChange(file, fileList) {
 
       let formdata = new FormData()
@@ -82,24 +81,29 @@ export default {
         console.log(res)
       })
     },
+
+    // beforeUpload (file) {
+    //   // alert(file)
+    //   this.infoForm.append('file', file)
+    //   alert(this.infoForm.file)
+    //   return true
+    // },
     // 提交表单
+
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // 表单验证成功
-          this.$axios.post('http://localhost:8082/api/upload', this.infoForm).then(res => {
+          this.$axios.post('http://localhost:8082/api/upload', this.sectionForm).then(res => {
             // 拿到结果
             let result = JSON.parse(res.data.data);
             let message = res.data.msg;
             // 判断结果
             if (result) {
               /*登陆成功*/
-              Element.Message.success(message);
-              /*跳转页面*/
               router.push('/')
             } else {
-              /*打印错误信息*/
-              Element.Message.error(message);
+
             }
           })
         } else {
@@ -117,15 +121,6 @@ export default {
 </script>
 
 <style scoped>
-.codeImg {
-  /*让验证码图片飘在右边*/
-  float: right;
-  /*设置一些圆角边框*/
-  border-radius: 3px;
-  /*设置宽度*/
-  width: 26%;
-}
-
 .bg-login {
   height: 100%;
   background-size: 200%;

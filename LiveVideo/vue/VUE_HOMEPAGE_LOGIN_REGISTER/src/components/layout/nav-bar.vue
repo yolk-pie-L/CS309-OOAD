@@ -8,156 +8,41 @@
       <div class="menu-expend">
         <i class="el-icon-menu"></i>
       </div>
-      <div class="user_show">
-        <el-image :src="userForm.photoUrl" alt="暂无图片" class="user_pic"></el-image>
+      <div v-if="isLog" class="user_show">
+        <el-image  :src="userForm.photoUrl" class="user_pic"></el-image>
         <el-link type="success" class="user_name" v-text="userForm.userName" @click="into()"></el-link>
       </div>
-      <div class="search_input">
-        <el-input
-            class="search"
-            placeholder="搜点什么"
-            prefix-icon="el-icon-search">
-        </el-input>
-        <el-button round icon="el-icon-search" circle class="el-search" @click="submit"></el-button>
+      <div v-else class="loginRegister">
+        <el-row>
+          <el-button v-if="isNotLog" type="primary" plain round @click="toLogin()">login</el-button>
+          <el-button v-if="isNotLog" type="primary" plain round @click="toRegister()">register</el-button>
+        </el-row>
+      </div>
+      <div class="query">
+        <el-input v-model="queryInfo.course" clearable placeholder="Course"
+                  @clear="getSelectCourse"></el-input>
+        <el-input v-model="queryInfo.teacher" clearable placeholder="Teacher"
+                  @clear="getSelectCourse"></el-input>
+        <el-button slot="append" icon="el-icon-search" @click="getSelectCourse()"></el-button>
       </div>
     </el-header>
   </div>
 
-  <div className="business wrap">
-    <ul className="box clearfix">
+  <div class="business wrap">
+    <ul class="box clearfix">
+      <div v-for="item in classForm">
       <li>
-        <a href="/#/courseMainPage+
-">
-          <h3>Course name</h3>
-          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
-          <div className="word">
-            <h4>Teacher</h4>
-            <i className="border"></i>
-            <p>Introduction</p>
+        <a @click="intoClass(item.id)">
+          <h3 v-text="item.courseName"></h3>
+          <img :src="item.coursePicture" alt="课程"/>
+          <div class="word">
+            <h4 v-text="item.teacherName"></h4>
+            <i class="border"></i>
+            <p v-text="item.introduction"></p>
           </div>
         </a>
       </li>
-      <li>
-        <a href="javascript:">
-          <h3>Course name</h3>
-          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
-          <div className="word">
-            <h4>Teacher</h4>
-            <i className="border"></i>
-            <p>Introduction</p>
-          </div>
-        </a>
-      </li>
-      <li>
-        <a href="javascript:">
-          <h3>Course name</h3>
-          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
-          <div className="word">
-            <h4>Teacher</h4>
-            <i className="border"></i>
-            <p>Introduction</p>
-          </div>
-        </a>
-      </li>
-      <li>
-        <a href="javascript:">
-          <h3>Course name</h3>
-          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
-          <div className="word">
-            <h4>Teacher</h4>
-            <i className="border"></i>
-            <p>Introduction</p>
-          </div>
-        </a>
-      </li>
-      <li>
-        <a href="javascript:">
-          <h3>Course name</h3>
-          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
-          <div className="word">
-            <h4>Teacher</h4>
-            <i className="border"></i>
-            <p>Introduction</p>
-          </div>
-        </a>
-      </li>
-      <li>
-        <a href="javascript:">
-          <h3>Course name</h3>
-          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
-          <div className="word">
-            <h4>Teacher</h4>
-            <i className="border"></i>
-            <p>Introduction</p>
-          </div>
-        </a>
-      </li>
-      <li>
-        <a href="javascript:">
-          <h3>Course name</h3>
-          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
-          <div className="word">
-            <h4>Teacher</h4>
-            <i className="border"></i>
-            <p>Introduction</p>
-          </div>
-        </a>
-      </li>
-      <li>
-        <a href="javascript:">
-          <h3>Course name</h3>
-          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
-          <div className="word">
-            <h4>Teacher</h4>
-            <i className="border"></i>
-            <p>Introduction</p>
-          </div>
-        </a>
-      </li>
-      <li>
-        <a href="javascript:">
-          <h3>Course name</h3>
-          <img src="https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg" alt="课程"/>
-          <div className="word">
-            <h4>Teacher</h4>
-            <i className="border"></i>
-            <p>Introduction</p>
-          </div>
-        </a>
-      </li>
-<!--      <li>-->
-<!--        <a href="javascript:">-->
-<!--          <el-header v-text="classForm.at(0).courseName"  justify="center"></el-header>-->
-<!--          <el-image :src="classForm.at(0).coursePicture" alt="课程" ></el-image>-->
-<!--          <div className="word">-->
-<!--            <el-header v-text="classForm.at(0).teacherName"  justify="center"></el-header>-->
-<!--            <i className="border"></i>-->
-<!--            <el-header v-text="classForm.at(0).introduction"  justify="center"></el-header>-->
-<!--          </div>-->
-<!--        </a>-->
-<!--      </li>-->
-<!--      <li>-->
-<!--        <a href="javascript:">-->
-<!--          <el-header v-text="classForm.at(1).courseName"  justify="center"></el-header>-->
-<!--          <el-image :src="classForm.at(1).coursePicture" alt="课程" ></el-image>-->
-<!--          <div className="word">-->
-<!--            <el-header v-text="classForm.at(1).teacherName"  justify="center"></el-header>-->
-<!--            <i className="border"></i>-->
-<!--            <el-header v-text="classForm.at(1).introduction"  justify="center"></el-header>-->
-<!--          </div>-->
-<!--        </a>-->
-<!--      </li>-->
-<!--      <li>-->
-<!--        <a href="javascript:">-->
-<!--          <el-header v-text="classForm.at(2).courseName"  justify="center"></el-header>-->
-<!--          <el-image :src="classForm.at(2).coursePicture" alt="课程" ></el-image>-->
-<!--          <div className="word">-->
-<!--            <el-header v-text="classForm.at(2).teacherName"  justify="center"></el-header>-->
-<!--            <i className="border"></i>-->
-<!--            <el-header v-text="classForm.at(2).introduction"  justify="center"></el-header>-->
-<!--          </div>-->
-<!--        </a>-->
-<!--      </li>-->
+      </div>
 <!--      <li>-->
 <!--        <a href="javascript:">-->
 <!--          <h3>Course name</h3>-->
@@ -172,6 +57,17 @@
     </ul>
   </div>
 
+  <div class="block">
+    <el-pagination
+        @size-change="fetchCourse"
+        @current-change="handleCurrentChange"
+        :current-page.sync="pageForm.page"
+        :page-size="9"
+        layout="prev, pager, next, jumper"
+        :total="1000">
+    </el-pagination>
+  </div>
+
 </template>
 
 <script>
@@ -183,8 +79,12 @@ export default {
     return {
       bgUrl:'url(https://p0.meituan.net/dpplatform/4ce8553013e2e819c08e6d6ba409bee8473079.jpg)',
       user_pic_src:'url(\'this.userForm.photoUrl\')',
+      pageForm:{
+        page:"1",
+        pageNum:"9",
+      },
       userForm: {
-        userName: "black",
+        userName: "teacher1",
         userType: "Teacher",
         mail: "",
         photoUrl: "https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg",
@@ -192,31 +92,38 @@ export default {
       },
       classForm: [
         {
+          courseId:"aa",
           courseName: "course",
           teacherName: "teacher",
           introduction: "intro",
           coursePicture: "https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg",
           privateKeyUrl: "ababa"
-        }
-      ]
+        },
+      ],
+      queryInfo: {
+        course: '',
+        teacher: ''
+      }
     };
   },
   mounted() {
     this.fetchUser()
-    this.fetchCourseOrigin()
+    this.fetchCourse()
   },
   methods: {
-    fetchCourseOrigin() {
-      this.$axios.get('api/course/success?recordsPerPage={\' + this.Page + \'}&pageNum={\' + this.pageNum + \'}\'').then(res => {
-        let result = JSON.parse(res.data.data);
+    fetchCourse() {
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
+
+      this.$axios.get('http://localhost:8082/api/course/success/all?o=\''+this.pageNum+'&page=\'' + this.currentPage + '&courseName=\''+this.queryInfo.course+'&teacherName=\'' + this.queryInfo.teacher + '\'}\'').then(res => {
+        let result = res.data.data;
         let message = res.data.msg;
-        this.classForm = result
-
+        this.classForm.id = result.id
+        this.classForm.courseName = result.courseName
+        this.classForm.teacherName = result.teacherName
+        this.classForm.introduction = result.introduction
+        this.classForm.coursePicture = result.coursePicture
+        this.classForm.privateKeyUrl = result.privateKeyUrl
         if (result) {
-          /*登陆成功*/
-
-          /*跳转页面*/
-          router.push('/')
         } else {
           /*打印错误信息*/
           alert(message);
@@ -224,9 +131,11 @@ export default {
       })
     },
     fetchUser() {
-      this.$axios.get('api/user?userName={' + this.username + '}').then(res => {
+      console.log(localStorage.getItem('token'))
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
+      this.$axios.get('http://localhost:8082/api/user').then(res => {
         // 拿到结果
-        let result = JSON.parse(res.data.data);
+        let result = res.data;
         let message = res.data.msg;
         this.userName = result.userName
         this.userType = result.userType
@@ -247,8 +156,28 @@ export default {
     },
     into(){
       router.push('/studentHome');
-    }
+    },
+    toLogin(){
+      router.push('/login');
+    },
+    toRegister(){
+      router.push('/register');
+    },
+    intoClass(id){
+      localStorage.setItem("courseId",id)
+      router.push({path:'/courseMainPage'})
+    },
   },
+  computed:{
+    isLog(){
+      let token = localStorage.getItem('token');
+      return !(token === null || token === '');
+    },
+    isNotLog(){
+      let token = localStorage.getItem('token');
+      return token === null || token === '';
+    }
+  }
 }
 </script>
 
@@ -268,6 +197,18 @@ export default {
 }
 </style>
 
+<style>
+.block{
+  position: absolute;
+  top: 1200px;
+  left: 510px;
+}
+.query{
+  position: absolute;
+  top: 300px;
+  left: 510px;
+}
+</style>
 
 <style scoped lang="less">
 

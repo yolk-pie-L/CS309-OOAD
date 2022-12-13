@@ -118,7 +118,7 @@ export default {
       },
       // 表单验证
       rules: {
-        person: [
+        userType: [
           {required: true, message: '请输入角色', trigger: 'blur'}
         ],
         mail: [

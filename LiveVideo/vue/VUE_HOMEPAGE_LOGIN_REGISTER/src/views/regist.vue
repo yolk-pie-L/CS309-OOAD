@@ -20,7 +20,7 @@
         <!--loginForm-->
         <el-form :model="loginForm" :rules="rules" ref="loginForm" label-width="21%" class="loginForm">
           <el-form-item label="角色" prop="person" style="width: 380px">
-            <el-select v-model="loginForm.person">
+            <el-select v-model="loginForm.userType">
               <el-option v-for="item in options"
                          :key="item.value"
                          :label="item.label"
@@ -86,7 +86,7 @@ export default {
       ],
       // 表单信息
       loginForm: {
-        person: '',
+        userType: '',
         // 邮箱数据
         mail: '',
         // 账户数据
@@ -138,8 +138,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // 表单验证成功
-          alert(this.loginForm.person)
-          this.$axios.post('http://localhost:8082/user/checkLogin', this.loginForm).then(res => {
+          this.$axios.post('http://localhost:8082/api/register ', this.loginForm).then(res => {
             // 拿到结果
             let result = JSON.parse(res.data.data);
             let message = res.data.msg;
@@ -148,7 +147,7 @@ export default {
               /*登陆成功*/
               Element.Message.success(message);
               /*跳转页面*/
-              router.push('/')
+              router.push('/login')
             } else {
               /*打印错误信息*/
               Element.Message.error(message);

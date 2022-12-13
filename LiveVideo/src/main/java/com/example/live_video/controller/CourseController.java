@@ -1,6 +1,9 @@
 package com.example.live_video.controller;
 
 import com.example.live_video.dto.CourseDto;
+import com.example.live_video.dto.JSONObject;
+import com.example.live_video.dto.JoinForm;
+import com.example.live_video.dto.UserForm;
 import com.example.live_video.entity.Course;
 import com.example.live_video.entity.CourseStatus;
 import com.example.live_video.entity.UserType;
@@ -17,6 +20,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 @ResponseResult
@@ -95,15 +99,25 @@ public class CourseController {
         return true;
     }
 
+//    @PostMapping("enroll")
+//    @CrossOrigin
+//    public Boolean enroll(@RequestParam String studentName,
+//                          @RequestParam Long courseId) throws Exception {
+//        return studentService.enrollCourse(courseId, studentName);
+//    }
     @PostMapping("enroll")
-    public Boolean enroll(@RequestParam String studentName,
-                          @RequestParam Long courseId) throws Exception {
+    public Boolean enroll(@RequestBody JoinForm joinForm) throws Exception {
+        Long courseId = joinForm.getCourseId();
+        String studentName = joinForm.getStudentName();
+        System.out.println(joinForm);
         return studentService.enrollCourse(courseId, studentName);
     }
 
     @PostMapping("exit")
-    public Boolean exit(@RequestParam String studentName,
-                        @RequestParam Long courseId) throws Exception {
+    public Boolean exit(@RequestBody JoinForm joinForm) throws Exception {
+        Long courseId = joinForm.getCourseId();
+        String studentName = joinForm.getStudentName();
+        System.out.println(joinForm);
         return studentService.exitCourse(courseId, studentName);
     }
 }

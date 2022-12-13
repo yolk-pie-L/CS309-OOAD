@@ -13,6 +13,8 @@
     </el-row>
     <el-row  type="flex" justify="space-around" align="middle">
       <el-button type="primary" @click="this.$router.push('/courseDetailPage')">课程信息</el-button>
+      <el-button type="primary" @click="joinCourse">报名课程</el-button>
+      <el-button type="primary" @click="leave">退课</el-button>
     </el-row>
   </div>
 </template>
@@ -26,10 +28,69 @@ export default {
   data() {
     return {
       courseForm: {
-        courseName: "checker",
-        teacherName: "black",
+        courseName: "DSAA",
+        teacherName: "李开",
         coursePic: "url"
+      },
+      joinForm: {
+        studentName: 'black',
+        courseId: '123'
       }
+    }
+  },
+  mounted() {
+    this.fetchData()
+  },
+  methods: {
+    fetchData() {
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
+      this.$axios.get('http://localhost:8082/api/user').then(res => {
+        // 拿到结果
+
+        // let message = res.data.msg;
+        // 判断结果
+        if (res.data.result.userName) {
+          /*登陆成功*/
+          this.joinForm.studentName = res.data.result.userName
+          /*跳转页面*/
+        } else {
+          /*打印错误信息*/
+          alert(this.joinForm.studentName);
+        }
+      })
+    },
+    joinCourse() {
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
+      this.$axios.post('http://localhost:8082/api/course/enroll', this.joinForm).then(res => {
+        // 拿到结果
+        let result = res.data.code
+        let message = res.data;
+        // 判断结果
+        if (result === 200) {
+          /*跳转页面*/
+          router.push('/')
+        } else {
+          alert(message)
+        }
+      })
+    },
+    leave() {
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
+      this.$axios.post('http://localhost:8082/api/course/exit', this.joinForm).then(res => {
+        // 拿到结果
+        let code = res.data.code;
+        let message = res.data.message;
+        // 判断结果
+        if (code === 200) {
+          /*登陆成功*/
+
+          /*跳转页面*/
+          router.push('/')
+        } else {
+          /*打印错误信息*/
+          alert(message)
+        }
+      })
     }
   }
 }
