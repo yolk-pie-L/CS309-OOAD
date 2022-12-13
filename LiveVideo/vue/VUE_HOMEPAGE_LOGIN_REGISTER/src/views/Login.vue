@@ -28,7 +28,7 @@
           <el-form-item label="验证码" prop="code" style="width: 380px">
             <el-input v-model="loginForm.code" class="code-input" style="width: 70%;float: left"></el-input>
             <!--验证码图片-->
-            <el-image :src="codeImg" class="codeImg"></el-image>
+            <img src="http://localhost:8082/api/captcha" width="130px" height="48px"  alt="no code"/>
           </el-form-item>
           <el-form-item label="记住密码" prop="remember">
             <el-switch v-model="loginForm.remember"></el-switch>

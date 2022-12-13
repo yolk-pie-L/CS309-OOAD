@@ -101,19 +101,18 @@ public class CourseController {
         return true;
     }
 
-//    @PostMapping("enroll")
-//    @CrossOrigin
-//    public Boolean enroll(@RequestParam String studentName,
-//                          @RequestParam Long courseId) throws Exception {
-//        return studentService.enrollCourse(courseId, studentName);
-//    }
-    @PostMapping("enroll")
-    public Boolean enroll(@RequestBody JoinForm joinForm) throws Exception {
-        Long courseId = joinForm.getCourseId();
-        String studentName = joinForm.getStudentName();
-        System.out.println(joinForm);
+    @PostMapping("/enroll")
+    public Boolean enroll(@RequestParam(value = "studentName") String studentName,
+                          @RequestParam(value = "courseId") Long courseId) throws Exception {
         return studentService.enrollCourse(courseId, studentName);
     }
+//    @PostMapping("enroll")
+//    public Boolean enroll(@RequestBody JoinForm joinForm) throws Exception {
+//        Long courseId = joinForm.getCourseId();
+//        String studentName = joinForm.getStudentName();
+//        System.out.println(joinForm);
+//        return studentService.enrollCourse(courseId, studentName);
+//    }
 
     @PostMapping("exit")
     public Boolean exit(@RequestBody JoinForm joinForm) throws Exception {

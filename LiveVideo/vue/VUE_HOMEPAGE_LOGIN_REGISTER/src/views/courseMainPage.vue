@@ -35,7 +35,7 @@ export default {
       },
       joinForm: {
         studentName: 'black',
-        courseId: '123'
+        courseId: '2'
       }
     }
   },
