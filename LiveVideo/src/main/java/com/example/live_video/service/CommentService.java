@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CommentService extends IService<Comment> {
 
-    List<Comment>   getCommentList(Long sectionId);
+    List<Comment> getCommentList(Long sectionId);
 
     boolean saveComment(Comment comment);
 
