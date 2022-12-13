@@ -99,12 +99,6 @@ public class CourseController {
         return true;
     }
 
-//    @PostMapping("enroll")
-//    @CrossOrigin
-//    public Boolean enroll(@RequestParam String studentName,
-//                          @RequestParam Long courseId) throws Exception {
-//        return studentService.enrollCourse(courseId, studentName);
-//    }
     @PostMapping("enroll")
     public Boolean enroll(@RequestBody JoinForm joinForm) throws Exception {
         Long courseId = joinForm.getCourseId();

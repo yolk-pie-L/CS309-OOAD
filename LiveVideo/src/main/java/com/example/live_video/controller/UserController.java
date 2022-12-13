@@ -9,12 +9,15 @@ import com.example.live_video.exception.MyException;
 import com.example.live_video.service.UserService;
 import com.example.live_video.util.TokenUtils;
 import com.example.live_video.wrapper.ResponseResult;
+import com.wf.captcha.utils.CaptchaUtil;
+import org.apache.catalina.connector.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -46,9 +49,13 @@ public class UserController {
     }
 
     @PostMapping("/api/login")
-    public JSONObject loginUser(@RequestBody UserForm userForm) throws Exception {
+    public JSONObject loginUser(@RequestBody UserForm userForm, HttpServletRequest request) throws Exception {
         JSONObject jsonObject = new JSONObject();
         System.out.println(userForm);
+        if (!CaptchaUtil.ver(userForm.getCode(), request)) {
+            CaptchaUtil.clear(request);  // 清除session中的验证码
+            throw new MyException("验证码不正确");
+        }
         if (userService.compareUserPassword(userForm.getUserName(), userForm.getPassword())) {
             jsonObject.put("token", TokenUtils.sign(userForm.getUserName()));
             return jsonObject;
