@@ -33,13 +33,7 @@ public class SectionServiceImpl extends ServiceImpl<SectionMapper, Section> impl
     String BASE_DIR;
 
     @Override
-    public Boolean createSection(Section section) throws SQLSectionnameConflictException {
-        QueryWrapper<Section> sectionQueryWrapper = new QueryWrapper<>();
-        sectionQueryWrapper.eq("section_name", section.getSectionName());
-        sectionQueryWrapper.eq("course_id", section.getCourseId());
-        if(sectionMapper.exists(sectionQueryWrapper)){
-            throw new SQLSectionnameConflictException();
-        }
+    public Boolean createSection(Section section) {
         return sectionMapper.insert(section) == 1;
     }
 
@@ -53,7 +47,6 @@ public class SectionServiceImpl extends ServiceImpl<SectionMapper, Section> impl
 
     @Override
     public Boolean removeSection(Long sectionId) {
-        // FIXME: 无法删除？
         return sectionMapper.deleteById(sectionId) == 1;
     }
 
@@ -70,9 +63,16 @@ public class SectionServiceImpl extends ServiceImpl<SectionMapper, Section> impl
     }
 
     @Override
-    public Long getId(Long courseId, String secName) {
-        // TODO: please find id of section by courseId and secName. If it does not have one section, then return -1.
-        return Long.valueOf(-1);
+    public Long getSectionId(Long courseId, String sectionName) {
+        QueryWrapper<Section> sectionQueryWrapper = new QueryWrapper<>();
+        sectionQueryWrapper.eq("course_id", courseId);
+        sectionQueryWrapper.eq("section_name", sectionName);
+        Section section = sectionMapper.selectOne(sectionQueryWrapper);
+        if(section == null){
+            return -1L;
+        }else{
+            return section.getId();
+        }
     }
 
     @Override

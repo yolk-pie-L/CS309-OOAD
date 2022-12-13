@@ -2,7 +2,6 @@ package com.example.live_video.controller;
 
 import com.example.live_video.util.MergeInfo;
 import com.example.live_video.wrapper.NonStaticResourceHttpRequestHandler;
-import com.example.live_video.entity.Course;
 import com.example.live_video.entity.Section;
 import com.example.live_video.exception.MyException;
 import com.example.live_video.service.CourseService;
@@ -10,7 +9,6 @@ import com.example.live_video.service.SectionService;
 import com.example.live_video.util.RandomUtils;
 import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
-import org.apache.catalina.core.ApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.FileSystemUtils;
@@ -18,11 +16,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -93,10 +89,10 @@ public class VideoController {
         }
         file.transferTo(filePath.getCanonicalFile());
         Section section = new Section(secName, courseId, filePath.getPath());
-        Long id = sectionService.getId(courseId, secName);
+        Long id = sectionService.getSectionId(courseId, secName);
         if (id == -1) {
             sectionService.createSection(section);
-            id = sectionService.getId(courseId, secName);
+            id = section.getId();
         } else {
             throw new MyException("视频已存在，请先删除先前视频");
         }

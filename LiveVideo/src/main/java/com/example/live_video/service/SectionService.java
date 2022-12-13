@@ -5,13 +5,12 @@ import com.example.live_video.entity.Section;
 import com.example.live_video.exception.MyException;
 import com.example.live_video.exception.SQLSectionnameConflictException;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
 public interface SectionService extends IService<Section> {
 
-    public Boolean createSection(Section section) throws SQLSectionnameConflictException;
+    public Boolean createSection(Section section);
 
     public Boolean updateSection(Section section);
 
@@ -21,7 +20,7 @@ public interface SectionService extends IService<Section> {
 
     public Section getOneSection(Long sectionId);
 
-    Long getId(Long courseId, String secName);
+    Long getSectionId(Long courseId, String sectionName);
 
     String uploadSlice(byte[] bytes, String hash, String filename, Integer seq, String type) throws IOException;
 

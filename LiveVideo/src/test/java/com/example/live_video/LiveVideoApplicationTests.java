@@ -2,6 +2,7 @@ package com.example.live_video;
 
 import com.example.live_video.entity.*;
 import com.example.live_video.mapper.*;
+import com.example.live_video.service.SectionService;
 import org.junit.jupiter.api.Test;
 import org.mockito.internal.matchers.Not;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ class LiveVideoApplicationTests {
 
     @Autowired
     AssignmentMapper assignmentMapper;
+
+    @Autowired
+    SectionService sectionService;
 
     @Test
     void contextLoads() {
@@ -116,4 +120,8 @@ class LiveVideoApplicationTests {
         noticeMapper.insert(n6);
     }
 
+    @Test
+    void singleMethodTest(){
+        sectionService.removeSection(1L);
+    }
 }

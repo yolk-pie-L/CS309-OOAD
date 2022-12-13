@@ -15,7 +15,7 @@ public class AdminController {
     public Boolean updatePrivilege(@RequestParam String administrator,
                                    @RequestParam String userName,
                                    @RequestParam String privilegeType) {
-        //TODO: Stop it until the AdminService has been completed
+        // TODO: adminService Completed
         return null;
     }
 }
