@@ -29,6 +29,9 @@ public class Section {
     @TableField(value = "video_url", updateStrategy = FieldStrategy.NOT_EMPTY)
     private String videoUrl;
 
+    @TableField(value = "grade", updateStrategy = FieldStrategy.NOT_EMPTY)
+    private int grade;
+
     @TableField(value = "create_time", insertStrategy = FieldStrategy.NOT_EMPTY)
     private Timestamp createTime;
 
@@ -59,9 +62,10 @@ public class Section {
      * @param courseId
      * @param videoUrl
      */
-    public Section(String sectionName, Long courseId, String videoUrl) {
+    public Section(String sectionName, Long courseId, String videoUrl, int grade) {
         this.sectionName = sectionName;
         this.courseId = courseId;
         this.videoUrl = videoUrl;
+        this.grade = grade;
     }
 }

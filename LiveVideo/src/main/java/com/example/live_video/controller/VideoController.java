@@ -88,7 +88,8 @@ public class VideoController {
             filePath.getParentFile().mkdirs();
         }
         file.transferTo(filePath.getCanonicalFile());
-        Section section = new Section(secName, courseId, filePath.getPath());
+        Section section = new Section(secName, courseId, filePath.getPath(), 0);
+        // FIXME: set section grade
         Long id = sectionService.getSectionId(courseId, secName);
         if (id == -1) {
             sectionService.createSection(section);

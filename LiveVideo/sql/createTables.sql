@@ -94,6 +94,7 @@ CREATE TABLE section
     section_name varchar(20) not null,
     course_id    int         not null,
     video_url    varchar(50),
+    grade        int,
     create_time  timestamp   not null default CURRENT_TIMESTAMP,
     update_time  timestamp   null     default null on update CURRENT_TIMESTAMP,
     is_delete    int                  default 0,
@@ -181,7 +182,35 @@ CREATE TABLE stu_section
 (
     user_id    int not null,
     section_id int not null,
-    rate       int not null default 0,
+    grade      int not null default 0,
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (section_id) REFERENCES section (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+DROP TRIGGER if exists tri_insert_section;
+
+DELIMITER $
+CREATE TRIGGER tri_insert_section
+    AFTER
+        INSERT
+    ON section
+    FOR EACH ROW
+BEGIN
+    INSERT INTO stu_section SELECT user_id, NEW.id, 0 FROM stu_course WHERE NEW.course_id = stu_course.course_id;
+END$
+DELIMITER ;
+
+DELIMITER $
+CREATE TRIGGER tri_enroll_course
+    AFTER
+        INSERT
+    ON stu_course
+    FOR EACH ROW
+BEGIN
+    INSERT INTO stu_section
+    SELECT NEW.user_id, section.id, 0
+    FROM stu_course
+             JOIN section ON section.course_id = stu_course.course_id
+    WHERE section.course_id = NEW.course_id AND stu_course.user_id = NEW.user_id;
+END$
+DELIMITER ;

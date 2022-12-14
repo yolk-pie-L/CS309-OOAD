@@ -23,4 +23,8 @@ public class RandomUtils {
     public static void main(String[] args) {
         System.out.println(VID(10));
     }
+
+    public static String getVerificationCode(){
+        return VID(6);
+    }
 }

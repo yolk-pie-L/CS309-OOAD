@@ -1,6 +1,7 @@
 package com.example.live_video.mapper;
 
 import com.example.live_video.entity.Course;
+import com.example.live_video.entity.User;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -19,6 +20,10 @@ public interface StudentMapper {
             "WHERE user_id = #{userId}")
     public List<Course> getEnrolledCourseList(Long userId);
 
+    @Select("SELECT mail FROM user JOIN stu_course on user.id = stu_course.user_id " +
+            "WHERE course_id = #{courseId} AND user.is_delete = 0")
+    public String[] getEnrolledCourseStudentEmailList(Long courseId);
+
     @Update("UPDATE stu_assign SET grade = #{grade} WHERE user_id = #{studentId} AND assign_id = #{assignId}")
     public void setStudentAssignGrade(Long studentId, Long assignId, int grade);
 
@@ -33,4 +38,10 @@ public interface StudentMapper {
 
     @Select("SELECT grade FROM stu_assign WHERE assign_id = #{assignId} AND user_id = #{studentId}")
     public int getStudentAssignGrade(Long assignId, Long studentId);
+
+    @Update("UPDATE stu_section SET grade = #{grade} WHERE user_id = #{studentId} AND section_id = #{sectionId}")
+    public void setStudentSectionProgress(long studentId, long sectionId, double grade);
+
+    @Select("SELECT user.* FROM stu_course JOIN user on user.id = stu_course.user_id WHERE course_id = #{courseId} AND user.is_delete = 0")
+    public List<User> getStudentListOfOneCourse(long courseId);
 }

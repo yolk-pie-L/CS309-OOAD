@@ -1,14 +1,26 @@
 server:
   port: 8082
-
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/LiveVideo?serverTimeZone=GMT%2b8
-#    url: jdbc:mysql://localhost:3306/test_db?serverTimeZone=GMT%2b8
+    #    url: jdbc:mysql://localhost:3306/test_db?serverTimeZone=GMT%2b8
     username: root
-    password: 123456
-#    password: ??????
+    #    password: 123456
+    password: ??????
+  mail:
+    host: smtp.163.com
+    username: livevideo2022@163.com
+    password: WAOIDFQQGHOMLJGT
+    port: 587
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+            required: false
+        debug: true
 
   servlet:
     multipart:
@@ -17,3 +29,5 @@ spring:
 
 src:
   path: src/main/resources/static/video/
+
+
