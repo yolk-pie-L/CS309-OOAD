@@ -30,7 +30,9 @@ public class AlipayConfig implements Serializable {
     private String charset;
     //支付宝网关
     private String gatewayUrl;
-    /** 格式 */
+    /**
+     * 格式
+     */
     private String formate = "json";
     private String log_path;
 }
