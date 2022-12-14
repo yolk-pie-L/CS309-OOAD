@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest
 @Transactional
 @Rollback
@@ -86,13 +88,6 @@ class SectionServiceTest {
         boolean flag = false;
         flag = sectionService.createSection(section5);
         assert flag;
-        flag = false;
-        try {
-            sectionService.createSection(section5);
-        }catch (SQLSectionnameConflictException e){
-            flag = true;
-        }
-        assert flag;
         sectionMapper.deleteById(section5);
     }
 
@@ -130,5 +125,12 @@ class SectionServiceTest {
         Section s = sectionService.getOneSection(origin.getId());
         assert s.getVideoUrl().equals(origin.getVideoUrl());
         assert s.getId().equals(origin.getId());
+    }
+
+    @Test
+    void getSectionId() {
+        Section section = allSections.get(0);
+        Long id = sectionService.getSectionId(section.getCourseId(), section.getSectionName());
+        assertEquals(section.getId(), id);
     }
 }

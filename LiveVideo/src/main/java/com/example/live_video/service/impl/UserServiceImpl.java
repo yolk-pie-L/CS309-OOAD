@@ -2,6 +2,7 @@ package com.example.live_video.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.live_video.entity.AdminRight;
 import com.example.live_video.entity.User;
 import com.example.live_video.entity.UserType;
 import com.example.live_video.exception.MyException;
@@ -36,6 +37,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         // 如果不存在该用户，则顺利执行插入
         System.out.println(user);
+        if(user.getUserType().equals(UserType.Administrator)){
+            user.setAdminRight(AdminRight.SuperAdmin);
+        }
         int res = userMapper.insert(user);
         return res == 1;
     }

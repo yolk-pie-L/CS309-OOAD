@@ -6,7 +6,6 @@ import com.example.live_video.mapper.UserMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.internal.matchers.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
@@ -14,8 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @Rollback
@@ -64,7 +61,7 @@ class NoticeServiceTest {
         noticeList.add(n1);
         noticeList.add(n2);
         noticeList.add(n3);
-        noticeList.forEach(n -> noticeService.createNotice(n));
+        noticeList.forEach(n -> noticeService.createNotice(n, false));
         List<Notice> notices1 = noticeService.getNoticeListOfCourse(course.getId());
         List<Notice> notices2 = noticeService.getNoticeListOfCourse(course1.getId());
         assert notices1.size() == 2;
