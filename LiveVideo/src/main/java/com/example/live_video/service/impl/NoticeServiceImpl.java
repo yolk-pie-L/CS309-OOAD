@@ -1,6 +1,5 @@
 package com.example.live_video.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.live_video.entity.Notice;
 import com.example.live_video.mapper.CourseMapper;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -23,7 +21,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
     CourseMapper courseMapper;
 
     @Override
-    public boolean createNotice(Notice notice) {
+    public boolean createNotice(Notice notice, boolean sendEmail) {
         return noticeMapper.insert(notice) == 1;
     }
 

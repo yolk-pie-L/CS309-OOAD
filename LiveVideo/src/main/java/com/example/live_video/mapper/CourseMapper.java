@@ -109,7 +109,7 @@ public interface CourseMapper extends BaseMapper<Course> {
     public List<Course> getFailedCourseListOfTeacher(int limit, int offset, String teacherName);
 
     @Select("SELECT * FROM course\n" +
-            "WHERE course_name = #{courseName} \n"+
+            "WHERE course_name = #{courseName} \n" +
             "  AND status = 'APPROVED'\n" +
             "  AND course.is_delete = 0\n" +
             "LIMIT #{limit} OFFSET #{offset}")

@@ -1,7 +1,7 @@
 package com.example.live_video.controller;
 
+import com.example.live_video.util.MergeInfo;
 import com.example.live_video.wrapper.NonStaticResourceHttpRequestHandler;
-import com.example.live_video.entity.Course;
 import com.example.live_video.entity.Section;
 import com.example.live_video.exception.MyException;
 import com.example.live_video.service.CourseService;
@@ -10,6 +10,8 @@ import com.example.live_video.util.RandomUtils;
 import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,18 +25,20 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static com.example.live_video.wrapper.NonStaticResourceHttpRequestHandler.ATTR_FILE;
 
 @ResponseResult
 @RestController
 @PassToken
-@RequestMapping("/api/video")
+@RequestMapping("/api/section")
 public class VideoController {
 
-    private final String defaultPath = "src/main/resources/static/video/";
+    @Value("${src.path}")
+    private String defaultPath;
 
-    private final String[] extList = new String[]{".mp4", ".avi", ".mkv", ".wmv"};
+    private final String[] extList = new String[]{"mp4", "avi", "mkv", "wmv"};
 
     @Autowired
     private NonStaticResourceHttpRequestHandler requestHandler;
@@ -67,29 +71,59 @@ public class VideoController {
     }
 
     @PostMapping("/upload")
-    public Boolean saveVideo(@RequestParam MultipartFile file,
+    public Section saveVideo(@RequestParam MultipartFile file,
                              @RequestParam Long courseId,
                              @RequestParam String secName) throws Exception {
         // 获取后缀名
-        Course course = courseService.getOneCourse(courseId);
-        String fileExt = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1).toLowerCase();
+        String fileExt = Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf(".")+1).toLowerCase();
         if (!Arrays.asList(extList).contains(fileExt)) {
             throw new MyException("视频格式不正确");
         }
 
-        String savePath = defaultPath + '/';
-        String videoName = RandomUtils.VID(10) + fileExt;
-        File filePath = new File(savePath, videoName);
+        String videoName = RandomUtils.VID(10) + "." + fileExt;
+        System.out.println(defaultPath);
+        File filePath = new File(defaultPath, videoName);
+        System.out.println(filePath.getCanonicalPath());
         if (!filePath.getParentFile().exists()) {
             filePath.getParentFile().mkdirs();
         }
-        Section section = new Section(secName, course.getCourseName(), course.getTeacherName(), filePath.getPath());
-        sectionService.createSection(section);
-        return true;
+        file.transferTo(filePath.getCanonicalFile());
+        Section section = new Section(secName, courseId, filePath.getPath());
+        Long id = sectionService.getSectionId(courseId, secName);
+        if (id == -1) {
+            sectionService.createSection(section);
+            id = section.getId();
+        } else {
+            throw new MyException("视频已存在，请先删除先前视频");
+        }
+        return sectionService.getOneSection(id);
     }
 
-    @PostMapping("remove/{sectionId}")
+    @PostMapping("/upload2")
+    public String uploadSlice(@RequestParam(value = "file") MultipartFile file,
+                                          @RequestParam(value = "hash") String hash,
+                                          @RequestParam(value = "filename") String filename,
+                                          @RequestParam(value = "seq") Integer seq,
+                                          @RequestParam(value = "type") String type) throws Exception {
+        return sectionService.uploadSlice(file.getBytes(), hash, filename, seq, type);
+    }
+
+    @PostMapping("/merge")
+    public String merge(@RequestBody MergeInfo mergeInfo) throws Exception {
+        if (mergeInfo!=null) {
+            String filename = mergeInfo.getFilename();
+            String type = mergeInfo.getType();
+            String hash = mergeInfo.getHash();
+            return sectionService.uploadMerge(filename, type, hash);
+        }
+        throw new MyException("文件合并失败");
+    }
+
+    @PostMapping("/remove/{sectionId}")
     public Boolean remove(@PathVariable Long sectionId) {
+        Section section = sectionService.getOneSection(sectionId);
+        File filePath = new File(section.getVideoUrl());
+        FileSystemUtils.deleteRecursively(filePath);
         sectionService.removeSection(sectionId);
         return true;
     }

@@ -11,6 +11,8 @@ import com.example.live_video.service.CourseService;
 import com.example.live_video.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
 import java.util.List;
 
 @Service
@@ -91,12 +93,8 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
 
     @Override
     public Course getOneCourse(Long courseId) {
-        Course course = courseMapper.selectById(courseId);
-        String teacherName = userMapper.selectById(course.getTeacherId()).getUserName();
-        course.setTeacherName(teacherName);
         return courseMapper.selectById(courseId);
     }
-
 
     @Override
     public String getCoursePrivateKeyUrl(String teacherName, String courseName) {

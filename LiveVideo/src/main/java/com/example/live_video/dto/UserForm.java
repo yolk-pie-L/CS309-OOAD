@@ -29,6 +29,8 @@ public class UserForm {
 
     private Long account;
 
+    private String code;
+
     public boolean checkPasswordEquals(){
         return this.password.equals(this.repeatPassword);
     }
@@ -47,6 +49,7 @@ public class UserForm {
                 ", password='" + password + '\'' +
                 ", repeatPassword='" + repeatPassword + '\'' +
                 ", mail='" + mail + '\'' +
+                ", code='" + code + '\'' +
                 ", userType='" + userType + '\'' +
                 '}';
     }

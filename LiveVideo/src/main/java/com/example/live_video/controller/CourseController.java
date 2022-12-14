@@ -39,13 +39,11 @@ public class CourseController {
     private StudentService studentService;
 
     @GetMapping("/{courseId}")
-    @CrossOrigin
     CourseVo getCourse(@PathVariable int courseId) {
         return CourseVo.parse(courseService.getOneCourse((long) courseId));
     }
 
     @GetMapping("/success/all")
-    @CrossOrigin
     List<CourseVo> getAllSuccessCourseByTeacher(@RequestParam int o,
                                                 @RequestParam int page,
                                                 @RequestParam(required = false) String courseName,
@@ -101,18 +99,13 @@ public class CourseController {
         return true;
     }
 
-    @PostMapping("/enroll")
-    public Boolean enroll(@RequestParam(value = "studentName") String studentName,
-                          @RequestParam(value = "courseId") Long courseId) throws Exception {
+    @PostMapping("enroll")
+    public Boolean enroll(@RequestBody JoinForm joinForm) throws Exception {
+        Long courseId = joinForm.getCourseId();
+        String studentName = joinForm.getStudentName();
+        System.out.println(joinForm);
         return studentService.enrollCourse(courseId, studentName);
     }
-//    @PostMapping("enroll")
-//    public Boolean enroll(@RequestBody JoinForm joinForm) throws Exception {
-//        Long courseId = joinForm.getCourseId();
-//        String studentName = joinForm.getStudentName();
-//        System.out.println(joinForm);
-//        return studentService.enrollCourse(courseId, studentName);
-//    }
 
     @PostMapping("exit")
     public Boolean exit(@RequestBody JoinForm joinForm) throws Exception {
