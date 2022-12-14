@@ -30,9 +30,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private MailService mailService;
-
 
     @GetMapping("/")
     public void index() {
@@ -46,9 +43,8 @@ public class UserController {
     public Boolean registerUser(@RequestBody @Valid UserForm userForm, BindingResult bindingResult) throws Exception {
         if (!userForm.getPassword().equals(userForm.getRepeatPassword()))
             throw new MyException("密码和重复密码不一致");
-        String verificationCode = RandomUtils.getVerificationCode();
-        mailService.sendTextMailMessage(new String[]{userForm.getMail()}, "Verify Your Mail", verificationCode);
-        // FIXME: compare the verification code in the userForm and verification code here，比较前端传入的验证码和此处的验证码是否相同
+        if (!CaptchaController.verificationCode.equals(userForm.getCode()))
+            throw new MyException("邮箱验证码不一致");
         if (bindingResult.hasErrors()) {
             List<ObjectError> list = bindingResult.getAllErrors();
             throw new MyException(list.get(0).getDefaultMessage());

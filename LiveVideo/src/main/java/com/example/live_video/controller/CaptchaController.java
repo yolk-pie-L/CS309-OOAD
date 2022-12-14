@@ -1,9 +1,15 @@
 package com.example.live_video.controller;
 
+import com.example.live_video.exception.MyException;
+import com.example.live_video.service.MailService;
+import com.example.live_video.util.RandomUtils;
 import com.example.live_video.wrapper.PassToken;
 import com.wf.captcha.utils.CaptchaUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,8 +18,16 @@ import javax.servlet.http.HttpServletResponse;
 @PassToken
 public class CaptchaController {
 
+    public static String verificationCode;
+    @Autowired
+    private MailService mailService;
     @RequestMapping("/api/captcha")
     public void captcha(HttpServletRequest request, HttpServletResponse response) throws Exception {
         CaptchaUtil.out(request, response);
+    }
+
+    @PostMapping("/api/mail")
+    public void mail(@RequestParam String mail) throws MyException {
+        mailService.sendTextMailMessage(new String[]{mail}, "Verify Your Mail", verificationCode = RandomUtils.getVerificationCode());
     }
 }
