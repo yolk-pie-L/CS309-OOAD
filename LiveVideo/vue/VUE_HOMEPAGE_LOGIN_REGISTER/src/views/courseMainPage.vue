@@ -12,7 +12,7 @@
       </el-col>
     </el-row>
     <el-row  type="flex" justify="space-around" align="middle">
-      <el-button type="primary" @click="this.$router.push('/courseDetailPage')">课程信息</el-button>
+      <el-button type="primary" @click="detailed">课程信息</el-button>
       <el-button type="primary" @click="joinCourse">报名课程</el-button>
       <el-button type="primary" @click="leave">退课</el-button>
     </el-row>
@@ -40,7 +40,6 @@ export default {
     }
   },
   mounted() {
-    this.fetchData()
 
   },
   methods: {
@@ -68,11 +67,6 @@ export default {
         }
       })
     },
-    fetchCource() {
-      this.courseId = localStorage.getItem('courseId');
-
-      this.courseForm.courseName
-    },
     joinCourse() {
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
       this.$axios.post('http://localhost:8082/api/course/enroll', this.joinForm).then(res => {
@@ -87,6 +81,7 @@ export default {
           alert(message)
         }
       })
+      router.push('/payment')
     },
     leave() {
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
@@ -105,6 +100,9 @@ export default {
           alert(message)
         }
       })
+    },
+    detailed() {
+      router.push('/courseDetailPage')
     }
   }
 }

@@ -5,6 +5,8 @@
         <el-table :data="sectionData" border stripe style="width: 100% " @row-click="reFetch">
           <el-table-column prop="sectionName" label="sectionNames" align="center"
                            min-width="180px"></el-table-column>
+          <el-table-column prop="sectionComplete" label="sectionComplete" align="center"
+                           min-width="180px"></el-table-column>
         </el-table>
         <el-row>
           <el-col>
@@ -115,11 +117,14 @@ export default {
       total: '总评论数： 7',
       courseName: 'black',
       videoURL: "url",
+      recodrTime: '0',
       sectionId: 1,
+      row: 0,
       sectionData: [
         {
-          sectionIdIn: "1",
-          videoURL: "ababa",
+          sectionIdIn: "0",
+          sectionName: "ababa",
+          sectionComplete: '0%',
           status: "OK"
         }
       ],
@@ -235,6 +240,21 @@ export default {
     this.fetchData()
     this.fetchComment()
     this.fetchTotalComment()
+    this.recodrTime = setInterval(() => {
+      if (document.getElementsByTagName('video')[0].currentTime && this.sectionId) {
+        localStorage.setItem(
+            'videoParams',
+            JSON.stringify({
+              courseId: this.id,
+              resourceId: this.sectionId,
+              resourceTime:
+              document.getElementsByTagName('video')[0].currentTime
+            })
+        )
+        this.sectionData[this.row].sectionComplete = (document.getElementsByTagName('video')[0].currentTime /
+            document.getElementsByTagName('video')[0].duration * 100).toString().split('.')[0] + '%'
+      }
+    }, 1000)
   },
   methods: {
 
@@ -294,6 +314,7 @@ export default {
     },
     reFetch(row) {
       router.push("/videoPage?courseName=" + "white" + "&sectionId={" + row.sectionIdIn + "}")
+      this.row = row.sectionIdIn
     },
     inputFocus(){
       var replyInput = document.getElementById('replyInput');
