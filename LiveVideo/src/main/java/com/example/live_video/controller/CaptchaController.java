@@ -24,9 +24,6 @@ public class CaptchaController {
 
     public static Captcha captcha;
 
-    public static String verificationCode;
-    @Autowired
-    private MailService mailService;
     @RequestMapping("/api/captcha")
     public void captcha(HttpServletRequest request, HttpServletResponse response) throws Exception {
         captcha = new SpecCaptcha(130, 48, 4);
@@ -35,10 +32,5 @@ public class CaptchaController {
 
     public static boolean ver(String code) {
         return captcha.text().equalsIgnoreCase(code);
-    }
-
-    @PostMapping("/api/mail")
-    public void mail(@RequestParam String mail) throws MyException {
-        mailService.sendTextMailMessage(new String[]{mail}, "Verify Your Mail", verificationCode = RandomUtils.getVerificationCode());
     }
 }

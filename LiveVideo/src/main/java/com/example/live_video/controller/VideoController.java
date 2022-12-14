@@ -1,6 +1,6 @@
 package com.example.live_video.controller;
 
-import com.example.live_video.util.MergeInfo;
+import com.example.live_video.dto.MergeInfo;
 import com.example.live_video.wrapper.NonStaticResourceHttpRequestHandler;
 import com.example.live_video.entity.Section;
 import com.example.live_video.exception.MyException;

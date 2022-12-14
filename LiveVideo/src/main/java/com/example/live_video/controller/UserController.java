@@ -8,6 +8,7 @@ import com.example.live_video.entity.UserType;
 import com.example.live_video.exception.MyException;
 import com.example.live_video.service.MailService;
 import com.example.live_video.service.UserService;
+import com.example.live_video.util.MailUtil;
 import com.example.live_video.util.RandomUtils;
 import com.example.live_video.util.TokenUtils;
 import com.example.live_video.wrapper.ResponseResult;
@@ -22,8 +23,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
-
-import static com.example.live_video.controller.CaptchaController.captcha;
 
 @ResponseResult
 @RestController
@@ -45,7 +44,7 @@ public class UserController {
     public Boolean registerUser(@RequestBody @Valid UserForm userForm, BindingResult bindingResult) throws Exception {
         if (!userForm.getPassword().equals(userForm.getRepeatPassword()))
             throw new MyException("密码和重复密码不一致");
-        if (!CaptchaController.verificationCode.equals(userForm.getCode()))
+        if (!MailUtil.ver(userForm.getCode()))
             throw new MyException("邮箱验证码不一致");
         if (bindingResult.hasErrors()) {
             List<ObjectError> list = bindingResult.getAllErrors();
