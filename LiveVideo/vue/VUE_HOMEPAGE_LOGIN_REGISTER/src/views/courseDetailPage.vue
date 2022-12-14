@@ -67,7 +67,7 @@
 import router from "@/router";
 
 export default {
-  name: 'courseMainPage',
+  name: 'courseDetailPage',
   data() {
     return {
       courseId: 2,
@@ -96,11 +96,7 @@ export default {
   methods: {
     fetchCourse() {
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
-      this.$axios.get('http://localhost:8082/api/course', {
-        params: {
-          courseId: this.courseId
-        }
-      }).then(res => {
+      this.$axios.get('http://localhost:8082/api/course/' + this.courseId).then(res => {
         // 拿到结果
         let result = res.data.result
         this.courseForm.courseName = result.courseName

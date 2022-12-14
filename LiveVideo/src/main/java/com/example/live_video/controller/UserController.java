@@ -23,6 +23,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
+import static com.example.live_video.controller.CaptchaController.captcha;
+
 @ResponseResult
 @RestController
 public class UserController {
@@ -55,9 +57,8 @@ public class UserController {
     @PostMapping("/api/login")
     public JSONObject loginUser(@RequestBody UserForm userForm, HttpServletRequest request) throws Exception {
         JSONObject jsonObject = new JSONObject();
-        System.out.println(userForm);
-        if (!CaptchaUtil.ver(userForm.getCode(), request)) {
-            CaptchaUtil.clear(request);  // 清除session中的验证码
+        System.out.println((String)request.getSession().getAttribute("captcha"));
+        if (!CaptchaController.ver(userForm.getCode())) {
             throw new MyException("验证码不正确");
         }
         if (userService.compareUserPassword(userForm.getUserName(), userForm.getPassword())) {

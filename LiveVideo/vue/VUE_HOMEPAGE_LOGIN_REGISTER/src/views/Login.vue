@@ -28,7 +28,7 @@
           <el-form-item label="验证码" prop="code" style="width: 380px">
             <el-input v-model="loginForm.code" class="code-input" style="width: 70%;float: left"></el-input>
             <!--验证码图片-->
-            <el-image :src="codeImg" class="codeImg"></el-image>
+            <el-image src="http://localhost:8082/api/captcha"></el-image>
           </el-form-item>
           <el-form-item label="记住密码" prop="remember">
             <el-switch v-model="loginForm.remember"></el-switch>
@@ -58,7 +58,7 @@ export default {
         // 密码数据
         password: '',
         // 验证码数据
-        code: '12345',
+        code: '',
         // 记住密码
         remember: false,
         // 验证码的key，因为前后端分离，这里验证码不能由后台存入session，所以交给vue状态管理
@@ -79,7 +79,6 @@ export default {
         // 设置验证码效验规则
         code: [
           {required: true, message: '请输入验证码', trigger: 'blur'},
-          {min: 5, max: 5, message: '长度为 5 个字符', trigger: 'blur'}
         ]
       },
       // 绑定验证码图片

@@ -49,6 +49,7 @@ public class UserForm {
                 ", password='" + password + '\'' +
                 ", repeatPassword='" + repeatPassword + '\'' +
                 ", mail='" + mail + '\'' +
+                ", code='" + code + '\'' +
                 ", userType='" + userType + '\'' +
                 '}';
     }

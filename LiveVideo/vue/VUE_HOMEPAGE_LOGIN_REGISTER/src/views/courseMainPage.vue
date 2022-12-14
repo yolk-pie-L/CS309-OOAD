@@ -12,7 +12,7 @@
       </el-col>
     </el-row>
     <el-row  type="flex" justify="space-around" align="middle">
-      <el-button type="primary" @click="this.$router.push('/courseDetailPage')">课程信息</el-button>
+      <el-button type="primary" @click="detailed">课程信息</el-button>
       <el-button type="primary" @click="joinCourse">报名课程</el-button>
       <el-button type="primary" @click="leave">退课</el-button>
     </el-row>
@@ -27,6 +27,7 @@ export default {
   name: 'courseMainPage',
   data() {
     return {
+      courseId: '2',
       courseForm: {
         courseName: "DSAA",
         teacherName: "李开",
@@ -34,28 +35,35 @@ export default {
       },
       joinForm: {
         studentName: 'black',
-        courseId: '123'
+        courseId: '2'
       }
     }
   },
   mounted() {
-    this.fetchData()
+
   },
   methods: {
-    fetchData() {
+    fetchCourse() {
+      // this.courseId = localStorage.getItem('courseId');
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
-      this.$axios.get('http://localhost:8082/api/user').then(res => {
+      this.$axios.get('http://localhost:8082/api/course', {
+        params: {
+          courseId: this.courseId
+        }
+      }).then(res => {
         // 拿到结果
-
+        let result = res.data.result
+        this.courseForm.courseName = result.courseName
+        this.courseForm.teacherName = result.teacherName
         // let message = res.data.msg;
         // 判断结果
-        if (res.data.result.userName) {
+        if (result) {
           /*登陆成功*/
-          this.joinForm.studentName = res.data.result.userName
+
           /*跳转页面*/
         } else {
           /*打印错误信息*/
-          alert(this.joinForm.studentName);
+          alert(this.courseId);
         }
       })
     },
@@ -73,6 +81,7 @@ export default {
           alert(message)
         }
       })
+      router.push('/payment')
     },
     leave() {
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
@@ -91,6 +100,9 @@ export default {
           alert(message)
         }
       })
+    },
+    detailed() {
+      router.push('/courseDetailPage')
     }
   }
 }
