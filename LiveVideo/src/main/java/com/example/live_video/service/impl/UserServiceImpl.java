@@ -14,6 +14,8 @@ import com.example.live_video.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
@@ -125,5 +127,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         } else {
             return null;
         }
+    }
+
+    public List<User> getUserLikeUserName(String userName, String type) {
+        // todo
+        return null;
     }
 }

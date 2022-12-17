@@ -11,7 +11,6 @@ import com.example.live_video.service.CourseService;
 import com.example.live_video.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -120,6 +119,11 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
     @Override
     public Course getOneApprovedCourse(String teacherName, String courseName) {
         return courseMapper.getOneApprovedCourse(teacherName, courseName);
+    }
+
+    public List<Course> getAllCourse() {
+        // TODO
+        return null;
     }
 }
 

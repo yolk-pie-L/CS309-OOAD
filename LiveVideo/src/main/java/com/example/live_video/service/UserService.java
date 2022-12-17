@@ -5,8 +5,10 @@ import com.example.live_video.entity.User;
 import com.example.live_video.entity.UserType;
 import com.example.live_video.exception.MyException;
 import com.example.live_video.exception.SQLMailConflictException;
-import com.example.live_video.exception.SQLUsernameConflictException;
 import com.example.live_video.exception.SQLUserNotFoundException;
+import com.example.live_video.exception.SQLUsernameConflictException;
+
+import java.util.List;
 
 public interface UserService extends IService<User> {
 
@@ -71,4 +73,9 @@ public interface UserService extends IService<User> {
      * @throws MyException
      */
     public String login(String userName, String password) throws MyException;
+
+    /**模糊匹配名字，userType需要一样*/
+    public List<User> getUserLikeUserName(String userName, String type);
+
+
 }
