@@ -203,7 +203,7 @@ export default {
   },
   methods: {
     fetchClass() {
-      this.$axios.get('api/course/waiting').then(res => {
+      this.$axios.get('http://localhost:8082/api/admin/waiting').then(res => {
         // 拿到结果
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
@@ -233,7 +233,7 @@ export default {
     handleAgree(index, row) {
       this.InputForm2.courseName = this.tableData.at(index).courseName;
       this.InputForm2.approved = "true";
-      this.$axios.post('api/course/admin', this.InputForm2).then(res => {
+      this.$axios.post('http://localhost:8082/api/course/admin', this.InputForm2).then(res => {
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         if (result) {
@@ -245,7 +245,7 @@ export default {
       })
     },
     handleChangePrivilege(index) {
-      this.$axios.post('/api/privilege?userName={' + this.userForm.at(index).username + '}').then(res => {
+      this.$axios.post('http://localhost:8082/api/privilege?userName={' + this.userForm.at(index).username + '}').then(res => {
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         if (result) {
@@ -262,7 +262,7 @@ export default {
       })
     },
     async getUserList() {
-      this.$axios.post('all?userName={' + this.queryInfo.name + '}&type={student or teacher or all}' + this.queryInfo.type + '}').then(res => {
+      this.$axios.post('http://localhost:8082/all?userName={' + this.queryInfo.name + '}&type={student or teacher or all}' + this.queryInfo.type + '}').then(res => {
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         this.tableUser.userName = result.userName
