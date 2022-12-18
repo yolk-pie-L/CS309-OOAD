@@ -33,7 +33,7 @@
     </div>
 
     <div class="query">
-      <el-input v-model="queryInfo.query" clearable placeholder="Search for user"
+      <el-input v-model="queryInfo.name" clearable placeholder="Search for user"
                 @clear="getUserList"></el-input>
         <el-select v-model="queryInfo.type" placeholder="请选择">
           <el-option
@@ -118,13 +118,13 @@ export default {
         type: ''
       },
       options: [{
-        value: '选项1',
+        value: 'student',
         label: 'student'
       }, {
-        value: '选项2',
+        value: 'teacher',
         label: 'teacher'
       }, {
-        value: '选项3',
+        value: 'all',
         label: 'all'
       }],
     }
@@ -324,7 +324,6 @@ export default {
   border-radius: 50%
 }
 
-//搜索框位置
 .search_input {
   position: absolute;
   top: 270px;
