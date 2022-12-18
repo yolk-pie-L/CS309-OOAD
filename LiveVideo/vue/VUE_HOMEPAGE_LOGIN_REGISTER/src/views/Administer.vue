@@ -194,7 +194,12 @@ export default {
       })
     },
     async getUserList() {
-      this.$axios.get('http://localhost:8082/api/admin/all?userName={' + this.queryInfo.name + '}&type={'+this.queryInfo.type+ '}').then(res => {
+      this.$axios.get('http://localhost:8082/api/admin/all',{
+        params: {
+          userName: this.queryInfo.name,
+              type: this.queryInfo.type,
+        }
+      }).then(res => {
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         this.tableUser=result
