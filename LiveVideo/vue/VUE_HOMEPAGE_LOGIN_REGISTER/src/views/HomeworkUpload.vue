@@ -12,23 +12,23 @@
       </el-col>
     </el-row>
     <!--form表单-->
-    <el-row type="flex" class="row-bg" justify="center" align="bottom">
+    <div>
       <el-col :span="7" class="login-card">
         <!--loginForm-->
         <el-form :model="homeworkForm" :rules="rules" ref="loginForm" label-width="21%" class="loginForm">
-          <el-form-item label="AssignmentName"  prop="assignmentName" style="width: 380px">
+          <el-form-item label="AssignmentName"  prop="assignmentName" style="width: 380px" class="variable1">
             <el-input v-model="homeworkForm.assignmentName"></el-input>
           </el-form-item>
-          <el-form-item label="Deadline" prop="deadline" style="width: 380px">
+          <el-form-item label="Deadline" prop="deadline" style="width: 380px" class="variable1">
             <el-input v-model="homeworkForm.deadline"></el-input>
           </el-form-item>
-          <el-form-item label="Description" prop="description" style="width: 380px">
+          <el-form-item label="Description" prop="description" style="width: 380px" class="variable1">
             <el-input v-model="homeworkForm.description"></el-input>
           </el-form-item>
-          <el-form-item label="totalGrade" prop="totalGrade" style="width: 380px">
+          <el-form-item label="totalGrade" prop="totalGrade" style="width: 380px" class="variable1">
             <el-input v-model="homeworkForm.totalGrade"></el-input>
           </el-form-item>
-          <el-form-item label="Additional Source" prop="additionalResources" style="width: 380px">
+          <el-form-item label="Additional Source" prop="additionalResources" style="width: 380px" class="variable1">
             <el-upload
                 :action="uploadURL"
                 :style="{backgroundImage:'url(' + dialogImageUrl + ')', backgroundRepeat:'no-repeat', backgroundPosition:'center center', backgroundSize: 'contain'}"
@@ -45,7 +45,7 @@
           </el-form-item>
         </el-form>
       </el-col>
-    </el-row>
+    </div>
   </div>
 </template>
 
@@ -160,9 +160,15 @@ export default {
   box-shadow: 0 0 20px #ffffff;
   border-radius: 10px;
   padding: 40px 40px 30px 15px;
-  width: auto;
+  width: 50%;
   position: absolute;
-  left: 70%;
+  left: 40%;
+  top:30%;
+}
+
+/deep/.variable1 {
+  font-size: 10px;
+  font-weight: 600;
 }
 
 /deep/ .welcome {

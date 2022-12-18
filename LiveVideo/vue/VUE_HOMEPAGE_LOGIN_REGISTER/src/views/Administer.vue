@@ -81,84 +81,15 @@ export default {
       },
       tableData: [
         {
+          id:'',
           teacherName: 'Tom',
           courseName: 'CS101',
           introduction: 'aaaaa',
           coursePicture: '',
           tag: '',
-          charge: ''
-        },
-        {
-          teacherName: 'Tom',
-          courseName: 'CS101',
-          introduction: 'aaaaa',
-          coursePicture: '',
-          tag: '',
-          charge: ''
-        },
-        {
-          teacherName: 'Tom',
-          courseName: 'CS101',
-          introduction: 'aaaaa',
-          coursePicture: '',
-          tag: '',
-          charge: ''
-        },
-        {
-          teacherName: 'Tom',
-          courseName: 'CS101',
-          introduction: 'aaaaa',
-          coursePicture: '',
-          tag: '',
-          charge: ''
-        },
-        {
-          teacherName: 'Tom',
-          courseName: 'CS101',
-          introduction: 'aaaaa',
-          coursePicture: '',
-          tag: '',
-          charge: ''
-        },
-        {
-          teacherName: 'Tom',
-          courseName: 'CS101',
-          introduction: 'aaaaa',
-          coursePicture: '',
-          tag: '',
-          charge: ''
-        },
-        {
-          teacherName: 'Tom',
-          courseName: 'CS101',
-          introduction: 'aaaaa',
-          coursePicture: '',
-          tag: '',
-          charge: ''
-        },
-        {
-          teacherName: 'Tom',
-          courseName: 'CS101',
-          introduction: 'aaaaa',
-          coursePicture: '',
-          tag: '',
-          charge: ''
-        },
-        {
-          teacherName: 'Tom',
-          courseName: 'CS101',
-          introduction: 'aaaaa',
-          coursePicture: '',
-          tag: '',
-          charge: ''
-        },
-        {
-          teacherName: 'Tom',
-          courseName: 'CS101',
-          introduction: 'aaaaa',
-          coursePicture: '',
-          tag: '',
-          charge: ''
+          charge: '',
+          privateKeyUrl:'',
+          status:''
         },
       ],
       tableUser: [
@@ -179,7 +110,7 @@ export default {
         userName: "user"
       },
       InputForm2: {
-        courseName: "course",
+        courseId: "courseId",
         approved: "true"
       },
       queryInfo: {
@@ -217,7 +148,7 @@ export default {
       })
     },
     handleReject(index) {
-      this.InputForm2.courseName = this.tableData.at(index).courseName;
+      this.InputForm2.courseId = this.tableData.at(index).id;
       this.InputForm2.approved = "false";
       this.$axios.post('http://localhost:8082/api/admin/status', this.InputForm2).then(res => {
         let result = JSON.parse(res.data.data);
@@ -231,7 +162,7 @@ export default {
       })
     },
     handleAgree(index, row) {
-      this.InputForm2.courseName = this.tableData.at(index).courseName;
+      this.InputForm2.courseId = this.tableData.at(index).id;
       this.InputForm2.approved = "true";
       this.$axios.post('http://localhost:8082/api/admin/status', this.InputForm2).then(res => {
         let result = JSON.parse(res.data.data);
