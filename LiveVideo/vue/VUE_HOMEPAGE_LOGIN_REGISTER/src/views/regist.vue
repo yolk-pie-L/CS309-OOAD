@@ -31,6 +31,7 @@
           </el-form-item>
           <el-form-item label="邮箱" prop="mail" style="width: 380px">
             <el-input v-model="loginForm.mail"></el-input>
+            <el-button @click="sendMail">获取验证码</el-button>
           </el-form-item>
           <el-form-item label="账户" prop="userName" style="width: 380px">
             <el-input v-model="loginForm.userName"></el-input>
@@ -102,9 +103,7 @@ export default {
       },
       // 表单验证
       rules: {
-        person: [
-          {required: true, message: '请输入角色', trigger: 'blur'}
-        ],
+        person: [],
         mail: [
           {required: true, message: '请输入邮箱', trigger: 'blur'}
         ],
@@ -121,7 +120,6 @@ export default {
         // 设置验证码效验规则
         code: [
           {required: true, message: '请输入验证码', trigger: 'blur'},
-          {min: 5, max: 5, message: '长度为 5 个字符', trigger: 'blur'}
         ],
         repeatPassword: [
           {required: true, message: '请再次输入密码', trigger: 'blur'},
@@ -138,19 +136,16 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // 表单验证成功
-          this.$axios.post('http://localhost:8082/api/register ', this.loginForm).then(res => {
+          this.$axios.post('http://localhost:8082/api/register', this.loginForm).then(res => {
             // 拿到结果
-            let result = JSON.parse(res.data.data);
-            let message = res.data.msg;
+            let message = res.data.code;
             // 判断结果
-            if (result) {
+            if (message === 200) {
               /*登陆成功*/
-              Element.Message.success(message);
               /*跳转页面*/
               router.push('/login')
             } else {
               /*打印错误信息*/
-              Element.Message.error(message);
             }
           })
         } else {
@@ -158,6 +153,18 @@ export default {
           return false;
         }
       });
+    },
+    sendMail() {
+      this.$axios.post('http://localhost:8082/api/mail?mail='+ this.loginForm.mail ).then(res => {
+        // 拿到结果
+        let message = res.data.code;
+        // 判断结果
+        if (message === 200) {
+          /*登陆成功*/
+          alert("发送成功")
+        } else {
+        }
+      })
     },
     // 重置表单
     resetForm(formName) {

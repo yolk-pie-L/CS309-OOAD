@@ -254,7 +254,7 @@ export default {
         this.sectionData[this.row].sectionComplete = (document.getElementsByTagName('video')[0].currentTime /
             document.getElementsByTagName('video')[0].duration * 100).toString().split('.')[0] + '%'
       }
-    }, 1000)
+    }, 5000)
   },
   methods: {
 
