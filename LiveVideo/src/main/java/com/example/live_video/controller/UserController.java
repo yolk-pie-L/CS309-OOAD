@@ -9,10 +9,7 @@ import com.example.live_video.exception.SQLCoursenameConflictException;
 import com.example.live_video.service.UserService;
 import com.example.live_video.wrapper.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
@@ -48,6 +45,7 @@ public class UserController {
     }
 
     @PostMapping("/api/login")
+    @CrossOrigin
     public ExceptionMessage loginUser(UserForm userForm) {
         try {
             String type = userService.login(userForm.convertToUser());

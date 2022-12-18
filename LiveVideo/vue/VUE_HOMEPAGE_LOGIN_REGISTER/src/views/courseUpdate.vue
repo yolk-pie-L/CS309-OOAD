@@ -27,13 +27,13 @@
             <el-input v-model="courseForm.teacherName"></el-input>
           </el-form-item>
           <el-form-item label="课程标签" prop="courseLabel" style="width: 380px">
-            <el-input v-model="courseForm.courseLabel"></el-input>
+            <el-input v-model="courseForm.tag"></el-input>
           </el-form-item>
           <el-form-item label="课程收费" prop="courseFee" style="width: 380px">
-            <el-input v-model="courseForm.courseFee"></el-input>
+            <el-input v-model="courseForm.charge"></el-input>
           </el-form-item>
           <el-form-item label="课程描述" prop="courseDescription" style="width: 380px">
-            <el-input v-model="courseForm.courseDescription"></el-input>
+            <el-input v-model="courseForm.description"></el-input>
           </el-form-item>
           <el-form-item label="课程图片" prop="username" style="width: 380px">
             <el-upload
@@ -71,15 +71,11 @@ export default {
         // 密码数据
         teacherName: 'checkerName',
 
-        courseLabel: 'CS444',
+        tag: 'CS444',
 
-        courseFee: '100',
+        charge: '100',
 
-        courseDescription: 'test',
-      },
-      // 表单验证
-      rules: {
-
+        description: 'test',
       },
     };
   },
@@ -95,7 +91,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // 表单验证成功
-          this.$axios.post('http://localhost:8082/user/checkLogin', this.courseForm).then(res => {
+          this.$axios.post('http://localhost:8082/api/course/insert', this.courseForm).then(res => {
             // 拿到结果
             let result = JSON.parse(res.data.data);
             let message = res.data.msg;

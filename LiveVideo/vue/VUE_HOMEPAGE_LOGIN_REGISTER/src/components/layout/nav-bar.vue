@@ -124,7 +124,7 @@ export default {
       })
     },
     fetchUser() {
-      this.$axios.get('api/user').then(res => {
+      this.$axios.get('http://localhost:8082/api/user').then(res => {
         // 拿到结果
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;

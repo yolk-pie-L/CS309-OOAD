@@ -150,7 +150,8 @@ export default {
       })
     },
     fetchCourse() {
-      this.$axios.get('api/notice/all?userName={' + this.username + '}').then(res => {
+      this.$axios.get('api/notice/all?teacherName={' + this.teacherForm.username + '&page={' + this.currentPage +
+          '}&o={' + this.pageSize +'}').then(res => {
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         this.tableData = result
@@ -204,7 +205,7 @@ export default {
       router.push("/")
     },
     back () {
-      router.push("/1")
+      router.push("/")
     }
     },
 }
