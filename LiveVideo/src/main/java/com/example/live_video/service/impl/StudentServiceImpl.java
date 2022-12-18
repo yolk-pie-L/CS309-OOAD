@@ -1,9 +1,11 @@
 package com.example.live_video.service.impl;
 
 import com.example.live_video.entity.Course;
+import com.example.live_video.entity.Section;
 import com.example.live_video.entity.User;
 import com.example.live_video.exception.EnrollCourseException;
 import com.example.live_video.mapper.CourseMapper;
+import com.example.live_video.mapper.SectionMapper;
 import com.example.live_video.mapper.StudentMapper;
 import com.example.live_video.mapper.UserMapper;
 import com.example.live_video.service.AssignmentService;
@@ -26,6 +28,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Autowired
     CourseMapper courseMapper;
+
+    @Autowired
+    SectionMapper sectionMapper;
 
     @Autowired
     UserService userService;
@@ -65,6 +70,11 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public List<User> getStudentListOfOneCourse(long courseId) {
+        return studentMapper.getStudentListOfOneCourse(courseId);
+    }
+
+    @Override
     public Boolean setStudentAssignGrade(String studentName, Long assignId, int grade) {
         Long studentId = userService.getUserId(studentName);
         studentMapper.setStudentAssignGrade(studentId, assignId, grade);
@@ -96,9 +106,17 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
-    public Boolean resubmitAssignment(String studentName, Long assignId, List<String> assignUrls) {
+    public boolean resubmitAssignment(String studentName, Long assignId, List<String> assignUrls) {
         Long studentId = userService.getUserId(studentName);
         studentMapper.deleteStudentAssignment(studentId, assignId);
         return this.submitAssignment(studentName, assignId, assignUrls);
+    }
+
+    @Override
+    public boolean setStudentSectionProgress(long studentId, long sectionId, double ratio) {
+        Section section = sectionMapper.selectById(sectionId);
+        double studentGrade = section.getGrade() * ratio;
+        studentMapper.setStudentSectionProgress(studentId, sectionId, studentGrade);
+        return true;
     }
 }

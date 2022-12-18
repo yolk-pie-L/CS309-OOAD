@@ -5,10 +5,7 @@ import com.example.live_video.entity.*;
 import com.example.live_video.exception.EnrollCourseException;
 import com.example.live_video.exception.SQLAssignNameConflictException;
 import com.example.live_video.exception.SQLCoursenameConflictException;
-import com.example.live_video.mapper.AssignmentMapper;
-import com.example.live_video.mapper.CourseMapper;
-import com.example.live_video.mapper.StudentMapper;
-import com.example.live_video.mapper.UserMapper;
+import com.example.live_video.mapper.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,9 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest
-@Transactional
-@Rollback
+//@Transactional
+//@Rollback
 class StudentServiceTest {
 
     List<User> teachers = new ArrayList<>();
@@ -41,6 +40,9 @@ class StudentServiceTest {
     CourseMapper courseMapper;
 
     @Autowired
+    SectionMapper sectionMapper;
+
+    @Autowired
     CourseService courseService;
 
     @Autowired
@@ -52,6 +54,8 @@ class StudentServiceTest {
     @Autowired
     AssignmentService assignmentService;
 
+    List<Section> sections = new ArrayList<>();
+
     @BeforeEach
     void setUp() throws SQLCoursenameConflictException {
         User teacher1 = new User("t1", UserType.Teacher, "t1mail", "123456");
@@ -61,8 +65,10 @@ class StudentServiceTest {
         teachers.forEach(userMapper::insert);
         User student1 = new User("s1", UserType.Student, "s1mail", "123456", null, 100L);
         User student2 = new User("s2", UserType.Student, "s2mail", "123456", null, 10L);
+        User student3 = new User("s3", UserType.Student, "s3m", "2ed", null, 2000L);
         students.add(student1);
         students.add(student2);
+        students.add(student3);
         students.forEach(userMapper::insert);
         Course course1 = new Course("c1", teacher1.getUserName(), "t", 10L, "d", CourseStatus.APPROVED, null);
         Course course2 = new Course("c2", teacher1.getUserName(), "t", 10L, "d", CourseStatus.APPROVED, null);
@@ -73,6 +79,15 @@ class StudentServiceTest {
         for (Course c : courses) {
             courseService.createCourse(c);
         }
+        Section section1 = new Section("s1", course1.getId(), "s1", 99);
+        Section section2 = new Section("s2", course1.getId(), "s2", 88);
+        Section section3 = new Section("s3", course2.getId(), "s3", 77);
+        sectionMapper.insert(section1);
+        sectionMapper.insert(section2);
+        sectionMapper.insert(section3);
+        sections.add(section1);
+        sections.add(section2);
+        sections.add(section3);
     }
 
     @AfterEach
@@ -175,5 +190,45 @@ class StudentServiceTest {
 
     @Test
     void getStudentAssignGrade() {
+    }
+
+    @Test
+    void setStudentSectionProgress() throws EnrollCourseException {
+        User s1 = students.get(0);
+        User s2 = students.get(2);
+        Course c1 = courses.get(0);
+        Course c2 = courses.get(1);
+        Course c3 = courses.get(2);
+        studentService.enrollCourse(c1.getId(), s1.getUserName());
+        studentService.enrollCourse(c2.getId(), s1.getUserName());
+        studentService.enrollCourse(c3.getId(), s1.getUserName());
+        studentService.enrollCourse(c1.getId(), s2.getUserName());
+        studentService.setStudentSectionProgress(s1.getId(), sections.get(0).getId(), 0.5);
+        studentService.setStudentSectionProgress(s2.getId(), sections.get(0).getId(), 0.3);
+        Section section4 = new Section("s4", c1.getId(), "s3", 77);
+        sectionMapper.insert(section4);
+        sections.add(section4);
+        studentService.setStudentSectionProgress(s1.getId(), section4.getId(), 0.2);
+    }
+
+    @Test
+    void getStudentListOfOneCourse() throws EnrollCourseException {
+        User s1 = students.get(0);
+        User s3 = students.get(2);
+        Course c1 = courses.get(0);
+        Course c2 = courses.get(1);
+        Course c3 = courses.get(2);
+        studentService.enrollCourse(c1.getId(), s1.getUserName());
+        studentService.enrollCourse(c2.getId(), s1.getUserName());
+        studentService.enrollCourse(c3.getId(), s3.getUserName());
+        studentService.enrollCourse(c1.getId(), s3.getUserName());
+        List<User> userList = studentService.getStudentListOfOneCourse(c1.getId());
+        List<User> userList1 = studentService.getStudentListOfOneCourse(c2.getId());
+        List<User> userList2 = studentService.getStudentListOfOneCourse(c3.getId());
+        assertEquals(2, userList.size());
+        assertEquals(1, userList1.size());
+        assertEquals(1, userList2.size());
+        assertEquals(s1.getId(), userList1.get(0).getId());
+        assertEquals(s3.getId(), userList2.get(0).getId());
     }
 }

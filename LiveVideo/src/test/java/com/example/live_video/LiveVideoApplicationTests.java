@@ -74,22 +74,22 @@ class LiveVideoApplicationTests {
         courseMapper.insert(course7);
         courseMapper.insert(course8);
         courseMapper.insert(course9);
-        Section section1 = new Section("s1", course1.getId(), "s1");
-        Section section2 = new Section("s2", course1.getId(), "s2");
-        Section section3 = new Section("s3", course1.getId(), "s3");
-        Section section4 = new Section("s4", course2.getId(), "s4");
-        Section section5 = new Section("s5", course2.getId(), "s5");
-        Section section6 = new Section("s6", course3.getId(), "s6");
-        Section section7 = new Section("s7", course3.getId(), "s4");
-        Section section8 = new Section("s8", course3.getId(), "s5");
-        Section section9 = new Section("s9", course3.getId(), "s6");
-        Section section10 = new Section("s1", course4.getId(), "s6");
-        Section section11 = new Section("s2", course4.getId(), "s4");
-        Section section12 = new Section("s3", course4.getId(), "s5");
-        Section section13 = new Section("s4", course4.getId(), "s6");
-        Section section14 = new Section("s5", course4.getId(), "s4");
-        Section section15 = new Section("s6", course4.getId(), "s5");
-        Section section16 = new Section("s7", course4.getId(), "s6");
+        Section section1 = new Section("s1", course1.getId(), "s1", 99);
+        Section section2 = new Section("s2", course1.getId(), "s2", 88);
+        Section section3 = new Section("s3", course1.getId(), "s3", 77);
+        Section section4 = new Section("s4", course2.getId(), "s4", 60);
+        Section section5 = new Section("s5", course2.getId(), "s5", 50);
+        Section section6 = new Section("s6", course3.getId(), "s6", 40);
+        Section section7 = new Section("s7", course3.getId(), "s4", 100);
+        Section section8 = new Section("s8", course3.getId(), "s5", 20);
+        Section section9 = new Section("s9", course3.getId(), "s6", 10);
+        Section section10 = new Section("s1", course4.getId(), "s6", 39);
+        Section section11 = new Section("s2", course4.getId(), "s4", 24);
+        Section section12 = new Section("s3", course4.getId(), "s5", 333);
+        Section section13 = new Section("s4", course4.getId(), "s6", 234);
+        Section section14 = new Section("s5", course4.getId(), "s4", 25);
+        Section section15 = new Section("s6", course4.getId(), "s5", 24);
+        Section section16 = new Section("s7", course4.getId(), "s6", 60);
         sectionMapper.insert(section1);
         sectionMapper.insert(section2);
         sectionMapper.insert(section3);
@@ -118,10 +118,5 @@ class LiveVideoApplicationTests {
         noticeMapper.insert(n4);
         noticeMapper.insert(n5);
         noticeMapper.insert(n6);
-    }
-
-    @Test
-    void singleMethodTest(){
-        sectionService.removeSection(1L);
     }
 }

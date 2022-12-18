@@ -1,4 +1,4 @@
-package com.example.live_video.util;
+package com.example.live_video.dto;
 
 import lombok.Data;
 

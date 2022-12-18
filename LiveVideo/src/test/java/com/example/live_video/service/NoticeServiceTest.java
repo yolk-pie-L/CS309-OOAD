@@ -1,6 +1,7 @@
 package com.example.live_video.service;
 
 import com.example.live_video.entity.*;
+import com.example.live_video.exception.MyException;
 import com.example.live_video.mapper.CourseMapper;
 import com.example.live_video.mapper.UserMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -44,7 +45,7 @@ class NoticeServiceTest {
     }
 
     @Test
-    void createNotice() {
+    void createNotice() throws MyException {
         long count = noticeService.count();
         System.out.printf("count %d\n", count);
         teacher = new User("teacher1", UserType.Teacher, "teacher1@mail", "123456");
@@ -61,7 +62,13 @@ class NoticeServiceTest {
         noticeList.add(n1);
         noticeList.add(n2);
         noticeList.add(n3);
-        noticeList.forEach(n -> noticeService.createNotice(n, false));
+        noticeList.forEach(n -> {
+            try {
+                noticeService.createNotice(n, false);
+            } catch (MyException e) {
+                throw new RuntimeException(e);
+            }
+        });
         List<Notice> notices1 = noticeService.getNoticeListOfCourse(course.getId());
         List<Notice> notices2 = noticeService.getNoticeListOfCourse(course1.getId());
         assert notices1.size() == 2;

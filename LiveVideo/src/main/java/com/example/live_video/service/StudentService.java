@@ -1,6 +1,7 @@
 package com.example.live_video.service;
 
 import com.example.live_video.entity.Course;
+import com.example.live_video.entity.User;
 import com.example.live_video.exception.EnrollCourseException;
 
 import java.util.List;
@@ -13,6 +14,8 @@ public interface StudentService {
 
     public List<Course> getEnrolledCourseList(String studentName);
 
+    public List<User> getStudentListOfOneCourse(long courseId);
+
     public Boolean setStudentAssignGrade(String studentName, Long assignId, int grade);
 
     public int getStudentAssignGrade(String studentName, Long assignId);
@@ -21,5 +24,7 @@ public interface StudentService {
 
     public List<String> getStudentAssignmentUrlList(String studentName, Long assignId);
 
-    public Boolean resubmitAssignment(String studentName, Long assignId, List<String> assignUrls);
+    public boolean resubmitAssignment(String studentName, Long assignId, List<String> assignUrls);
+
+    public boolean setStudentSectionProgress(long studentId, long sectionId, double ratio);
 }

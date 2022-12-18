@@ -114,4 +114,5 @@ public interface CourseMapper extends BaseMapper<Course> {
             "  AND course.is_delete = 0\n" +
             "LIMIT #{limit} OFFSET #{offset}")
     public List<Course> getApprovedCourseListByCourseName(int limit, int offset, String courseName);
+
 }
