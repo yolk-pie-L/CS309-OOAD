@@ -11,7 +11,7 @@
     </el-row>
     <div class="tableD">
       <el-table :data="quizForm" height="300" class="tableH">
-        <el-table-column prop="assignmentName" label="Assignment Title" width="300" />
+        <el-table-column prop="assignmentName" label="Quiz Title" width="300" />
         <el-table-column prop="status" label="Status" width="250" />
         <el-table-column prop="deadline" label="Due" width="250" />
         <el-table-column prop="score" label="Score" width="200" />
@@ -74,15 +74,11 @@ export default {
   },
   methods: {
     fetchAssignment() {
-      this.$axios.get('api/course/allAssignment?courseId={' + this.classForm.privateKeyUrl + '}').then(res => {
+      this.$axios.get('/api/course/allQuiz?courseId={' + this.classForm.privateKeyUrl + '}').then(res => {
         // 拿到结果
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
-        this.quizForm.id = result.id
-        this.quizForm.assignmentName = result.assignmentName
-        this.quizForm.deadline = result.deadline
-        this.quizForm.status = result.status
-        this.quizForm.score = result.score
+        this.quizForm=result
         // 判断结果
         if (result) {
         } else {

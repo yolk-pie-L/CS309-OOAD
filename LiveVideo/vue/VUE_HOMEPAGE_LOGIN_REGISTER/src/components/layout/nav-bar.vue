@@ -22,7 +22,7 @@
         <el-input v-model="queryInfo.course" clearable placeholder="Course"
                   @clear="fetchCourse"></el-input>
         <el-input v-model="queryInfo.teacher" clearable placeholder="Teacher"
-                  @clear="fetchUser"></el-input>
+                  @clear="fetchCourse"></el-input>
         <el-button slot="append" icon="el-icon-search" @click="fetchCourse"></el-button>
       </div>
     </el-header>
@@ -84,7 +84,7 @@ export default {
         pageNum:"9",
       },
       userForm: {
-        userName: "teacher1",
+        userName: "black",
         userType: "Teacher",
         mail: "",
         photoUrl: "https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg",
@@ -112,17 +112,8 @@ export default {
   },
   methods: {
     fetchCourse() {
-      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
-
-      this.$axios.get('http://localhost:8082/api/course/success/all', {
-        params: {
-          o: this.pageForm.pageNum,
-          page: this.pageForm.page,
-          courseName: this.queryInfo.course,
-          teacherName: this.queryInfo.teacher
-        }
-      }).then(res => {
-        let result = res.data.result;
+      this.$axios.get('api/course/success/all?o=\''+this.pageNum+'&page=\'' + this.currentPage + '&courseName=\''+this.queryInfo.course+'&teacherName=\'' + this.queryInfo.teacher + '\'}\'').then(res => {
+        let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         this.classForm = result;
         if (result) {
@@ -133,11 +124,9 @@ export default {
       })
     },
     fetchUser() {
-      console.log(localStorage.getItem('token'))
-      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
       this.$axios.get('http://localhost:8082/api/user').then(res => {
         // 拿到结果
-        let result = res.data;
+        let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         this.userName = result.userName
         this.userType = result.userType

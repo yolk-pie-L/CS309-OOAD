@@ -203,17 +203,11 @@ export default {
   },
   methods: {
     fetchClass() {
-      this.$axios.get('api/user?userName={' + this.username + '}').then(res => {
+      this.$axios.get('api/course/waiting').then(res => {
         // 拿到结果
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
-        this.courseName = result.courseName
-        this.teacherName = result.teacher
-        this.introduction = result.intro
-        this.coursePicture = result.url
-        this.privateKeyUrl = result.privateKeyUrl
-        this.tag = result.tag
-        this.charge = result.charge
+        this.tableData=result;
         // 判断结果
         if (result) {
         } else {
