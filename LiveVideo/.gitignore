@@ -40,3 +40,4 @@ vue/package.json
 /src/main/resources/application.yml
 .gitignore
 /.run/
+/src/main/javatest.java

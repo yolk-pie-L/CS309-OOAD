@@ -65,7 +65,7 @@ public class CourseVo {
                 );
     }
 
-    public static CourseVo parseEasy(Course course) {
+    public static CourseVo pasteEasy(Course course) {
         return new CourseVo(
                 course.getCourseName(),
                 course.getPictureUrl(),
