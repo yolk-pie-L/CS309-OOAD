@@ -219,7 +219,7 @@ export default {
     handleReject(index) {
       this.InputForm2.courseName = this.tableData.at(index).courseName;
       this.InputForm2.approved = "false";
-      this.$axios.post('api/course/admin', this.InputForm2).then(res => {
+      this.$axios.post('http://localhost:8082/api/admin/status', this.InputForm2).then(res => {
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         if (result) {
@@ -233,7 +233,7 @@ export default {
     handleAgree(index, row) {
       this.InputForm2.courseName = this.tableData.at(index).courseName;
       this.InputForm2.approved = "true";
-      this.$axios.post('http://localhost:8082/api/course/admin', this.InputForm2).then(res => {
+      this.$axios.post('http://localhost:8082/api/admin/status', this.InputForm2).then(res => {
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         if (result) {
@@ -245,7 +245,8 @@ export default {
       })
     },
     handleChangePrivilege(index) {
-      this.$axios.post('http://localhost:8082/api/privilege?userName={' + this.userForm.at(index).username + '}').then(res => {
+      this.InputForm1.userName= this.userForm.at(index).username
+      this.$axios.post('http://localhost:8082/api/admin/privilege' ,this.InputForm1).then(res => {
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         if (result) {
@@ -262,13 +263,10 @@ export default {
       })
     },
     async getUserList() {
-      this.$axios.post('http://localhost:8082/all?userName={' + this.queryInfo.name + '}&type={student or teacher or all}' + this.queryInfo.type + '}').then(res => {
+      this.$axios.get('http://localhost:8082/api/admin/all?userName={' + this.queryInfo.name + '}&type={'+this.queryInfo.type+ '}').then(res => {
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
-        this.tableUser.userName = result.userName
-        this.tableUser.userType = result.userType
-        this.tableUser.photoUrl = result.photoUrl
-        this.tableUser.isAdm = result.isAdm
+        this.tableUser=result
         if (result) {
         } else {
           /*打印错误信息*/
