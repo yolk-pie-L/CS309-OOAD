@@ -20,8 +20,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-//@Transactional
-//@Rollback
+@Transactional
+@Rollback
 class StudentServiceTest {
 
     List<User> teachers = new ArrayList<>();
