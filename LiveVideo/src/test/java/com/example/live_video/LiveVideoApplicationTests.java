@@ -10,6 +10,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest
 class LiveVideoApplicationTests {
@@ -118,5 +122,41 @@ class LiveVideoApplicationTests {
         noticeMapper.insert(n4);
         noticeMapper.insert(n5);
         noticeMapper.insert(n6);
+    }
+
+    @Test
+    void testSectionCache(){
+        Long sectionId = 1L;
+        System.out.println();
+        System.out.println();
+        System.out.println("----!!Get One Section!! Should only print once!!----");
+        System.out.println();
+        System.out.println();
+        Section section = sectionService.getOneSection(sectionId);
+        System.out.println();
+        System.out.println();
+        Section section1 = sectionService.getOneSection(sectionId);
+        assert section1.getId().equals(section.getId());
+        assert section1.getGrade() == section.getGrade();
+        assert Objects.equals(section1.getCourseId(), section.getCourseId());
+        System.out.println("=====================================================");
+        System.out.println("----!!Update Section!! Should only print once!!----");
+        section.setVideoUrl("new url");
+        sectionService.updateSection(section);
+        section = sectionService.getOneSection(sectionId);
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        section1 = sectionService.getOneSection(sectionId);
+        assertEquals("new url", section1.getVideoUrl());
+        assert section1.getGrade() == section.getGrade();
+        System.out.println("===============================================");
+        System.out.println("--------Remove Section-------------------------");
+        sectionService.removeSection(sectionId);
+        Section section2 = sectionService.getOneSection(sectionId);
+        assertNull(section2);
+        System.out.println("=================================================");
+
     }
 }

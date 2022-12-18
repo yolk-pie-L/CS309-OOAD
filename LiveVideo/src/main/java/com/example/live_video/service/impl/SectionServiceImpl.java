@@ -41,7 +41,7 @@ public class SectionServiceImpl extends ServiceImpl<SectionMapper, Section> impl
     }
 
     @Override
-    @CachePut(value = "emp" ,key = "targetClass + methodName +#p0.id")
+    @CachePut(value = "emp" ,key = "'Section' +#p0")
     public Boolean updateSection(Section section) {
         QueryWrapper<Section> sectionQueryWrapper = new QueryWrapper<>();
         sectionQueryWrapper.eq("section_name", section.getSectionName());
@@ -50,7 +50,7 @@ public class SectionServiceImpl extends ServiceImpl<SectionMapper, Section> impl
     }
 
     @Override
-    @CacheEvict(value = "emp" ,key = "targetClass + methodName +#p0")
+    @CacheEvict(value = "emp" ,key = "'Section' +#p0")
     public Boolean removeSection(Long sectionId) {
         return sectionMapper.deleteById(sectionId) == 1;
     }
@@ -63,7 +63,7 @@ public class SectionServiceImpl extends ServiceImpl<SectionMapper, Section> impl
     }
 
     @Override
-    @Cacheable(value = "emp" ,key = "targetClass + methodName +#p0")
+    @Cacheable(value = "emp" ,key = "'Section' +#p0")
     public Section getOneSection(Long sectionId) {
         return sectionMapper.selectById(sectionId);
     }
