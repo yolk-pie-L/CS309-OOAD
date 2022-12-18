@@ -8,6 +8,8 @@ import com.example.live_video.mapper.AssignmentMapper;
 import com.example.live_video.mapper.CourseMapper;
 import com.example.live_video.service.AssignmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -39,13 +41,18 @@ public class AssignmentServiceImpl extends ServiceImpl<AssignmentMapper, Assignm
     }
 
     @Override
+    @CacheEvict(value = "ass" ,key = "'Assign' +#p0")
     public Boolean removeAssignment(Long id) {
         return assignmentMapper.deleteById(id) == 1;
     }
 
     @Override
+    @Cacheable(value = "ass" ,key = "'Assign' +#p0")
     public Assignment getOneAssignment(Long assignId) {
         Assignment assignment = assignmentMapper.selectById(assignId);
+        if(assignment == null){
+            return null;
+        }
         assignment.setAssignUrls(assignmentMapper.getAssignUrlList(assignId));
         return assignment;
     }
