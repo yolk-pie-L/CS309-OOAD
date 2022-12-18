@@ -136,7 +136,7 @@ export default {
     fetchClass() {
       this.$axios.get('http://localhost:8082/api/admin/waiting').then(res => {
         // 拿到结果
-        let result = JSON.parse(res.data.data);
+        let result = res.data.result;
         let message = res.data.msg;
         this.tableData=result;
         // 判断结果
@@ -151,7 +151,7 @@ export default {
       this.InputForm2.courseId = this.tableData.at(index).id;
       this.InputForm2.approved = "false";
       this.$axios.post('http://localhost:8082/api/admin/status', this.InputForm2).then(res => {
-        let result = JSON.parse(res.data.data);
+        let result = res.data.result;
         let message = res.data.msg;
         if (result) {
           this.tableData.splice(index, 1);
@@ -165,7 +165,7 @@ export default {
       this.InputForm2.courseId = this.tableData.at(index).id;
       this.InputForm2.approved = "true";
       this.$axios.post('http://localhost:8082/api/admin/status', this.InputForm2).then(res => {
-        let result = JSON.parse(res.data.data);
+        let result = res.data.result;
         let message = res.data.msg;
         if (result) {
           this.tableData.splice(index, 1);
@@ -178,7 +178,7 @@ export default {
     handleChangePrivilege(index) {
       this.InputForm1.userName= this.userForm.at(index).username
       this.$axios.post('http://localhost:8082/api/admin/privilege' ,this.InputForm1).then(res => {
-        let result = JSON.parse(res.data.data);
+        let result = res.data.result;
         let message = res.data.msg;
         if (result) {
           this.fetchClass();
@@ -200,7 +200,7 @@ export default {
               type: this.queryInfo.type,
         }
       }).then(res => {
-        let result = JSON.parse(res.data.data);
+        let result = res.data.result;
         let message = res.data.msg;
         this.tableUser=result
         if (result) {
