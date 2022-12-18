@@ -14,6 +14,7 @@ import com.example.live_video.wrapper.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @ResponseResult
@@ -31,7 +32,14 @@ public class AdminController {
 
     @GetMapping("/waiting")
     public List<CourseVo> queryCourseOfAdministrator() {
-        return CourseVo.parse(courseService.getReviewingCourseList());
+        List<Course> list1 = courseService.getReviewingCourseList();
+        List<CourseVo> list2 = new ArrayList<>();
+        for (Course c : list1) {
+            CourseVo cv = CourseVo.parse(c);
+            cv.setTeacherName(userService.getById(c.getTeacherId()).getUserName());
+            list2.add(cv);
+        }
+        return list2;
     }
 
     @GetMapping("/all?userName={userName}&type={type}")
