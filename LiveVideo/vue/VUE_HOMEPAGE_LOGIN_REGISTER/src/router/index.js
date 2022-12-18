@@ -3,7 +3,6 @@ import Login from '@/views/Login';
 import HomeView from "@/views/HomeView";
 import register from "@/views/regist";
 import Home from '@/views/home'
-import Home1 from '@/views/home1'
 import teacherHomeView from "@/views/teacherHomeView";
 import infoUpdate from "@/views/infoUpdate";
 import courseUpdate from "@/views/courseUpdate";

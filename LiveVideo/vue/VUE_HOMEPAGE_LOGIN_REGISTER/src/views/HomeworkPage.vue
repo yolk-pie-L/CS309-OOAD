@@ -57,17 +57,17 @@
       </div>
     </div>
 
-    <div class="answer">
-      <el-header class="variable1">Answer:</el-header>
-      <div v-for="item in answer">
-        <el-link
-            :body-style="{ padding: '0px', marginBottom: '1px' }"
-            :href="item.answerUrl"
-            class="addi"
-            v-text="item.answerName">
-        </el-link>
-      </div>
-    </div>
+<!--    <div class="answer">-->
+<!--      <el-header class="variable1">Answer:</el-header>-->
+<!--      <div v-for="item in answer">-->
+<!--        <el-link-->
+<!--            :body-style="{ padding: '0px', marginBottom: '1px' }"-->
+<!--            :href="item.answerUrl"-->
+<!--            class="addi"-->
+<!--            v-text="item.answerName">-->
+<!--        </el-link>-->
+<!--      </div>-->
+<!--    </div>-->
 
 <!--    <div class="upload">-->
 <!--      <el-upload ref="upload" :before-upload="beforeUpload" :file-list="list" :limit="1" action="doUpload"-->
@@ -82,25 +82,53 @@
 <!--      </span>-->
 <!--    </div>-->
 
-    <el-upload
-        class="upload-demo"
-        action="https://jsonplaceholder.typicode.com/posts/"
-        :on-preview="handlePreview"
-        :on-remove="handleRemove"
-        :before-remove="beforeRemove"
-        multiple
-        :limit="3"
-        :on-exceed="handleExceed"
-        :file-list="fileList">
-      <el-button size="small" type="primary">点击上传</el-button>
-      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-    </el-upload>
+<!--    <el-upload-->
+<!--        class="upload-demo"-->
+<!--        action="https://jsonplaceholder.typicode.com/posts/"-->
+<!--        :on-preview="handlePreview"-->
+<!--        :on-remove="handleRemove"-->
+<!--        :before-remove="beforeRemove"-->
+<!--        multiple-->
+<!--        :limit="3"-->
+<!--        :on-exceed="handleExceed"-->
+<!--        :file-list="fileList">-->
+<!--      <el-button size="small" type="primary">点击上传</el-button>-->
+<!--      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
+<!--    </el-upload>-->
+    <el-row type="flex" class="row-bg card" justify="center" align="bottom">
+      <el-col :span="7" class="login-card">
+        <!--loginForm-->
+        <el-form :model="sectionForm" :rules="rules" ref="loginForm" label-width="21%" class="loginForm">
+          <el-form-item label="章节名称" prop="sectionName" style="width: 380px">
+            <el-input v-model="sectionForm.sectionName"></el-input>
+          </el-form-item>
+          <el-upload
+              action="#"
+              multiple
+              :auto-upload="false"
+              :show-file-list="true"
+              :on-change="handleChange"
+              drag>
+            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+            <div class="el-upload__text">
+              将文件拖到此处，或<em>点击上传</em>
+            </div>
+          </el-upload>
+          <el-form-item class="btn-ground">
+            <el-button type="primary" @click="submitForm('loginForm')">Update</el-button>
+            <el-button @click="resetForm('loginForm')">Reset</el-button>
+          </el-form-item>
+        </el-form>
+      </el-col>
+    </el-row>
 
 
   </div>
 </template>
 
 <script>
+
+import router from "@/router";
 
 export default {
   name: "Homework",
@@ -152,7 +180,7 @@ export default {
           name: 'food2.jpeg',
           url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
         }
-      ]
+      ],
     }
   },
   mounted() {
@@ -164,19 +192,8 @@ export default {
         // 拿到结果
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
-        this.homeworkForm.assignmentId = result.assignmentId
-        this.homeworkForm.courseName = result.courseName
-        this.homeworkForm.teacherName = result.teacherName
-        this.homeworkForm.assignmentName = result.assignmentName
-        this.homeworkForm.deadline = result.deadline
-        this.homeworkForm.description = result.description
-        this.homeworkForm.status = result.status
-        this.homeworkForm.score = result.score
-        this.homeworkForm.totalGrade = result.totalGrade
-        this.homeworkForm.createTime = result.createTime
-        this.homeworkForm.updateTime = result.updateTime
+        this.homeworkForm = result
         this.additionalResources = result.additionalResources
-        this.homeworkForm.answerStatus = result.answerStatus
         this.answer = result.answer
         // 判断结果
         if (result) {
@@ -186,17 +203,47 @@ export default {
         }
       })
     },
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
+    uploading() {
+      this.$message({
+        message: '请等待上传完成',
+        type: 'error'
+      })
     },
-    handlePreview(file) {
-      console.log(file);
+    handleChange(file, fileList) {
+      let formdata = new FormData()
+      fileList.map(item => { //fileList本来就是数组，就不用转为真数组了
+        formdata.append("file", item.raw)  //将每一个文件图片都加进formdata
+      })
+      console.log(file.size)
+      this.$axios.post("http://localhost:8082/api/getPhoto", formdata).then(res => {
+        console.log(res)
+      })
     },
-    handleExceed(files, fileList) {
-      this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          // 表单验证成功
+          this.$axios.post('http://localhost:8082/api/upload', this.sectionForm).then(res => {
+            // 拿到结果
+            let result = JSON.parse(res.data.data);
+            let message = res.data.msg;
+            // 判断结果
+            if (result) {
+              /*登陆成功*/
+              router.push('/')
+            } else {
+
+            }
+          })
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
     },
-    beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除 ${ file.name }？`);
+    // 重置表单
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
     }
   },
 }

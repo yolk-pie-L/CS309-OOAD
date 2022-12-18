@@ -24,9 +24,7 @@
               :auto-upload="false"
               :show-file-list="true"
               :on-change="handleChange"
-              drag
-          >
-            <!-- 这个图标的书写方式，element-plus和element有区别，注意一下！ -->
+              drag>
             <el-icon class="el-icon--upload"><upload-filled /></el-icon>
             <div class="el-upload__text">
               将文件拖到此处，或<em>点击上传</em>
@@ -70,7 +68,6 @@ export default {
       })
     },
     handleChange(file, fileList) {
-
       let formdata = new FormData()
       fileList.map(item => { //fileList本来就是数组，就不用转为真数组了
         formdata.append("file", item.raw)  //将每一个文件图片都加进formdata
@@ -80,15 +77,6 @@ export default {
         console.log(res)
       })
     },
-
-    // beforeUpload (file) {
-    //   // alert(file)
-    //   this.infoForm.append('file', file)
-    //   alert(this.infoForm.file)
-    //   return true
-    // },
-    // 提交表单
-
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
