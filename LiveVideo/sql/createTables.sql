@@ -28,7 +28,7 @@ drop table if exists course cascade;
 
 drop table if exists user cascade;
 
-
+DROP TABLE IF EXISTS `file_tb`;
 
 CREATE TABLE user
 (
@@ -214,3 +214,12 @@ BEGIN
     WHERE section.course_id = NEW.course_id AND stu_course.user_id = NEW.user_id;
 END$
 DELIMITER ;
+
+CREATE TABLE `file_tb`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `f_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '文件唯一标识',
+  `f_index` bigint(20) DEFAULT NULL COMMENT '第几个分片',
+  `f_total` int(11) DEFAULT NULL COMMENT '共有几个分片',
+  `f_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '文件名称，后面可以返回出去',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 49 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
