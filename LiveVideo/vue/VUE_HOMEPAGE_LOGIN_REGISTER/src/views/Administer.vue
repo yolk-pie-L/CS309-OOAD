@@ -324,7 +324,6 @@ export default {
   border-radius: 50%
 }
 
-//搜索框位置
 .search_input {
   position: absolute;
   top: 270px;
