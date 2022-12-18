@@ -267,7 +267,7 @@
         ]
       }
     },
-    "submitAssignmentr": {
+    "submitAssignment": {
       "Method": "POST",
       "Path": "~/api/course/assignment/submitAssignment",
       "InputForm": {

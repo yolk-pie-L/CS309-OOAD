@@ -10,6 +10,8 @@ import com.example.live_video.service.AssignmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AssignmentServiceImpl extends ServiceImpl<AssignmentMapper, Assignment> implements AssignmentService {
 
@@ -59,5 +61,10 @@ public class AssignmentServiceImpl extends ServiceImpl<AssignmentMapper, Assignm
         assignQueryWrapper.select("id");
         Assignment assignment = assignmentMapper.selectOne(assignQueryWrapper);
         return assignment.getId();
+    }
+
+    @Override
+    public List<Assignment> getAssignmentByCourse(String courseName, String teacherName) {
+        return null;
     }
 }
