@@ -3,6 +3,9 @@ package com.example.live_video.vo;
 import com.example.live_video.entity.User;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 public class UserVo {
 
@@ -24,12 +27,18 @@ public class UserVo {
         this.account = account;
     }
 
-    public static UserVo convert(User user) {
+    public static UserVo parse(User user) {
         return new UserVo(
                 user.getUserName(),
                 user.getUserType().toString(),
                 user.getMail(),
                 user.getPhotoUrl(),
                 user.getAccount());
+    }
+
+    public static List<UserVo> parse(List<User> userList){
+        List<UserVo> userVoList = new ArrayList<>();
+        userList.forEach(user -> userVoList.add(UserVo.parse(user)));
+        return userVoList;
     }
 }

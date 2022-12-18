@@ -13,21 +13,17 @@
             "courseName": "course",
             "teacherName": "teacher",
             "introduction": "intro",
-            "charge": 10,
-            "tag": "tag",
             "coursePicture": "url",
             "privateKeyUrl": "ababa",
-            "status": "OK"
+            "tag": "",
+            "charge": ""
           },
           {
             "courseName": "course",
             "teacherName": "teacher",
             "introduction": "intro",
-            "charge": 10,
-            "tag": "tag",
             "coursePicture": "url",
-            "privateKeyUrl": "ababa",
-            "status": "OK"
+            "privateKeyUrl": "ababa"
           }
         ]
       }
@@ -132,8 +128,6 @@
       "InputForm": {
         "userName": "checker",
         "userType": "Student",
-        "password": "123456",
-        "repeatPassword": "Blank or 123456789",
         "mail": "example@xx.com",
         "photoUrl": "url"
       },
@@ -170,28 +164,31 @@
     },
     "queryCourseOfAdministrator": {
       "Method": "GET",
-      "Path": "~/api/course/waiting?administrator={ababa}",
-      "OutputForm": [
-        {
-          "courseName": "course",
-          "teacherName": "teacher",
-          "introduction": "intro",
-          "charge": 10,
-          "tag": "tag",
-          "coursePicture": "url",
-          "privateKeyUrl": "ababa",
-          "status": "OK"
-        }
-      ]
+      "Path": "~/api/course/waiting",
+      "OutputForm": {
+        "courseList": [
+          {
+            "courseName": "course",
+            "teacherName": "teacher",
+            "introduction": "intro",
+            "coursePicture": "url",
+            "privateKeyUrl": "ababa",
+            "tag": "",
+            "charge": ""
+          }
+        ]
+      }
     },
     "queryUserLikeUserName": {
       "Method": "GET",
-      "Path": "~/api/user/all?userName={user}&type={student or teacher}",
+      "Path": "~/api/user/all?userName={user}&type={student or teacher or all}",
       "OutputForm": {
         "result": [
           {
             "userName": "user",
-            "photoUrl": "url"
+            "userType": "student or teacher",
+            "photoUrl": "url",
+            "isAdmin": "(yes|no)"
           }
         ]
       }
@@ -200,9 +197,10 @@
       "Method": "POST",
       "Path": "~/api/privilege",
       "InputForm": {
-        "administrator": "admin",
-        "userName": "user",
-        "privilegeType": "give or transform or remove"
+        "userName": "user"
+      },
+      "OutputForm": {
+        "result": "(true/false)"
       }
     },
     "updateCourseStatusByAdministrator": {
@@ -210,9 +208,7 @@
       "Path": "~/api/course/admin",
       "InputForm": {
         "courseName": "course",
-        "courseStatus": "APPROVED or FAILED or REVIEWING"
-      },
-      "OutputForm": {
+        "approved": "(true or false)"
       }
     }
   },
@@ -228,31 +224,31 @@
       }
     }
   },
-  "AssignmentPage":{
-    "queryAssignmentByCourseName":{
-      "Method":"GET",
-      "Path":"~/api/course/allAssignment?courseId={courseId}",
-      "OutputForm":[
+  "AssignmentPage": {
+    "queryAssignmentByCourseName": {
+      "Method": "GET",
+      "Path": "~/api/course/allAssignment?courseId={courseId}",
+      "OutputForm": [
         {
-          "id":"aa",
+          "id": "aa",
           "assignmentName": "homework1",
           "deadline": "date",
           "status": "notStarted/return/submitted"
         }
       ]
     },
-    "queryAssignmentById":{
-      "Method":"GET",
-      "Path":"~/api/course/assignment?AssignmentId={AssignmentId}",
-      "OutputForm":{
-        "assignmentId":"aa",
+    "queryAssignmentById": {
+      "Method": "GET",
+      "Path": "~/api/course/assignment?AssignmentId={AssignmentId}",
+      "OutputForm": {
+        "assignmentId": "aa",
         "courseName": "course",
         "teacherName": "teacher",
         "assignmentName": "homework1",
         "deadline": "date",
         "description": "Intro",
         "status": "notStarted/return/submitted",
-        "score":"",
+        "score": "",
         "totalGrade": "",
         "createTime": "date",
         "updateTime": "date",
@@ -262,7 +258,7 @@
             "resourceUrl": ""
           }
         ],
-        "answerStatus":"yes/no",
+        "answerStatus": "yes/no",
         "answer": [
           {
             "answerName": "",
@@ -271,36 +267,36 @@
         ]
       }
     },
-    "submitAssignment":{
-      "Method":"POST",
-      "Path":"~/api/course/assignment/submitAssignment",
-      "InputForm":{
-        "assignmentId":"aaa",
+    "submitAssignment": {
+      "Method": "POST",
+      "Path": "~/api/course/assignment/submitAssignment",
+      "InputForm": {
+        "assignmentId": "aaa",
         "answerFile": [
           {
             "answerUrl": ""
           }
         ]
       },
-      "OutputForm":{
-        "result":"(yes/no)"
+      "OutputForm": {
+        "result": "(yes/no)"
       }
     },
-    "uploadFile":{
-      "Method":"POST",
-      "Path":"~/api/uploadFile",
-      "InputForm":{
-        "file":"file"
+    "uploadFile": {
+      "Method": "POST",
+      "Path": "~/api/uploadFile",
+      "InputForm": {
+        "file": "file"
       },
-      "OutputForm":{
-        "url":"http://"
+      "OutputForm": {
+        "url": "http://"
       }
     },
-    "createAssignment":{
-      "Method":"POST",
-      "Path":"~/api/course/createAssignment",
-      "InputForm":{
-        "courseId":"",
+    "createAssignment": {
+      "Method": "POST",
+      "Path": "~/api/course/createAssignment",
+      "InputForm": {
+        "courseId": "",
         "assignmentName": "homework1",
         "deadline": "date",
         "description": "Intro",
@@ -312,121 +308,127 @@
           }
         ]
       },
-      "OutputForm":{
-        "result":"(yes/no)"
+      "OutputForm": {
+        "result": "(yes/no)"
       }
     }
   },
-  "Quiz":{
-    "createQuizJson":{
-      "Method":"POST",
-      "Path":"~/api/course/createQuizJson",
-      "InputForm":{
-        "num":"10",
-        "problems":[
+  "Quiz": {
+    "createQuizJson": {
+      "Method": "POST",
+      "Path": "~/api/course/createQuizJson",
+      "InputForm": {
+        "num": "10",
+        "problems": [
           {
-            "problem":"xxxx",
-            "A":"sdfa",
-            "B":"sss",
-            "C":"ddd",
-            "D":"ddd",
-            "answer":"A/B/C/D"
+            "isSelection": "(yes/no)",
+            "problem": "xxxx",
+            "A": "sdfa",
+            "B": "sss",
+            "C": "ddd",
+            "D": "ddd",
+            "answer": "(A/B/C/D)/(yes/no)"
           }
         ]
       },
-      "OutputForm":{
-        "quizUrl":""
+      "OutputForm": {
+        "quizUrl": ""
       }
     },
-    "createQuiz":{
-      "Method":"POST",
-      "Path":"~/api/course/createQuiz",
-      "InputForm":{
-        "courseId":"",
+    "createQuiz": {
+      "Method": "POST",
+      "Path": "~/api/course/createQuiz",
+      "InputForm": {
+        "courseId": "",
         "assignmentName": "homework1",
         "deadline": "date",
         "description": "Intro",
         "totalGrade": "",
+        "limitedTime": "(as mins)",
         "additionalResources": {
           "resourceName": "",
           "resourceUrl": ""
         }
       },
-      "OutputForm":{
-        "result":"(yes/no)"
+      "OutputForm": {
+        "result": "(yes/no)"
       }
     },
-    "queryQuizByCourseName":{
-      "Method":"GET",
-      "Path":"~/api/course/allQuiz?courseId={courseId}",
-      "OutputForm":[
+    "queryQuizByCourseName": {
+      "Method": "GET",
+      "Path": "~/api/course/allQuiz?courseId={courseId}",
+      "OutputForm": [
         {
-          "Quizid":"aa",
+          "Quizid": "aa",
           "QuizName": "homework1",
           "deadline": "date",
           "status": "notStarted/return/submitted",
-          "score":""
+          "score": ""
         }
       ]
     },
-    "queryQuizById":{
-      "Method":"GET",
-      "Path":"~/api/course/quiz?QuizId={QuizId}",
-      "OutputForm":{
-        "quizId":"aa",
+    "queryQuizById": {
+      "Method": "GET",
+      "Path": "~/api/course/quiz?QuizId={QuizId}",
+      "OutputForm": {
+        "quizId": "aa",
         "courseName": "course",
         "teacherName": "teacher",
         "QuizName": "quiz1",
         "deadline": "date",
         "description": "Intro",
         "status": "notStarted/return/submitted",
-        "score":"",
+        "score": "",
         "totalGrade": "",
+        "limitedTime": "(as mins)",
         "createTime": "date",
         "updateTime": "date",
-        "num":"10",
-        "problems":[
+        "num": "10",
+        "problems": [
           {
-            "problem":"xxxx",
-            "A":"sdfa",
-            "B":"sss",
-            "C":"ddd",
-            "D":"ddd",
-            "answer":"A/B/C/D"
+            "isSelection": "(yes/no)",
+            "problem": "xxxx",
+            "A": "sdfa",
+            "B": "sss",
+            "C": "ddd",
+            "D": "ddd",
+            "answer": "(A/B/C/D)/(yes/no)"
           }
         ]
       }
     },
-    "submitQuiz":{
-      "Method":"POST",
-      "Path":"~/api/course/submitQuiz",
-      "InputForm":{
-        "quizId":" ",
-        "answer":[
+    "submitQuiz": {
+      "Method": "POST",
+      "Path": "~/api/course/submitQuiz",
+      "InputForm": {
+        "quizId": " ",
+        "answer": [
           {
-            "choice":"A/B/C/D"
+            "choice": "(A/B/C/D)/(yes/no)"
           }
         ]
       },
-      "OutputForm":{
-        "score":""
+      "OutputForm": {
+        "score": ""
       }
     }
   },
-  "ThirdParty":{
-    "securityCodeCreate":{
-      "Method":"GET",
-      "Path":"~/api/securityCodeCreate",
-      "OutputForm":{
-        "result":"(yes/no)"
+  "ThirdParty": {
+    "securityCodeCreate": {
+      "Method": "GET",
+      "Path": "~/api/securityCodeCreate",
+      "OutputForm": {
+        "result": "(yes/no)"
       }
     },
-    "securityCodeVerify":{
-      "Method":"GET",
-      "Path":"~/api/securityCodeVerify?code={inputCode}",
-      "OutputForm":{
-        "result":"(yes/no)"
+    "securityCodeVerify": {
+      "Method": "GET",
+      "Path": "~/api/securityCodeVerify?code={inputCode}",
+      "OutputForm": {
+        "result": "(yes/no)"
       }
     }
   }
 }
+
+

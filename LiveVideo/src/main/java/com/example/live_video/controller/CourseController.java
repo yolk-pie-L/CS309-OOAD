@@ -1,9 +1,7 @@
 package com.example.live_video.controller;
 
 import com.example.live_video.dto.CourseDto;
-import com.example.live_video.dto.JSONObject;
 import com.example.live_video.dto.JoinForm;
-import com.example.live_video.dto.UserForm;
 import com.example.live_video.entity.Course;
 import com.example.live_video.entity.CourseStatus;
 import com.example.live_video.entity.UserType;
@@ -14,13 +12,11 @@ import com.example.live_video.service.UserService;
 import com.example.live_video.vo.CourseVo;
 import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
-import com.example.live_video.wrapper.UserLoginToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 @ResponseResult
@@ -70,7 +66,7 @@ public class CourseController {
         if (userService.getUserType(userName) == UserType.Teacher) {
             return CourseVo.parse(courseService.getApprovedCourseListOfTeacher(o, page, userName));
         }
-//        return CourseVo.parseEasy(courseService.getOneCourse(userName, null));
+//        return CourseVo.pasteEasy(courseService.getOneCourse(userName, null));
         return null;
     }
 

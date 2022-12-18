@@ -18,4 +18,9 @@ public class FileForm {
 
     private String suffix;
 
+    private Long courseId;
+
+    private String sectionName;
+
+    private Long sectionScore;
 }

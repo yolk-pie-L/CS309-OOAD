@@ -21,6 +21,7 @@ public interface CourseService extends IService<Course> {
 
     /**
      * Update the course. Any field that is not empty in the course will be updated.
+     *
      * @param course course to be updated
      * @return true if the course is updated successfully
      * @throws
@@ -39,8 +40,9 @@ public interface CourseService extends IService<Course> {
 
     /**
      * Get the courses that has status APPROVED. 实现了分页
+     *
      * @param recordsPerPage 每一页的记录数量
-     * @param pageNum 第几页（从1开始）
+     * @param pageNum        第几页（从1开始）
      * @return A list of course
      */
     public List<Course> getApprovedCourseList(int recordsPerPage, int pageNum);
@@ -60,5 +62,7 @@ public interface CourseService extends IService<Course> {
     public String getCoursePrivateKeyUrl(String teacherName, String courseName);
 
     public List<Course> getApprovedCourseList(int recordsPerPage, int pageNum, String courseName);
+
+    public List<Course> getAllCourse();
 
 }
