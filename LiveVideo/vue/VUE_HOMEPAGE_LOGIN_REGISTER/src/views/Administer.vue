@@ -33,7 +33,7 @@
     </div>
 
     <div class="query">
-      <el-input v-model="queryInfo.query" clearable placeholder="Search for user"
+      <el-input v-model="queryInfo.name" clearable placeholder="Search for user"
                 @clear="getUserList"></el-input>
         <el-select v-model="queryInfo.type" placeholder="请选择">
           <el-option
@@ -81,84 +81,15 @@ export default {
       },
       tableData: [
         {
+          id:'',
           teacherName: 'Tom',
           courseName: 'CS101',
           introduction: 'aaaaa',
           coursePicture: '',
           tag: '',
-          charge: ''
-        },
-        {
-          teacherName: 'Tom',
-          courseName: 'CS101',
-          introduction: 'aaaaa',
-          coursePicture: '',
-          tag: '',
-          charge: ''
-        },
-        {
-          teacherName: 'Tom',
-          courseName: 'CS101',
-          introduction: 'aaaaa',
-          coursePicture: '',
-          tag: '',
-          charge: ''
-        },
-        {
-          teacherName: 'Tom',
-          courseName: 'CS101',
-          introduction: 'aaaaa',
-          coursePicture: '',
-          tag: '',
-          charge: ''
-        },
-        {
-          teacherName: 'Tom',
-          courseName: 'CS101',
-          introduction: 'aaaaa',
-          coursePicture: '',
-          tag: '',
-          charge: ''
-        },
-        {
-          teacherName: 'Tom',
-          courseName: 'CS101',
-          introduction: 'aaaaa',
-          coursePicture: '',
-          tag: '',
-          charge: ''
-        },
-        {
-          teacherName: 'Tom',
-          courseName: 'CS101',
-          introduction: 'aaaaa',
-          coursePicture: '',
-          tag: '',
-          charge: ''
-        },
-        {
-          teacherName: 'Tom',
-          courseName: 'CS101',
-          introduction: 'aaaaa',
-          coursePicture: '',
-          tag: '',
-          charge: ''
-        },
-        {
-          teacherName: 'Tom',
-          courseName: 'CS101',
-          introduction: 'aaaaa',
-          coursePicture: '',
-          tag: '',
-          charge: ''
-        },
-        {
-          teacherName: 'Tom',
-          courseName: 'CS101',
-          introduction: 'aaaaa',
-          coursePicture: '',
-          tag: '',
-          charge: ''
+          charge: '',
+          privateKeyUrl:'',
+          status:''
         },
       ],
       tableUser: [
@@ -179,7 +110,7 @@ export default {
         userName: "user"
       },
       InputForm2: {
-        courseName: "course",
+        courseId: "courseId",
         approved: "true"
       },
       queryInfo: {
@@ -187,13 +118,13 @@ export default {
         type: ''
       },
       options: [{
-        value: '选项1',
+        value: 'student',
         label: 'student'
       }, {
-        value: '选项2',
+        value: 'teacher',
         label: 'teacher'
       }, {
-        value: '选项3',
+        value: 'all',
         label: 'all'
       }],
     }
@@ -203,17 +134,11 @@ export default {
   },
   methods: {
     fetchClass() {
-      this.$axios.get('api/user?userName={' + this.username + '}').then(res => {
+      this.$axios.get('http://localhost:8082/api/admin/waiting').then(res => {
         // 拿到结果
-        let result = JSON.parse(res.data.data);
+        let result = res.data.result;
         let message = res.data.msg;
-        this.courseName = result.courseName
-        this.teacherName = result.teacher
-        this.introduction = result.intro
-        this.coursePicture = result.url
-        this.privateKeyUrl = result.privateKeyUrl
-        this.tag = result.tag
-        this.charge = result.charge
+        this.tableData=result;
         // 判断结果
         if (result) {
         } else {
@@ -223,10 +148,10 @@ export default {
       })
     },
     handleReject(index) {
-      this.InputForm2.courseName = this.tableData.at(index).courseName;
+      this.InputForm2.courseId = this.tableData.at(index).id;
       this.InputForm2.approved = "false";
-      this.$axios.post('api/course/admin', this.InputForm2).then(res => {
-        let result = JSON.parse(res.data.data);
+      this.$axios.post('http://localhost:8082/api/admin/status', this.InputForm2).then(res => {
+        let result = res.data.result;
         let message = res.data.msg;
         if (result) {
           this.tableData.splice(index, 1);
@@ -237,10 +162,10 @@ export default {
       })
     },
     handleAgree(index, row) {
-      this.InputForm2.courseName = this.tableData.at(index).courseName;
+      this.InputForm2.courseId = this.tableData.at(index).id;
       this.InputForm2.approved = "true";
-      this.$axios.post('api/course/admin', this.InputForm2).then(res => {
-        let result = JSON.parse(res.data.data);
+      this.$axios.post('http://localhost:8082/api/admin/status', this.InputForm2).then(res => {
+        let result = res.data.result;
         let message = res.data.msg;
         if (result) {
           this.tableData.splice(index, 1);
@@ -251,8 +176,9 @@ export default {
       })
     },
     handleChangePrivilege(index) {
-      this.$axios.post('/api/privilege?userName={' + this.userForm.at(index).username + '}').then(res => {
-        let result = JSON.parse(res.data.data);
+      this.InputForm1.userName= this.userForm.at(index).username
+      this.$axios.post('http://localhost:8082/api/admin/privilege' ,this.InputForm1).then(res => {
+        let result = res.data.result;
         let message = res.data.msg;
         if (result) {
           this.fetchClass();
@@ -268,13 +194,15 @@ export default {
       })
     },
     async getUserList() {
-      this.$axios.post('all?userName={' + this.queryInfo.name + '}&type={student or teacher or all}' + this.queryInfo.type + '}').then(res => {
-        let result = JSON.parse(res.data.data);
+      this.$axios.get('http://localhost:8082/api/admin/all',{
+        params: {
+          userName: this.queryInfo.name,
+              type: this.queryInfo.type,
+        }
+      }).then(res => {
+        let result = res.data.result;
         let message = res.data.msg;
-        this.tableUser.userName = result.userName
-        this.tableUser.userType = result.userType
-        this.tableUser.photoUrl = result.photoUrl
-        this.tableUser.isAdm = result.isAdm
+        this.tableUser=result
         if (result) {
         } else {
           /*打印错误信息*/
@@ -401,7 +329,6 @@ export default {
   border-radius: 50%
 }
 
-//搜索框位置
 .search_input {
   position: absolute;
   top: 270px;
