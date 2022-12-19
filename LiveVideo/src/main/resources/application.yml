@@ -6,8 +6,8 @@ spring:
     url: jdbc:mysql://localhost:3306/LiveVideo?serverTimeZone=GMT%2b8
     #    url: jdbc:mysql://localhost:3306/test_db?serverTimeZone=GMT%2b8
     username: root
-    password: 123456
-#    password: ??????
+    #    password: 123456
+    password: ??????
   mail:
     host: smtp.163.com
     username: livevideo2022@163.com
@@ -31,3 +31,13 @@ src:
   path: src/main/resources/static/video/
 
 
+logging:
+  level:
+    com.example.live_video.mapper: debug
+
+
+mybatis:
+  #用于mybatis在控制台打印sql日志
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:mapper/*.xml

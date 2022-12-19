@@ -97,8 +97,7 @@ CREATE TABLE section
     grade        int,
     create_time  timestamp   not null default CURRENT_TIMESTAMP,
     update_time  timestamp   null     default null on update CURRENT_TIMESTAMP,
-    is_delete    int                  default 0,
-    CONSTRAINT unique (section_name, course_id, is_delete),
+    CONSTRAINT unique (section_name, course_id),
     FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
