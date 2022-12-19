@@ -118,7 +118,7 @@ export default {
       courseName: 'black',
       videoURL: "url",
       recodrTime: '0',
-      sectionId: 1,
+      sectionId: 4,
       row: 0,
       sectionData: [
         {
@@ -139,8 +139,8 @@ export default {
         fluid: false,  // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
         sources: [{
           type: "video/mp4",  // 类型
-          src: 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4'             // url地址
-       // src: 'http://localhost:8082/api/video/?sectionId=${sectionId}'             // url地址
+          // src: 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4'             // url地址
+          src: 'http://localhost:8082/api/section/4'              // url地址
         }],
         poster: '',  // 封面地址
         notSupportedMessage: '此视频暂无法播放，请稍后再试',  // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
@@ -257,11 +257,10 @@ export default {
     }, 5000)
   },
   methods: {
-
     fetchData() {
       this.courseName = this.$route.query.courseName
       console.log(this.courseName)
-      this.$axios.get('api/video/sectionId=${sectionId}').then(res => {
+      this.$axios.get('http://localhost:8082/api/section/' + this.sectionId).then(res => {
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         this.sectionData = result

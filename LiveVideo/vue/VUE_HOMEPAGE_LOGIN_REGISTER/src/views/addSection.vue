@@ -49,6 +49,7 @@
 
 <script>
 import router from "@/router";
+import md5 from "js-md5"
 
 export default {
   name: "FileUpload",
@@ -59,7 +60,7 @@ export default {
       shardSize: 10 * 1024 * 1024,
       videoUrl: '',
       sectionForm: {
-        courseId: '2',
+        courseId: '15',
         sectionName: 'black',
         sectionScore: '10'
       }
@@ -68,7 +69,7 @@ export default {
   methods: {
     submitForm() {
       // 表单验证成功
-      this.$axios.post('http://localhost:8082/api/addSection', this.sectionForm).then(res => {
+      this.$axios.post('http://localhost:8082/api/section/', this.sectionForm).then(res => {
         // 拿到结果
         let message = res.data.msg;
         // 判断结果
@@ -86,11 +87,11 @@ export default {
       this.$refs.upload.submit();
     },
     async check(key) {
-      var res = await this.$http.get('/check', {
+      var res = await this.$axios.get('http://localhost:8082/api/section/check', {
         params: {'key': key}
       })
       let resData = res.data;
-      return resData.data;
+      return resData.result;
     },
     async recursionUpload(param, file) {
       //FormData私有类对象，访问不到，可以通过get判断值是否传进去
@@ -116,15 +117,19 @@ export default {
       totalParam.append("size", size);
       totalParam.append("fileName", fileName);
       totalParam.append("suffix", suffix);
+      totalParam.append("sectionName", this.sectionForm.sectionName);
+      totalParam.append("courseId", this.sectionForm.courseId);
+      totalParam.append("sectionScore", this.sectionForm.sectionScore);
       let config = {
         //添加请求头
         headers: {"Content-Type": "multipart/form-data"}
       };
       console.log(param);
-      var res = await this.$http.post('/upload', totalParam, config)
+      var res = await this.$axios.post('http://localhost:8082/api/section/upload2', totalParam, config)
 
       var resData = res.data;
-      if (resData.status) {
+      console.log(resData)
+      if (resData.code === 200) {
         if (shardIndex < shardTotal) {
           this.$notify({
             title: '成功',
@@ -146,6 +151,12 @@ export default {
           param.shardIndex = param.shardIndex + 1;
           _this.recursionUpload(param, file);
         }
+      } else {
+        this.$notify({
+          title: '失败',
+          message: resData.result,
+          type: 'success'
+        });
       }
 
 
@@ -176,7 +187,7 @@ export default {
       let size = file.size;
       let shardTotal = Math.ceil(size / shardSize); //总片数
       // 生成文件标识，标识多次上传的是不是同一个文件
-      let key = this.$md5(file.name + file.size + file.type);
+      let key = md5(file.name + file.size + file.type);
       let param = {
         key: key,
         shardIndex: shardIndex,
@@ -197,6 +208,7 @@ export default {
 */
 
       let checkIndexData = await _this.check(key);//得到文件分片索引
+      console.log(checkIndexData)
       let checkIndex = checkIndexData.findex;
 
       //console.log(checkIndexData)
