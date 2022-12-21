@@ -12,6 +12,8 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AssignmentServiceImpl extends ServiceImpl<AssignmentMapper, Assignment> implements AssignmentService {
 
@@ -58,13 +60,20 @@ public class AssignmentServiceImpl extends ServiceImpl<AssignmentMapper, Assignm
     }
 
     @Override
-    public Long getAssignmentId(String courseName, String teacherName, String assignName) {
-        Long courseId = courseMapper.getCourseId(teacherName, courseName);
+    public Long getAssignmentId(long courseId, String assignName) {
         QueryWrapper<Assignment> assignQueryWrapper = new QueryWrapper<>();
         assignQueryWrapper.eq("course_id", courseId);
         assignQueryWrapper.eq("assignment_name", assignName);
         assignQueryWrapper.select("id");
         Assignment assignment = assignmentMapper.selectOne(assignQueryWrapper);
         return assignment.getId();
+    }
+
+    @Override
+    public List<Assignment> getAssignmentsOfCourse(long courseId) {
+        QueryWrapper<Assignment> assignQueryWrapper = new QueryWrapper<>();
+        assignQueryWrapper.eq("course_id", courseId);
+        List<Assignment> assignmentList = assignmentMapper.selectList(assignQueryWrapper);
+        return assignmentList;
     }
 }

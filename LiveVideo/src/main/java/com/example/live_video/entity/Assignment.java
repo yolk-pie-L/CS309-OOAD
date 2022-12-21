@@ -42,6 +42,9 @@ public class Assignment {
     @TableField(value = "description", updateStrategy = FieldStrategy.NOT_EMPTY)
     private String description;
 
+    @TableField(value = "answer_url")
+    private String answerUrl;
+
     @TableField(value = "create_time", insertStrategy = FieldStrategy.NOT_EMPTY)
     private Timestamp createTime;
 
@@ -56,6 +59,17 @@ public class Assignment {
         this.assignUrls = assignUrls;
         this.isAssignment = isAssignment;
         this.description = description;
+    }
+
+    public Assignment(String assignmentName, Long courseId, Timestamp deadline, Integer totalGrade, List<String> assignUrls, Boolean isAssignment, String description, String answerUrl) {
+        this.assignmentName = assignmentName;
+        this.courseId = courseId;
+        this.deadline = deadline;
+        this.totalGrade = totalGrade;
+        this.assignUrls = assignUrls;
+        this.isAssignment = isAssignment;
+        this.description = description;
+        this.answerUrl = answerUrl;
     }
 
     /**
