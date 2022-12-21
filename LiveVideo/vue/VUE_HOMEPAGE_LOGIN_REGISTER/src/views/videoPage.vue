@@ -260,7 +260,7 @@ export default {
     fetchData() {
       this.courseName = this.$route.query.courseName
       console.log(this.courseName)
-      this.$axios.get('http://localhost:8082/api/section/' + this.sectionId).then(res => {
+      this.$axios.get(`http://localhost:8082/api/section/${this.sectionId}`).then(res => {
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         this.sectionData = result
@@ -278,7 +278,7 @@ export default {
     },
     fetchComment() {
       this.courseName = this.$route.query.courseName
-      this.$axios.get('api/video?courseVID=${courseName}$sectionName=${sectionName}').then(res => {
+      this.$axios.get(`http://localhost:8082/api/comment/${this.sectionId}`).then(res => {
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         this.sectionData = result
@@ -295,8 +295,7 @@ export default {
       })
     },
     fetchTotalComment() {
-      this.courseName = this.$route.query.courseName
-      this.$axios.get('api/comment/all?courseVID=${courseName}$sectionName=${sectionName}').then(res => {
+      this.$axios.get(`http://localhost:8082/api/comment/all?${this.sectionId}`).then(res => {
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         this.total = "总评论数： " + result

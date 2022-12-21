@@ -36,7 +36,9 @@ public class CourseController {
 
     @GetMapping("/{courseId}")
     CourseVo getCourse(@PathVariable int courseId) {
-        return CourseVo.parse(courseService.getOneCourse((long) courseId));
+        Course course = courseService.getOneCourse((long) courseId);
+        course.setTeacherName(userService.getById(course.getTeacherId()).getUserName());
+        return CourseVo.parse(course);
     }
 
     @GetMapping("/success/all")

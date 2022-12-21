@@ -135,7 +135,7 @@ export default {
     },
     fetchCourse() {
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
-      this.$axios.get('http://localhost:8082/api/course/', {
+      this.$axios.get('http://localhost:8082/api/course/all', {
         params: {
           o: this.pageSize,
           page: this.currentPage,
