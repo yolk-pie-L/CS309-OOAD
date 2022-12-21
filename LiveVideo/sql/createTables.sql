@@ -12,6 +12,8 @@ drop table if exists notice cascade;
 
 drop table if exists stu_assign cascade;
 
+DROP TABLE IF EXISTS stu_assign_urls cascade;
+
 drop table if exists assignment cascade;
 
 drop table if exists stu_course cascade;
@@ -29,6 +31,8 @@ drop table if exists course cascade;
 drop table if exists user cascade;
 
 DROP TABLE IF EXISTS `file_tb`;
+
+DROP TABLE IF EXISTS stu_assign_urls cascade;
 
 CREATE TABLE user
 (
@@ -74,6 +78,7 @@ CREATE TABLE assignment
     total_grade     int,
     is_assignment   boolean     not null,
     description     text,
+    answer_url      varchar(50),
     create_time     timestamp   not null default CURRENT_TIMESTAMP,
     update_time     timestamp   null     default null on update CURRENT_TIMESTAMP,
     CONSTRAINT unique (assignment_name, course_id),
@@ -97,8 +102,7 @@ CREATE TABLE section
     grade        int,
     create_time  timestamp   not null default CURRENT_TIMESTAMP,
     update_time  timestamp   null     default null on update CURRENT_TIMESTAMP,
-    is_delete    int                  default 0,
-    CONSTRAINT unique (section_name, course_id, is_delete),
+    CONSTRAINT unique (section_name, course_id),
     FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -161,9 +165,17 @@ CREATE TABLE user_payment_log
 
 CREATE TABLE stu_assign
 (
+    user_id   int not null,
+    assign_id int not null,
+    grade     int,
+    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (assign_id) REFERENCES assignment (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE stu_assign_urls
+(
     user_id    int not null,
     assign_id  int not null,
-    grade      int,
     assign_url varchar(50),
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (assign_id) REFERENCES assignment (id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -211,15 +223,42 @@ BEGIN
     SELECT NEW.user_id, section.id, 0
     FROM stu_course
              JOIN section ON section.course_id = stu_course.course_id
-    WHERE section.course_id = NEW.course_id AND stu_course.user_id = NEW.user_id;
+    WHERE section.course_id = NEW.course_id
+      AND stu_course.user_id = NEW.user_id;
+    INSERT INTO stu_assign
+    SELECT NEW.user_id, assignment.id, 0
+    FROM stu_course
+             JOIN assignment ON stu_course.course_id = assignment.course_id
+    WHERE assignment.course_id = NEW.course_id
+      AND stu_course.user_id = NEW.user_id;
 END$
 DELIMITER ;
 
-CREATE TABLE `file_tb`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `f_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '文件唯一标识',
-  `f_index` bigint(20) DEFAULT NULL COMMENT '第几个分片',
-  `f_total` int(11) DEFAULT NULL COMMENT '共有几个分片',
-  `f_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '文件名称，后面可以返回出去',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 49 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+DELIMITER $
+CREATE TRIGGER tri_create_assignment
+    AFTER
+        INSERT
+    ON assignment
+    FOR EACH ROW
+BEGIN
+    INSERT INTO stu_assign
+    SELECT stu_course.user_id, NEW.id, 0
+    FROM stu_course
+    WHERE stu_course.course_id = NEW.course_id;
+END$
+DELIMITER ;
+
+CREATE TABLE `file_tb`
+(
+    `id`      int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `f_key`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '文件唯一标识',
+    `f_index` bigint(20)                                                    DEFAULT NULL COMMENT '第几个分片',
+    `f_total` int(11)                                                       DEFAULT NULL COMMENT '共有几个分片',
+    `f_name`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '文件名称，后面可以返回出去',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 49
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_general_ci
+  ROW_FORMAT = Dynamic;
+

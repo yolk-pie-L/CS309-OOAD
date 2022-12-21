@@ -11,6 +11,9 @@ import com.example.live_video.service.SectionService;
 import com.example.live_video.util.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -38,6 +41,7 @@ public class SectionServiceImpl extends ServiceImpl<SectionMapper, Section> impl
     }
 
     @Override
+    @CachePut(value = "emp" ,key = "'Section' +#p0")
     public Boolean updateSection(Section section) {
         QueryWrapper<Section> sectionQueryWrapper = new QueryWrapper<>();
         sectionQueryWrapper.eq("section_name", section.getSectionName());
@@ -46,6 +50,7 @@ public class SectionServiceImpl extends ServiceImpl<SectionMapper, Section> impl
     }
 
     @Override
+    @CacheEvict(value = "emp" ,key = "'Section' +#p0")
     public Boolean removeSection(Long sectionId) {
         return sectionMapper.deleteById(sectionId) == 1;
     }
@@ -58,6 +63,7 @@ public class SectionServiceImpl extends ServiceImpl<SectionMapper, Section> impl
     }
 
     @Override
+    @Cacheable(value = "emp" ,key = "'Section' +#p0")
     public Section getOneSection(Long sectionId) {
         return sectionMapper.selectById(sectionId);
     }

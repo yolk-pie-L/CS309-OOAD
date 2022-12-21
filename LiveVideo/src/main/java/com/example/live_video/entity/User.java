@@ -22,7 +22,7 @@ public class User {
 
     @TableField(updateStrategy = FieldStrategy.NOT_EMPTY)
     private String mail;
-    @TableField(updateStrategy = FieldStrategy.NOT_EMPTY)
+    @TableField(updateStrategy = FieldStrategy.NOT_EMPTY, select = false)
     private String password;
 
     @TableField(value = "photo_url", updateStrategy = FieldStrategy.NOT_EMPTY)

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest
 @Transactional
@@ -83,7 +84,10 @@ class AssignmentServiceTest {
         urls.add("url2");
         Assignment assignment = new Assignment("ass1", courses.get(0).getId(), null, 100, urls, true, null);
         assignmentService.createAssignment(assignment);
+        long count = assignmentService.count();
         assignmentService.removeAssignment(assignment.getId());
+        long count2 = assignmentService.count();
+        assertEquals(count2, count - 1);
     }
 
     @Test
@@ -97,5 +101,35 @@ class AssignmentServiceTest {
         System.out.println(assignment1);
         assertEquals(assignment.getId(), assignment1.getId());
         assertEquals(assignment.getAssignUrls(), assignment1.getAssignUrls());
+    }
+
+    @Test
+    void testAssignmentCache() throws SQLAssignNameConflictException {
+        Assignment assignment = new Assignment("assgin23123", courses.get(0).getId(), null, 100, null, true, null);
+        assignmentService.createAssignment(assignment);
+        System.out.println();
+        System.out.println();
+        System.out.println("--------------Start Testing Cache----------------");
+        System.out.println("-------------Get One Assignment! Print Once-------");
+        assignmentService.getOneAssignment(assignment.getId());
+        System.out.println();
+        System.out.println();
+        assignmentService.getOneAssignment(assignment.getId());
+        System.out.println();
+        System.out.println();
+        assignmentService.getOneAssignment(assignment.getId());
+        System.out.println();
+        System.out.println("===================================================");
+        System.out.println("-------------Remove Assignment! Print Once-------");
+        assignmentService.removeAssignment(assignment.getId());
+        System.out.println();
+        assertNull(assignmentService.getOneAssignment(assignment.getId()));
+        System.out.println();
+        System.out.println();
+        assignmentService.getOneAssignment(assignment.getId());
+        System.out.println();
+        System.out.println();
+        assignmentService.getOneAssignment(assignment.getId());
+        System.out.println("=================================================");
     }
 }
