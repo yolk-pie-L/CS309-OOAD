@@ -23,7 +23,7 @@ public class AssignmentController {
 
     @GetMapping("/allAssignment?courseId={courseId}")
     public Assignment queryAssignmentByCourseName(@PathVariable String courseId) {
-        assignmentService.getAssignmentByCourse("","");
+//        assignmentService.getAssignmentByCourse("","");
         return null;
     }
 }

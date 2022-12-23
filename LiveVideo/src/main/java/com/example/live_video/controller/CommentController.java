@@ -48,10 +48,10 @@ public class CommentController {
 //        return commentService.getCommentList(sectionId);
         return null;
     }
-//
-//    @PostMapping(value = "/exportExcel")
-//    public void exportExcel(HttpServletResponse response) {
-//        List<StudentGradeVo> activityList = studentService.getStudentGrades(1);
-//        FileWithExcelUtil.exportExcel(activityList,"活动参加人员信息列表","sheet页名称", StudentGradeVo.class,"活动参加人员信息列表.xls",response);
-//    }
+
+    @GetMapping(value = "/exportExcel")
+    public void exportExcel(HttpServletResponse response, @RequestParam String courseId) {
+        List<StudentGradeVo> activityList = studentService.getStudentGrades(Long.parseLong(courseId));
+        FileWithExcelUtil.exportExcel(activityList,"成绩表","sheet页名称", StudentGradeVo.class,"成绩表.xls",response);
+    }
 }
