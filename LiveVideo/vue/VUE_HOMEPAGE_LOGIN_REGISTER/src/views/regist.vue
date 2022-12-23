@@ -67,7 +67,7 @@ export default {
     var validatePass2 = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'));
-      } else if (value !== this.ruleForm.newPwd) {
+      } else if (value !== this.loginForm.password) {
         callback(new Error('两次输入密码不一致!'));
       } else {
         callback();
