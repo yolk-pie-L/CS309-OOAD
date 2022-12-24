@@ -31,8 +31,9 @@ public class CommentController {
     @Autowired
     UserService userService;
 
-    @PostMapping("/")
+    @PostMapping("")
     public Boolean comment(@RequestBody CommentForm commentForm) {
+        System.out.println(commentForm);
         String userName = commentForm.getUserName();
         long replyCommentId = commentForm.getReplyCommentId();
         Long userId = userService.getUserId(userName);

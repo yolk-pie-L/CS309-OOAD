@@ -58,9 +58,9 @@
     <el-row type="flex" class="row-bg card" justify="center" align="bottom">
       <el-card class="box-card">
         <el-table :data="messageTable" border stripe style="width: 100% ">
-          <el-table-column prop="title" label="Message Title" align="center" min-width="500px"></el-table-column>
-          <el-table-column prop="date" label="Message Date" align="center" min-width="500px"></el-table-column>
-          <el-table-column prop="context" label="Message Contest" align="center" min-width="500px"></el-table-column>
+          <el-table-column prop="title" label="Message Title" align="center" min-width="200px"></el-table-column>
+          <el-table-column prop="date" label="Message Date" align="center" min-width="200px"></el-table-column>
+          <el-table-column prop="context" label="Message Context" align="center" min-width="500px"></el-table-column>
         </el-table>
         <el-row :gutter="20">
           <el-col :span="6" :offset="12">
@@ -104,6 +104,7 @@ export default {
       tableData: [
         {
           courseName: "course",
+          id: 0,
           privateKeyUrl: "ababa",
           status: "OK"
         }
@@ -166,7 +167,6 @@ export default {
 
         if (result) {
           /*登陆成功*/
-
           /*跳转页面*/
           this.fetchMessage()
         } else {
@@ -177,14 +177,17 @@ export default {
     },
     fetchMessage() {
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
-      this.$axios.get('http://localhost:8082/api/notice/all?userName={' + this.username + '}&courseName={' + this.tableData.at(0).courseName + '}').then(res => {
-        let result = JSON.parse(res.data.data);
+      this.$axios.get('http://localhost:8082/api/notice/all', {
+        params: {
+          courseId: this.tableData[0].id
+        }
+      }).then(res => {
+        let result = res.data.result;
         let message = res.data.msg;
         this.messageTable = result
 
         if (result) {
           /*登陆成功*/
-
           /*跳转页面*/
         } else {
           /*打印错误信息*/
@@ -202,7 +205,6 @@ export default {
           /*登陆成功*/
 
           /*跳转页面*/
-          router.push('/')
         } else {
           /*打印错误信息*/
           alert(message);
