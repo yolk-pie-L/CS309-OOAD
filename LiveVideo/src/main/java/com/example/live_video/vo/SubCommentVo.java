@@ -48,10 +48,10 @@ public class SubCommentVo {
     public static SubCommentVo parseComment(Comment comment){
         return new SubCommentVo(
                 comment.getThisUser().getUserName(),
-                comment.getUserId(),
+                comment.getId(),
                 comment.getThisUser().getPhotoUrl(),
                 comment.getParentUser().getUserName(),
-                comment.getParentUser().getId(),
+                comment.getParentId(),
                 comment.getContext(),
                 comment.getCreateTime(),
                 0,
