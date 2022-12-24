@@ -125,6 +125,10 @@ export default {
         let result = res.data.result;
         let message = res.data.msg;
         this.classForm = result;
+        this.classForm.forEach(course => {
+          course.coursePicture = this.$picture + course.coursePicture
+          console.log(course.coursePicture)
+        })
         if (result) {
         } else {
           /*打印错误信息*/
@@ -137,31 +141,35 @@ export default {
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
       this.$axios.get('http://localhost:8082/api/user').then(res => {
         // 拿到结果
-        let result = res.data;
-        let message = res.data.msg;
-        this.userName = result.userName
-        this.userType = result.userType
-        this.mail = result.mail
-        this.photoUrl = result.photoUrl
-        this.account = result.account
+        let result = res.data.result;
+        this.userForm.userName = result.userName
+        this.userForm.userType = result.userType
+        this.userForm.mail = result.mail
+        this.userForm.photoUrl = `${this.$pref}/api/picture/${result.photoUrl}`
+        this.userForm.account = result.account
         // 判断结果
-        if (result) {
+        if (res.data.code === 200) {
           /*登陆成功*/
-
           /*跳转页面*/
-          router.push('/')
-        } else {
+          // router.push('/')
+        } else if (localStorage.getItem('token')) {
           /*打印错误信息*/
-          alert(message);
+          this.$notify({
+            title: '失败',
+            message: result,
+            type: 'error'
+          })
+          localStorage.removeItem('token')
+          router.push('/')
         }
       })
     },
     into(){
       this.$axios.get('http://localhost:8082/api/user').then(res => {
         let result = res.data.result;
-        if (result.userType == 'Student') {
+        if (result.userType === 'Student') {
           router.push('/studentHome');
-        } else if (result.userType == 'Teacher') {
+        } else if (result.userType === 'Teacher') {
           router.push('/teacherHomeView');
         } else {
           console.log(res)
@@ -176,7 +184,7 @@ export default {
     },
     intoClass(id){
       localStorage.setItem("courseId",id)
-      router.push({path:'/courseMainPage'})
+      router.push({path:'/courseMainPage', query: { courseId: id }})
     },
   },
   computed:{

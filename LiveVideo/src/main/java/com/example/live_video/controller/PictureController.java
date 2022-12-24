@@ -1,16 +1,36 @@
-package com.example.live_video.util;
+package com.example.live_video.controller;
 
+import com.example.live_video.wrapper.NonStaticResourceHttpRequestHandler;
+import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static com.example.live_video.wrapper.NonStaticResourceHttpRequestHandler.ATTR_FILE;
+
 @ResponseResult
 @RestController
-public class Url {
+@PassToken
+public class PictureController {
+
+    @Value("${src.picture-path}")
+    private String defaultPath;
+
+    @Autowired
+    private NonStaticResourceHttpRequestHandler requestHandler;
     static MultipartFile curFile;
 
     @PostMapping("/api/upload")
@@ -39,12 +59,30 @@ public class Url {
     }
 
     @RequestMapping("/api/getPhoto")
-    @ResponseBody
     public void getPhoto(@RequestParam MultipartFile file) throws IOException {
         curFile = file;
         System.out.println("UPLOAD: " + curFile.getOriginalFilename()
                 + ", size of MB:" + curFile.getSize() / ((1 << 20) + 0.0));
         System.out.println(upload());
+    }
+
+    @GetMapping("/api/picture/{url}")
+    public void photoPreview(HttpServletRequest request, HttpServletResponse response, @PathVariable String url) throws Exception {
+        if (!url.contains(defaultPath)) {
+            url = defaultPath + url;
+        }
+        Path filePath = Paths.get(url);
+
+        if (Files.exists(filePath)) {
+            String mimeType = Files.probeContentType(filePath);
+            if (StringUtils.hasText(mimeType))
+                response.setContentType(mimeType);
+            request.setAttribute(ATTR_FILE, url);
+            requestHandler.handleRequest(request, response);
+        } else {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+        }
     }
 
     // 为文件重新命名，命名规则为当前系统时间毫秒数
@@ -58,4 +96,6 @@ public class Url {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
         return fmt.format(new Date());
     }
+
+
 }

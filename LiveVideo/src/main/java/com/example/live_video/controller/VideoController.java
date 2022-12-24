@@ -14,6 +14,7 @@ import com.example.live_video.service.SectionService;
 import com.example.live_video.util.RandomUtils;
 import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
+import com.example.live_video.wrapper.UserLoginToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,12 +41,12 @@ import static com.example.live_video.wrapper.NonStaticResourceHttpRequestHandler
 
 @ResponseResult
 @RestController
-@PassToken
+@UserLoginToken
 @Slf4j
 @RequestMapping("/api/section")
 public class VideoController {
 
-    @Value("${src.path}")
+    @Value("${src.video-path}")
     private String defaultPath;
 
     private final String[] extList = new String[]{"mp4", "avi", "mkv", "wmv"};

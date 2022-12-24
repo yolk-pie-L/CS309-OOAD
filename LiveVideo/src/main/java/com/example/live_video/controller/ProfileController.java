@@ -8,6 +8,7 @@ import com.example.live_video.util.TokenUtils;
 import com.example.live_video.vo.UserVo;
 import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
+import com.example.live_video.wrapper.UserLoginToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -19,7 +20,7 @@ import java.util.List;
 
 @RestController
 @ResponseResult
-@PassToken
+@UserLoginToken
 public class ProfileController {
 
     @Autowired
