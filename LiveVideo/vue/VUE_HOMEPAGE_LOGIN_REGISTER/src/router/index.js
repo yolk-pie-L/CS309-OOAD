@@ -18,6 +18,7 @@ import quizUpload from "@/views/QuizUpload";
 import homeworkUpload from "@/views/HomeworkUpload";
 import videoPage from "@/views/videoPage";
 import addSection from "@/views/addSection";
+import addNotice from "@/views/addNotice";
 const routes = [
   {
     path:'/',
@@ -113,8 +114,12 @@ const routes = [
     path: '/addSection',
     name: addSection,
     component: addSection
+  },
+  {
+    path: '/addNotice',
+    name: addNotice,
+    component: addNotice
   }
-
 ]
 
 const router = createRouter({
