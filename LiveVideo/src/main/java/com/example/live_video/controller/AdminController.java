@@ -42,36 +42,43 @@ public class AdminController {
         return list2;
     }
 
-    @GetMapping("/all?userName={userName}&type={type}")
-    public List<UserVo> queryUserLikeUserName(@PathVariable String userName,
-                                              @PathVariable String type) {
+    @GetMapping("/all")
+    // "/all?userName={LI}&type={all}"
+    public List<UserVo> queryUserLikeUserName(@RequestParam("userName") String userName,
+                                              @RequestParam("type") String type) {
         // type: "student", "teacher", or "all"
         List<UserVo> userVoList = UserVo.parse(adminService.getUserList(userName));
-        userVoList.removeIf(u -> u.getUserType().equalsIgnoreCase(type));
+        if (type.equalsIgnoreCase("all")) return userVoList;
+        userVoList.removeIf(u -> !u.getUserType().equalsIgnoreCase(type));
         return userVoList;
     }
 
     @PostMapping("privilege")
-    public Boolean updatePrivilege(@RequestParam String userName) {
+    public boolean updatePrivilege(@RequestParam(name = "userName") String userName) {
+        if (userService.getUser(userName).getUserType().toString().equalsIgnoreCase("Administrator"))
+            return false;
         User updateUser = new User();
         updateUser.setUserName(userName);
-        if (userService.getUser(userName).getAdminRight() == AdminRight.Admin)
+        AdminRight pastRight = userService.getUser(userName).getAdminRight();
+        if (pastRight == AdminRight.Admin)
             updateUser.setAdminRight(AdminRight.NonAdmin);
-        else if (userService.getUser(userName).getAdminRight() == AdminRight.NonAdmin)
+        else if (pastRight == AdminRight.NonAdmin)
             updateUser.setAdminRight(AdminRight.Admin);
         return userService.updateUser(updateUser);
     }
 
-    @GetMapping("/status")
-    public Boolean updateCourseStatusByAdministrator(@RequestParam String courseId,
-                                                     @RequestParam String approved) {
+    @PostMapping("/status")
+    public boolean updateCourseStatusByAdministrator(@RequestParam("courseId") String courseId,
+                                                     @RequestParam("approved") String approved) {
         // note: 输入这里用的是id，跟json写得不一样；并且返回了bool
         boolean ok = approved.equalsIgnoreCase("yes") ||
                 approved.equalsIgnoreCase("true") ||
                 approved.equalsIgnoreCase("1");
         Course course = courseService.getOneCourse(Long.parseLong(courseId));
+        course.setTeacherName(userService.getById(course.getTeacherId()).getUserName());
         course.setStatus(ok ? CourseStatus.APPROVED : CourseStatus.FAILED);
-        return courseService.updateCourse(course);
+        ok = courseService.updateCourse(course);
+        return ok;
     }
 
 
