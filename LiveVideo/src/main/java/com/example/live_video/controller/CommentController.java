@@ -1,7 +1,9 @@
 package com.example.live_video.controller;
 
 import com.example.live_video.dto.CommentForm;
+import com.example.live_video.dto.DeleteCommentForm;
 import com.example.live_video.entity.Comment;
+import com.example.live_video.exception.MyException;
 import com.example.live_video.service.CommentService;
 import com.example.live_video.service.StudentService;
 import com.example.live_video.service.UserService;
@@ -10,6 +12,8 @@ import com.example.live_video.vo.StudentGradeVo;
 import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import com.example.live_video.util.FileWithExcelUtil;
 
@@ -32,7 +36,11 @@ public class CommentController {
     UserService userService;
 
     @PostMapping("/")
-    public Boolean comment(@RequestBody CommentForm commentForm) {
+    public Boolean comment(@RequestBody CommentForm commentForm, BindingResult bindingResult) throws MyException {
+        if (bindingResult.hasErrors()) {
+            List<ObjectError> list = bindingResult.getAllErrors();
+            throw new MyException(list.get(0).getDefaultMessage());
+        }
         String userName = commentForm.getUserName();
         long replyCommentId = commentForm.getReplyCommentId();
         Long userId = userService.getUserId(userName);
@@ -54,8 +62,10 @@ public class CommentController {
     }
 
     @PostMapping("/del")
-    public boolean deleteComment(@RequestParam long commentId) {
-        return commentService.deleteComment(commentId);
+    public boolean deleteComment(@RequestBody DeleteCommentForm deleteCommentForm) throws MyException {
+        long commentId = deleteCommentForm.getCommentId();
+        long userId = deleteCommentForm.getUserId();
+        return commentService.deleteComment(commentId, userId);
     }
 
     @PostMapping("/update")

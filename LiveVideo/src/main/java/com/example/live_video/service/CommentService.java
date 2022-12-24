@@ -2,6 +2,7 @@ package com.example.live_video.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.live_video.entity.Comment;
+import com.example.live_video.exception.MyException;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public interface CommentService extends IService<Comment> {
 
     boolean saveComment(Comment comment);
 
-    boolean deleteComment(Long commentId);
+    boolean deleteComment(Long commentId, Long userId) throws MyException;
 
     Comment getOneComment(Long commentId);
 

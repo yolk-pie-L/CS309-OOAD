@@ -1,6 +1,7 @@
 package com.example.live_video.service;
 
 import com.example.live_video.entity.*;
+import com.example.live_video.exception.MyException;
 import com.example.live_video.mapper.CourseMapper;
 import com.example.live_video.mapper.SectionMapper;
 import com.example.live_video.mapper.UserMapper;
@@ -9,16 +10,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 //@Transactional
@@ -86,7 +83,7 @@ class CommentServiceTest {
 
 
     @Test
-    void saveComment() throws IOException {
+    void saveComment() throws IOException, MyException {
         Section section1 = allSections.get(0);
         User user1 = allUsers.get(0);
         User user2 = allUsers.get(1);
@@ -119,7 +116,7 @@ class CommentServiceTest {
         FileWriter fw = new FileWriter(file);
         fw.write(pjson);
         fw.close();
-        commentService.deleteComment(comment.getId());
+        commentService.deleteComment(comment.getId(), comment.getUserId());
         List<Comment> comments1 = commentService.getCommentList(section1.getId());
         pjson = gson.toJson(comments1);
         file = new File("src/test/java/com/example/live_video/service/test2.json");

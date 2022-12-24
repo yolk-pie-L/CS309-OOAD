@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.live_video.entity.Comment;
 import com.example.live_video.entity.User;
+import com.example.live_video.exception.MyException;
 import com.example.live_video.mapper.CommentMapper;
 import com.example.live_video.mapper.UserMapper;
 import com.example.live_video.service.CommentService;
@@ -80,7 +81,11 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     }
 
     @Override
-    public boolean deleteComment(Long commentId) {
+    public boolean deleteComment(Long commentId, Long userId) throws MyException {
+        Comment comment = commentMapper.selectById(commentId);
+        if(!comment.getUserId().equals(userId)){
+            throw new MyException("You have no right to do this");
+        }
         List<Comment> commentList = getCommentTree(commentId, null);
         commentList.forEach(c -> commentMapper.deleteById(c));
         commentMapper.deleteById(commentId);
