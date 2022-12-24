@@ -1,7 +1,7 @@
 {
   "properties": [
     {
-      "name": "src.path",
+      "name": "src.video-path",
       "type": "java.lang.String",
       "description": "Description for src.path."
     }

@@ -5,6 +5,7 @@ import com.example.live_video.dto.FileForm;
 import com.example.live_video.dto.MergeInfo;
 import com.example.live_video.entity.FileTb;
 import com.example.live_video.service.FileTbService;
+import com.example.live_video.vo.StringVo;
 import com.example.live_video.wrapper.NonStaticResourceHttpRequestHandler;
 import com.example.live_video.entity.Section;
 import com.example.live_video.exception.MyException;
@@ -13,6 +14,7 @@ import com.example.live_video.service.SectionService;
 import com.example.live_video.util.RandomUtils;
 import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
+import com.example.live_video.wrapper.UserLoginToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,12 +41,12 @@ import static com.example.live_video.wrapper.NonStaticResourceHttpRequestHandler
 
 @ResponseResult
 @RestController
-@PassToken
+@UserLoginToken
 @Slf4j
 @RequestMapping("/api/section")
 public class VideoController {
 
-    @Value("${src.path}")
+    @Value("${src.video-path}")
     private String defaultPath;
 
     private final String[] extList = new String[]{"mp4", "avi", "mkv", "wmv"};
@@ -62,11 +64,12 @@ public class VideoController {
     private FileTbService fileTbService;
 
     @GetMapping("/{sectionId}")
-    public void videoPreview(HttpServletRequest request, HttpServletResponse response, @PathVariable Long sectionId) throws Exception {
-//        String videoUrl = sectionService.getOneSection(sectionId).getVideoUrl();
-        System.out.println("Hello world");
-        String videoUrl = "src/main/resources/static/video/demo1.mp4";
+    public void videoPreview(HttpServletRequest request, HttpServletResponse response, @PathVariable String sectionId) throws Exception {
+        String videoUrl = sectionService.getOneSection(Long.valueOf(sectionId)).getVideoUrl();
+//        System.out.println("Hello world");
+//        String videoUrl = "src/main/resources/static/video/demo1.mp4";
 
+        System.out.println(videoUrl);
         Path filePath = Paths.get(videoUrl);
 
         if (Files.exists(filePath)) {
@@ -101,7 +104,6 @@ public class VideoController {
         }
         file.transferTo(filePath.getCanonicalFile());
         Section section = new Section(secName, courseId, filePath.getPath(), 0);
-        // FIXME: set section grade
         Long id = sectionService.getSectionId(courseId, secName);
         if (id == -1) {
             sectionService.createSection(section);
@@ -113,8 +115,8 @@ public class VideoController {
     }
 
     @PostMapping(value = "/upload2")
-    public String upload(@RequestParam(value = "file") MultipartFile file,
-                         FileForm fileForm) throws Exception {
+    public StringVo upload(@RequestParam(value = "file") MultipartFile file,
+                           FileForm fileForm) throws Exception {
         File fullDir = new File(FileConstance.FILE_PATH);
         if (!fullDir.exists()) {
             fullDir.mkdir();
@@ -142,10 +144,11 @@ public class VideoController {
 
         if (Objects.equals(fileForm.getShardIndex(), fileForm.getShardTotal())) {
             //开始合并
+            System.out.println("FileForm: "+fileForm);
             merge(fileForm);
-            return FileConstance.ACCESS_PATH + fileForm.getFileName();
+            return new StringVo(FileConstance.ACCESS_PATH + fileForm.getFileName());
         }
-        return "OK";
+        return new StringVo("OK");
     }
 
     public Long merge(FileForm fileForm) throws Exception {
@@ -155,8 +158,8 @@ public class VideoController {
             newFile.delete();
         }
         FileOutputStream outputStream = new FileOutputStream(newFile, true);//文件追加写入
-        Section section = new Section(fileForm.getSectionName(), fileForm.getCourseId(), newFile.getPath(), 0);
-        // FIXME: set section grade
+        System.out.println(newFile.getCanonicalPath());
+        Section section = new Section(fileForm.getSectionName(), fileForm.getCourseId(), newFile.getCanonicalPath(), 0);
         Long id = sectionService.getSectionId(fileForm.getCourseId(), fileForm.getSectionName());
         if (id == -1) {
             sectionService.createSection(section);

@@ -20,32 +20,19 @@
       <el-col :span="7" class="login-card">
         <!--loginForm-->
         <el-form :model="loginForm" :rules="rules" ref="loginForm" label-width="21%" class="loginForm">
-          <el-form-item label="角色" prop="person" style="width: 380px">
-            <el-select v-model="loginForm.person">
-              <el-option v-for="item in options"
-                         :key="item.value"
-                         :label="item.label"
-                         :value="item.value"
-                         :disabled="item.disabled">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="邮箱" prop="mail" style="width: 380px">
-            <el-input v-model="loginForm.mail"></el-input>
-          </el-form-item>
-          <el-form-item label="账户" prop="userName" style="width: 380px">
-            <el-input v-model="loginForm.userName"></el-input>
+          <el-form-item label="邮箱" prop="code" style="width: 380px">
+            <el-input v-model="loginForm.mail" style="width: 70%"></el-input>
+            <el-button @click="sendMail" style="width: 30%">发送验证码</el-button>
           </el-form-item>
           <el-form-item label="密码" prop="password" style="width: 380px">
             <el-input type="password" v-model="loginForm.password"></el-input>
           </el-form-item>
-          <el-form-item label="重复密码" prop="password" style="width: 380px">
+          <el-form-item label="新密码" prop="password" style="width: 380px">
             <el-input type="password" v-model="loginForm.repeatPassword"></el-input>
           </el-form-item>
           <el-form-item label="验证码" prop="code" style="width: 380px">
             <el-input v-model="loginForm.code" class="code-input" style="width: 70%;float: left"></el-input>
             <!--验证码图片-->
-            <el-image :src="codeImg" class="codeImg"></el-image>
           </el-form-item>
           <el-form-item class="btn-ground">
             <el-button type="primary" @click="submitForm('loginForm')">立即登陆</el-button>
@@ -79,16 +66,24 @@ export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Login",
   data() {
+    var validatePass1 = (rule, value, callback) => {
+      if (value !== this.loginForm.password) {
+        callback(new Error('这不是您的邮箱！'));
+      } else {
+        callback();
+      }
+    };
     var validatePass2 = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'));
-      } else if (value !== this.ruleForm.newPwd) {
+      } else if (value !== this.loginForm.password) {
         callback(new Error('两次输入密码不一致!'));
       } else {
         callback();
       }
     };
     return {
+      mail: '',
       options: [{
         value: 'Student',
         label: '学生',
@@ -118,35 +113,29 @@ export default {
       },
       // 表单验证
       rules: {
-        userType: [
-          {required: true, message: '请输入角色', trigger: 'blur'}
-        ],
         mail: [
-          {required: true, message: '请输入邮箱', trigger: 'blur'}
-        ],
-        // 设置账户效验规则
-        userName: [
-          {required: true, message: '请输入账户', trigger: 'blur'},
-          {min: 3, max: 10, message: '长度在 3 到 10 个字符的账户', trigger: 'blur'}
+          {required: true, message: '请输入邮箱', trigger: 'blur'},
+          { validator: validatePass1, trigger: 'blur', required: true }
         ],
         // 设置密码效验规则
         password: [
-          {required: true, message: '请输入密码', trigger: 'blur'},
+          {required: false, message: '请输入密码', trigger: 'blur'},
           {min: 6, max: 15, message: '长度在 6 到 15 个字符的密码', trigger: 'blur'}
         ],
         // 设置验证码效验规则
         code: [
           {required: true, message: '请输入验证码', trigger: 'blur'},
-          {min: 5, max: 5, message: '长度为 5 个字符', trigger: 'blur'}
         ],
         repeatPassword: [
-          {required: true, message: '请再次输入密码', trigger: 'blur'},
+          {required: false, message: '请再次输入密码', trigger: 'blur'},
           { validator: validatePass2, trigger: 'blur', required: true }
         ]
       },
       // 绑定验证码图片
       codeImg: null
     };
+  },
+  mounted() {
   },
   methods: {
     beforeUpload (file) {
@@ -155,19 +144,37 @@ export default {
 
       return false
     },
+    sendMail() {
+      this.$axios.post('http://localhost:8082/api/mail?mail=' + this.loginForm.mail).then(res => {
+        // 拿到结果
+        let message = res.data.code;
+        // 判断结果
+        if (message === 200) {
+          /*登陆成功*/
+          this.$notify({
+            message: '发送成功',
+            type: 'success'
+          })
+        }
+      })
+    },
     // 提交表单
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // 表单验证成功
-          this.$axios.post('api/user', this.infoForm).then(res => {
+          this.$axios.post('http://localhost:8082/api/user', this.loginForm).then(res => {
             // 拿到结果
             let result = JSON.parse(res.data.data);
             let message = res.data.msg;
             // 判断结果
             if (result) {
               /*登陆成功*/
-              Element.Message.success(message);
+              this.$notify({
+                title: '成功',
+                message: '修改成功',
+                type: 'success'
+              });
               /*跳转页面*/
               router.push('/')
             } else {

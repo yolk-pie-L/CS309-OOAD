@@ -4,8 +4,9 @@ public enum ResultCode {
 
     SUCCESS(200, "OK"),
     FAIL(500, "Fail"),
-    HTTP_ERROR(250, "HTTP Error");
+    HTTP_ERROR(250, "HTTP Error"),
 
+    TOKEN_EXPIRED(251, "Token Expired");
     private Integer code;
     private String message;
 

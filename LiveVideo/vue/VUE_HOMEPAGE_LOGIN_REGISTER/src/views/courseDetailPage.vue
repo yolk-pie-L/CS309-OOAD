@@ -70,7 +70,7 @@ export default {
   name: 'courseDetailPage',
   data() {
     return {
-      courseId: 2,
+      courseId: localStorage.getItem("courseId"),
       courseForm: {
         courseName: "checker",
         tag: "CS202",
@@ -99,11 +99,12 @@ export default {
       this.$axios.get('http://localhost:8082/api/course/' + this.courseId).then(res => {
         // 拿到结果
         let result = res.data.result
+        console.log(result)
         this.courseForm.courseName = result.courseName
         this.courseForm.tag = result.tag
         this.courseForm.coursePic = result.coursePicture
         this.courseForm.teacherName = result.teacherName
-        this.infoTable[0] = result.introduction
+        this.infoTable.info = result.introduction
         this.courseForm.charge = result.charge
         // let message = res.data.msg;
         // 判断结果
