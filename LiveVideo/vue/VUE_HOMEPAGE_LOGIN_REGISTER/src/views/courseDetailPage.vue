@@ -104,7 +104,7 @@ export default {
         this.courseForm.tag = result.tag
         this.courseForm.coursePic = result.coursePicture
         this.courseForm.teacherName = result.teacherName
-        this.infoTable[0] = result.introduction
+        this.infoTable[0].info = result.introduction
         this.courseForm.charge = result.charge
         // let message = res.data.msg;
         // 判断结果

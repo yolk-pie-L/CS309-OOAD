@@ -86,6 +86,7 @@ export default {
       tableData: [
         {
           courseName: "course",
+          id: 0,
           privateKeyUrl: "ababa",
           status: "OK"
         }
@@ -159,8 +160,12 @@ export default {
     },
     fetchMessage() {
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
-      this.$axios.get('http://localhost:8082/api/notice/all?userName={' + this.username + '}&courseName={' + this.tableData.at(0).courseName + '}').then(res => {
-        let result = JSON.parse(res.data.data);
+      this.$axios.get('http://localhost:8082/api/notice/all', {
+        params: {
+          courseId: this.tableData[0].id
+        }
+      }).then(res => {
+        let result = res.data.result;
         let message = res.data.msg;
         this.messageTable = result
 
@@ -168,7 +173,6 @@ export default {
           /*登陆成功*/
 
           /*跳转页面*/
-          router.push('/')
         } else {
           /*打印错误信息*/
           alert(message);
@@ -176,16 +180,14 @@ export default {
       })
     },
     fetchFriend() {
-      this.$axios.get('api/notice/all?userName={' + this.username + '}&type={teacher}').then(res => {
+      this.$axios.get('api/notice/all?userName={' + this.teacherForm.userName + '}&type={teacher}').then(res => {
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         this.friendData = result
 
         if (result) {
           /*登陆成功*/
-
           /*跳转页面*/
-          router.push('/')
         } else {
           /*打印错误信息*/
           alert(message);

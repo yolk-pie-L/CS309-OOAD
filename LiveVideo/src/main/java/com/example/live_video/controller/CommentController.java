@@ -35,12 +35,8 @@ public class CommentController {
     @Autowired
     UserService userService;
 
-    @PostMapping("/")
-    public Boolean comment(@RequestBody CommentForm commentForm, BindingResult bindingResult) throws MyException {
-        if (bindingResult.hasErrors()) {
-            List<ObjectError> list = bindingResult.getAllErrors();
-            throw new MyException(list.get(0).getDefaultMessage());
-        }
+    @PostMapping("")
+    public Boolean comment(@RequestBody CommentForm commentForm) {
         String userName = commentForm.getUserName();
         long replyCommentId = commentForm.getReplyCommentId();
         Long userId = userService.getUserId(userName);

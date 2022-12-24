@@ -69,7 +69,7 @@ export default {
         // 设置账户效验规则
         userName: [
           {required: true, message: '请输入账户', trigger: 'blur'},
-          {min: 3, max: 10, message: '长度在 3 到 10 个字符的账户', trigger: 'blur'}
+          {min: 2, max: 10, message: '长度在 2 到 10 个字符的账户', trigger: 'blur'}
         ],
         // 设置密码效验规则
         password: [
