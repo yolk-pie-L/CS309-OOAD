@@ -1,6 +1,7 @@
 package com.example.live_video.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -43,10 +44,13 @@ public class Comment {
     @TableField(value = "section_id")
     private Long sectionId;
 
+    int likes;
+
     /*
     创建评论的时间
      */
     @TableField(value = "create_time", insertStrategy = FieldStrategy.NOT_EMPTY)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Timestamp createTime;
 
     /*
@@ -71,21 +75,23 @@ public class Comment {
     /*
     For non-root comment, parentId is the id you reply to.
      */
-    public Comment(Long parentId, String context, Long userId, Long sectionId) {
+    public Comment(Long parentId, String context, Long userId, Long sectionId, int likes) {
         this.parentId = parentId;
         this.context = context;
         this.userId = userId;
         this.sectionId = sectionId;
+        this.likes = likes;
     }
 
     /*
     For root comment
      */
-    public Comment(String context, Long userId, Long sectionId) {
+    public Comment(String context, Long userId, Long sectionId, int likes) {
         this.parentId = -1L;
         this.context = context;
         this.userId = userId;
         this.sectionId = sectionId;
+        this.likes = likes;
     }
 
 

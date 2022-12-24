@@ -97,4 +97,19 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         }
         return comment;
     }
+
+    @Override
+    public long countComments(Long sectionId) {
+        QueryWrapper<Comment> commentQueryWrapper = new QueryWrapper<>();
+        commentQueryWrapper.eq("section_id", sectionId);
+        return commentMapper.selectCount(commentQueryWrapper);
+    }
+
+    @Override
+    public boolean updateComment(Comment comment) {
+        QueryWrapper<Comment> commentQueryWrapper = new QueryWrapper<>();
+        commentQueryWrapper.eq("id", comment.getId());
+        commentMapper.update(comment, commentQueryWrapper);
+        return true;
+    }
 }

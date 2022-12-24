@@ -14,4 +14,8 @@ public interface CommentService extends IService<Comment> {
     boolean deleteComment(Long commentId);
 
     Comment getOneComment(Long commentId);
+
+    long countComments(Long sectionId);
+
+    boolean updateComment(Comment comment);
 }

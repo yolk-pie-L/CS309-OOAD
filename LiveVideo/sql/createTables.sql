@@ -133,6 +133,7 @@ CREATE TABLE comment
     context     text      not null,
     user_id     int       not null,
     section_id  int,
+    likes       int,
     create_time timestamp not null default CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (section_id) REFERENCES section (id) ON DELETE CASCADE ON UPDATE CASCADE
