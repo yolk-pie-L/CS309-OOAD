@@ -31,20 +31,19 @@ public class ProfileController {
     }
 
     @PostMapping("/api/user")
-    public Boolean modifyUserInfo(@RequestBody @Valid UserForm userForm, @RequestParam User user, BindingResult bindingResult) throws Exception {
+    public Boolean modifyUserInfo(@RequestBody @Valid UserForm userForm, BindingResult bindingResult) throws Exception {
         if (bindingResult.hasErrors()) {
             List<ObjectError> list = bindingResult.getAllErrors();
             throw new MyException(list.get(0).getDefaultMessage());
         }
+        User user = userService.getUser(userForm.getUserName());
         if (!userForm.getPassword().equals(user.getPassword())) {
             throw new MyException("密码不一致");
         }
-        if (userForm.getUserName().equals(user.getUserName())) {
-            user.setMail(userForm.getMail());
-            user.setPhotoUrl(userForm.getPhotoUrl());
-            if (StringUtils.hasText(userForm.getRepeatPassword()))
-                user.setPassword(userForm.getRepeatPassword());
-        }
+        user.setMail(userForm.getMail());
+        user.setPhotoUrl(userForm.getPhotoUrl());
+        if (StringUtils.hasText(userForm.getRepeatPassword()))
+            user.setPassword(userForm.getRepeatPassword());
         return userService.updateUser(userForm.convertToUser());
     }
 }

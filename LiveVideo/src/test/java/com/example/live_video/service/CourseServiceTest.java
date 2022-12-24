@@ -37,6 +37,7 @@ public class CourseServiceTest {
 
     // teacher1有三个review, 一个failed, 一个approved
     // teacher2有一个review
+    @Test
     void setUp() {
         User teacher1 = new User("teacher1", UserType.Teacher, "teacher1@mail", "123456");
         User teacher2 = new User("teacher2", UserType.Teacher, "teacher2@mail", "123456");

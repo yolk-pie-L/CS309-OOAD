@@ -157,7 +157,16 @@ export default {
       })
     },
     into(){
-      router.push('/studentHome');
+      this.$axios.get('http://localhost:8082/api/user').then(res => {
+        let result = res.data.result;
+        if (result.userType == 'Student') {
+          router.push('/studentHome');
+        } else if (result.userType == 'Teacher') {
+          router.push('/teacherHomeView');
+        } else {
+          console.log(res)
+        }
+      })
     },
     toLogin(){
       router.push('/login');

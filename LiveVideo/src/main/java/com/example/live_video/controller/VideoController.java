@@ -143,7 +143,7 @@ public class VideoController {
 
         if (Objects.equals(fileForm.getShardIndex(), fileForm.getShardTotal())) {
             //开始合并
-            System.out.println(fileForm);
+            System.out.println("FileForm: "+fileForm);
             merge(fileForm);
             return new StringVo(FileConstance.ACCESS_PATH + fileForm.getFileName());
         }
@@ -159,7 +159,6 @@ public class VideoController {
         FileOutputStream outputStream = new FileOutputStream(newFile, true);//文件追加写入
         System.out.println(newFile.getCanonicalPath());
         Section section = new Section(fileForm.getSectionName(), fileForm.getCourseId(), newFile.getCanonicalPath(), 0);
-        // FIXME: set section grade
         Long id = sectionService.getSectionId(fileForm.getCourseId(), fileForm.getSectionName());
         if (id == -1) {
             sectionService.createSection(section);
