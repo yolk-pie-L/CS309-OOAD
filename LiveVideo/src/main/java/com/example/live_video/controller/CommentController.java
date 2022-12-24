@@ -1,5 +1,6 @@
 package com.example.live_video.controller;
 
+import com.example.live_video.dto.CommentForm;
 import com.example.live_video.entity.Comment;
 import com.example.live_video.service.CommentService;
 import com.example.live_video.service.StudentService;
@@ -31,11 +32,12 @@ public class CommentController {
     UserService userService;
 
     @PostMapping("/")
-    public Boolean comment(@RequestParam long sectionId,
-                           @RequestParam String userName,
-                           @RequestParam long replyCommentId,
-                           @RequestParam String context) {
+    public Boolean comment(@RequestBody CommentForm commentForm) {
+        String userName = commentForm.getUserName();
+        long replyCommentId = commentForm.getReplyCommentId();
         Long userId = userService.getUserId(userName);
+        String context = commentForm.getContext();
+        long sectionId = commentForm.getSectionId();
         Comment comment = new Comment(replyCommentId, context, userId, sectionId, 0);
         commentService.saveComment(comment);
         return true;
