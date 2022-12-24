@@ -1,5 +1,5 @@
 <template>
-  <el-row style="padding: 10px; border-bottom: 2px black solid">
+  <el-row style="padding: 10px; border-bottom: 2px black solid; position: fixed; width: 100%;">
     <el-link href="/">首页</el-link>
     <el-input placeholder="search..." style="width: 200px; margin: auto"></el-input>
     <el-image src="@/assets/logo.png" style="height: 20px"></el-image>

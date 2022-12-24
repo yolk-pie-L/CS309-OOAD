@@ -3,7 +3,7 @@
   <nav></nav>
 
   <div>
-    <div class="animate__animated animate__fadeIn title"  :style="{'background-image': bgUrl}"></div>
+    <div class="animate__animated animate__fadeIn title"  :style="{'background-image': bgUrl}" style="top: 55px"></div>
     <el-header  class="animate__animated animate__fadeIn">
       <div class="menu-expend">
         <i class="el-icon-menu"></i>
