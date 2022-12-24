@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div :xl="6" :lg="7" class="bg-login">
+
     <div>
       <el-row style="height: 95vh">
         <el-col :span="24" style="height: 100%">
@@ -57,55 +58,42 @@
       </div>
     </div>
 
-    <div class="answer">
-      <el-header class="variable1">Answer:</el-header>
-      <div v-for="item in answer">
-        <el-link
-            :body-style="{ padding: '0px', marginBottom: '1px' }"
-            :href="item.answerUrl"
-            class="addi"
-            v-text="item.answerName">
-        </el-link>
-      </div>
+    <div>
+      <el-col :span="7" class="login-card" >
+        <!--loginForm-->
+        <el-form :model="answers.answerFile" :rules="rules" ref="loginForm" label-width="21%" class="loginForm">
+          <el-upload
+              action="#"
+              multiple
+              :auto-upload="false"
+              :show-file-list="true"
+              :on-change="handleChange"
+              drag>
+            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+            <div class="el-upload__text">
+              将文件拖到此处，或<em>点击上传</em>
+            </div>
+          </el-upload>
+          <el-form-item class="btn-ground">
+            <el-button type="primary" @click="submitForm('loginForm')">Update</el-button>
+            <el-button @click="resetForm('loginForm')">Reset</el-button>
+          </el-form-item>
+        </el-form>
+      </el-col>
     </div>
-
-<!--    <div class="upload">-->
-<!--      <el-upload ref="upload" :before-upload="beforeUpload" :file-list="list" :limit="1" action="doUpload"-->
-<!--                 class="upload-demo">-->
-<!--        <el-button slot="trigger" size="small" type="primary">选取文件</el-button>-->
-<!--        <div slot="tip" class="el-upload__tip">文件大小不能不超过5mb</div>-->
-<!--        <div slot="tip" class="el-upload-list__item-name">{{list}}</div>-->
-<!--      </el-upload>-->
-<!--      <span slot="footer" class="dialog-footer">-->
-<!--        <el-button @click="visible = false">取消</el-button>-->
-<!--        <el-button type="primary" @click="submitUpload()">确定</el-button>-->
-<!--      </span>-->
-<!--    </div>-->
-
-    <el-upload
-        class="upload-demo"
-        action="https://jsonplaceholder.typicode.com/posts/"
-        :on-preview="handlePreview"
-        :on-remove="handleRemove"
-        :before-remove="beforeRemove"
-        multiple
-        :limit="3"
-        :on-exceed="handleExceed"
-        :file-list="fileList">
-      <el-button size="small" type="primary">点击上传</el-button>
-      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-    </el-upload>
-
-
   </div>
 </template>
 
+
 <script>
+import router from "@/router";
 
 export default {
-  name: "Homework",
+  // eslint-disable-next-line vue/multi-word-component-names
+  name: "Login",
   data() {
     return {
+      courseId:"",
       homeworkForm: {
         assignmentId: "aa",
         courseName: "course",
@@ -130,53 +118,42 @@ export default {
           resourceUrl: "https://element.eleme.io"
         }
       ],
-      answers: [
-        {
-          answerName: "a",
-          answerUrl: "b"
-        },
-        {
-          answerName: "c",
-          answerUrl: "d"
-        }
-      ],
-      uploadAnswer:{
-        file:"",
+      answers: {
+        assignmentId:"aaa",
+        answerFile: [
+          {
+            answerName: "a",
+            answerUrl: "b"
+          },
+          {
+            answerName: "c",
+            answerUrl: "d"
+          }
+        ]
       },
-      fileList: [
-        {
-          name: 'food.jpeg',
-          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-        },
-        {
-          name: 'food2.jpeg',
-          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-        }
-      ]
-    }
+      sectionForm: {
+        sectionName: 'blank'
+      },
+    };
   },
   mounted() {
+    this.fetchClass();
     this.fetchAssignment()
   },
   methods: {
+    fetchClass(){
+      this.courseId=localStorage.getItem("course");
+      this.homeworkForm.assignmentId=localStorage.getItem("assignment");
+      localStorage.removeItem("assignment");
+      localStorage.removeItem("course")
+    },
     fetchAssignment() {
-      this.$axios.get('api/course/assignment?AssignmentId={' + this.$router.query.id + '}').then(res => {
+      this.$axios.get('api/course/assignment?AssignmentId={' + this.homeworkForm.assignmentId + '}').then(res => {
         // 拿到结果
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
-        this.homeworkForm.assignmentId = result.assignmentId
-        this.homeworkForm.courseName = result.courseName
-        this.homeworkForm.teacherName = result.teacherName
-        this.homeworkForm.assignmentName = result.assignmentName
-        this.homeworkForm.deadline = result.deadline
-        this.homeworkForm.description = result.description
-        this.homeworkForm.status = result.status
-        this.homeworkForm.score = result.score
-        this.homeworkForm.totalGrade = result.totalGrade
-        this.homeworkForm.createTime = result.createTime
-        this.homeworkForm.updateTime = result.updateTime
+        this.homeworkForm = result
         this.additionalResources = result.additionalResources
-        this.homeworkForm.answerStatus = result.answerStatus
         this.answer = result.answer
         // 判断结果
         if (result) {
@@ -186,41 +163,75 @@ export default {
         }
       })
     },
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
+    uploading() {
+      this.$message({
+        message: '请等待上传完成',
+        type: 'error'
+      })
     },
-    handlePreview(file) {
-      console.log(file);
+    handleChange(file, fileList) {
+      let formdata = new FormData()
+      fileList.map(item => { //fileList本来就是数组，就不用转为真数组了
+        formdata.append("file", item.raw)  //将每一个文件图片都加进formdata
+      })
+      console.log(file.size)
+      this.$axios.post("http://localhost:8082/api/uploadFile", formdata).then(res => {
+        console.log(res)
+      })
     },
-    handleExceed(files, fileList) {
-      this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          // 表单验证成功
+          this.$axios.post('http://localhost:8082/api/course/submitAssignment', this.answer).then(res => {
+            // 拿到结果
+            let result = JSON.parse(res.data.data);
+            let message = res.data.msg;
+            // 判断结果
+            if (result) {
+              /*登陆成功*/
+              localStorage.setItem("course",this.homeworkForm.courseName)
+              router.push('/homeworkHome')
+            } else {
+
+            }
+          })
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
     },
-    beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除 ${ file.name }？`);
+    // 重置表单
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
     }
   },
 }
 </script>
 
-<style>
-.tableA th,
-.tableA tr,
-.tableA td {
-  background-color: transparent;
+<style scoped>
+.bg-login {
+  height: 100%;
+  background-size: 200%;
+
 }
 
-.tableA {
-  background-color: transparent;
-  position: absolute;
-  top: 35%;
-  left: 50%;
+.btn-ground {
+  text-align: center;
+}
+
+.login-card {
+  background-color: #c1d1d7;
+  opacity: 0.9;
+  box-shadow: 0 0 20px #ffffff;
+  border-radius: 10px;
+  padding: 40px 40px 30px 15px;
   width: 30%;
-  border-radius: 10%;
-  font-size: 20px;
-  font-weight: 600;
-
+  position: absolute;
+  top: 63%;
+  left: 55%;
 }
-
 </style>
 
 <style scoped>
@@ -261,18 +272,27 @@ export default {
 .describe {
   position: absolute;
   background-color: #c1d1d7;
-  top: 40%;
-  left: 10%;
-  border-radius: 10%;
+  top: 33%;
+  left: 8%;
+  height: 70%;
+  opacity: 0.9;
+  box-shadow: 0 0 20px #ffffff;
+  border-radius: 10px;
+  padding: 40px 40px 30px 15px;
+  width: 30%;
 }
 
 .add {
   position: absolute;
   top: 30%;
-  left: 50%;
-  width: 40%;
+  left: 55%;
   height: 20%;
+  width: 30%;
   background-color: #c1d1d7;
+  opacity: 0.9;
+  box-shadow: 0 0 20px #ffffff;
+  border-radius: 10px;
+  padding: 40px 40px 30px 15px;
 }
 
 .addi {
