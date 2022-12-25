@@ -263,10 +263,10 @@ export default {
     }, 1000)
   },
   methods: {
-
     fetchData() {
       this.courseName = this.$route.query.courseName
-      console.log(this.courseName)
+      console.log(localStorage.getItem('token'))
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
       this.$axios.get(`http://localhost:8082/api/section/${this.sectionId}`).then(res => {
         let result = res.data.result;
         let message = res.data.msg;

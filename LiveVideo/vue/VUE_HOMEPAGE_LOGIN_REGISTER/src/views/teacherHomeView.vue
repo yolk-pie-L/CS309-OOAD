@@ -107,6 +107,7 @@ export default {
       },
       tableData: [
         {
+          id: "0",
           courseName: "course",
           privateKeyUrl: "ababa",
           status: "OK"
@@ -130,21 +131,17 @@ export default {
   },
   mounted() {
     this.fetchData()
-    this.fetchCourse()
-    this.fetchMessage()
   },
   methods: {
     selectItem(row, column, event) {
-      this.selectedFundRow = row
-      let noticeIndex = this.messageTable[row.id].noticeId
       if (event.target.innerText === "删除") {
-        console.log("here")
-        this.removeFundBtn(noticeIndex)
+        this.removeFundBtn(row.id)
       }
     },
     // 删除指定行
     removeFundBtn(params) {
-      this.$axios.post('localhost:8082/api/notice/del', {
+      console.log(params)
+      this.$axios.post('http://localhost:8082/api/notice/del', {
         noticeId: params
       }).then(res => {
         let result = res.data.result;
@@ -153,18 +150,21 @@ export default {
     },
     //获取后端数据
     fetchData() {
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
       this.$axios.get('http://localhost:8082/api/user').then(res => {
         // 拿到结果
         let result = res.data.result;
         let message = res.data.msg;
-        this.userName = result.userName
-        this.userType = result.userType
-        this.mail = result.mail
-        this.photoUrl = result.photoUrl
-        this.account = result.account
+        this.teacherForm.userName = result.userName
+        this.teacherForm.userType = result.userType
+        this.teacherForm.mail = result.mail
+        this.teacherForm.photoUrl = result.photoUrl
+        this.teacherForm.account = result.account
         // 判断结果
         if (result) {
           /*登陆成功*/
+          this.fetchCourse()
+
           /*跳转页面*/
         } else {
           /*打印错误信息*/
@@ -173,15 +173,20 @@ export default {
       })
     },
     fetchCourse() {
-      this.$axios.get('http://localhost:8082/api/notice/all?teacherName=' + this.teacherForm.username + '&page=' + 1 +
-          '&o=' + 5).then(res => {
+      this.$axios.get('http://localhost:8082/api/course/all', {
+        params: {
+          userName: this.teacherForm.userName,
+          page: 1,
+          o: 5
+        }
+      }).then(res => {
         let result = res.data.result;
         let message = res.data.msg;
         this.tableData = result
 
         if (result) {
           /*登陆成功*/
-
+          this.fetchMessage()
           /*跳转页面*/
         } else {
           /*打印错误信息*/
@@ -190,14 +195,18 @@ export default {
       })
     },
     fetchMessage() {
-      this.$axios.get('http://localhost:8082/api/notice/all?userName=' + this.username + '&courseName=' + this.tableData.at(0).courseName + '').then(res => {
+      this.$axios.get('http://localhost:8082/api/notice/all', {
+        params: {
+          courseId: this.tableData[0].id
+        }
+      }).then(res => {
         let result = res.data.result;
         let message = res.data.msg;
         this.messageTable = result
 
         if (result) {
           /*登陆成功*/
-
+          console.log(result)
           /*跳转页面*/
         } else {
           /*打印错误信息*/
