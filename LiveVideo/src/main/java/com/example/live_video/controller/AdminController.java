@@ -77,8 +77,7 @@ public class AdminController {
         Course course = courseService.getOneCourse(Long.parseLong(courseId));
         course.setTeacherName(userService.getById(course.getTeacherId()).getUserName());
         course.setStatus(ok ? CourseStatus.APPROVED : CourseStatus.FAILED);
-        ok = courseService.updateCourse(course);
-        return ok;
+        return courseService.updateCourse(course);
     }
 
 
