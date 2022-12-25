@@ -224,6 +224,8 @@
       }
     }
   },
+
+
   "AssignmentPage": {
     "queryAssignmentByCourseName": {
       "Method": "GET",
@@ -313,6 +315,8 @@
       }
     }
   },
+
+
   "Quiz": {
     "createQuizJson": {
       "Method": "POST",

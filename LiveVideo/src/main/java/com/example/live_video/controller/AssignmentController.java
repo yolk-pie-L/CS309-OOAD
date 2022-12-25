@@ -7,10 +7,7 @@ import com.example.live_video.vo.AssignmentVo;
 import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,7 +23,7 @@ public class AssignmentController {
     @Autowired
     private CourseService courseService;
 
-    @GetMapping("/allAssignment")
+    @GetMapping("/all")
     public List<AssignmentVo> queryAssignmentByCourseName(@RequestParam("courseId") String courseId) {
 //        Course course = courseService.getOneCourse(Long.parseLong(courseId));
 //        String courseName = course.getCourseName();
@@ -34,6 +31,29 @@ public class AssignmentController {
 //        if (teacherName == null) teacherName = userService.getById(course.getTeacherId()).getUserName();
 //        List<Assignment> assignmentList = assignmentService.getAssignmentByCourse(courseName, teacherName);
 //        return assignmentList;
-        return AssignmentVo.parse(assignmentService.getAssignmentsOfCourse(Long.parseLong(courseId)));
+        return AssignmentVo.parseInfo(assignmentService.getAssignmentsOfCourse(Long.parseLong(courseId)));
     }
+
+    @GetMapping("/one")
+    public AssignmentVo queryAssignmentById(@RequestParam("assignmentId") String assignmentId) {
+        Long userId = 1L;  // fixme
+        return null;
+    }
+
+    @PostMapping("/submit")
+    public boolean submitAssignment() {
+        return false;
+    }
+
+    @PostMapping("/upload")
+    public String uploadFile() {
+        return "";
+    }
+
+    @PostMapping("/create")
+    public boolean createAssignment() {
+        return false;
+    }
+
+
 }

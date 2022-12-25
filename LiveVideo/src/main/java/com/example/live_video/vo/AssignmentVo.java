@@ -22,10 +22,13 @@ public class AssignmentVo {
     private Timestamp createTime;
     private Timestamp updateTime;
     private String status;
+    private List<Attached> attached;
+    private List<Attached> answer;
 
     public AssignmentVo(Long id, String assignmentName, Long courseId, String courseName, String teacherName,
                         Timestamp deadline, Integer totalGrade, List<String> assignUrls, Boolean isAssignment,
-                        String description, Timestamp createTime, Timestamp updateTime, String status) {
+                        String description, Timestamp createTime, Timestamp updateTime,
+                        String status, List<Attached> attached, List<Attached> answer) {
         this.id = id;
         this.assignmentName = assignmentName;
         this.courseId = courseId;
@@ -39,10 +42,14 @@ public class AssignmentVo {
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.status = status;
+        this.attached = attached;
+        this.answer = answer;
     }
 
     public static AssignmentVo parse(Assignment assignment) {
-        String status = "Not Started";  // fixme
+        String status = getStatus(assignment);
+        List<Attached> attached = getAttached(assignment);
+        List<Attached> answer = getAnswer(assignment);
         return new AssignmentVo(
                 assignment.getId(),
                 assignment.getAssignmentName(),
@@ -56,7 +63,9 @@ public class AssignmentVo {
                 assignment.getDescription(),
                 assignment.getCreateTime(),
                 assignment.getUpdateTime(),
-                status
+                status,
+                attached,
+                answer
         );
     }
 
@@ -64,5 +73,46 @@ public class AssignmentVo {
         List<AssignmentVo> assignmentVoList = new ArrayList<>();
         assignmentList.forEach(assign -> assignmentVoList.add(AssignmentVo.parse(assign)));
         return assignmentVoList;
+    }
+
+    public AssignmentVo(Long id, String assignmentName, Timestamp deadline, String status) {
+        this.id = id;
+        this.assignmentName = assignmentName;
+        this.deadline = deadline;
+        this.status = status;
+    }
+
+    public static AssignmentVo parseInfo(Assignment assignment) {
+        String status = getStatus(assignment);
+        return new AssignmentVo(
+                assignment.getId(),
+                assignment.getAssignmentName(),
+                assignment.getDeadline(),
+                status
+        );
+    }
+
+    public static List<AssignmentVo> parseInfo(List<Assignment> assignmentList) {
+        List<AssignmentVo> assignmentVoList = new ArrayList<>();
+        assignmentList.forEach(assign -> assignmentVoList.add(AssignmentVo.parseInfo(assign)));
+        return assignmentVoList;
+    }
+
+
+    private static String getStatus(Assignment a) {
+        return "Not finished.";
+    }
+
+    private static List<Attached> getAttached(Assignment a) {
+        return null;
+    }
+
+    private static List<Attached> getAnswer(Assignment a) {
+        return null;
+    }
+
+    private static class Attached {
+        String name;
+        String url;
     }
 }
