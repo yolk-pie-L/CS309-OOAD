@@ -3,7 +3,7 @@
   <nav></nav>
 
   <div>
-    <div class="animate__animated animate__fadeIn title"  :style="{'background-image': bgUrl}" style="top: 55px"></div>
+    <div class="animate__animated animate__fadeIn title"  :style="{'background-image': bgUrl}"></div>
     <el-header  class="animate__animated animate__fadeIn">
       <div class="menu-expend">
         <i class="el-icon-menu"></i>
@@ -22,7 +22,7 @@
         <el-input v-model="queryInfo.course" clearable placeholder="Course"
                   @clear="fetchCourse"></el-input>
         <el-input v-model="queryInfo.teacher" clearable placeholder="Teacher"
-                  @clear="fetchUser"></el-input>
+                  @clear="fetchCourse"></el-input>
         <el-button slot="append" icon="el-icon-search" @click="fetchCourse"></el-button>
       </div>
     </el-header>
@@ -84,7 +84,7 @@ export default {
         pageNum:"9",
       },
       userForm: {
-        userName: "teacher1",
+        userName: "black",
         userType: "Teacher",
         mail: "",
         photoUrl: "https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg",
@@ -112,23 +112,10 @@ export default {
   },
   methods: {
     fetchCourse() {
-      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
-
-      this.$axios.get('http://localhost:8082/api/course/success/all', {
-        params: {
-          o: this.pageForm.pageNum,
-          page: this.pageForm.page,
-          courseName: this.queryInfo.course,
-          teacherName: this.queryInfo.teacher
-        }
-      }).then(res => {
-        let result = res.data.result;
+      this.$axios.get('api/course/success/all?o=\''+this.pageNum+'&page=\'' + this.currentPage + '&courseName=\''+this.queryInfo.course+'&teacherName=\'' + this.queryInfo.teacher + '\'}\'').then(res => {
+        let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         this.classForm = result;
-        this.classForm.forEach(course => {
-          course.coursePicture = this.$picture + course.coursePicture
-          console.log(course.coursePicture)
-        })
         if (result) {
         } else {
           /*打印错误信息*/
@@ -137,44 +124,29 @@ export default {
       })
     },
     fetchUser() {
-      console.log(localStorage.getItem('token'))
-      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
       this.$axios.get('http://localhost:8082/api/user').then(res => {
         // 拿到结果
-        let result = res.data.result;
-        this.userForm.userName = result.userName
-        this.userForm.userType = result.userType
-        this.userForm.mail = result.mail
-        this.userForm.photoUrl = `${this.$pref}/api/picture/${result.photoUrl}`
-        this.userForm.account = result.account
+        let result = JSON.parse(res.data.data);
+        let message = res.data.msg;
+        this.userName = result.userName
+        this.userType = result.userType
+        this.mail = result.mail
+        this.photoUrl = result.photoUrl
+        this.account = result.account
         // 判断结果
-        if (res.data.code === 200) {
+        if (result) {
           /*登陆成功*/
+
           /*跳转页面*/
-          // router.push('/')
-        } else if (localStorage.getItem('token')) {
-          /*打印错误信息*/
-          this.$notify({
-            title: '失败',
-            message: result,
-            type: 'error'
-          })
-          localStorage.removeItem('token')
           router.push('/')
+        } else {
+          /*打印错误信息*/
+          alert(message);
         }
       })
     },
     into(){
-      this.$axios.get('http://localhost:8082/api/user').then(res => {
-        let result = res.data.result;
-        if (result.userType === 'Student') {
-          router.push('/studentHome');
-        } else if (result.userType === 'Teacher') {
-          router.push('/teacherHomeView');
-        } else {
-          console.log(res)
-        }
-      })
+      router.push('/studentHome');
     },
     toLogin(){
       router.push('/login');
@@ -184,7 +156,7 @@ export default {
     },
     intoClass(id){
       localStorage.setItem("courseId",id)
-      router.push({path:'/courseMainPage', query: { courseId: id }})
+      router.push({path:'/courseMainPage'})
     },
   },
   computed:{

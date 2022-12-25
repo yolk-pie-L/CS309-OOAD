@@ -6,6 +6,8 @@ import com.example.live_video.exception.EnrollCourseException;
 import com.example.live_video.exception.SQLAssignNameConflictException;
 import com.example.live_video.exception.SQLCoursenameConflictException;
 import com.example.live_video.mapper.*;
+import com.example.live_video.vo.StudentGradeVo;
+import com.google.gson.Gson;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +16,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -92,11 +98,11 @@ class StudentServiceTest {
 
     @AfterEach
     void tearDown() {
-        for (Course c : courses) {
-            courseService.removeCourse(c.getId());
-        }
-        students.forEach(userMapper::deleteById);
-        teachers.forEach(userMapper::deleteById);
+//        for (Course c : courses) {
+//            courseService.removeCourse(c.getId());
+//        }
+//        students.forEach(userMapper::deleteById);
+//        teachers.forEach(userMapper::deleteById);
     }
 
     @Test
@@ -150,7 +156,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void setStudentAssignGrade() throws SQLAssignNameConflictException {
+    void setStudentAssignGrade() throws SQLAssignNameConflictException, EnrollCourseException {
         User s1 = students.get(0);
         User s2 = students.get(1);
         Course c1 = courses.get(0);
@@ -163,6 +169,7 @@ class StudentServiceTest {
         List<String> urls1 = new ArrayList<>();
         urls1.add("l1");
         urls1.add("l2");
+        studentService.enrollCourse(c1.getId(), s1.getUserName());
         studentService.submitAssignment(s1.getUserName(), assignment1.getId(), urls1);
         studentService.setStudentAssignGrade(s1.getUserName(), assignment1.getId(), 100);
         int grade = studentService.getStudentAssignGrade(s1.getUserName(), assignment1.getId());
@@ -230,5 +237,80 @@ class StudentServiceTest {
         assertEquals(1, userList2.size());
         assertEquals(s1.getId(), userList1.get(0).getId());
         assertEquals(s3.getId(), userList2.get(0).getId());
+    }
+
+    @Test
+    void getStudentGrades() throws EnrollCourseException, SQLAssignNameConflictException, IOException {
+        Course course = courses.get(0);
+        Course course1 = courses.get(1);
+        User student = students.get(0);
+        User student1 = students.get(1);
+        User student2 = students.get(2);
+        Section section = sections.get(0);
+        Section section1 = sections.get(1);
+        Section section2 = sections.get(2);
+        studentService.enrollCourse(course.getId(), student.getUserName());
+        studentService.enrollCourse(course.getId(), student1.getUserName());
+        studentService.enrollCourse(course.getId(), student2.getUserName());
+        studentService.enrollCourse(course1.getId(), student.getUserName());
+        studentService.setStudentSectionProgress(student.getId(), section.getId(), 0.1);
+        studentService.setStudentSectionProgress(student.getId(), section1.getId(), 0.2);
+        studentService.setStudentSectionProgress(student1.getId(), section.getId(), 0.3);
+        studentService.setStudentSectionProgress(student1.getId(), section1.getId(), 0.4);
+        studentService.setStudentSectionProgress(student2.getId(), section.getId(), 0.5);
+        studentService.setStudentSectionProgress(student2.getId(), section1.getId(), 0.6);
+        studentService.setStudentSectionProgress(student.getId(), section2.getId(), 0.8);
+        Assignment assignment1 = new Assignment("assi1", course.getId(), null, 100, null,true, null);
+        Assignment assignment2 = new Assignment("assi2", course.getId(), null, 120, null, false, null);
+        assignmentService.createAssignment(assignment1);
+        assignmentService.createAssignment(assignment2);
+        List<String> assignUrls = new LinkedList<>();
+        assignUrls.add("1");
+        assignUrls.add("2");
+        studentService.submitAssignment(student.getUserName(), assignment1.getId(), assignUrls);
+        studentService.submitAssignment(student.getUserName(), assignment2.getId(), assignUrls);
+        studentService.setStudentAssignGrade(student.getUserName(), assignment1.getId(), 10);
+        studentService.setStudentAssignGrade(student.getUserName(), assignment2.getId(), 20);
+        List<StudentGradeVo> studentGrades = studentService.getStudentGrades(course1.getId());
+        List<StudentGradeVo> studentGrades1 = studentService.getStudentGrades(course.getId());
+        Gson gson = new Gson();
+        String pjson = gson.toJson(studentGrades);
+        File file = new File("src/test/java/com/example/live_video/service/studentGrades.json");
+        file.createNewFile();
+        FileWriter fw = new FileWriter(file);
+        fw.write(pjson);
+        fw.close();
+        pjson = gson.toJson(studentGrades1);
+        file = new File("src/test/java/com/example/live_video/service/studentGrades1.json");
+        file.createNewFile();
+        fw = new FileWriter(file);
+        fw.write(pjson);
+        fw.close();
+    }
+
+    @Test
+    public void testTrigger() throws SQLAssignNameConflictException, EnrollCourseException {
+        Course course = courses.get(0);
+        Course course1 = courses.get(1);
+        User student = students.get(0);
+        User student1 = students.get(1);
+        User student2 = students.get(2);
+        Section section = sections.get(0);
+        Section section1 = sections.get(1);
+        Section section2 = sections.get(2);
+        Assignment assignment1 = new Assignment("assi1", course.getId(), null, 100, null,true, null);
+        Assignment assignment2 = new Assignment("assi2", course.getId(), null, 120, null, false, null);
+        studentService.enrollCourse(course.getId(), student.getUserName());
+        studentService.enrollCourse(course.getId(), student1.getUserName());
+        studentService.enrollCourse(course.getId(), student2.getUserName());
+        assignmentService.createAssignment(assignment1);
+        assignmentService.createAssignment(assignment2);
+//        List<String> assignUrls = new LinkedList<>();
+//        assignUrls.add("1");
+//        assignUrls.add("2");
+//        studentService.submitAssignment(student.getUserName(), assignment1.getId(), assignUrls);
+//        studentService.setStudentAssignGrade(student.getUserName(), assignment1.getId(), 10);
+//        int grade = studentService.getStudentAssignGrade(student.getUserName(), assignment1.getId());
+//        assertEquals(10, grade);
     }
 }

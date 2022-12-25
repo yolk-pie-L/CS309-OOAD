@@ -122,7 +122,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public String login(String userName, String password) throws SQLUserNotFoundException {
-        if ((boolean) compareUserPassword(userName, password)) {
+        if (compareUserPassword(userName, password)) {
             return getUserType(userName).name();
         } else {
             return null;

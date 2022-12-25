@@ -64,8 +64,8 @@
         <span class="author-time">{{item.time}}</span>
       </div>
       <div class="icon-btn">
-        <span @click="showReplyInput(i,item.name,item.id)"><i class="iconfont el-icon-s-comment"></i>{{item.commentNum}}</span>
-        <i class="iconfont el-icon-caret-top"></i>{{item.like}}
+        <span @click="showReplyInput(i,item.name,item.id)"><el-icon><comment></comment></el-icon>{{item.commentNum}}</span>
+        <i class="iconfont el-icon-caret-top"></i>
       </div>
       <div class="talk-box">
         <p>
@@ -80,8 +80,8 @@
             <span class="author-time">{{reply.time}}</span>
           </div>
           <div class="icon-btn">
-            <span @click="showReplyInput(i,reply.from,reply.id)"><i class="iconfont el-icon-s-comment"></i>{{reply.commentNum}}</span>
-            <i class="iconfont el-icon-caret-top"></i>{{reply.like}}
+            <span @click="showReplyInput(i,reply.from,reply.id)"><el-icon><comment></comment></el-icon></span>
+            <i class="iconfont el-icon-caret-top"></i>
           </div>
           <div class="talk-box">
             <p>
@@ -110,15 +110,21 @@
 
 <script>
 import router from "@/router";
-
+import {Comment, Setting, Menu ,Document} from '@element-plus/icons'
 export default {
+  components: {
+    Comment, Setting, Menu ,Document
+  },
+  name: "Aside",
+
   data() {
     return {
+      userName: 'SY',
       total: '总评论数： 7',
       courseName: 'black',
       videoURL: "url",
       recodrTime: '0',
-      sectionId: 4,
+      sectionId: 1,
       row: 0,
       sectionData: [
         {
@@ -139,8 +145,8 @@ export default {
         fluid: false,  // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
         sources: [{
           type: "video/mp4",  // 类型
-          // src: 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4'             // url地址
-          src: 'http://localhost:8082/api/section/4'              // url地址
+          src: 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4'             // url地址
+       // src: 'http://localhost:8082/api/video/?sectionId=${sectionId}'             // url地址
         }],
         poster: '',  // 封面地址
         notSupportedMessage: '此视频暂无法播放，请稍后再试',  // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
@@ -254,17 +260,19 @@ export default {
         this.sectionData[this.row].sectionComplete = (document.getElementsByTagName('video')[0].currentTime /
             document.getElementsByTagName('video')[0].duration * 100).toString().split('.')[0] + '%'
       }
-    }, 5000)
+    }, 1000)
   },
   methods: {
     fetchData() {
       this.courseName = this.$route.query.courseName
-      console.log(this.courseName)
+      console.log(localStorage.getItem('token'))
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
       this.$axios.get(`http://localhost:8082/api/section/${this.sectionId}`).then(res => {
-        let result = JSON.parse(res.data.data);
+        let result = res.data.result;
         let message = res.data.msg;
         this.sectionData = result
         this.sectionId = result[0].sectionIdIn
+        console.log(this.sectionId)
         if (result) {
           /*登陆成功*/
 
@@ -277,17 +285,15 @@ export default {
       })
     },
     fetchComment() {
-      this.courseName = this.$route.query.courseName
-      this.$axios.get(`http://localhost:8082/api/comment/${this.sectionId}`).then(res => {
-        let result = JSON.parse(res.data.data);
-        let message = res.data.msg;
-        this.sectionData = result
+      this.$axios.get('http://localhost:8082/api/comment/' + this.sectionId).then(res => {
+        let result = res.data.result;
+        console.log(result)
+        this.comments = result
 
         if (result) {
           /*登陆成功*/
 
           /*跳转页面*/
-          router.push('/videoPage')
         } else {
           /*打印错误信息*/
           alert(message);
@@ -295,9 +301,10 @@ export default {
       })
     },
     fetchTotalComment() {
-      this.$axios.get(`http://localhost:8082/api/comment/all?${this.sectionId}`).then(res => {
-        let result = JSON.parse(res.data.data);
+      this.$axios.get('http://localhost:8082/api/comment/all/' + this.sectionId).then(res => {
+        let result = res.data.result;
         let message = res.data.msg;
+        console.log(result)
         this.total = "总评论数： " + result
         if (result) {
           /*登陆成功*/
@@ -350,7 +357,7 @@ export default {
         let input =  document.getElementById('replyInput')
         let timeNow = new Date().getTime();
         let time= this.dateStr(timeNow);
-        a.name= this.myName
+        a.name= this.userName
         a.comment =this.replyComment
         a.headImg = this.myHeader
         a.time = time
@@ -361,8 +368,13 @@ export default {
         input.innerHTML = '';
         let totalNum = parseInt(this.total.split(" ")[1]) + 1
         this.total = "总评论数： " + totalNum.toString()
-        this.$axios.post('api/video?userName=${myName}&replyUserName=${}&context=${replyComment}&date=${time}').then(res => {
-          let result = JSON.parse(res.data.data);
+        this.$axios.post('http://localhost:8082/api/comment/', {
+          sectionId: this.sectionId,
+          userName: this.userName,
+          replyCommentId: -1,
+          context: a.comment
+        }).then(res => {
+          let result = res.data.result;
           let message = res.data.msg;
           this.sectionData = result
           if (result) {
@@ -388,7 +400,7 @@ export default {
         let a ={}
         let timeNow = new Date().getTime();
         let time= this.dateStr(timeNow);
-        a.from= this.myName
+        a.from= this.userName
         a.to = this.to
         a.fromHeadImg = this.myHeader
         a.comment =this.replyComment
@@ -400,8 +412,13 @@ export default {
         document.getElementsByClassName("reply-comment-input")[i].innerHTML = ""
         let totalNum = parseInt(this.total.split(" ")[1]) + 1
         this.total = "总评论数： " + totalNum.toString()
-        this.$axios.post('api/video?userName=${myName}&replyUserName=${to}&context=${replyComment}&date=${time}').then(res => {
-          let result = JSON.parse(res.data.data);
+        this.$axios.post('http://localhost:8082/api/comment/', {
+          sectionId: this.sectionId,
+          userName: this.userName,
+          replyCommentId: this.toId,
+          context: a.comment
+        }).then(res => {
+          let result = res.data.result;
           let message = res.data.msg;
           this.sectionData = result
           if (result) {

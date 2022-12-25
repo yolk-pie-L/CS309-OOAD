@@ -1,5 +1,6 @@
 package com.example.live_video.service.impl;
 
+import com.example.live_video.entity.Assignment;
 import com.example.live_video.entity.Course;
 import com.example.live_video.entity.Section;
 import com.example.live_video.entity.User;
@@ -9,12 +10,17 @@ import com.example.live_video.mapper.SectionMapper;
 import com.example.live_video.mapper.StudentMapper;
 import com.example.live_video.mapper.UserMapper;
 import com.example.live_video.service.AssignmentService;
+import com.example.live_video.service.SectionService;
 import com.example.live_video.service.StudentService;
 import com.example.live_video.service.UserService;
+import com.example.live_video.vo.StudentAssignGradeVo;
+import com.example.live_video.vo.StudentGradeVo;
+import com.example.live_video.vo.StudentSectionGradeVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -38,6 +44,8 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     AssignmentService assignmentService;
 
+    @Autowired
+    SectionService sectionService;
 
     @Override
     @Transactional
@@ -118,5 +126,40 @@ public class StudentServiceImpl implements StudentService {
         double studentGrade = section.getGrade() * ratio;
         studentMapper.setStudentSectionProgress(studentId, sectionId, studentGrade);
         return true;
+    }
+
+    @Override
+    public List<StudentGradeVo> getStudentGrades(long courseId) {
+        List<User> studentList = getStudentListOfOneCourse(courseId);
+        List<StudentGradeVo> studentGradesList = new LinkedList<>();
+        List<Assignment> assignmentList = assignmentService.getAssignmentsOfCourse(courseId);
+        List<Section> sectionList = sectionService.getSectionList(courseId);
+        for(User student: studentList){
+            StudentGradeVo studentGradeVo = new StudentGradeVo();
+            studentGradeVo.setStudentName(student.getUserName());
+
+            List<StudentAssignGradeVo> studentAssignGradeList = new LinkedList<>();
+            for(Assignment assignment: assignmentList){
+                StudentAssignGradeVo studentAssignGrade = new StudentAssignGradeVo();
+                studentAssignGrade.setAssignName(assignment.getAssignmentName());
+                studentAssignGrade.setTotalGrade(assignment.getTotalGrade());
+                studentAssignGrade.setStudentGrade(getStudentAssignGrade(student.getUserName(), assignment.getId()));
+                studentAssignGradeList.add(studentAssignGrade);
+            }
+            studentGradeVo.setStudentAssignGradeList(studentAssignGradeList);
+
+            List<StudentSectionGradeVo> studentSectionGradeList = new LinkedList<>();
+            for(Section section: sectionList){
+                StudentSectionGradeVo studentSectionGrade = new StudentSectionGradeVo();
+                studentSectionGrade.setSectionName(section.getSectionName());
+                studentSectionGrade.setFullGrade(section.getGrade());
+                studentSectionGrade.setStudentGrade(studentMapper.getStudentSectionGrade(student.getId(), section.getId()));
+                studentSectionGradeList.add(studentSectionGrade);
+            }
+            studentGradeVo.setStudentSectionGradeList(studentSectionGradeList);
+
+            studentGradesList.add(studentGradeVo);
+        }
+        return studentGradesList;
     }
 }

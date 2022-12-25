@@ -1,6 +1,7 @@
 package com.example.live_video.service;
 
 import com.example.live_video.entity.*;
+import com.example.live_video.exception.MyException;
 import com.example.live_video.mapper.CourseMapper;
 import com.example.live_video.mapper.SectionMapper;
 import com.example.live_video.mapper.UserMapper;
@@ -9,8 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -18,11 +17,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
-@Transactional
-@Rollback
+//@Transactional
+//@Rollback
 class CommentServiceTest {
 
     @Autowired
@@ -86,30 +83,30 @@ class CommentServiceTest {
 
 
     @Test
-    void saveComment() throws IOException {
+    void saveComment() throws IOException, MyException {
         Section section1 = allSections.get(0);
         User user1 = allUsers.get(0);
         User user2 = allUsers.get(1);
-        Comment comment = new Comment("root1", user1.getId(), section1.getId());
+        Comment comment = new Comment("root1", user1.getId(), section1.getId(), 0);
         commentService.saveComment(comment);
-        Comment comment2 = new Comment(comment.getId(), "root1_level1", user1.getId(), section1.getId());
+        Comment comment2 = new Comment(comment.getId(), "root1_level1", user1.getId(), section1.getId(), 0);
         commentService.saveComment(comment2);
-        Comment comment3 = new Comment(comment2.getId(), "root1_level2", user1.getId(), section1.getId());
+        Comment comment3 = new Comment(comment2.getId(), "root1_level2", user1.getId(), section1.getId(), 0);
         commentService.saveComment(comment3);
-        Comment comment4 = new Comment(comment3.getId(), "root1_level3", user2.getId(), section1.getId());
+        Comment comment4 = new Comment(comment3.getId(), "root1_level3", user2.getId(), section1.getId(), 0);
         commentService.saveComment(comment4);
-        Comment comment5 = new Comment(comment.getId(), "root_level1", user1.getId(), section1.getId());
+        Comment comment5 = new Comment(comment.getId(), "root_level1", user1.getId(), section1.getId(), 0);
         commentService.saveComment(comment5);
-        Comment comment6 = new Comment(comment5.getParentId(), "root_level2", user2.getId(), section1.getId());
+        Comment comment6 = new Comment(comment5.getParentId(), "root_level2", user2.getId(), section1.getId(), 0);
         commentService.saveComment(comment6);
-        Comment comment1 = new Comment("root2", user1.getId(), section1.getId());
+        Comment comment1 = new Comment("root2", user1.getId(), section1.getId(), 0);
         commentService.saveComment(comment1);
-        Comment comment7 = new Comment(comment1.getId(), "root2_level1", user2.getId(), section1.getId());
+        Comment comment7 = new Comment(comment1.getId(), "root2_level1", user2.getId(), section1.getId(), 0);
         commentService.saveComment(comment7);
         Section section2 = allSections.get(1);
-        Comment comment8 = new Comment("section2_root1", user1.getId(), section2.getId());
+        Comment comment8 = new Comment("section2_root1", user1.getId(), section2.getId(), 0);
         commentService.saveComment(comment8);
-        Comment comment9 = new Comment(comment8.getId(), "s2_root1_level1", user2.getId(), section2.getId());
+        Comment comment9 = new Comment(comment8.getId(), "s2_root1_level1", user2.getId(), section2.getId(), 0);
         commentService.saveComment(comment9);
         List<Comment> comments = commentService.getCommentList(section1.getId());
         Gson gson = new Gson();
@@ -119,7 +116,7 @@ class CommentServiceTest {
         FileWriter fw = new FileWriter(file);
         fw.write(pjson);
         fw.close();
-        commentService.deleteComment(comment.getId());
+        commentService.deleteComment(comment.getId(), comment.getUserId());
         List<Comment> comments1 = commentService.getCommentList(section1.getId());
         pjson = gson.toJson(comments1);
         file = new File("src/test/java/com/example/live_video/service/test2.json");

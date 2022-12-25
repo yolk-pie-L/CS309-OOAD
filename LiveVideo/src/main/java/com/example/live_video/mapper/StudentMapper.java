@@ -27,21 +27,24 @@ public interface StudentMapper {
     @Update("UPDATE stu_assign SET grade = #{grade} WHERE user_id = #{studentId} AND assign_id = #{assignId}")
     public void setStudentAssignGrade(Long studentId, Long assignId, int grade);
 
-    @Insert("INSERT INTO stu_assign(user_id, assign_id, assign_url) VALUES (#{studentId}, #{assignId}, #{assign_url})")
+    @Insert("INSERT INTO stu_assign_urls(user_id, assign_id, assign_url) VALUES (#{studentId}, #{assignId}, #{assign_url})")
     public void submitAssignment(Long studentId, Long assignId, String assign_url);
 
-    @Select("SELECT assign_url FROM stu_assign WHERE user_id = #{studentId} AND assign_id = #{assignId}")
+    @Select("SELECT assign_url FROM stu_assign_urls WHERE user_id = #{studentId} AND assign_id = #{assignId}")
     public List<String> getStudentSubmittedAssignUrlList(Long studentId, Long assignId);
 
-    @Delete("DELETE FROM stu_assign WHERE user_id = #{studentId} AND assign_id = #{assignId}")
+    @Delete("DELETE FROM stu_assign_urls WHERE user_id = #{studentId} AND assign_id = #{assignId}")
     public void deleteStudentAssignment(Long studentId, Long assignId);
 
     @Select("SELECT grade FROM stu_assign WHERE assign_id = #{assignId} AND user_id = #{studentId}")
-    public int getStudentAssignGrade(Long assignId, Long studentId);
+    public int getStudentAssignGrade(Long studentId, Long assignId);
 
     @Update("UPDATE stu_section SET grade = #{grade} WHERE user_id = #{studentId} AND section_id = #{sectionId}")
     public void setStudentSectionProgress(long studentId, long sectionId, double grade);
 
     @Select("SELECT user.* FROM stu_course JOIN user on user.id = stu_course.user_id WHERE course_id = #{courseId} AND user.is_delete = 0")
     public List<User> getStudentListOfOneCourse(long courseId);
+
+    @Select("SELECT grade FROM stu_section WHERE user_id = #{userId} AND section_id = #{sectionId}")
+    public int getStudentSectionGrade(long userId, long sectionId);
 }
