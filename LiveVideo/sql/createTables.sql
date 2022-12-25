@@ -78,7 +78,7 @@ CREATE TABLE assignment
     total_grade     int,
     is_assignment   boolean     not null,
     description     text,
-    answer_url      varchar(50),
+    start_time      timestamp,
     create_time     timestamp   not null default CURRENT_TIMESTAMP,
     update_time     timestamp   null     default null on update CURRENT_TIMESTAMP,
     CONSTRAINT unique (assignment_name, course_id),
