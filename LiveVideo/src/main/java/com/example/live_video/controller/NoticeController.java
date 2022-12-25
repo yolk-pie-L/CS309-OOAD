@@ -21,7 +21,7 @@ public class NoticeController {
     NoticeService noticeService;
 
     @GetMapping("/all")
-    public List<NoticeVo> getNoticesOfCourse(@RequestBody long courseId) {
+    public List<NoticeVo> getNoticesOfCourse(@RequestParam long courseId) {
         return NoticeVo.parseNoticeList(noticeService.getNoticeListOfCourse(courseId));
     }
 
