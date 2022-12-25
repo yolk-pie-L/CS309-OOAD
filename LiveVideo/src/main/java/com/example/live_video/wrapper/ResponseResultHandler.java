@@ -1,5 +1,7 @@
 package com.example.live_video.wrapper;
 
+import com.example.live_video.exception.MyException;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -33,15 +35,17 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object o, MethodParameter methodParameter, MediaType mediaType, Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
         //根据controller返回的响应类型 进行返回结果包装。controller可返回各种类型的exception或各类型数据 然后此处控制返回不同的响应：code、msg都不同
-        if (o instanceof Exception) {
-            return Response.fail(o);
+        System.out.println("Before Body Write "+o);
+        if (o instanceof MyException) {
+            return Response.failHttpError(((MyException) o).getMessage());
             //如果自身产生异常。LinkedHashMap为http异常
-        } else if (o instanceof LinkedHashMap) {
-            LinkedHashMap lk = (LinkedHashMap) o;
-            return Response.failHttpError(o);
+        } else if (o instanceof Exception) {
+            return Response.fail(((Exception) o).getMessage());
             //如果没有报错
         } else {
             return Response.success(o);
         }
     }
+
+
 }

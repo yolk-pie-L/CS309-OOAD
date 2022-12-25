@@ -1,7 +1,6 @@
 package com.example.live_video.service;
 
 import com.example.live_video.entity.*;
-import com.example.live_video.exception.MyException;
 import com.example.live_video.exception.SQLSectionnameConflictException;
 import com.example.live_video.mapper.CourseMapper;
 import com.example.live_video.mapper.SectionMapper;
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
@@ -48,18 +47,18 @@ class SectionServiceTest {
         User teacher = new User("user2", UserType.Teacher, "user2@mail.com1", "123456");
         userMapper.insert(teacher);
         allUsers.add(teacher);
-        Course course1 = new Course("rc1_t1", teacher.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "url");
+        Course course1 = new Course("rc1_t1", teacher.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "assign_url");
         course1.setTeacherName(teacher.getUserName());
-        Course course2 = new Course("rc2_t1", teacher.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "url");
+        Course course2 = new Course("rc2_t1", teacher.getId(), "test", 0L, "review", CourseStatus.REVIEWING, "assign_url");
         course2.setTeacherName(teacher.getUserName());
         courseMapper.insert(course1);
         courseMapper.insert(course2);
         allCourses.add(course1);
         allCourses.add(course2);
-        Section section1 = new Section("s1", course1.getCourseName(), teacher.getUserName(), "url");
-        Section section2 = new Section("s2", course1.getCourseName(), teacher.getUserName(), "url");
-        Section section3 = new Section("s3", course1.getCourseName(), teacher.getUserName(), "url");
-        Section section4 = new Section("s4", course2.getCourseName(), teacher.getUserName(), "url");
+        Section section1 = new Section("s1", course1.getCourseName(), teacher.getUserName(), "assign_url");
+        Section section2 = new Section("s2", course1.getCourseName(), teacher.getUserName(), "assign_url");
+        Section section3 = new Section("s3", course1.getCourseName(), teacher.getUserName(), "assign_url");
+        Section section4 = new Section("s4", course2.getCourseName(), teacher.getUserName(), "assign_url");
         section1.setCourseId(course1.getId());
         section2.setCourseId(course1.getId());
         section3.setCourseId(course1.getId());
@@ -82,23 +81,12 @@ class SectionServiceTest {
     }
 
     @Test
-    void createSection() {
+    void createSection() throws SQLSectionnameConflictException {
         Course course2 = allCourses.get(1);
         User teacher = allUsers.get(0);
-        Section section5 = new Section("s5", course2.getCourseName(), teacher.getUserName(), "url");
+        Section section5 = new Section("s5", course2.getId(), "assign_url", 20);
         boolean flag = false;
-        try {
-            flag = sectionService.createSection(section5);
-        }catch (MyException e){
-            flag = false;
-        }
-        assert flag;
-        try {
-            sectionService.createSection(section5);
-            flag = false;
-        }catch (MyException e){
-            flag = e instanceof SQLSectionnameConflictException;
-        }
+        flag = sectionService.createSection(section5);
         assert flag;
         sectionMapper.deleteById(section5);
     }
@@ -106,13 +94,12 @@ class SectionServiceTest {
     @Test
     void updateSection() {
         Course course1 = allCourses.get(0);
-        User teacher = allUsers.get(0);
         Section ansSection = allSections.get(0);
-        Section section1 = new Section("s1", course1.getCourseName(), teacher.getUserName(), null);
+        Section section1 = new Section("s1", course1.getId(), null, 10);
         sectionService.updateSection(section1);
         Section section = sectionMapper.selectById(ansSection.getId());
         assert Objects.equals(section.getVideoUrl(), ansSection.getVideoUrl());
-        section1.setVideoUrl("new url");
+        section1.setVideoUrl("new assign_url");
         sectionService.updateSection(section1);
         section = sectionMapper.selectById(ansSection.getId());
         assert Objects.equals(section.getVideoUrl(), section1.getVideoUrl());
@@ -122,7 +109,7 @@ class SectionServiceTest {
     void removeSection() {
         Section testSection = allSections.get(0);
         long count = sectionMapper.selectCount(null);
-        sectionService.removeSection(testSection.getTeacherName(), testSection.getCourseName(), testSection.getSectionName());
+        sectionService.removeSection(testSection.getId());
         long count2 = sectionMapper.selectCount(null);
         assert count2 == count - 1;
         List<Section> sectionList = sectionMapper.selectList(null);
@@ -130,5 +117,20 @@ class SectionServiceTest {
             assert !Objects.equals(section.getSectionName(), testSection.getSectionName());
         }
         allSections.remove(testSection);
+    }
+
+    @Test
+    void getOneSection() {
+        Section origin = allSections.get(0);
+        Section s = sectionService.getOneSection(origin.getId());
+        assert s.getVideoUrl().equals(origin.getVideoUrl());
+        assert s.getId().equals(origin.getId());
+    }
+
+    @Test
+    void getSectionId() {
+        Section section = allSections.get(0);
+        Long id = sectionService.getSectionId(section.getCourseId(), section.getSectionName());
+        assertEquals(section.getId(), id);
     }
 }

@@ -1,9 +1,9 @@
 package com.example.live_video.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 
 import java.sql.Timestamp;
 
@@ -18,15 +18,22 @@ public class User {
     @TableField(value = "username")
     private String userName;
 
-    @TableField(value = "usertype")
+    @TableField(value = "usertype", updateStrategy = FieldStrategy.NOT_EMPTY)
     private UserType userType;
 
+    @TableField(updateStrategy = FieldStrategy.NOT_EMPTY)
     private String mail;
+    @TableField(updateStrategy = FieldStrategy.NOT_EMPTY, select = false)
     private String password;
 
-    @TableField(value = "photo_url")
+    @TableField(value = "photo_url", updateStrategy = FieldStrategy.NOT_EMPTY)
     private String photoUrl;
+
+    @TableField(updateStrategy = FieldStrategy.NOT_EMPTY)
     private Long account;
+
+    @TableField(value = "admin_right", updateStrategy = FieldStrategy.NOT_EMPTY)
+    private AdminRight adminRight = AdminRight.NonAdmin;
 
     @TableField(value = "create_time", insertStrategy = FieldStrategy.NOT_EMPTY)
     private Timestamp createTime;

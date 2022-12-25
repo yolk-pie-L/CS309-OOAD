@@ -3,6 +3,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+vue
 
 ### STS ###
 .apt_generated
@@ -36,4 +37,7 @@ build/
 vue/package.json
 
 ###配置###
-LiveVideo/src/main/resources/application.yml
+/src/main/resources/application.yml
+.gitignore
+/.run/
+/src/main/javatest.java

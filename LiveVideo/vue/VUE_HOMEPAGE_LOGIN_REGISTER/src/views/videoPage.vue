@@ -5,6 +5,8 @@
         <el-table :data="sectionData" border stripe style="width: 100% " @row-click="reFetch">
           <el-table-column prop="sectionName" label="sectionNames" align="center"
                            min-width="180px"></el-table-column>
+          <el-table-column prop="sectionComplete" label="sectionComplete" align="center"
+                           min-width="180px"></el-table-column>
         </el-table>
         <el-row>
           <el-col>
@@ -62,8 +64,8 @@
         <span class="author-time">{{item.time}}</span>
       </div>
       <div class="icon-btn">
-        <span @click="showReplyInput(i,item.name,item.id)"><i class="iconfont el-icon-s-comment"></i>{{item.commentNum}}</span>
-        <i class="iconfont el-icon-caret-top"></i>{{item.like}}
+        <span @click="showReplyInput(i,item.name,item.id)"><el-icon><comment></comment></el-icon>{{item.commentNum}}</span>
+        <i class="iconfont el-icon-caret-top"></i>
       </div>
       <div class="talk-box">
         <p>
@@ -78,8 +80,8 @@
             <span class="author-time">{{reply.time}}</span>
           </div>
           <div class="icon-btn">
-            <span @click="showReplyInput(i,reply.from,reply.id)"><i class="iconfont el-icon-s-comment"></i>{{reply.commentNum}}</span>
-            <i class="iconfont el-icon-caret-top"></i>{{reply.like}}
+            <span @click="showReplyInput(i,reply.from,reply.id)"><el-icon><comment></comment></el-icon></span>
+            <i class="iconfont el-icon-caret-top"></i>
           </div>
           <div class="talk-box">
             <p>
@@ -108,18 +110,27 @@
 
 <script>
 import router from "@/router";
-
+import {Comment, Setting, Menu ,Document} from '@element-plus/icons'
 export default {
+  components: {
+    Comment, Setting, Menu ,Document
+  },
+  name: "Aside",
+
   data() {
     return {
+      userName: 'SY',
       total: '总评论数： 7',
       courseName: 'black',
       videoURL: "url",
+      recodrTime: '0',
       sectionId: 1,
+      row: 0,
       sectionData: [
         {
-          sectionIdIn: "1",
-          videoURL: "ababa",
+          sectionIdIn: "0",
+          sectionName: "ababa",
+          sectionComplete: '0%',
           status: "OK"
         }
       ],
@@ -235,17 +246,33 @@ export default {
     this.fetchData()
     this.fetchComment()
     this.fetchTotalComment()
+    this.recodrTime = setInterval(() => {
+      if (document.getElementsByTagName('video')[0].currentTime && this.sectionId) {
+        localStorage.setItem(
+            'videoParams',
+            JSON.stringify({
+              courseId: this.id,
+              resourceId: this.sectionId,
+              resourceTime:
+              document.getElementsByTagName('video')[0].currentTime
+            })
+        )
+        this.sectionData[this.row].sectionComplete = (document.getElementsByTagName('video')[0].currentTime /
+            document.getElementsByTagName('video')[0].duration * 100).toString().split('.')[0] + '%'
+      }
+    }, 1000)
   },
   methods: {
 
     fetchData() {
       this.courseName = this.$route.query.courseName
       console.log(this.courseName)
-      this.$axios.get('api/video/sectionId=${sectionId}').then(res => {
-        let result = JSON.parse(res.data.data);
+      this.$axios.get(`http://localhost:8082/api/section/${this.sectionId}`).then(res => {
+        let result = res.data.result;
         let message = res.data.msg;
         this.sectionData = result
         this.sectionId = result[0].sectionIdIn
+        console.log(this.sectionId)
         if (result) {
           /*登陆成功*/
 
@@ -258,17 +285,15 @@ export default {
       })
     },
     fetchComment() {
-      this.courseName = this.$route.query.courseName
-      this.$axios.get('api/video?courseVID=${courseName}$sectionName=${sectionName}').then(res => {
-        let result = JSON.parse(res.data.data);
-        let message = res.data.msg;
-        this.sectionData = result
+      this.$axios.get('http://localhost:8082/api/comment/' + this.sectionId).then(res => {
+        let result = res.data.result;
+        console.log(result)
+        this.comments = result
 
         if (result) {
           /*登陆成功*/
 
           /*跳转页面*/
-          router.push('/videoPage')
         } else {
           /*打印错误信息*/
           alert(message);
@@ -276,10 +301,10 @@ export default {
       })
     },
     fetchTotalComment() {
-      this.courseName = this.$route.query.courseName
-      this.$axios.get('api/comment/all?courseVID=${courseName}$sectionName=${sectionName}').then(res => {
-        let result = JSON.parse(res.data.data);
+      this.$axios.get('http://localhost:8082/api/comment/all/' + this.sectionId).then(res => {
+        let result = res.data.result;
         let message = res.data.msg;
+        console.log(result)
         this.total = "总评论数： " + result
         if (result) {
           /*登陆成功*/
@@ -294,6 +319,7 @@ export default {
     },
     reFetch(row) {
       router.push("/videoPage?courseName=" + "white" + "&sectionId={" + row.sectionIdIn + "}")
+      this.row = row.sectionIdIn
     },
     inputFocus(){
       var replyInput = document.getElementById('replyInput');
@@ -331,7 +357,7 @@ export default {
         let input =  document.getElementById('replyInput')
         let timeNow = new Date().getTime();
         let time= this.dateStr(timeNow);
-        a.name= this.myName
+        a.name= this.userName
         a.comment =this.replyComment
         a.headImg = this.myHeader
         a.time = time
@@ -342,8 +368,13 @@ export default {
         input.innerHTML = '';
         let totalNum = parseInt(this.total.split(" ")[1]) + 1
         this.total = "总评论数： " + totalNum.toString()
-        this.$axios.post('api/video?userName=${myName}&replyUserName=${}&context=${replyComment}&date=${time}').then(res => {
-          let result = JSON.parse(res.data.data);
+        this.$axios.post('http://localhost:8082/api/comment/', {
+          sectionId: this.sectionId,
+          userName: this.userName,
+          replyCommentId: -1,
+          context: a.comment
+        }).then(res => {
+          let result = res.data.result;
           let message = res.data.msg;
           this.sectionData = result
           if (result) {
@@ -369,7 +400,7 @@ export default {
         let a ={}
         let timeNow = new Date().getTime();
         let time= this.dateStr(timeNow);
-        a.from= this.myName
+        a.from= this.userName
         a.to = this.to
         a.fromHeadImg = this.myHeader
         a.comment =this.replyComment
@@ -381,8 +412,13 @@ export default {
         document.getElementsByClassName("reply-comment-input")[i].innerHTML = ""
         let totalNum = parseInt(this.total.split(" ")[1]) + 1
         this.total = "总评论数： " + totalNum.toString()
-        this.$axios.post('api/video?userName=${myName}&replyUserName=${to}&context=${replyComment}&date=${time}').then(res => {
-          let result = JSON.parse(res.data.data);
+        this.$axios.post('http://localhost:8082/api/comment/', {
+          sectionId: this.sectionId,
+          userName: this.userName,
+          replyCommentId: this.toId,
+          context: a.comment
+        }).then(res => {
+          let result = res.data.result;
           let message = res.data.msg;
           this.sectionData = result
           if (result) {

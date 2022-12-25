@@ -29,15 +29,14 @@ public class Section {
     @TableField(value = "video_url", updateStrategy = FieldStrategy.NOT_EMPTY)
     private String videoUrl;
 
+    @TableField(value = "grade", updateStrategy = FieldStrategy.NOT_EMPTY)
+    private int grade;
+
     @TableField(value = "create_time", insertStrategy = FieldStrategy.NOT_EMPTY)
     private Timestamp createTime;
 
     @TableField(value = "update_time", insertStrategy = FieldStrategy.NOT_EMPTY)
     private Timestamp updateTime;
-
-    @TableLogic(value = "0", delval = "id")
-    @TableField(value = "is_delete", insertStrategy = FieldStrategy.NOT_EMPTY)
-    private Integer deleteFlag;
 
     /**
      * For upper layer
@@ -59,9 +58,10 @@ public class Section {
      * @param courseId
      * @param videoUrl
      */
-    public Section(String sectionName, Long courseId, String videoUrl) {
+    public Section(String sectionName, Long courseId, String videoUrl, int grade) {
         this.sectionName = sectionName;
         this.courseId = courseId;
         this.videoUrl = videoUrl;
+        this.grade = grade;
     }
 }

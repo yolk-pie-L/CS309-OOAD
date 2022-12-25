@@ -18,13 +18,15 @@ public class Response implements Serializable {
         this.result = data;
     }
 
+    public Response(ResultCode resultCode) {
+        this(resultCode, null);
+    }
+
     public static Response success(Object data) {
         return new Response(ResultCode.SUCCESS, data);
     }
 
-    public static Response fail(Object data) {
-        return new Response(ResultCode.FAIL, data);
-    }
+    public static Response fail(Object data) { return new Response(ResultCode.FAIL, data); }
 
     public static Response failHttpError(Object data) {
         return new Response(ResultCode.HTTP_ERROR, data);

@@ -66,7 +66,7 @@ public class CourseMapperTest {
     public void getCourseIdByCourseNameTeacherName(){
         setUp();
         Course course = allCourses.get(0);
-        Long id = courseMapper.getCourseIdByTeacherNameCourseName(course.getTeacherName(), course.getCourseName());
+        Long id = courseMapper.getCourseId(course.getTeacherName(), course.getCourseName());
         assert Objects.equals(id, course.getId());
         tearDown();
     }

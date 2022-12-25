@@ -35,14 +35,12 @@
           <el-form-item label="课程描述" prop="courseDescription" style="width: 380px">
             <el-input v-model="courseForm.description"></el-input>
           </el-form-item>
-          <el-form-item label="课程图片" prop="username" style="width: 380px">
+          <el-form-item label="Pic" style="width: 380px">
             <el-upload
-                :action="uploadURL"
-                :style="{backgroundImage:'url(' + dialogImageUrl + ')', backgroundRepeat:'no-repeat', backgroundPosition:'center center', backgroundSize: 'contain'}"
-                list-type="picture-card"
-                class="uploadImg"
-                name="files"
-                :before-upload="beforeUpload">
+                action="/"
+                :on-change="handleChange"
+                :auto-upload="false"
+                list-type="picture-card">
               <i class="el-icon-plus"></i>
             </el-upload>
           </el-form-item>
@@ -93,17 +91,15 @@ export default {
           // 表单验证成功
           this.$axios.post('http://localhost:8082/api/course/insert', this.courseForm).then(res => {
             // 拿到结果
-            let result = JSON.parse(res.data.data);
+            let result = res.data.code;
             let message = res.data.msg;
             // 判断结果
-            if (result) {
+            if (result === 200) {
               /*登陆成功*/
-              Element.Message.success(message);
               /*跳转页面*/
-              router.push('/')
+              router.push('/teacherHomeView')
             } else {
               /*打印错误信息*/
-              Element.Message.error(message);
             }
           })
         } else {
