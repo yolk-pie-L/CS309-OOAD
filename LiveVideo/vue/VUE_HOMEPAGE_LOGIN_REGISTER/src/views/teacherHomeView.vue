@@ -2,7 +2,8 @@
   <nav>
     <router-link to="/teacherHomeView">Home</router-link> |
     <router-link to="/courseUpdate">UpdateCourse</router-link> |
-    <router-link to="/infoUpdate">UpdateInfo</router-link>
+    <router-link to="/infoUpdate">UpdateInfo</router-link> |
+    <router-link to="/addNotice">AddNotice</router-link>
   </nav>
   <div :xl="6" :lg="7" class="bg-login">
     <!--logo-->
@@ -57,10 +58,13 @@
     </el-row>
     <el-row type="flex" class="row-bg card" justify="center" align="bottom">
       <el-card class="box-card">
-        <el-table :data="messageTable" border stripe style="width: 100% ">
+        <el-table :data="messageTable" border stripe style="width: 100% " @row-click="selectItem">
           <el-table-column prop="title" label="Message Title" align="center" min-width="500px"></el-table-column>
           <el-table-column prop="date" label="Message Date" align="center" min-width="500px"></el-table-column>
           <el-table-column prop="context" label="Message Contest" align="center" min-width="500px"></el-table-column>
+          <el-table-column prop="button" label="delete Message" align="center" min-width="100px">
+            <el-button>删除</el-button>
+          </el-table-column>
         </el-table>
         <el-row :gutter="20">
           <el-col :span="6" :offset="12">
@@ -90,6 +94,8 @@ import router from "@/router";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Login",
+  components: {},
+
   data() {
     return {
       teacherForm: {
@@ -108,6 +114,7 @@ export default {
       ],
       messageTable: [
         {
+          noticeId: 0,
           title: "Da Jia Hao",
           date: "2022-11-10",
           context: "Hao Ye"
@@ -127,11 +134,28 @@ export default {
     this.fetchMessage()
   },
   methods: {
+    selectItem(row, column, event) {
+      this.selectedFundRow = row
+      let noticeIndex = this.messageTable[row.id].noticeId
+      if (event.target.innerText === "删除") {
+        console.log("here")
+        this.removeFundBtn(noticeIndex)
+      }
+    },
+    // 删除指定行
+    removeFundBtn(params) {
+      this.$axios.post('localhost:8082/api/notice/del', {
+        noticeId: params
+      }).then(res => {
+        let result = res.data.result;
+        router.push('/teacherHomeView')
+      })
+    },
     //获取后端数据
     fetchData() {
-      this.$axios.get('api/user').then(res => {
+      this.$axios.get('http://localhost:8082/api/user').then(res => {
         // 拿到结果
-        let result = JSON.parse(res.data.data);
+        let result = res.data.result;
         let message = res.data.msg;
         this.userName = result.userName
         this.userType = result.userType
@@ -142,7 +166,6 @@ export default {
         if (result) {
           /*登陆成功*/
           /*跳转页面*/
-          router.push('/')
         } else {
           /*打印错误信息*/
           alert(message);
@@ -150,9 +173,9 @@ export default {
       })
     },
     fetchCourse() {
-      this.$axios.get('api/notice/all?teacherName={' + this.teacherForm.username + '&page={' + this.currentPage +
-          '}&o={' + this.pageSize +'}').then(res => {
-        let result = JSON.parse(res.data.data);
+      this.$axios.get('http://localhost:8082/api/notice/all?teacherName=' + this.teacherForm.username + '&page=' + 1 +
+          '&o=' + 5).then(res => {
+        let result = res.data.result;
         let message = res.data.msg;
         this.tableData = result
 
@@ -160,7 +183,6 @@ export default {
           /*登陆成功*/
 
           /*跳转页面*/
-          router.push('/')
         } else {
           /*打印错误信息*/
           alert(message);
@@ -168,8 +190,8 @@ export default {
       })
     },
     fetchMessage() {
-      this.$axios.get('api/notice/all?userName={' + this.username + '}&courseName={' + this.tableData.at(0).courseName + '}').then(res => {
-        let result = JSON.parse(res.data.data);
+      this.$axios.get('http://localhost:8082/api/notice/all?userName=' + this.username + '&courseName=' + this.tableData.at(0).courseName + '').then(res => {
+        let result = res.data.result;
         let message = res.data.msg;
         this.messageTable = result
 
@@ -177,7 +199,6 @@ export default {
           /*登陆成功*/
 
           /*跳转页面*/
-          router.push('/')
         } else {
           /*打印错误信息*/
           alert(message);
@@ -185,8 +206,8 @@ export default {
       })
     },
     fetchFriend() {
-      this.$axios.get('api/notice/all?userName={' + this.username + '}&type={teacher}').then(res => {
-        let result = JSON.parse(res.data.data);
+      this.$axios.get('http://localhost:8082/api/notice/all?userName=' + this.username + '&type={teacher}').then(res => {
+        let result = res.data.result;
         let message = res.data.msg;
         this.friendData = result
 
@@ -194,7 +215,6 @@ export default {
           /*登陆成功*/
 
           /*跳转页面*/
-          router.push('/')
         } else {
           /*打印错误信息*/
           alert(message);
@@ -202,6 +222,7 @@ export default {
       })
     },
     logOut () {
+      localStorage.removeItem('token')
       router.push("/")
     },
     back () {
