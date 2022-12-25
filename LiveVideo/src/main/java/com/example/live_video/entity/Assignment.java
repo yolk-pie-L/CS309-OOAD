@@ -51,7 +51,8 @@ public class Assignment {
     @TableField(value = "update_time", insertStrategy = FieldStrategy.NOT_EMPTY)
     private Timestamp updateTime;
 
-    public Assignment(String assignmentName, Long courseId, Timestamp deadline, Integer totalGrade, List<String> assignUrls, Boolean isAssignment, String description) {
+    public Assignment(String assignmentName, Long courseId, Timestamp deadline, Integer totalGrade,
+                      List<String> assignUrls, Boolean isAssignment, String description) {
         this.assignmentName = assignmentName;
         this.courseId = courseId;
         this.deadline = deadline;
@@ -83,8 +84,8 @@ public class Assignment {
      * @param isAssignment
      * @param description
      */
-    public Assignment(String assignmentName, String courseName, String teacherName, Timestamp deadline, Integer totalGrade,
-                      Boolean isAssignment, String description, List<String> assignUrls) {
+    public Assignment(String assignmentName, String courseName, String teacherName, Timestamp deadline,
+                      Integer totalGrade, Boolean isAssignment, String description, List<String> assignUrls) {
         this.assignmentName = assignmentName;
         this.courseName = courseName;
         this.teacherName = teacherName;

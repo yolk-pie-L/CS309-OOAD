@@ -14,6 +14,7 @@ import com.example.live_video.service.SectionService;
 import com.example.live_video.util.RandomUtils;
 import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
+import com.example.live_video.wrapper.UserLoginToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,12 +41,12 @@ import static com.example.live_video.wrapper.NonStaticResourceHttpRequestHandler
 
 @ResponseResult
 @RestController
-@PassToken
+@UserLoginToken
 @Slf4j
 @RequestMapping("/api/section")
 public class VideoController {
 
-    @Value("${src.path}")
+    @Value("${src.video-path}")
     private String defaultPath;
 
     private final String[] extList = new String[]{"mp4", "avi", "mkv", "wmv"};
@@ -143,7 +144,7 @@ public class VideoController {
 
         if (Objects.equals(fileForm.getShardIndex(), fileForm.getShardTotal())) {
             //开始合并
-            System.out.println(fileForm);
+            System.out.println("FileForm: "+fileForm);
             merge(fileForm);
             return new StringVo(FileConstance.ACCESS_PATH + fileForm.getFileName());
         }
@@ -159,7 +160,6 @@ public class VideoController {
         FileOutputStream outputStream = new FileOutputStream(newFile, true);//文件追加写入
         System.out.println(newFile.getCanonicalPath());
         Section section = new Section(fileForm.getSectionName(), fileForm.getCourseId(), newFile.getCanonicalPath(), 0);
-        // FIXME: set section grade
         Long id = sectionService.getSectionId(fileForm.getCourseId(), fileForm.getSectionName());
         if (id == -1) {
             sectionService.createSection(section);

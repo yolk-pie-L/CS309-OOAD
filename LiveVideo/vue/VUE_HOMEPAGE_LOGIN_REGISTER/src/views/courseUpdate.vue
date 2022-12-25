@@ -23,9 +23,6 @@
           <el-form-item label="课程名字" prop="username" style="width: 380px">
             <el-input v-model="courseForm.courseName"></el-input>
           </el-form-item>
-          <el-form-item label="老师名字" prop="teacherName" style="width: 380px">
-            <el-input v-model="courseForm.teacherName"></el-input>
-          </el-form-item>
           <el-form-item label="课程标签" prop="courseLabel" style="width: 380px">
             <el-input v-model="courseForm.tag"></el-input>
           </el-form-item>
@@ -67,7 +64,7 @@ export default {
         // 账户数据
         courseName: 'checker',
         // 密码数据
-        teacherName: 'checkerName',
+        teacherName: '',
 
         tag: 'CS444',
 
@@ -76,6 +73,12 @@ export default {
         description: 'test',
       },
     };
+  },
+  mounted() {
+    this.$axios.get('http://localhost:8082/api/user').then(res=>{
+      let result = res.data.result;
+      this.courseForm.teacherName = result.userName;
+    })
   },
   methods: {
     beforeUpload (file) {

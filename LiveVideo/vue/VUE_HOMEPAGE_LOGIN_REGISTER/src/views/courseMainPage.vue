@@ -22,12 +22,13 @@
 <script>
 // @ is an alias to /src
 import router from "@/router";
+import { useRouter, useRoute } from 'vue-router';
 
 export default {
   name: 'courseMainPage',
   data() {
     return {
-      courseId: '2',
+      courseId: useRoute().query.courseId,
       courseForm: {
         courseName: "DSAA",
         teacherName: "李开",
@@ -40,17 +41,15 @@ export default {
     }
   },
   mounted() {
-
+    this.fetchCourse();
   },
   methods: {
     fetchCourse() {
       // this.courseId = localStorage.getItem('courseId');
+      console.log('课程id'+this.courseId)
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
-      this.$axios.get('http://localhost:8082/api/course', {
-        params: {
-          courseId: this.courseId
-        }
-      }).then(res => {
+      this.$axios.get(`http://localhost:8082/api/course/${this.courseId}`
+      ).then(res => {
         // 拿到结果
         let result = res.data.result
         this.courseForm.courseName = result.courseName

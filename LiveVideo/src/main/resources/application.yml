@@ -28,7 +28,8 @@ spring:
       max-request-size: 1000MB
 
 src:
-  path: src/main/resources/static/video/
+  video-path: src/main/resources/static/video/
+  picture-path: src/main/resources/static/picture/
 
 
 #logging:

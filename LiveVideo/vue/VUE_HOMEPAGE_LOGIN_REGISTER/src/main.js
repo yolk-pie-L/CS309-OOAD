@@ -20,6 +20,8 @@ import 'element-plus/dist/index.css'
 const app = createApp(App);
 app.use(router).use(store).use(VueAxios, axios).use(ElementPlus).use(VideoPlayer).use(Antd).mount('#app')
 app.config.globalProperties.$axios=axios
+app.config.globalProperties.$pref='http://localhost:8082'
+app.config.globalProperties.$picture='http://localhost:8082/api/picture/'
 
 app.directive('title', {
     inserted: function (el, binding) {

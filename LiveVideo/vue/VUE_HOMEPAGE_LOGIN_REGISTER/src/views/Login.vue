@@ -104,6 +104,11 @@ export default {
             } else {
               /*打印错误信息*/
               console.log(message)
+              this.$notify({
+                title: '错误',
+                message: res.data.result,
+                type: 'error'
+              })
             }
           })
         } else {

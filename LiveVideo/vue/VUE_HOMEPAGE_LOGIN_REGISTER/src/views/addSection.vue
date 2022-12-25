@@ -66,6 +66,9 @@ export default {
       }
     };
   },
+  mounted() {
+    this.sectionForm.courseId = this
+  },
   methods: {
     submitForm() {
       // 表单验证成功
