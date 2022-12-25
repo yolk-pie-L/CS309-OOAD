@@ -18,7 +18,6 @@ import quizUpload from "@/views/QuizUpload";
 import homeworkUpload from "@/views/HomeworkUpload";
 import videoPage from "@/views/videoPage";
 import addSection from "@/views/addSection";
-import payment from "@/views/payment";
 import addNotice from "@/views/addNotice";
 const routes = [
   {
@@ -115,11 +114,6 @@ const routes = [
     path: '/addSection',
     name: addSection,
     component: addSection
-  },
-  {
-    path: '/payment',
-    name: payment,
-    component: payment
   },
   {
     path: '/addNotice',

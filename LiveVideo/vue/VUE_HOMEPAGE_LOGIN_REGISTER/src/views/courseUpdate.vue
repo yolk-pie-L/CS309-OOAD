@@ -2,7 +2,8 @@
   <nav>
     <router-link to="/teacherHomeView">Home</router-link> |
     <router-link to="/courseUpdate">UpdateCourse</router-link> |
-    <router-link to="/infoUpdate">UpdateInfo</router-link>
+    <router-link to="/infoUpdate">UpdateInfo</router-link> |
+    <router-link to="/addNotice">AddNotice</router-link>
   </nav>
   <div :xl="6" :lg="7" class="bg-login">
     <!--logo-->
