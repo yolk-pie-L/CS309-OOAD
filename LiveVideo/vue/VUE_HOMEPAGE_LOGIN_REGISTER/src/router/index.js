@@ -19,6 +19,7 @@ import homeworkUpload from "@/views/HomeworkUpload";
 import videoPage from "@/views/videoPage";
 import addSection from "@/views/addSection";
 import payment from "@/views/payment";
+import addNotice from "@/views/addNotice";
 const routes = [
   {
     path:'/',
@@ -119,6 +120,11 @@ const routes = [
     path: '/payment',
     name: payment,
     component: payment
+  },
+  {
+    path: '/addNotice',
+    name: addNotice,
+    component: addNotice
   }
 ]
 

@@ -119,6 +119,7 @@ export default {
 
   data() {
     return {
+      userName: 'SY',
       total: '总评论数： 7',
       courseName: 'black',
       videoURL: "url",
@@ -356,7 +357,7 @@ export default {
         let input =  document.getElementById('replyInput')
         let timeNow = new Date().getTime();
         let time= this.dateStr(timeNow);
-        a.name= this.myName
+        a.name= this.userName
         a.comment =this.replyComment
         a.headImg = this.myHeader
         a.time = time
@@ -368,12 +369,10 @@ export default {
         let totalNum = parseInt(this.total.split(" ")[1]) + 1
         this.total = "总评论数： " + totalNum.toString()
         this.$axios.post('http://localhost:8082/api/comment/', {
-          params: {
-            sectionId: this.sectionId,
-            userName: this.myName,
-            replyCommentId: -1,
-            context: a.comment
-          }
+          sectionId: this.sectionId,
+          userName: this.userName,
+          replyCommentId: -1,
+          context: a.comment
         }).then(res => {
           let result = res.data.result;
           let message = res.data.msg;
@@ -401,7 +400,7 @@ export default {
         let a ={}
         let timeNow = new Date().getTime();
         let time= this.dateStr(timeNow);
-        a.from= this.myName
+        a.from= this.userName
         a.to = this.to
         a.fromHeadImg = this.myHeader
         a.comment =this.replyComment
@@ -414,12 +413,10 @@ export default {
         let totalNum = parseInt(this.total.split(" ")[1]) + 1
         this.total = "总评论数： " + totalNum.toString()
         this.$axios.post('http://localhost:8082/api/comment/', {
-          params: {
-            sectionId: this.sectionId,
-            userName: this.myName,
-            replyCommentId: this.toId,
-            context: this.replyComment
-          }
+          sectionId: this.sectionId,
+          userName: this.userName,
+          replyCommentId: this.toId,
+          context: a.comment
         }).then(res => {
           let result = res.data.result;
           let message = res.data.msg;
