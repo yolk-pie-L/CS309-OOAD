@@ -4,6 +4,8 @@ drop table if exists assign_urls cascade;
 
 drop table if exists comment cascade;
 
+drop table if exists live_stream cascade;
+
 drop table if exists course_invitation cascade;
 
 drop table if exists danmu cascade;
@@ -124,6 +126,15 @@ CREATE TABLE danmu
     color      char default 'w',
     send_time  int  not null,
     FOREIGN KEY (section_id) REFERENCES section (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE live_stream
+(
+    id      int auto_increment primary key,
+    title   text        not null,
+    user_id int         not null,
+    url     varchar(50) not null,
+    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE comment
