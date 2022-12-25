@@ -1,6 +1,12 @@
 <template>
   <div class="file-upload">
-    <h1 class="title">Add Section</h1>
+    <nav>
+      <router-link to="/teacherHomeView">Home</router-link> |
+      <router-link to="/courseUpdate">UpdateCourse</router-link> |
+      <router-link to="/infoUpdate">UpdateInfo</router-link> |
+      <router-link to="/addNotice">AddNotice</router-link>
+    </nav>
+    <h1 class="title">Add Notice</h1>
     <el-row type="flex" class="row-bg card" justify="center" align="bottom">
       <el-col :span="7" class="login-card">
         <!--loginForm-->
