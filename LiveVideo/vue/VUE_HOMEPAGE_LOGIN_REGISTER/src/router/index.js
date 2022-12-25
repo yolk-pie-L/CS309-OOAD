@@ -126,6 +126,7 @@ const routes = [
     name: addNotice,
     component: addNotice
   }
+
 ]
 
 const router = createRouter({
