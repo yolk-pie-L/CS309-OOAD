@@ -233,7 +233,7 @@
           "id": "aa",
           "assignmentName": "homework1",
           "deadline": "date",
-          "status": "notStarted/return/submitted"
+          "status": "Not Started / Not Submitted / Late / Submitted / Return"
         }
       ]
     },
