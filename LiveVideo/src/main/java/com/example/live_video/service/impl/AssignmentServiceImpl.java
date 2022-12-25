@@ -76,4 +76,10 @@ public class AssignmentServiceImpl extends ServiceImpl<AssignmentMapper, Assignm
         List<Assignment> assignmentList = assignmentMapper.selectList(assignQueryWrapper);
         return assignmentList;
     }
+
+    @Override
+    public List<String> getAssignmentUrlList(long assignId) {
+        // todo
+        return null;
+    }
 }
