@@ -74,8 +74,8 @@ export default {
       bgUrl:'url(https://p0.meituan.net/dpplatform/4ce8553013e2e819c08e6d6ba409bee8473079.jpg)',
       user_pic_src:'url(\'this.userForm.photoUrl\')',
       pageForm:{
-        page:"1",
-        pageNum:"9",
+        page: '1',
+        pageNum: '9',
       },
       userForm: {
         userName: "teacher1",
@@ -106,9 +106,9 @@ export default {
   },
   methods: {
     fetchCourse() {
-      this.$axios.get('api/course/success/all?o=\''+this.pageNum+'&page=\'' + this.currentPage + '&courseName=\''+this.queryInfo.course+'&teacherName=\'' + this.queryInfo.teacher + '\'}\'').then(res => {
-        let result = JSON.parse(res.data.data);
-        let message = res.data.msg;
+      this.$axios.get(`http://localhost:8082/api/course/success/all?o=${this.pageForm.pageNum}&page=${this.pageForm.page}&courseName=${this.queryInfo.course}&teacherName=${this.queryInfo.teacher}`).then(res => {
+        let result = res.data.result;
+        let message = res.data.message;
         this.classForm = result;
         this.classForm.forEach(course => {
           course.coursePicture = this.$picture + course.coursePicture

@@ -133,7 +133,9 @@ const routes = [
         name: infoUpdate,
         component: infoUpdate
       }
-    ]
+    ],
+  },
+  {
     path: '/addNotice',
     name: addNotice,
     component: addNotice
