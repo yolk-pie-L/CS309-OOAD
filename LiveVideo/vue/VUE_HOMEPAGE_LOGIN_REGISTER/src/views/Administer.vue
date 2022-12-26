@@ -19,13 +19,12 @@
         <el-table-column label="Introduction" prop="introduction" width="400"/>
         <el-table-column label="CoursePic" prop="coursePicture" width="400"/>
         <el-table-column fixed="right" label="Operation1" width="120">
-          <template #default>
-            <el-button link size="small" type="primary" @click="handleReject(scope.$index)">Reject
-            </el-button>
+          <template v-slot="scope" #default>
+            <el-button link size="small" type="primary" @click="handleReject(scope.$index)">Reject</el-button>
           </template>
         </el-table-column>
         <el-table-column fixed="right" label="Operation1" width="120">
-          <template slot-scope="scope" #default>
+          <template v-slot="scope" #default>
             <el-button link size="small" type="primary" @click="handleAgree(scope.$index)">Agree</el-button>
           </template>
         </el-table-column>
@@ -35,14 +34,14 @@
     <div class="query">
       <el-input v-model="queryInfo.name" clearable placeholder="Search for user"
                 @clear="getUserList"></el-input>
-        <el-select v-model="queryInfo.type" placeholder="请选择">
-          <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-          </el-option>
-        </el-select>
+      <el-select v-model="queryInfo.type" placeholder="请选择">
+        <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+        </el-option>
+      </el-select>
       <el-button slot="append" icon="el-icon-search" @click="getUserList"></el-button>
     </div>
 
@@ -52,7 +51,7 @@
         <el-table-column label="UserType" prop="userType" width="390"/>
         <el-table-column label="Privilege" prop="isAdm" width="300"/>
         <el-table-column fixed="right" label="Operation1" width="300">
-          <template #default>
+          <template v-slot="scope" #default>
             <el-button link size="small" type="primary" @click="handleChangePrivilege(scope.$index)">
               Change
             </el-button>
@@ -81,15 +80,15 @@ export default {
       },
       tableData: [
         {
-          id:'',
+          id: '',
           teacherName: 'Tom',
           courseName: 'CS101',
           introduction: 'aaaaa',
           coursePicture: '',
           tag: '',
           charge: '',
-          privateKeyUrl:'',
-          status:''
+          privateKeyUrl: '',
+          status: ''
         },
       ],
       tableUser: [
@@ -106,13 +105,6 @@ export default {
           isAdm: "yes"
         },
       ],
-      InputForm1: {
-        userName: "user"
-      },
-      InputForm2: {
-        courseId: "courseId",
-        approved: "true"
-      },
       queryInfo: {
         name: '',
         type: ''
@@ -138,7 +130,7 @@ export default {
         // 拿到结果
         let result = res.data.result;
         let message = res.data.msg;
-        this.tableData=result;
+        this.tableData = result;
         // 判断结果
         if (result) {
         } else {
@@ -148,27 +140,29 @@ export default {
       })
     },
     handleReject(index) {
-      this.InputForm2.courseId = this.tableData.at(index).id;
-      this.InputForm2.approved = "false";
-      this.$axios.post('http://localhost:8082/api/admin/status', this.InputForm2).then(res => {
+      let form2 = new URLSearchParams();
+      form2.append("courseId", this.tableData.at(index).id);
+      form2.append("approved", "false");
+      this.$axios.post('http://localhost:8082/api/admin/status', form2).then(res => {
         let result = res.data.result;
         let message = res.data.msg;
         if (result) {
-          this.tableData.splice(index, 1);
+          this.fetchClass();
         } else {
           /*打印错误信息*/
           alert(message);
         }
       })
     },
-    handleAgree(index, row) {
-      this.InputForm2.courseId = this.tableData.at(index).id;
-      this.InputForm2.approved = "true";
-      this.$axios.post('http://localhost:8082/api/admin/status', this.InputForm2).then(res => {
+    handleAgree(index) {
+      let form2 = new URLSearchParams();
+      form2.append("courseId", this.tableData.at(index).id);
+      form2.append("approved", "true");
+      this.$axios.post('http://localhost:8082/api/admin/status', form2).then(res => {
         let result = res.data.result;
         let message = res.data.msg;
         if (result) {
-          this.tableData.splice(index, 1);
+          this.fetchClass();
         } else {
           /*打印错误信息*/
           alert(message);
@@ -176,17 +170,13 @@ export default {
       })
     },
     handleChangePrivilege(index) {
-      this.InputForm1.userName= this.userForm.at(index).username
-      this.$axios.post('http://localhost:8082/api/admin/privilege' ,this.InputForm1).then(res => {
+      let form1 = new URLSearchParams();
+      form1.append("userName", this.tableUser.at(index).userName);
+      this.$axios.post('http://localhost:8082/api/admin/privilege', form1).then(res => {
         let result = res.data.result;
         let message = res.data.msg;
         if (result) {
           this.fetchClass();
-          // if (this.userForm.at(index).isAdm.equals("yes")) {
-          //   this.userForm.at(index).isAdm = "no";
-          // } else {
-          //   this.userForm.at(index).isAdm = "yes";
-          // }
         } else {
           /*打印错误信息*/
           alert(message);
@@ -194,15 +184,15 @@ export default {
       })
     },
     async getUserList() {
-      this.$axios.get('http://localhost:8082/api/admin/all',{
+      this.$axios.get('http://localhost:8082/api/admin/all', {
         params: {
           userName: this.queryInfo.name,
-              type: this.queryInfo.type,
+          type: this.queryInfo.type,
         }
       }).then(res => {
         let result = res.data.result;
         let message = res.data.msg;
-        this.tableUser=result
+        this.tableUser = result
         if (result) {
         } else {
           /*打印错误信息*/

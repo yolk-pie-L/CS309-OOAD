@@ -21,6 +21,7 @@ import addSection from "@/views/addSection";
 import payment from "@/views/payment";
 import personInfo from "@/views/myspace/personInfo";
 import myspace from "@/views/myspace";
+import addNotice from "@/views/addNotice";
 const routes = [
   {
     path:'/',
@@ -133,6 +134,9 @@ const routes = [
         component: infoUpdate
       }
     ]
+    path: '/addNotice',
+    name: addNotice,
+    component: addNotice
   }
 ]
 

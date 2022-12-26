@@ -63,13 +63,13 @@ public class CourseController {
     public List<CourseVo> queryAllCourseByUsername(@RequestParam String userName,
                                                    @RequestParam(required = false) int page,
                                                    @RequestParam(required = false) int o) {
+        System.out.println(userService.getUserType(userName));
         if (userService.getUserType(userName) == UserType.Student) {
             return CourseVo.parse(studentService.getEnrolledCourseList(userName));
         }
         if (userService.getUserType(userName) == UserType.Teacher) {
             return CourseVo.parse(courseService.getApprovedCourseListOfTeacher(o, page, userName));
         }
-//        return CourseVo.pasteEasy(courseService.getOneCourse(userName, null));
         return null;
     }
 

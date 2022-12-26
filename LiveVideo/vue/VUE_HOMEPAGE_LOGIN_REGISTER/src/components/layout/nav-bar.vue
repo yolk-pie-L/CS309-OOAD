@@ -3,7 +3,7 @@
   <nav></nav>
 
   <div>
-    <div class="animate__animated animate__fadeIn title"  :style="{'background-image': bgUrl}" style="top: 55px"></div>
+    <div class="animate__animated animate__fadeIn title"  :style="{'background-image': bgUrl}"></div>
     <el-header  class="animate__animated animate__fadeIn">
       <div class="menu-expend">
         <i class="el-icon-menu"></i>
@@ -16,7 +16,7 @@
         <el-input v-model="queryInfo.course" clearable placeholder="Course"
                   @clear="fetchCourse"></el-input>
         <el-input v-model="queryInfo.teacher" clearable placeholder="Teacher"
-                  @clear="fetchUser"></el-input>
+                  @clear="fetchCourse"></el-input>
         <el-button slot="append" icon="el-icon-search" @click="fetchCourse">搜索</el-button>
       </div>
     </el-header>
@@ -106,17 +106,8 @@ export default {
   },
   methods: {
     fetchCourse() {
-      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
-
-      this.$axios.get('http://localhost:8082/api/course/success/all', {
-        params: {
-          o: this.pageForm.pageNum,
-          page: this.pageForm.page,
-          courseName: this.queryInfo.course,
-          teacherName: this.queryInfo.teacher
-        }
-      }).then(res => {
-        let result = res.data.result;
+      this.$axios.get('api/course/success/all?o=\''+this.pageNum+'&page=\'' + this.currentPage + '&courseName=\''+this.queryInfo.course+'&teacherName=\'' + this.queryInfo.teacher + '\'}\'').then(res => {
+        let result = JSON.parse(res.data.data);
         let message = res.data.msg;
         this.classForm = result;
         this.classForm.forEach(course => {

@@ -1,6 +1,7 @@
 package com.example.live_video.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -22,7 +23,7 @@ public class User {
 
     @TableField(updateStrategy = FieldStrategy.NOT_EMPTY)
     private String mail;
-    @TableField(updateStrategy = FieldStrategy.NOT_EMPTY)
+    @TableField(updateStrategy = FieldStrategy.NOT_EMPTY, select = false)
     private String password;
 
     @TableField(value = "photo_url", updateStrategy = FieldStrategy.NOT_EMPTY)
