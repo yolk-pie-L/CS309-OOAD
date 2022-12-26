@@ -29,11 +29,7 @@ public class AssignmentController {
 
     @GetMapping("/allAssignment")
     public List<Assignment> queryAssignmentByCourseName(@RequestParam("courseId") String courseId) {
-        Course course = courseService.getOneCourse(Long.parseLong(courseId));
-        String courseName = course.getCourseName();
-        String teacherName = course.getTeacherName();
-        if (teacherName == null) teacherName = userService.getById(course.getTeacherId()).getUserName();
-        List<Assignment> assignmentList = assignmentService.getAssignmentByCourse(courseName, teacherName);
+        List<Assignment> assignmentList = assignmentService.getAssignmentsOfCourse(Long.parseLong(courseId));
         return assignmentList;
     }
 }
