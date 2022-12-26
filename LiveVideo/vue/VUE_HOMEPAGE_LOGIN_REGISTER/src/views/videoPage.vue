@@ -65,7 +65,7 @@
       </div>
       <div class="icon-btn">
         <span @click="showReplyInput(i,item.name,item.id)"><el-icon><comment></comment></el-icon>{{item.commentNum}}</span>
-        <i class="iconfont el-icon-caret-top"></i>
+        <span @click="deleteReply(i,item.name,item.id)"><el-icon><setting></setting></el-icon></span>
       </div>
       <div class="talk-box">
         <p>
@@ -81,7 +81,7 @@
           </div>
           <div class="icon-btn">
             <span @click="showReplyInput(i,reply.from,reply.id)"><el-icon><comment></comment></el-icon></span>
-            <i class="iconfont el-icon-caret-top"></i>
+            <span @click="deleteReply(i,reply.from,reply.fromId)"><el-icon><setting></setting></el-icon></span>
           </div>
           <div class="talk-box">
             <p>
@@ -462,7 +462,25 @@ export default {
         var date= new Date(parseInt(date));
         return date.getFullYear()+"/"+(date.getMonth()+1)+"/"+date.getDate();
       }
-    }
+    },
+    deleteReply(i,userName,commentId) {
+      this.$axios.post('http://localhost:8082/api/comment/del', {
+        userName: userName,
+        commentId: commentId
+      }).then(res => {
+        let result = res.data.result;
+        let message = res.data.msg;
+        this.sectionData = result
+        if (result) {
+          /*登陆成功*/
+
+          /*跳转页面*/
+          router.push('/videoPage')
+        } else {
+          /*打印错误信息*/
+          alert(message);
+        }
+      })    }
   }
 }
 
