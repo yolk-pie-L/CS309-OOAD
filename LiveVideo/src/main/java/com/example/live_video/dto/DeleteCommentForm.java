@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class DeleteCommentForm {
     Long commentId;
-    Long userId;
+    String userName;
 }
