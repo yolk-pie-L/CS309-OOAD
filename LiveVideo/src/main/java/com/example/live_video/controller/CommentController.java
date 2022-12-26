@@ -60,7 +60,7 @@ public class CommentController {
     @PostMapping("/del")
     public boolean deleteComment(@RequestBody DeleteCommentForm deleteCommentForm) throws MyException {
         long commentId = deleteCommentForm.getCommentId();
-        long userId = deleteCommentForm.getUserId();
+        long userId = userService.getUserId(deleteCommentForm.getUserName());
         return commentService.deleteComment(commentId, userId);
     }
 
