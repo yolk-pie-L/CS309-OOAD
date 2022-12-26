@@ -2,12 +2,12 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Login from '@/views/Login';
 import register from "@/views/regist";
 import Home from '@/views/home'
-import teacherHomeView from "@/views/teacherHomeView";
-import infoUpdate from "@/views/infoUpdate";
+import teacherHomeView from "@/views/myspace/teacherHomeView";
+import infoUpdate from "@/views/myspace/infoUpdate";
 import courseUpdate from "@/views/courseUpdate";
 import courseMainPage from "@/views/courseMainPage";
 import courseDetailPage from "@/views/courseDetailPage";
-import studentHome from "@/views/StudentHome";
+import studentHome from "@/views/myspace/StudentHome";
 import studentinfoUpdate from "@/views/StudentinfoUpdate";
 import homeworkHome from "@/views/HomeworkHome";
 import homeworkPage from "@/views/HomeworkPage";
@@ -19,6 +19,8 @@ import homeworkUpload from "@/views/HomeworkUpload";
 import videoPage from "@/views/videoPage";
 import addSection from "@/views/addSection";
 import payment from "@/views/payment";
+import personInfo from "@/views/myspace/personInfo";
+import myspace from "@/views/myspace";
 const routes = [
   {
     path:'/',
@@ -39,11 +41,6 @@ const routes = [
     path: '/teacherHomeView',
     name: teacherHomeView,
     component: teacherHomeView
-  },
-  {
-    path: '/infoUpdate',
-    name: infoUpdate,
-    component: infoUpdate
   },
   {
     path: '/courseUpdate',
@@ -119,6 +116,23 @@ const routes = [
     path: '/payment',
     name: payment,
     component: payment
+  },
+  {
+    path: '/person',
+    name: myspace,
+    component: myspace,
+    children: [
+      {
+        path: '/person/info',
+        name: personInfo,
+        component: personInfo
+      },
+      {
+        path: '/person/modify-info',
+        name: infoUpdate,
+        component: infoUpdate
+      }
+    ]
   }
 ]
 

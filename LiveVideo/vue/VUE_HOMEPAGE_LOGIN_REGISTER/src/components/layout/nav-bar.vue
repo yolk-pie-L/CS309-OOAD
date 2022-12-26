@@ -8,22 +8,16 @@
       <div class="menu-expend">
         <i class="el-icon-menu"></i>
       </div>
-      <div v-if="isLog" class="user_show">
-        <el-image  :src="userForm.photoUrl" class="user_pic"></el-image>
-        <el-link type="success" class="user_name" v-text="userForm.userName" @click="into()"></el-link>
-      </div>
-      <div v-else class="loginRegister">
-        <el-row>
-          <el-button v-if="isNotLog" type="primary" plain round @click="toLogin()">login</el-button>
-          <el-button v-if="isNotLog" type="primary" plain round @click="toRegister()">register</el-button>
-        </el-row>
-      </div>
-      <div class="query">
+<!--      <div v-if="isLog" class="user_show">-->
+<!--        <el-image  :src="userForm.photoUrl" class="user_pic"></el-image>-->
+<!--        <el-link type="success" class="user_name" v-text="userForm.userName" @click="into()"></el-link>-->
+<!--      </div>-->
+      <div class="query" style="padding: 10px">
         <el-input v-model="queryInfo.course" clearable placeholder="Course"
                   @clear="fetchCourse"></el-input>
         <el-input v-model="queryInfo.teacher" clearable placeholder="Teacher"
                   @clear="fetchUser"></el-input>
-        <el-button slot="append" icon="el-icon-search" @click="fetchCourse"></el-button>
+        <el-button slot="append" icon="el-icon-search" @click="fetchCourse">搜索</el-button>
       </div>
     </el-header>
   </div>
