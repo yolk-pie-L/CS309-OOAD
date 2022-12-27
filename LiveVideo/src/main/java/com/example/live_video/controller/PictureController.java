@@ -68,6 +68,8 @@ public class PictureController {
 
     @GetMapping("/api/picture/{url}")
     public void photoPreview(HttpServletRequest request, HttpServletResponse response, @PathVariable String url) throws Exception {
+        if (url.equals("null"))
+            url = "default.png";
         if (!url.contains(defaultPath)) {
             url = defaultPath + url;
         }

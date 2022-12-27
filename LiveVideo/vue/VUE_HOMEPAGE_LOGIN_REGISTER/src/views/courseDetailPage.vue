@@ -52,9 +52,9 @@
       </el-card>
     </el-row>
     <el-row type="flex" class="row-bg card" justify="center" align="bottom">
-      <el-button type="primary" @click="">Assignment</el-button>
-      <el-button type="primary" @click="">Quiz</el-button>
-      <el-button type="primary" @click="">Grade</el-button>
+      <el-button type="primary" @click="toAssign">Assignment</el-button>
+      <el-button type="primary" @click="toQuiz">Quiz</el-button>
+      <el-button type="primary" @click="toGrade">Grade</el-button>
       <el-button type="primary" @click="videoPage">lessons</el-button>
       <el-button type="primary" @click="addSection">Add Section</el-button>
 
@@ -65,12 +65,13 @@
 <script>
 // @ is an alias to /src
 import router from "@/router";
+import {useRoute} from "vue-router";
 
 export default {
   name: 'courseDetailPage',
   data() {
     return {
-      courseId: localStorage.getItem("courseId"),
+      courseId: useRoute().query.courseId,
       courseForm: {
         courseName: "checker",
         tag: "CS202",
@@ -118,11 +119,17 @@ export default {
         }
       })
     },
+    toAssign() {
+      router.push(`/homeworkHome`)
+    },
+    toQuiz() {
+      router.push(`/quizHome`)
+    },
     videoPage() {
-      router.push("/videoPage")
+      router.push(`/videoPage?courseId=${this.courseId}`)
     },
     addSection() {
-      router.push("/addSection")
+      router.push(`/addSection?courseId=${this.courseId}`)
     }
   }
 }

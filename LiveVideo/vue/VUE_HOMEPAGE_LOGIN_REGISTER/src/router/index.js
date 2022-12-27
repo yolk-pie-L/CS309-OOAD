@@ -44,11 +44,6 @@ const routes = [
     component: teacherHomeView
   },
   {
-    path: '/courseUpdate',
-    name: courseUpdate,
-    component: courseUpdate
-  },
-  {
     path: '/courseMainPage',
     name: courseMainPage,
     component: courseMainPage
@@ -127,6 +122,11 @@ const routes = [
         path: '/person/info',
         name: personInfo,
         component: personInfo
+      },
+      {
+        path: '/person/course',
+        name: courseUpdate,
+        component: courseUpdate
       },
       {
         path: '/person/modify-info',

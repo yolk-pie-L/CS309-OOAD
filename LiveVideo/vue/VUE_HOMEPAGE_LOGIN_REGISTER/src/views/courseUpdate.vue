@@ -1,10 +1,4 @@
 <template>
-  <nav>
-    <router-link to="/teacherHomeView">Home</router-link> |
-    <router-link to="/courseUpdate">UpdateCourse</router-link> |
-    <router-link to="/infoUpdate">UpdateInfo</router-link> |
-    <router-link to="/addNotice">AddNotice</router-link>
-  </nav>
   <div :xl="6" :lg="7" class="bg-login">
     <!--logo-->
     <!--标题-->
@@ -12,7 +6,7 @@
       <el-col :span="6"></el-col>
       <el-col :span="6">
         <!--标题-->
-        <h1 class="title">Course Update</h1>
+        <h1 class="title"> {{ 'Course ' + method }} </h1>
       </el-col>
       <el-col :span="6"></el-col>
     </el-row>
@@ -31,7 +25,7 @@
             <el-input v-model="courseForm.charge"></el-input>
           </el-form-item>
           <el-form-item label="课程描述" prop="courseDescription" style="width: 380px">
-            <el-input v-model="courseForm.description"></el-input>
+            <el-input v-model="courseForm.description" type="textarea"></el-input>
           </el-form-item>
           <el-form-item label="Pic" style="width: 380px">
             <el-upload
@@ -54,12 +48,14 @@
 
 <script>
 import router from "@/router";
+import {useRoute} from "vue-router";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Login",
   data() {
     return {
+      method: useRoute().query.method,
       // 表单信息
       courseForm: {
         // 账户数据

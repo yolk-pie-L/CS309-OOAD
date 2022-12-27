@@ -102,7 +102,7 @@ public class CourseController {
     public Boolean enroll(@RequestBody JoinForm joinForm) throws Exception {
         Long courseId = joinForm.getCourseId();
         String studentName = joinForm.getStudentName();
-        System.out.println(joinForm);
+        System.out.println("JoinForm: "+joinForm);
         return studentService.enrollCourse(courseId, studentName);
     }
 

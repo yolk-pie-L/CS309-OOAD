@@ -36,14 +36,22 @@ export default {
       },
       joinForm: {
         studentName: 'black',
-        courseId: '2'
+        courseId: ''
       }
     }
   },
   mounted() {
+    this.fetchUser();
     this.fetchCourse();
   },
   methods: {
+    fetchUser() {
+      this.$axios.get('http://localhost:8082/api/user').then(res => {
+        let result = res.data.result
+        this.joinForm.studentName = result.userName;
+        this.joinForm.courseId = this.courseId;
+      })
+    },
     fetchCourse() {
       // this.courseId = localStorage.getItem('courseId');
       console.log('课程id'+this.courseId)
@@ -71,16 +79,20 @@ export default {
       this.$axios.post('http://localhost:8082/api/course/enroll', this.joinForm).then(res => {
         // 拿到结果
         let result = res.data.code
-        let message = res.data;
+        let message = res.data.result;
         // 判断结果
         if (result === 200) {
           /*跳转页面*/
           router.push('/')
         } else {
-          alert(message)
+          this.$notify({
+            title: "加入失败",
+            message: message,
+            type: "error"
+          })
+          router.push(`/payment?courseId=${this.courseId}`)
         }
       })
-      router.push('/payment')
     },
     leave() {
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
@@ -101,7 +113,7 @@ export default {
       })
     },
     detailed() {
-      router.push('/courseDetailPage')
+      router.push(`/courseDetailPage?courseId=${this.courseId}`)
     }
   }
 }
