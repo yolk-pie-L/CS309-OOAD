@@ -5,6 +5,7 @@ import com.example.live_video.dto.FileForm;
 import com.example.live_video.dto.MergeInfo;
 import com.example.live_video.entity.FileTb;
 import com.example.live_video.service.FileTbService;
+import com.example.live_video.vo.SectionVo;
 import com.example.live_video.vo.StringVo;
 import com.example.live_video.wrapper.NonStaticResourceHttpRequestHandler;
 import com.example.live_video.entity.Section;
@@ -41,7 +42,7 @@ import static com.example.live_video.wrapper.NonStaticResourceHttpRequestHandler
 
 @ResponseResult
 @RestController
-@UserLoginToken
+@PassToken
 @Slf4j
 @RequestMapping("/api/section")
 public class VideoController {
@@ -159,7 +160,7 @@ public class VideoController {
         }
         FileOutputStream outputStream = new FileOutputStream(newFile, true);//文件追加写入
         System.out.println(newFile.getCanonicalPath());
-        Section section = new Section(fileForm.getSectionName(), fileForm.getCourseId(), newFile.getCanonicalPath(), 0);
+        Section section = new Section(fileForm.getSectionName(), fileForm.getCourseId(), newFile.getCanonicalPath(), fileForm.getSectionScore().intValue());
         Long id = sectionService.getSectionId(fileForm.getCourseId(), fileForm.getSectionName());
         if (id == -1) {
             sectionService.createSection(section);
@@ -214,7 +215,7 @@ public class VideoController {
     }
 
     @GetMapping("all/{courseId}")
-    public List<Section> getSectionList(@PathVariable Long courseId) {
-        return sectionService.getSectionList(courseId);
+    public List<SectionVo> getSectionList(@PathVariable String courseId) {
+        return SectionVo.parse(sectionService.getSectionList(Long.valueOf(courseId)));
     }
 }
