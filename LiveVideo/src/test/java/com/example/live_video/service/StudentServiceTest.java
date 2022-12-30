@@ -7,14 +7,14 @@ import com.example.live_video.exception.SQLAssignNameConflictException;
 import com.example.live_video.exception.SQLCoursenameConflictException;
 import com.example.live_video.mapper.*;
 import com.example.live_video.vo.StudentGradeVo;
+import com.example.live_video.vo.StudentSectionGradeVo;
+import com.example.live_video.vo.StudentSectionProgressVo;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -273,6 +273,7 @@ class StudentServiceTest {
         studentService.setStudentAssignGrade(student.getUserName(), assignment2.getId(), 20);
         List<StudentGradeVo> studentGrades = studentService.getStudentGrades(course1.getId());
         List<StudentGradeVo> studentGrades1 = studentService.getStudentGrades(course.getId());
+        List<StudentSectionProgressVo> studentSectionProgressVoList = studentService.getStudentSectionsProgress(student.getId(), course.getId());
         Gson gson = new Gson();
         String pjson = gson.toJson(studentGrades);
         File file = new File("src/test/java/com/example/live_video/service/studentGrades.json");
@@ -282,6 +283,12 @@ class StudentServiceTest {
         fw.close();
         pjson = gson.toJson(studentGrades1);
         file = new File("src/test/java/com/example/live_video/service/studentGrades1.json");
+        file.createNewFile();
+        fw = new FileWriter(file);
+        fw.write(pjson);
+        fw.close();
+        pjson = gson.toJson(studentSectionProgressVoList);
+        file = new File("src/test/java/com/example/live_video/service/studentSectionGrade.json");
         file.createNewFile();
         fw = new FileWriter(file);
         fw.write(pjson);
