@@ -82,8 +82,6 @@ export default {
   },
   mounted() {
     this.fetchUserInfo();
-    this.fetchCourse();
-    this.showTime()
   },
   methods: {
     handleChange(val) {
@@ -96,14 +94,15 @@ export default {
         let result = res.data.result;
         let message = res.data.msg;
         this.teacherForm = result;
-        this.teacherForm.photoUrl = getPhoto(this.teacherForm.photoUrl);
+        if (getPhoto(this.teacherForm.photoUrl) !== null)
+          this.teacherForm.photoUrl = getPhoto(this.teacherForm.photoUrl);
 
         if (this.teacherForm.userType === 'Teacher')
           this.courseTitle = "已创建的课程"
         else
           this.courseTitle = "已加入的课程"
         // 判断结果
-        if (result) {
+        if (res.data.code === 200) {
           /*登陆成功*/
           /*跳转页面*/
           console.log(this.teacherForm.userName)
@@ -144,7 +143,7 @@ export default {
         let message = res.data.msg;
         this.courseForm = result
 
-        if (result) {
+        if (res.data.code === 200) {
           /*登陆成功*/
 
           /*跳转页面*/
