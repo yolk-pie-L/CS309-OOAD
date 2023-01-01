@@ -134,8 +134,8 @@ export default {
 
   data() {
     return {
-      courseId: 1,
-      sectionId: 7,
+      courseId: useRoute().query.courseId,
+      sectionId: undefined,
       userName: 'SY',
       total: '总评论数： 7',
       courseName: 'black',
@@ -281,12 +281,10 @@ export default {
   },
   methods: {
     fetchData() {
-      this.courseId = useRoute().query.courseId
       console.log(localStorage.getItem('token'))
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
       this.$axios.get(`http://localhost:8082/api/section/all/${this.courseId}`).then(res => {
         let result = res.data.result;
-        let message = res.data.msg;
         this.sectionData = result
         this.sectionId = result[0].sectionIdIn
         console.log(result)
@@ -299,16 +297,20 @@ export default {
           alert(result);
         }
       })
-      console.log(this.playerOptions.sources[0].src)
-      if (!this.playerOptions.sources[0].src && !useRoute().query.sectionId) {
-        console.log("无src参数")
-        router.push(`/videoPage?courseId=${this.courseId}&sectionId=${this.sectionId}&src=http://localhost:8082/api/section/${this.sectionId}`)
+      if (this.sectionId === undefined) {
+
       } else {
-        console.log("有src参数" + this.playerOptions.sources[0].src)
-        this.sectionId = useRoute().query.sectionId
+        if (!this.playerOptions.sources[0].src && !useRoute().query.sectionId) {
+          console.log("无src参数")
+          router.push(`/videoPage?courseId=${this.courseId}&sectionId=${this.sectionId}&src=http://localhost:8082/api/section/${this.sectionId}`)
+        } else {
+          console.log("有src参数" + this.playerOptions.sources[0].src)
+          this.sectionId = useRoute().query.sectionId
+        }
       }
     },
     fetchUser() {
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
       this.$axios.get('http://localhost:8082/api/user').then(res => {
         let result = res.data.result
         if (res.data.code === 200) {

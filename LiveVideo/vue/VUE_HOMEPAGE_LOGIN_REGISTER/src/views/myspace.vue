@@ -102,6 +102,7 @@ export default {
       }
     },
     async fetchUserType() {
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
       await this.$axios.get('http://localhost:8082/api/user').then(res => {
         console.log(res)
         let result = res.data.result
