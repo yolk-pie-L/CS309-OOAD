@@ -11,7 +11,7 @@
     </el-descriptions-item>
 
   </el-descriptions>
-  <el-descriptions title="已加入的课程">
+  <el-descriptions :title="courseTitle">
   </el-descriptions>
   <div>
     <div style="margin-bottom: 15px">fill: <el-switch v-model="fill" /></div>
@@ -41,6 +41,7 @@ export default {
     return{
       currentPage: 1,
       pageSize: 5,
+      courseTitle: "已加入的课程",
       teacherForm: {
         userName: "teacher1",
         userType: "Teacher",
@@ -69,11 +70,11 @@ export default {
     }
   },
   mounted() {
-    this.fetchData();
+    this.fetchUserInfo();
     this.fetchCourse();
   },
   methods: {
-    fetchData() {
+    fetchUserInfo() {
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
       this.$axios.get('http://localhost:8082/api/user').then(res => {
         // 拿到结果
@@ -81,6 +82,11 @@ export default {
         let message = res.data.msg;
         this.teacherForm = result;
         this.teacherForm.photoUrl = getPhoto(this.teacherForm.photoUrl);
+
+        if (this.teacherForm.userType === 'Teacher')
+          this.courseTitle = "已创建的课程"
+        else
+          this.courseTitle = "已加入的课程"
         // 判断结果
         if (result) {
           /*登陆成功*/
