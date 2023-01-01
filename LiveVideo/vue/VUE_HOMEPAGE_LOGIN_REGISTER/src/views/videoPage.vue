@@ -1,13 +1,26 @@
 <template>
   <div class="leastBox"> <el-row>
     <el-col :span="6">
-      <el-card class="box-card">
-        <el-table :data="sectionData" border stripe style="width: 100%">
-          <el-table-column prop="sectionName" label="Section Name" align="center"
-                           min-width="180px"></el-table-column>
-          <el-table-column prop="sectionComplete" label="Section Complete" align="center"
-                           min-width="180px"></el-table-column>
-        </el-table>
+      <el-card>
+<!--        <el-table :data="sectionData" border stripe style="width: 100%">-->
+<!--          <el-table-column prop="sectionName" label="Section Name" align="center"-->
+<!--                           min-width="180px"></el-table-column>-->
+<!--          <el-table-column prop="sectionComplete" label="Section Complete" align="center"-->
+<!--                           min-width="180px"></el-table-column>-->
+<!--        </el-table>-->
+        <template #header>Section List</template>
+        <el-scrollbar>
+          <div v-for="(item, i) in sectionData" :key="i" style="padding: 5px;">
+            <router-link :to="reFetch(item)">
+              <el-card class="box-card">
+                <div class="card-header">
+                  <span>{{item.sectionName}}</span>
+                  <span>{{item.sectionComplete}}</span>
+                </div>
+              </el-card>
+            </router-link>
+          </div>
+        </el-scrollbar>
         <el-row>
           <el-col>
             <div class="block">
@@ -286,11 +299,13 @@ export default {
           alert(result);
         }
       })
-      if (!this.playerOptions.sources.src) {
+      console.log(this.playerOptions.sources[0].src)
+      if (!this.playerOptions.sources[0].src && !useRoute().query.sectionId) {
         console.log("无src参数")
-        router.push(`/videoPage?courseId=${this.courseId}&src=http://localhost:8082/api/section/${this.sectionId}`)
+        router.push(`/videoPage?courseId=${this.courseId}&sectionId=${this.sectionId}&src=http://localhost:8082/api/section/${this.sectionId}`)
       } else {
-        console.log("有src参数" + this.playerOptions.sources.src)
+        console.log("有src参数" + this.playerOptions.sources[0].src)
+        this.sectionId = useRoute().query.sectionId
       }
     },
     fetchUser() {
@@ -347,9 +362,8 @@ export default {
         }
       })
     },
-    reFetch(row) {
-      router.push(`/videoPage?courseId=${this.courseId}`)
-      this.row = row.sectionIdIn
+    reFetch(item) {
+      return `/videoPage?courseId=${this.courseId}&sectionId=${item.sectionIdIn}&src=http://localhost:8082/api/section/${item.sectionIdIn}`
     },
     inputFocus(){
       var replyInput = document.getElementById('replyInput');
@@ -640,5 +654,24 @@ export default {
   margin: 10px 0 0 50px;
   background-color: #efefef;
 }
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text {
+  font-size: 14px;
+}
+
+.item {
+  margin-bottom: 18px;
+}
+
+.box-card {
+  width: 420px;
+}
+
 </style>
 

@@ -2,7 +2,7 @@
   <div id="app">
 <!--    <menubar></menubar>-->
     <!--路由页面-->
-    <router-view/>
+    <router-view :key="$route.fullPath"/>
   </div>
 </template>
 
