@@ -15,14 +15,17 @@ public class UserVo {
 
     private String mail;
 
+    private String adminRight;
+
     private String photoUrl;
 
     private Long account;
 
-    public UserVo(String userName, String userType, String mail, String photoUrl, Long account) {
+    public UserVo(String userName, String userType, String mail, String adminRight, String photoUrl, Long account) {
         this.userName = userName;
         this.userType = userType;
         this.mail = mail;
+        this.adminRight = adminRight;
         this.photoUrl = photoUrl;
         this.account = account;
     }
@@ -32,6 +35,7 @@ public class UserVo {
                 user.getUserName(),
                 user.getUserType().toString(),
                 user.getMail(),
+                user.getAdminRight().toString(),
                 user.getPhotoUrl(),
                 user.getAccount());
     }

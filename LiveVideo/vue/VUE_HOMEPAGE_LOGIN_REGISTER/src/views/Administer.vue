@@ -42,7 +42,7 @@
             :value="item.value">
         </el-option>
       </el-select>
-      <el-button slot="append" icon="el-icon-search" @click="getUserList"></el-button>
+      <el-button slot="append" icon="el-icon-search" @click="getUserList">搜索</el-button>
     </div>
 
     <div class="tableU">
@@ -65,6 +65,9 @@
 
 <script>
 
+import {getPhoto} from "@/utils";
+import router from "@/router";
+
 export default {
   name: "Administer",
   data() {
@@ -74,6 +77,7 @@ export default {
       userForm: {
         userName: "black",
         userType: "Teacher",
+        adminRight: 'Admin',
         mail: "",
         photoUrl: "https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg",
         account: "0",
@@ -122,9 +126,27 @@ export default {
     }
   },
   mounted() {
+    this.fetchUserInfo()
     this.fetchClass()
   },
   methods: {
+    fetchUserInfo() {
+
+      this.$axios.get('http://localhost:8082/api/user').then(res => {
+        let result = res.data.result
+        if (res.data.code === 200) {
+          this.userForm = result
+          this.userForm.photoUrl = getPhoto(this.userForm.photoUrl)
+        } else {
+          this.$notify.error("您未登录")
+          router.push("/login")
+        }
+        if (this.userForm.adminRight === 'NonAdmin') {
+          this.$notify.error("您不是管理员")
+          router.push("/")
+        }
+      })
+    },
     fetchClass() {
       this.$axios.get('http://localhost:8082/api/admin/waiting').then(res => {
         // 拿到结果

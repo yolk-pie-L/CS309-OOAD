@@ -421,12 +421,12 @@ export default {
           let result = res.data.result;
           if (res.data.code === 200) {
             /*登陆成功*/
+            a.id = result
             this.$notify({
               message: "发送成功",
               title: "成功",
               type: "success"
             })
-            //TODO: 获取commentId
             /*跳转页面*/
             // router.push('/videoPage')
           } else {
@@ -468,7 +468,7 @@ export default {
           let result = res.data.result;
           if (res.data.code === 200) {
             /*登陆成功*/
-            // TODO: 获取commentId
+            a.id = result
             /*跳转页面*/
             // router.push('/videoPage')
           } else {

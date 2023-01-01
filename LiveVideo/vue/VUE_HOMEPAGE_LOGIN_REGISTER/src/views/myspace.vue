@@ -18,12 +18,15 @@
           <el-menu-item index="2-1">item one</el-menu-item>
           <el-menu-item index="2-2">充值</el-menu-item>
           <el-menu-item index="2-3">注销</el-menu-item>
-          <el-sub-menu index="2-4">
-            <template #title>item four</template>
-            <el-menu-item index="2-4-1">item one</el-menu-item>
-            <el-menu-item index="2-4-2">item two</el-menu-item>
-            <el-menu-item index="2-4-3">item three</el-menu-item>
-          </el-sub-menu>
+          <div v-show="adminShow">
+            <el-menu-item index="2-4">管理员界面</el-menu-item>
+          </div>
+<!--          <el-sub-menu index="2-4">-->
+<!--            <template #title>item four</template>-->
+<!--            <el-menu-item index="2-4-1">item one</el-menu-item>-->
+<!--            <el-menu-item index="2-4-2">item two</el-menu-item>-->
+<!--            <el-menu-item index="2-4-3">item three</el-menu-item>-->
+<!--          </el-sub-menu>-->
         </el-sub-menu>
       </el-menu>
     </el-header>
@@ -75,6 +78,7 @@ export default {
   data() {
     return {
       coShow: true,
+      adminShow: false,
       activeIndex: ref('1'),
       activeIndex2: ref('1')
     }
@@ -93,13 +97,17 @@ export default {
           localStorage.removeItem('token')
           router.push('/')
           break
+        case '2-4':
+          router.push('/administer')
       }
     },
     async fetchUserType() {
       await this.$axios.get('http://localhost:8082/api/user').then(res => {
         console.log(res)
+        let result = res.data.result
         if (res.data.code === 200) {
-          this.coShow = res.data.result.userType === 'Teacher'
+          this.coShow = result.userType === 'Teacher'
+          this.adminShow = (result.adminRight === 'Admin' || res.adminRight === 'SuperAdmin')
         } else {
           this.$notify({
             title: '错误',
