@@ -1,6 +1,5 @@
 <template>
   <!--导航-->
-  <nav></nav>
 
   <div>
     <div class="animate__animated animate__fadeIn title"  :style="{'background-image': bgUrl}"></div>
@@ -55,10 +54,11 @@
     <el-pagination
         @size-change="fetchCourse"
         @current-change="handleCurrentChange"
-        :current-page.sync="pageForm.page"
+        v-model:current-page="pageForm.page"
         :page-size="9"
         layout="prev, pager, next, jumper"
-        :total="1000">
+        :total="1000"
+    >
     </el-pagination>
   </div>
 
@@ -74,8 +74,8 @@ export default {
       bgUrl:'url(https://p0.meituan.net/dpplatform/4ce8553013e2e819c08e6d6ba409bee8473079.jpg)',
       user_pic_src:'url(\'this.userForm.photoUrl\')',
       pageForm:{
-        page: '1',
-        pageNum: '9',
+        page: 1,
+        pageNum: 9,
       },
       userForm: {
         userName: "teacher1",
@@ -171,6 +171,11 @@ export default {
       localStorage.setItem("courseId",id)
       router.push({path:'/courseMainPage', query: { courseId: id }})
     },
+    handleCurrentChange() {
+      console.log('changed! pageNum: '+ this.pageForm.pageNum)
+      console.log('changed! page: '+ this.pageForm.page)
+      this.fetchCourse()
+    }
   },
   computed:{
     isLog(){
@@ -218,7 +223,7 @@ export default {
 
 .title {
   position: fixed;
-  top: 0;
+  top: 75px;
   width: 100%;
   height: 100%;
   background-repeat: no-repeat;
