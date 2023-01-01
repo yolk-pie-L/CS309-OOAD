@@ -138,14 +138,14 @@ const routes = [
         path: '/person/modify-avatar',
         name: avatarUpdate,
         component: avatarUpdate
+      },
+      {
+        path: '/person/create-notice',
+        name: addNotice,
+        component: addNotice
       }
     ],
   },
-  {
-    path: '/addNotice',
-    name: addNotice,
-    component: addNotice
-  }
 ]
 
 const router = createRouter({

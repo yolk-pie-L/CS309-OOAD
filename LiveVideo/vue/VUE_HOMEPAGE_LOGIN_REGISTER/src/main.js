@@ -10,6 +10,7 @@ import './index.css'
 import VideoPlayer from 'vue-video-player'
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
+import methods from './methods'
 
 import { getCurrentInstance } from "vue";
 
@@ -22,6 +23,10 @@ app.use(router).use(store).use(VueAxios, axios).use(ElementPlus).use(VideoPlayer
 app.config.globalProperties.$axios=axios
 app.config.globalProperties.$pref='http://localhost:8082'
 app.config.globalProperties.$picture='http://localhost:8082/api/picture/'
+
+Object.keys(methods).forEach(k => {
+    app.config.globalProperties[k] = methods[k]
+})
 
 app.directive('title', {
     inserted: function (el, binding) {
