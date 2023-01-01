@@ -16,6 +16,7 @@ import com.example.live_video.service.UserService;
 import com.example.live_video.vo.StudentAssignGradeVo;
 import com.example.live_video.vo.StudentGradeVo;
 import com.example.live_video.vo.StudentSectionGradeVo;
+import com.example.live_video.vo.StudentSectionProgressVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -127,6 +128,22 @@ public class StudentServiceImpl implements StudentService {
         studentMapper.setStudentSectionProgress(studentId, sectionId, studentGrade);
         return true;
     }
+
+    @Override
+    public List<StudentSectionProgressVo> getStudentSectionsProgress(long studentId, long courseId) {
+        List<Section> sectionList = sectionService.getSectionList(courseId);
+        User student = userService.getById(studentId);
+        List<StudentSectionProgressVo> studentSectionProgressList = new LinkedList<>();
+        for(Section section: sectionList){
+            StudentSectionProgressVo studentSectionProgress = new StudentSectionProgressVo();
+            studentSectionProgress.setSectionName(section.getSectionName());
+            studentSectionProgress.setStudentProgress((double) studentMapper.getStudentSectionGrade(student.getId(), section.getId())
+                    / section.getGrade());
+            studentSectionProgressList.add(studentSectionProgress);
+        }
+        return studentSectionProgressList;
+    }
+
 
     @Override
     public List<StudentGradeVo> getStudentGrades(long courseId) {
