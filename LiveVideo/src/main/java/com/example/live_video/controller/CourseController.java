@@ -10,6 +10,9 @@ import com.example.live_video.service.CourseService;
 import com.example.live_video.service.StudentService;
 import com.example.live_video.service.UserService;
 import com.example.live_video.vo.CourseVo;
+import com.example.live_video.vo.StudentGradeVo;
+import com.example.live_video.vo.StudentSectionGradeVo;
+import com.example.live_video.vo.StudentSectionProgressVo;
 import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,5 +114,16 @@ public class CourseController {
         String studentName = joinForm.getStudentName();
         System.out.println(joinForm);
         return studentService.exitCourse(courseId, studentName);
+    }
+
+    @GetMapping("/{courseId}/grades")
+    public List<StudentGradeVo> getStudentGrades(@PathVariable String courseId){
+        return studentService.getStudentGrades(Long.parseLong(courseId));
+    }
+
+    @GetMapping("/student/section/grades")
+    public List<StudentSectionProgressVo> getStudentSectionGrades(@RequestParam String studentName, @RequestParam Long courseId){
+        long studentId = userService.getUserId(studentName);
+        return studentService.getStudentSectionsProgress(studentId, courseId);
     }
 }

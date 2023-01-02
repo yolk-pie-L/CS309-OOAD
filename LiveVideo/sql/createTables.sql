@@ -36,6 +36,8 @@ DROP TABLE IF EXISTS `file_tb`;
 
 DROP TABLE IF EXISTS stu_assign_urls cascade;
 
+DROP TABLE IF EXISTS user_order cascade;
+
 CREATE TABLE user
 (
     id          int auto_increment primary key,
@@ -157,24 +159,6 @@ CREATE TABLE course_invitation
     FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE user_login_log
-(
-    user_id      int         not null,
-    login_time   datetime    not null,
-    session_id   varchar(25) not null,
-    login_status char default 'y',
-    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE user_payment_log
-(
-    user_id   int      not null,
-    pay_time  datetime not null,
-    course_id int      not null,
-    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
 CREATE TABLE stu_assign
 (
     user_id   int not null,
@@ -209,6 +193,13 @@ CREATE TABLE stu_section
     grade      int not null default 0,
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (section_id) REFERENCES section (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE user_order
+(
+    out_trade_no varchar(50),
+    username     varchar(20),
+    status       enum ('APPROVED', 'FAILED', 'CREATED')
 );
 
 DROP TRIGGER if exists tri_insert_section;

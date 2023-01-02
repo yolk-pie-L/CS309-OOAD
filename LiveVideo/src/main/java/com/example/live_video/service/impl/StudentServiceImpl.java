@@ -134,11 +134,12 @@ public class StudentServiceImpl implements StudentService {
         List<Section> sectionList = sectionService.getSectionList(courseId);
         User student = userService.getById(studentId);
         List<StudentSectionProgressVo> studentSectionProgressList = new LinkedList<>();
-        for(Section section: sectionList){
+        for (Section section : sectionList) {
             StudentSectionProgressVo studentSectionProgress = new StudentSectionProgressVo();
             studentSectionProgress.setSectionName(section.getSectionName());
-            studentSectionProgress.setStudentProgress((double) studentMapper.getStudentSectionGrade(student.getId(), section.getId())
-                    / section.getGrade());
+            int studentGrade = studentMapper.getStudentSectionGrade(student.getId(), section.getId());
+            studentSectionProgress.setStudentGrade(studentGrade);
+            studentSectionProgress.setStudentProgress((double) studentGrade / section.getGrade());
             studentSectionProgressList.add(studentSectionProgress);
         }
         return studentSectionProgressList;
@@ -151,12 +152,12 @@ public class StudentServiceImpl implements StudentService {
         List<StudentGradeVo> studentGradesList = new LinkedList<>();
         List<Assignment> assignmentList = assignmentService.getAssignmentsOfCourse(courseId);
         List<Section> sectionList = sectionService.getSectionList(courseId);
-        for(User student: studentList){
+        for (User student : studentList) {
             StudentGradeVo studentGradeVo = new StudentGradeVo();
             studentGradeVo.setStudentName(student.getUserName());
 
             List<StudentAssignGradeVo> studentAssignGradeList = new LinkedList<>();
-            for(Assignment assignment: assignmentList){
+            for (Assignment assignment : assignmentList) {
                 StudentAssignGradeVo studentAssignGrade = new StudentAssignGradeVo();
                 studentAssignGrade.setAssignName(assignment.getAssignmentName());
                 studentAssignGrade.setTotalGrade(assignment.getTotalGrade());
@@ -166,7 +167,7 @@ public class StudentServiceImpl implements StudentService {
             studentGradeVo.setStudentAssignGradeList(studentAssignGradeList);
 
             List<StudentSectionGradeVo> studentSectionGradeList = new LinkedList<>();
-            for(Section section: sectionList){
+            for (Section section : sectionList) {
                 StudentSectionGradeVo studentSectionGrade = new StudentSectionGradeVo();
                 studentSectionGrade.setSectionName(section.getSectionName());
                 studentSectionGrade.setFullGrade(section.getGrade());
