@@ -188,16 +188,18 @@ CREATE TABLE stu_course
 
 CREATE TABLE stu_section
 (
-    user_id    int not null,
-    section_id int not null,
-    grade      int not null default 0,
+    user_id       int not null,
+    section_id    int not null,
+    grade         int not null default 0,
+    duration      double       default 0,
+    current_watch double       default 0,
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (section_id) REFERENCES section (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE user_order
 (
-    out_trade_no varchar(50),
+    out_trade_no varchar(50) PRIMARY KEY,
     username     varchar(20),
     status       enum ('APPROVED', 'FAILED', 'CREATED')
 );
@@ -211,7 +213,7 @@ CREATE TRIGGER tri_insert_section
     ON section
     FOR EACH ROW
 BEGIN
-    INSERT INTO stu_section SELECT user_id, NEW.id, 0 FROM stu_course WHERE NEW.course_id = stu_course.course_id;
+    INSERT INTO stu_section SELECT user_id, NEW.id, 0, 0, 0 FROM stu_course WHERE NEW.course_id = stu_course.course_id;
 END$
 DELIMITER ;
 
@@ -223,7 +225,7 @@ CREATE TRIGGER tri_enroll_course
     FOR EACH ROW
 BEGIN
     INSERT INTO stu_section
-    SELECT NEW.user_id, section.id, 0
+    SELECT NEW.user_id, section.id, 0, 0, 0
     FROM stu_course
              JOIN section ON section.course_id = stu_course.course_id
     WHERE section.course_id = NEW.course_id

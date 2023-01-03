@@ -3,6 +3,7 @@ package com.example.live_video.controller;
 import com.example.live_video.constance.FileConstance;
 import com.example.live_video.dto.FileForm;
 import com.example.live_video.dto.MergeInfo;
+import com.example.live_video.dto.SectionProgressForm;
 import com.example.live_video.entity.FileTb;
 import com.example.live_video.service.FileTbService;
 import com.example.live_video.vo.StringVo;
@@ -61,6 +62,11 @@ public class VideoController {
 
     @Autowired
     private FileTbService fileTbService;
+
+    @PostMapping("/update")
+    public void updateSectionProgress(@RequestBody SectionProgressForm sectionProgressForm){
+
+    }
 
     @GetMapping("/{sectionId}")
     public void videoPreview(HttpServletRequest request, HttpServletResponse response, @PathVariable String sectionId) throws Exception {

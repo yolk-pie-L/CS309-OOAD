@@ -1,7 +1,6 @@
 package com.example.live_video.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,12 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserOrder {
-    @TableField(value = "out_trade_no")
+    @TableId(value = "out_trade_no")
     String outTradeNo;
-    @TableField(value = "username")
+    @TableField(value = "username", updateStrategy = FieldStrategy.NEVER)
     String userName;
     StuOrderStatus status;
-    enum StuOrderStatus{
+
+    public enum StuOrderStatus {
         APPROVED, FAILED, CREATED
     }
 }
