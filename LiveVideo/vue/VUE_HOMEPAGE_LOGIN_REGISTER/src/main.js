@@ -8,18 +8,21 @@ import VueAxios from 'vue-cli-plugin-axios'
 import '../node_modules/element-plus/theme-chalk/index.css'
 import './index.css'
 import VideoPlayer from 'vue-video-player'
+import 'video.js/dist/video-js.css'
+import 'videojs-contrib-hls.js/src/videojs.hlsjs'
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 import methods from './methods'
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+import 'videojs-flash'
 
-import { getCurrentInstance } from "vue";
 
 require('video.js/dist/video-js.css')
 // require('vue-video-player/src/custom-theme.css')
-import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'
+const hls = require('videojs-contrib-hls')
 const app = createApp(App);
-app.use(router).use(store).use(VueAxios, axios).use(ElementPlus).use(VideoPlayer).use(Antd).mount('#app')
+app.use(router).use(store).use(VueAxios, axios).use(ElementPlus).use(hls).use(VideoPlayer).use(Antd).mount('#app')
 app.config.globalProperties.$axios=axios
 app.config.globalProperties.$pref='http://localhost:8082'
 app.config.globalProperties.$picture='http://localhost:8082/api/picture/'

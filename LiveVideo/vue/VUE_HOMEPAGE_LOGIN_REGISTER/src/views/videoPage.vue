@@ -21,25 +21,18 @@
             </router-link>
           </div>
         </el-scrollbar>
-        <el-row>
-          <el-col>
-            <div class="block">
-              <el-pagination
-                  background
-                  :current-page.sync="currentPage"
-                  :page-size="pageSize"
-                  layout="total, prev, next, jumper, pager"
-                  :total="total"
-              ></el-pagination>
-            </div>
-          </el-col>
-        </el-row>
       </el-card>
     </el-col>
     <el-col :span="18">
       <div class='video' style="height: 100px;">
         <video-player class="video-player vjs-custom-skin"
                       ref="videoPlayer"
+                      @canplay="canPlay($event)"
+                      @play="onPlayerPlay($event)"
+                      @pause="onPlayerPause($event)"
+                      @ended="onPlayerEnded($event)"
+                      @playing="onPlayerPlaying($event)"
+                      @timeupdate="onPlayerTimeUpdate($event)"
                       :playsinline="true"
                       :options="playerOptions">
         </video-player>
@@ -66,6 +59,9 @@
         >
         </div>
       </div>
+      <object>
+        <embed>
+      </object>
       <div class="reply-btn-box" v-show="btnShow">
         <el-button class="reply-btn" size="medium" @click="sendComment" type="primary">发表评论</el-button>
       </div>
@@ -159,11 +155,13 @@ export default {
         language: 'zh-CN',
         aspectRatio: '4:3',  // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
         fluid: false,  // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
-        sources: [{
-          type: "video/mp4",  // 类型
-          // src: 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4'             // url地址
-          src: useRoute().query.src           // url地址
-        }],
+        sources: [
+          {
+            type: "video/mp4",  // 类型
+            // src: 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4'             // url地址
+            src: useRoute().query.src           // url地址
+          }
+        ],
         poster: '',  // 封面地址
         notSupportedMessage: '此视频暂无法播放，请稍后再试',  // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
         controls: true
@@ -255,14 +253,18 @@ export default {
           inputShow:false,
           reply:[]
         },
-      ]
+      ],
+      player: {
+        currentTime: 1,
+        duration: 114514
+      },
+      last: 0,
+      continueTime: 0
     }
   },
   mounted() {
     this.fetchData()
     this.fetchUser()
-    this.fetchComment()
-    this.fetchTotalComment()
     this.recodrTime = setInterval(() => {
       if (document.getElementsByTagName('video')[0].currentTime && this.sectionId) {
         localStorage.setItem(
@@ -274,7 +276,7 @@ export default {
               document.getElementsByTagName('video')[0].currentTime
             })
         )
-        this.sectionData[this.row].sectionComplete = (document.getElementsByTagName('video')[0].currentTime /
+        this.sectionData[this.row].sectionComplete = (this.continueTime /
             document.getElementsByTagName('video')[0].duration * 100).toString().split('.')[0] + '%'
       }
     }, 1000)
@@ -306,6 +308,10 @@ export default {
         } else {
           console.log("有src参数" + this.playerOptions.sources[0].src)
           this.sectionId = useRoute().query.sectionId
+          this.sectionData.forEach(section => {
+            if (section.sectionIdIn === this.sectionId)
+              this.row = this.sectionData.indexOf(section)
+          })
         }
       }
     },
@@ -316,6 +322,8 @@ export default {
         if (res.data.code === 200) {
           this.userName = result.userName
           this.myHeader = getPhoto(result.photoUrl)
+          this.fetchComment()
+          this.fetchTotalComment()
         } else {
           this.$notify({
             message: result,
@@ -364,11 +372,22 @@ export default {
         }
       })
     },
+    fetchContinueTime() {
+      this.$axios.get(`http://localhost:8082/api/grade?courseId=${this.courseId}&userName=${this.userName}`).then(res => {
+        let result = res.data.result
+        if (res.data.code === 200) {
+          this.continueTime = result.continueTime
+          this.last = result.last
+        } else {
+          this.$notify.error(result)
+        }
+      })
+    },
     reFetch(item) {
       return `/videoPage?courseId=${this.courseId}&sectionId=${item.sectionIdIn}&src=http://localhost:8082/api/section/${item.sectionIdIn}`
     },
     inputFocus(){
-      var replyInput = document.getElementById('replyInput');
+      let replyInput = document.getElementById('replyInput');
       replyInput.style.padding= "8px 8px"
       replyInput.style.border ="2px solid blue"
       replyInput.focus()
@@ -377,6 +396,7 @@ export default {
       this.btnShow = true
     },
     hideReplyBtn(){
+      let replyInput = document.getElementById('replyInput');
       this.btnShow = false
       replyInput.style.padding= "10px"
       replyInput.style.border ="none"
@@ -534,7 +554,32 @@ export default {
           /*打印错误信息*/
           alert(result);
         }
-      })    }
+      })
+    },
+    canPlay(player) {
+      this.player = document.getElementsByTagName('video')[0]
+      console.log(this.player)
+    },
+    onPlayerPlay(player) {
+      console.log('player play!', player)
+      this.timeInterval = setInterval(() => {
+        this.continueTime ++
+      }, 1000)
+    },
+    onPlayerPause(player) {
+      console.log('player pause!', player)
+      clearInterval(this.timeInterval)
+    },
+    onPlayerEnded(player) {
+      console.log('player end!', player)
+    },
+    onPlayerPlaying(player) {
+      console.log('player playing', player)
+    },
+    onPlayerTimeUpdate(player) {
+      console.log('player time update', player)
+      this.last = this.player.currentTime
+    }
   }
 }
 
