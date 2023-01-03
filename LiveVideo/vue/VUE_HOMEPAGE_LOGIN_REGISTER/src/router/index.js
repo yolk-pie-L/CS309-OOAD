@@ -23,6 +23,8 @@ import personInfo from "@/views/myspace/personInfo";
 import myspace from "@/views/myspace";
 import addNotice from "@/views/addNotice";
 import avatarUpdate from "@/views/myspace/avatarUpdate";
+import studentGrade from "@/views/studentGrade";
+import teacherGrade from "@/views/teacherGrade";
 const routes = [
   {
     path:'/',
@@ -146,6 +148,16 @@ const routes = [
       }
     ],
   },
+  {
+    path: '/studentGrade',
+    name: studentGrade,
+    component: studentGrade
+  },
+  {
+    path: '/teacherGrade',
+    name: teacherGrade,
+    component: teacherGrade
+  }
 ]
 
 const router = createRouter({
