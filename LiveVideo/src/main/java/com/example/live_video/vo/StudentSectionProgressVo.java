@@ -9,4 +9,6 @@ public class StudentSectionProgressVo {
     String sectionName;
 
     double studentProgress;
+
+    int studentGrade;
 }

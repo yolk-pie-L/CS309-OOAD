@@ -51,13 +51,18 @@
         </el-row>
       </el-card>
     </el-row>
-    <el-row type="flex" class="row-bg card" justify="center" align="bottom">
+    <el-row v-show="coShow" type="flex" class="row-bg card" justify="center" align="bottom">
+      <el-button type="primary" @click="toAssignUpload">Assignment</el-button>
+      <el-button type="primary" @click="toQuizUpload">Quiz</el-button>
+      <el-button type="primary" @click="toAllGrade">Grade</el-button>
+      <el-button type="primary" @click="videoPage">lessons</el-button>
+      <el-button type="primary" @click="addSection">Add Section</el-button>
+    </el-row>
+    <el-row v-show="coNotShow" type="flex" class="row-bg card" justify="center" align="bottom">
       <el-button type="primary" @click="toAssign">Assignment</el-button>
       <el-button type="primary" @click="toQuiz">Quiz</el-button>
       <el-button type="primary" @click="toGrade">Grade</el-button>
       <el-button type="primary" @click="videoPage">lessons</el-button>
-      <el-button type="primary" @click="addSection">Add Section</el-button>
-
     </el-row>
   </div>
 </template>
@@ -71,6 +76,8 @@ export default {
   name: 'courseDetailPage',
   data() {
     return {
+      coShow: true,
+      coNotShow: false,
       courseId: useRoute().query.courseId,
       courseForm: {
         courseName: "checker",
@@ -93,6 +100,7 @@ export default {
   },
   mounted() {
     this.fetchCourse()
+    this.fetchUserType()
   },
   methods: {
     fetchCourse() {
@@ -122,15 +130,44 @@ export default {
     toAssign() {
       router.push(`/homeworkHome`)
     },
+    toAssignUpload() {
+      router.push(`/homeworkUpload`)
+    },
     toQuiz() {
       router.push(`/quizHome`)
+    },
+    toQuizUpload() {
+      router.push(`/quizUpload`)
     },
     videoPage() {
       router.push(`/videoPage?courseId=${this.courseId}`)
     },
     addSection() {
       router.push(`/addSection?courseId=${this.courseId}`)
+    },
+    toGrade() {
+      router.push(`/studentGrade?courseId=${this.courseId}`)
+    },
+    toAllGrade() {
+      router.push(`/teacherGrade?courseId=${this.courseId}`)
+    },
+    async fetchUserType() {
+      await this.$axios.get('http://localhost:8082/api/user').then(res => {
+        console.log(res)
+        if (res.data.code === 200) {
+          this.coShow = res.data.result.userType === 'Teacher'
+          this.coNotShow = res.data.result.userType !== 'Teacher'
+        } else {
+          this.$notify({
+            title: '错误',
+            message: '获取用户信息错误',
+            type: 'error'
+          })
+          router.push('/login')
+        }
+      })
     }
+
   }
 }
 </script>
