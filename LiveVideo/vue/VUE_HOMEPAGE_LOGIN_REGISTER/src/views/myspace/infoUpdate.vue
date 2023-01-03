@@ -6,37 +6,19 @@
       <el-col :span="7" class="login-card">
         <!--loginForm-->
         <el-form :model="loginForm" :rules="rules" ref="loginForm" label-width="21%" class="loginForm">
-          <el-form-item label="邮箱" prop="code" style="width: 380px">
-            <el-input v-model="loginForm.mail" style="width: 70%"></el-input>
+          <el-form-item label="邮箱验证" prop="code" style="width: 380px">
+            <el-input v-model="loginForm.code" style="width: 70%"></el-input>
             <el-button @click="sendMail" style="width: 30%">发送验证码</el-button>
           </el-form-item>
-          <el-form-item label="密码" prop="password" style="width: 380px">
+          <el-form-item label="新密码" prop="password" style="width: 380px">
             <el-input type="password" v-model="loginForm.password"></el-input>
           </el-form-item>
-          <el-form-item label="新密码" prop="password" style="width: 380px">
+          <el-form-item label="重复密码" prop="password" style="width: 380px">
             <el-input type="password" v-model="loginForm.repeatPassword"></el-input>
           </el-form-item>
-          <el-form-item label="验证码" prop="code" style="width: 380px">
-            <el-input v-model="loginForm.code" class="code-input" style="width: 70%;float: left"></el-input>
-            <!--验证码图片-->
-          </el-form-item>
           <el-form-item class="btn-ground">
-            <el-button type="primary" @click="submitForm('loginForm')">立即登陆</el-button>
+            <el-button type="primary" @click="submitForm('loginForm')">更新</el-button>
             <el-button @click="resetForm('loginForm')">重置</el-button>
-          </el-form-item>
-          <el-form-item label="Pic" style="width: 380px">
-            <el-upload
-                action="/"
-                :on-change="handleChange"
-                :auto-upload="false"
-                list-type="picture-card">
-              <i class="el-icon-plus"></i>
-            </el-upload>
-
-          </el-form-item>
-          <el-form-item class="btn-ground">
-            <el-button type="primary" @click="submitForm('loginForm')">Update</el-button>
-            <el-button @click="resetForm('loginForm')">Reset</el-button>
           </el-form-item>
         </el-form>
       </el-col>
@@ -122,6 +104,7 @@ export default {
     };
   },
   mounted() {
+
   },
   methods: {
     beforeUpload (file) {
@@ -131,7 +114,7 @@ export default {
       return false
     },
     sendMail() {
-      this.$axios.post('http://localhost:8082/api/mail?mail=' + this.loginForm.mail).then(res => {
+      this.$axios.post('http://localhost:8082/api/mail/modify').then(res => {
         // 拿到结果
         let message = res.data.code;
         // 判断结果
@@ -151,10 +134,9 @@ export default {
           // 表单验证成功
           this.$axios.post('http://localhost:8082/api/user', this.loginForm).then(res => {
             // 拿到结果
-            let result = JSON.parse(res.data.data);
-            let message = res.data.msg;
+            let result = res.data.result;
             // 判断结果
-            if (result) {
+            if (res.data.code === 200) {
               /*登陆成功*/
               this.$notify({
                 title: '成功',
@@ -167,7 +149,7 @@ export default {
               /*打印错误信息*/
               this.$notify({
                 title: '失败',
-                message: message,
+                message: result,
                 type: 'error'
               })
             }

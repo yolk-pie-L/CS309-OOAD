@@ -73,17 +73,17 @@ public class CourseController {
         return null;
     }
 
-    @PostMapping ("")
+    @PostMapping ("/modify")
     public Boolean modifyCourseOfTeacher(@RequestBody CourseDto courseDto) {
         return courseService.updateCourse(courseDto.convertToCourse(CourseStatus.REVIEWING));
     }
 
-    @PostMapping ("insert")
+    @PostMapping ("/insert")
     public Boolean insertCourseOfTeacher(@RequestBody CourseDto courseDto) throws SQLCoursenameConflictException {
         return courseService.createCourse(courseDto.convertToCourse(CourseStatus.REVIEWING));
     }
 
-    @GetMapping("waiting")
+    @GetMapping("/waiting")
     public List<CourseVo> queryCourseOfAdministrator(@RequestParam String administrator) {
         return CourseVo.parse(courseService.getReviewingCourseList());
     }

@@ -11,7 +11,7 @@
     </el-descriptions-item>
 
   </el-descriptions>
-  <el-descriptions title="已加入的课程">
+  <el-descriptions :title="courseTitle">
   </el-descriptions>
   <div>
     <div style="margin-bottom: 15px">fill: <el-switch v-model="fill" /></div>
@@ -29,6 +29,17 @@
       </el-card>
     </el-space>
   </div>
+
+  <el-descriptions title="通知列表"/>
+  <div class="demo-collapse">
+    <el-collapse v-for="item in this.messageTable" :key="item" @change="handleChange(item)">
+      <el-collapse-item :title="item.title + ' ' + item.date" :name="messageTable.indexOf(item)">
+        <div>
+          {{item.context}}
+        </div>
+      </el-collapse-item>
+    </el-collapse>
+  </div>
 </template>
 
 <script>
@@ -40,7 +51,8 @@ export default {
   data() {
     return{
       currentPage: 1,
-      pageSize: 5,
+      pageSize: 114514,
+      courseTitle: "已加入的课程",
       teacherForm: {
         userName: "teacher1",
         userType: "Teacher",
@@ -65,24 +77,32 @@ export default {
           context: "Hao Ye"
         }
       ],
-      fill: ref(true)
+      fill: ref(false)
     }
   },
   mounted() {
-    this.fetchData();
-    this.fetchCourse();
+    this.fetchUserInfo();
   },
   methods: {
-    fetchData() {
+    handleChange(val) {
+      console.log(val)
+    },
+    fetchUserInfo() {
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
       this.$axios.get('http://localhost:8082/api/user').then(res => {
         // 拿到结果
         let result = res.data.result;
         let message = res.data.msg;
         this.teacherForm = result;
-        this.teacherForm.photoUrl = getPhoto(this.teacherForm.photoUrl);
+        if (getPhoto(this.teacherForm.photoUrl) !== null)
+          this.teacherForm.photoUrl = getPhoto(this.teacherForm.photoUrl);
+
+        if (this.teacherForm.userType === 'Teacher')
+          this.courseTitle = "已创建的课程"
+        else
+          this.courseTitle = "已加入的课程"
         // 判断结果
-        if (result) {
+        if (res.data.code === 200) {
           /*登陆成功*/
           /*跳转页面*/
           console.log(this.teacherForm.userName)
@@ -95,8 +115,8 @@ export default {
     },
     fetchMessage() {
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
-      this.$axios.get('http://localhost:8082/api/notice/all?userName={' + this.teacherForm.userName + '}&courseName={' + this.courseForm.at(0).courseName + '}').then(res => {
-        let result = JSON.parse(res.data.data);
+      this.$axios.get(`http://localhost:8082/api/notice/user/all?userName=${this.teacherForm.userName}`).then(res => {
+        let result = res.data.result;
         let message = res.data.msg;
         this.messageTable = result
 
@@ -123,7 +143,7 @@ export default {
         let message = res.data.msg;
         this.courseForm = result
 
-        if (result) {
+        if (res.data.code === 200) {
           /*登陆成功*/
 
           /*跳转页面*/

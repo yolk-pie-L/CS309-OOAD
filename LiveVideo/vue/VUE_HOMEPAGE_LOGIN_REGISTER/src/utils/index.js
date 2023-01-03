@@ -4,5 +4,8 @@ export function fetchUserInfo() {
 }
 
 export function getPhoto(url) {
-    return `http://localhost:8082/api/picture/${url}`;
+    if (url.includes('http'))
+        return url;
+    else
+        return `http://localhost:8082/api/picture/${url}`;
 }

@@ -2,54 +2,56 @@
   <div class="file-upload">
     <h1>Add Section</h1>
     <el-row type="flex" class="row-bg card" justify="center" align="bottom">
-      <el-col :span="7" class="login-card">
+      <el-col :span="6" class="login-card">
         <!--loginForm-->
         <el-form :model="sectionForm" ref="loginForm" label-width="21%" class="loginForm">
+          <el-form-item label="课程序号" prop="sectionName" style="width: 380px">
+            <el-input v-model="sectionForm.courseId" disabled></el-input>
+          </el-form-item>
           <el-form-item label="章节名称" prop="sectionName" style="width: 380px">
             <el-input v-model="sectionForm.sectionName"></el-input>
           </el-form-item>
           <el-form-item label="章节分数" prop="sectionScore" style="width: 380px">
             <el-input v-model="sectionForm.sectionScore"></el-input>
           </el-form-item>
-          <el-form-item class="btn-ground">
-            <el-button type="primary" @click="submitForm">提交</el-button>
-          </el-form-item>
         </el-form>
       </el-col>
+      <el-col>
+        <div class="file-upload-el">
+          <el-upload
+              class="upload-demo"
+              drag
+              ref="upload"
+              :limit=1
+              :action="actionUrl"
+              :on-exceed="handleExceed"
+              :http-request="handUpLoad"
+              :auto-upload="false">
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+          </el-upload>
+          <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">提交并上传到服务器</el-button>
+        </div>
+        <div>
+          <!-- autoplay-->
+          <el-card class="v-box-card">
+            <video :src="videoUrl"
+                   controls
+                   autoplay
+                   class="video"
+                   width="100%">
+            </video>
+          </el-card>
+        </div>
+      </el-col>
     </el-row>
-    <div class="file-upload-el">
-      <el-upload
-          class="upload-demo"
-          drag
-          ref="upload"
-          :limit=1
-          :action="actionUrl"
-          :on-exceed="handleExceed"
-          :http-request="handUpLoad"
-          :auto-upload="false">
-        <i class="el-icon-upload"></i>
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-      </el-upload>
-      <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-    </div>
-    <div>
-      <!-- autoplay-->
-      <el-card class="v-box-card">
-        <video :src="videoUrl"
-               controls
-               autoplay
-               class="video"
-               width="100%">
-
-        </video>
-      </el-card>
-    </div>
   </div>
 </template>
 
 <script>
 import router from "@/router";
 import md5 from "js-md5"
+import {useRoute} from "vue-router";
 
 export default {
   name: "FileUpload",
@@ -67,22 +69,9 @@ export default {
     };
   },
   mounted() {
-    this.sectionForm.courseId = this
+    this.sectionForm.courseId = useRoute().query.courseId
   },
   methods: {
-    submitForm() {
-      // 表单验证成功
-      this.$axios.post('http://localhost:8082/api/section/', this.sectionForm).then(res => {
-        // 拿到结果
-        let message = res.data.msg;
-        // 判断结果
-        if (message) {
-        } else {
-          /*打印错误信息*/
-          console.log(message)
-        }
-      })
-    },
     handleExceed(files, fileList) {
       this.$message.warning(`当前限制选择 1个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
     },
@@ -146,13 +135,14 @@ export default {
             message: '文件上传完成。。。。。。',
             type: 'success'
           });
+          await router.push(`/courseDetailPage?courseId=${this.sectionForm.courseId}`)
         }
 
         if (shardIndex < shardTotal) {
           console.log('下一份片开始。。。。。。');
           // 上传下一个分片
           param.shardIndex = param.shardIndex + 1;
-          _this.recursionUpload(param, file);
+          await _this.recursionUpload(param, file);
         }
       } else {
         this.$notify({

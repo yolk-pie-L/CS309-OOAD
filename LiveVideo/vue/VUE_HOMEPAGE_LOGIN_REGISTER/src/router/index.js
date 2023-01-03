@@ -4,7 +4,7 @@ import register from "@/views/regist";
 import Home from '@/views/home'
 import teacherHomeView from "@/views/myspace/teacherHomeView";
 import infoUpdate from "@/views/myspace/infoUpdate";
-import courseUpdate from "@/views/courseUpdate";
+import courseUpdate from "@/views/myspace/courseUpdate";
 import courseMainPage from "@/views/courseMainPage";
 import courseDetailPage from "@/views/courseDetailPage";
 import studentHome from "@/views/myspace/StudentHome";
@@ -22,6 +22,7 @@ import payment from "@/views/payment";
 import personInfo from "@/views/myspace/personInfo";
 import myspace from "@/views/myspace";
 import addNotice from "@/views/addNotice";
+import avatarUpdate from "@/views/myspace/avatarUpdate";
 const routes = [
   {
     path:'/',
@@ -132,14 +133,19 @@ const routes = [
         path: '/person/modify-info',
         name: infoUpdate,
         component: infoUpdate
+      },
+      {
+        path: '/person/modify-avatar',
+        name: avatarUpdate,
+        component: avatarUpdate
+      },
+      {
+        path: '/person/create-notice',
+        name: addNotice,
+        component: addNotice
       }
     ],
   },
-  {
-    path: '/addNotice',
-    name: addNotice,
-    component: addNotice
-  }
 ]
 
 const router = createRouter({
