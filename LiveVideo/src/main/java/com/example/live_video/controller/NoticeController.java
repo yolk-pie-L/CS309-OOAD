@@ -1,5 +1,7 @@
 package com.example.live_video.controller;
 
+import com.example.live_video.dto.DeleteNoticeForm;
+import com.example.live_video.dto.NoticeForm;
 import com.example.live_video.entity.Notice;
 import com.example.live_video.exception.MyException;
 import com.example.live_video.service.NoticeService;
@@ -19,20 +21,24 @@ public class NoticeController {
     NoticeService noticeService;
 
     @GetMapping("/all")
-    public List<NoticeVo> getNoticesOfCourse(@RequestParam long courseId) {
+    public List<NoticeVo> getNoticesOfCourse(@RequestBody long courseId) {
         return NoticeVo.parseNoticeList(noticeService.getNoticeListOfCourse(courseId));
     }
 
     @PostMapping("/create")
-    public boolean createNotice(@RequestParam long courseId, @RequestParam String title, @RequestParam String context,
-                                @RequestParam boolean sendMail) throws MyException {
+    public boolean createNotice(@RequestBody NoticeForm noticeForm) throws MyException {
+        String title = noticeForm.getTitle();
+        long courseId = noticeForm.getCourseId();
+        String context = noticeForm.getContext();
+        boolean sendMail = noticeForm.isSendMail();
         Notice notice = new Notice(title, courseId, context);
         noticeService.createNotice(notice, sendMail);
         return true;
     }
 
     @PostMapping("/del")
-    public boolean deleteNotice(@RequestParam long noticeId){
+    public boolean deleteNotice(@RequestBody DeleteNoticeForm deleteNoticeForm){
+        long noticeId = deleteNoticeForm.getNoticeId();
         noticeService.deleteNotice(noticeId);
         return true;
     }

@@ -4,6 +4,7 @@ import com.example.live_video.entity.Course;
 import com.example.live_video.entity.User;
 import com.example.live_video.exception.EnrollCourseException;
 import com.example.live_video.vo.StudentGradeVo;
+import com.example.live_video.vo.StudentSectionProgressVo;
 
 import java.util.List;
 
@@ -28,6 +29,8 @@ public interface StudentService {
     public boolean resubmitAssignment(String studentName, Long assignId, List<String> assignUrls);
 
     public boolean setStudentSectionProgress(long studentId, long sectionId, double ratio);
+
+    public List<StudentSectionProgressVo> getStudentSectionsProgress(long studentId, long courseId);
 
     /**
      * 老师查看该课程所有学生的成绩

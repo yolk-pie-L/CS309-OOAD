@@ -4,6 +4,8 @@ drop table if exists assign_urls cascade;
 
 drop table if exists comment cascade;
 
+drop table if exists live_stream cascade;
+
 drop table if exists course_invitation cascade;
 
 drop table if exists danmu cascade;
@@ -33,6 +35,8 @@ drop table if exists user cascade;
 DROP TABLE IF EXISTS `file_tb`;
 
 DROP TABLE IF EXISTS stu_assign_urls cascade;
+
+DROP TABLE IF EXISTS user_order cascade;
 
 CREATE TABLE user
 (
@@ -126,6 +130,15 @@ CREATE TABLE danmu
     FOREIGN KEY (section_id) REFERENCES section (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE live_stream
+(
+    id      int auto_increment primary key,
+    title   text        not null,
+    user_id int         not null,
+    url     varchar(50) not null,
+    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 CREATE TABLE comment
 (
     id          int auto_increment primary key,
@@ -143,24 +156,6 @@ CREATE TABLE course_invitation
 (
     course_id       int      not null,
     invitation_code char(20) not null unique,
-    FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE user_login_log
-(
-    user_id      int         not null,
-    login_time   datetime    not null,
-    session_id   varchar(25) not null,
-    login_status char default 'y',
-    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE user_payment_log
-(
-    user_id   int      not null,
-    pay_time  datetime not null,
-    course_id int      not null,
-    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -193,11 +188,20 @@ CREATE TABLE stu_course
 
 CREATE TABLE stu_section
 (
-    user_id    int not null,
-    section_id int not null,
-    grade      int not null default 0,
+    user_id       int not null,
+    section_id    int not null,
+    grade         int not null default 0,
+    duration      double       default 0,
+    current_watch double       default 0,
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (section_id) REFERENCES section (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE user_order
+(
+    out_trade_no varchar(50) PRIMARY KEY,
+    username     varchar(20),
+    status       enum ('APPROVED', 'FAILED', 'CREATED')
 );
 
 DROP TRIGGER if exists tri_insert_section;
@@ -209,7 +213,7 @@ CREATE TRIGGER tri_insert_section
     ON section
     FOR EACH ROW
 BEGIN
-    INSERT INTO stu_section SELECT user_id, NEW.id, 0 FROM stu_course WHERE NEW.course_id = stu_course.course_id;
+    INSERT INTO stu_section SELECT user_id, NEW.id, 0, 0, 0 FROM stu_course WHERE NEW.course_id = stu_course.course_id;
 END$
 DELIMITER ;
 
@@ -221,7 +225,7 @@ CREATE TRIGGER tri_enroll_course
     FOR EACH ROW
 BEGIN
     INSERT INTO stu_section
-    SELECT NEW.user_id, section.id, 0
+    SELECT NEW.user_id, section.id, 0, 0, 0
     FROM stu_course
              JOIN section ON section.course_id = stu_course.course_id
     WHERE section.course_id = NEW.course_id

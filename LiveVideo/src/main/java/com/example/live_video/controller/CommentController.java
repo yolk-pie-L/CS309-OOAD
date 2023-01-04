@@ -36,7 +36,7 @@ public class CommentController {
     UserService userService;
 
     @PostMapping("")
-    public Boolean comment(@RequestBody CommentForm commentForm) {
+    public long comment(@RequestBody CommentForm commentForm) {
         String userName = commentForm.getUserName();
         long replyCommentId = commentForm.getReplyCommentId();
         Long userId = userService.getUserId(userName);
@@ -44,7 +44,7 @@ public class CommentController {
         long sectionId = commentForm.getSectionId();
         Comment comment = new Comment(replyCommentId, context, userId, sectionId, 0);
         commentService.saveComment(comment);
-        return true;
+        return comment.getId();
     }
 
     @GetMapping("/all/{sectionId}")
@@ -60,7 +60,7 @@ public class CommentController {
     @PostMapping("/del")
     public boolean deleteComment(@RequestBody DeleteCommentForm deleteCommentForm) throws MyException {
         long commentId = deleteCommentForm.getCommentId();
-        long userId = deleteCommentForm.getUserId();
+        long userId = userService.getUserId(deleteCommentForm.getUserName());
         return commentService.deleteComment(commentId, userId);
     }
 
