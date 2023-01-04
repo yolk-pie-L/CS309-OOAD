@@ -80,4 +80,17 @@ public class AssignmentVo {
         assignmentList.forEach(assign -> assignmentVoList.add(AssignmentVo.parseInfo(assign)));
         return assignmentVoList;
     }
+
+    public static Assignment voToAssign(AssignmentVo assignmentVo) {
+        return new Assignment(
+                assignmentVo.getAssignmentName(),
+                assignmentVo.getCourseName(),
+                assignmentVo.getTeacherName(),
+                assignmentVo.getDeadline(),
+                assignmentVo.getTotalGrade(),
+                assignmentVo.getIsAssignment(),
+                assignmentVo.getDescription(),
+                assignmentVo.getAssignUrls()
+        );
+    }
 }

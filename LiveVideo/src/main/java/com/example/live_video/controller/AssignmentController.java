@@ -1,10 +1,9 @@
 package com.example.live_video.controller;
 
 import com.example.live_video.entity.Assignment;
+import com.example.live_video.exception.SQLAssignNameConflictException;
 import com.example.live_video.service.AssignmentService;
-import com.example.live_video.service.CourseService;
 import com.example.live_video.service.StudentService;
-import com.example.live_video.service.UserService;
 import com.example.live_video.vo.AssignmentVo;
 import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
@@ -28,10 +27,6 @@ public class AssignmentController {
     private AssignmentService assignmentService;
     @Autowired
     private StudentService studentService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private CourseService courseService;
 
     @GetMapping("/all")
     public List<AssignmentVo> queryAssignmentByCourse(@RequestParam("userName") String userName,
@@ -52,6 +47,7 @@ public class AssignmentController {
                                             @RequestParam("assignmentId") Long assignId) {
         Assignment a = assignmentService.getOneAssignment(assignId);
         AssignmentVo b = AssignmentVo.parse(a);
+        // set some elements
         b.setStatus(getStatus(a, assignId, userName));
         b.setScore(studentService.getStudentAssignGrade(userName, assignId));
         b.setAttached(assignmentService.getAssignmentUrlList(assignId));
@@ -75,7 +71,8 @@ public class AssignmentController {
         fileName = strs[strs.length - 2] + strs[strs.length - 1];
         String url = filePath + fileName;
         File dest = new File(url);
-        if (!dest.getParentFile().exists()) dest.getParentFile().mkdirs();
+        if (!dest.getParentFile().exists())
+            System.out.println("CREATE A NEW DIRECTORY: " + dest.getParentFile().mkdirs());
         f.transferTo(dest);
         System.out.println("SAVE TO: " + url);
         return url;
@@ -83,10 +80,15 @@ public class AssignmentController {
 
     @PostMapping("/create")
     public boolean createAssignment(@RequestParam AssignmentVo assignmentVo) {
-        Assignment a = new Assignment();
-        return false;
+        Assignment a = AssignmentVo.voToAssign(assignmentVo);
+        try {
+            return assignmentService.createAssignment(a);
+        } catch (SQLAssignNameConflictException e) {
+            throw new RuntimeException(e);
+        }
     }
 
+    // util methods:
     private String getStatus(Assignment a, Long assignId, String userName) {
         // Not Started / Not Submitted / Late / Submitted / Return
         Timestamp startTime = a.getStartTime();
