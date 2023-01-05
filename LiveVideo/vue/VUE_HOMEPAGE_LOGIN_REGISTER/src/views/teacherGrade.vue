@@ -8,7 +8,7 @@
     </el-col>
   </el-row>
   <div class="tableD">
-    <el-table :data="gradeForm" height="300" class="tableH" >
+    <el-table :data="gradeForm" height="300" class="tableH" @row-click="selectItem">
       <el-table-column prop="studentName" label="studentName" width="300"></el-table-column>
       <el-table-column label="studentSectionGradeList" width="250">
         <el-table-column v-for="(title, index) in gradeForm[0].studentSectionGradeList"
@@ -27,6 +27,9 @@
               .totalGrade}}</span>
           </template>
         </el-table-column>
+      </el-table-column>
+      <el-table-column>
+        <el-button @click="handleDelete(scope.$index)">删除学生</el-button>
       </el-table-column>
     </el-table>
   </div>
@@ -113,7 +116,26 @@ export default {
           localStorage.removeItem('token')
         }
       })
-    }
+    },
+    selectItem(row, column, event) {
+      this.selectedFundRow = row
+      if (event.target.innerText === "删除学生") {
+        this.removeFundBtn(this.selectedFundRow)
+      }
+    },
+    removeFundBtn(params) {
+      this.gradeForm = this.gradeForm.filter((ele) => {
+        var flag = false
+        // 如果不一致，则保留该行
+        for (const key in params) {
+          if (ele[key] !== params[key]) {
+            flag = true
+            break
+          }
+        }
+        return flag
+      })
+    },
   }
 }
 </script>
