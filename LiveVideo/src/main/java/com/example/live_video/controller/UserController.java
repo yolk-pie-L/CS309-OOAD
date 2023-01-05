@@ -48,7 +48,6 @@ public class UserController {
             throw new MyException(list.get(0).getDefaultMessage());
         }
         User user = userForm.convertToUser();
-        user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
         user.setPhotoUrl("default.png");
         return userService.register(user);
     }
@@ -60,7 +59,7 @@ public class UserController {
         if (!CaptchaController.ver(userForm.getCode())) {
             throw new MyException("验证码不正确");
         }
-        if (userService.compareUserPassword(userForm.getUserName(), DigestUtils.md5DigestAsHex(userForm.getPassword().getBytes()))) {
+        if (userService.compareUserPassword(userForm.getUserName(), userForm.getPassword())) {
             jsonObject.put("token", TokenUtils.sign(userForm.getUserName()));
             return jsonObject;
         }else

@@ -6,6 +6,7 @@ import com.example.live_video.exception.MyException;
 import com.example.live_video.mapper.*;
 import com.example.live_video.service.SectionService;
 import com.example.live_video.service.StudentService;
+import com.example.live_video.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.mockito.internal.matchers.Not;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,9 @@ class LiveVideoApplicationTests {
 
     @Autowired
     StudentService studentService;
+
+    @Autowired
+    UserService userService;
 
     @Test
     void contextLoads() throws MyException {
@@ -119,7 +123,7 @@ class LiveVideoApplicationTests {
         sectionMapper.insert(section14);
         sectionMapper.insert(section15);
         sectionMapper.insert(linkedlayer);
-        Notice n1 = new Notice( "project1 released",ComputerNetwork.getId(), "project1 released, ddl is tomorrow");
+        Notice n1 = new Notice("project1 released", ComputerNetwork.getId(), "project1 released, ddl is tomorrow");
         Notice n2 = new Notice("project2 released", ComputerNetwork.getId(), "project2 released, ddl is today");
         Notice n3 = new Notice("OJ account", DataStructure.getId(), "check your oj account");
         Notice n4 = new Notice("Bonus", DataStructure.getId(), "everybody add 3 point");
@@ -156,7 +160,7 @@ class LiveVideoApplicationTests {
     }
 
     @Test
-    void testSectionCache(){
+    void testSectionCache() {
         Long sectionId = 1L;
         System.out.println();
         System.out.println();

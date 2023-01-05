@@ -91,7 +91,7 @@ CREATE TABLE assignment
 
 CREATE TABLE assign_urls
 (
-    assign_id  int         not null,
+    assign_id  int          not null,
     assign_url varchar(100) not null,
     FOREIGN KEY (assign_id) REFERENCES assignment (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -133,9 +133,9 @@ CREATE TABLE danmu
 CREATE TABLE live_stream
 (
     id          int auto_increment primary key,
-    title       text        not null,
-    description text        not null,
-    user_id     int         not null,
+    title       text         not null,
+    description text         not null,
+    user_id     int          not null,
     url         varchar(100) not null,
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
 );

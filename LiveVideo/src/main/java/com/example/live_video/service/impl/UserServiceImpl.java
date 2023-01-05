@@ -13,6 +13,7 @@ import com.example.live_video.mapper.UserMapper;
 import com.example.live_video.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 import java.util.List;
 
@@ -24,22 +25,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public Boolean register(User user) throws MyException {
+        user.setPassword(DigestUtils.md5DigestAsHex((user.getPassword() + user.getUserName()).getBytes()));
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("username", user.getUserName());
         boolean existsFlag = userMapper.exists(userQueryWrapper);
         // 如果存在该用户名，则抛出异常
-        if(existsFlag){
+        if (existsFlag) {
             throw new SQLUsernameConflictException();
         }
         userQueryWrapper.clear();
         userQueryWrapper.eq("mail", user.getMail());
         existsFlag = userMapper.exists(userQueryWrapper);
-        if(existsFlag){
+        if (existsFlag) {
             throw new SQLMailConflictException();
         }
         // 如果不存在该用户，则顺利执行插入
         System.out.println(user);
-        if(user.getUserType().equals(UserType.Administrator)){
+        if (user.getUserType().equals(UserType.Administrator)) {
             user.setAdminRight(AdminRight.SuperAdmin);
         }
         int res = userMapper.insert(user);
@@ -54,10 +56,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userQueryWrapper.select("password");
         User resUser = userMapper.selectOne(userQueryWrapper);
         // 如果不存在该用户，则抛出异常
-        if(resUser == null){
+        if (resUser == null) {
             throw new SQLUserNotFoundException();
         }
-        return resUser.getPassword().equals(password);
+        return resUser.getPassword().equals(DigestUtils.md5DigestAsHex((password + userName).getBytes()));
     }
 
     @Override
@@ -66,14 +68,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userQueryWrapper.eq("username", userName);
         User resUser = userMapper.selectOne(userQueryWrapper);
         // 如果不存在该用户，则抛出异常
-        if(resUser == null){
+        if (resUser == null) {
             throw new SQLUserNotFoundException();
         }
         return userMapper.deleteById(resUser) == 1;
     }
 
     @Override
-    public Long getUserId(String userName){
+    public Long getUserId(String userName) {
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("username", userName);
         userQueryWrapper.select("id");

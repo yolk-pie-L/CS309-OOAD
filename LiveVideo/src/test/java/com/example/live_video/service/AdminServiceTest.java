@@ -5,6 +5,7 @@ import com.example.live_video.entity.User;
 import com.example.live_video.entity.UserType;
 import com.example.live_video.exception.PermissionDeniedException;
 import com.example.live_video.mapper.UserMapper;
+import org.bouncycastle.crypto.digests.MD5Digest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -34,28 +36,31 @@ class AdminServiceTest {
 
     Long count;
 
+    public static void main(String[] args) {
+
+    }
+
     @Test
     void tt(){
-        String defaultUrlPath = System.getProperty("user.dir") + File.separator + "src/main/resources/static/picture/default.png";
-        System.out.println(defaultUrlPath);
+        System.out.println(DigestUtils.md5DigestAsHex(("??????" + "LIKAI").getBytes()));
     }
 
-    @BeforeEach
-    void setUp() {
-        count = userMapper.selectCount(null);
-        User user2 = new User("user2", UserType.Teacher, "user2@mail.com1", "123456");
-        User user3 = new User("2user3", UserType.Student, "user3@mail.com1", "123456");
-        User user4 = new User("2user4", UserType.Student, "user4@mail.com1", "123456");
-        userList.add(user2);
-        userList.add(user3);
-        userList.add(user4);
-        userList.forEach(u -> userMapper.insert(u));
-    }
-
-    @AfterEach
-    void tearDown() {
-        userList.forEach(u -> userMapper.deleteById(u));
-    }
+//    @BeforeEach
+//    void setUp() {
+//        count = userMapper.selectCount(null);
+//        User user2 = new User("user2", UserType.Teacher, "user2@mail.com1", "123456");
+//        User user3 = new User("2user3", UserType.Student, "user3@mail.com1", "123456");
+//        User user4 = new User("2user4", UserType.Student, "user4@mail.com1", "123456");
+//        userList.add(user2);
+//        userList.add(user3);
+//        userList.add(user4);
+//        userList.forEach(u -> userMapper.insert(u));
+//    }
+//
+//    @AfterEach
+//    void tearDown() {
+//        userList.forEach(u -> userMapper.deleteById(u));
+//    }
 
 
     @Test
