@@ -92,7 +92,7 @@ CREATE TABLE assignment
 CREATE TABLE assign_urls
 (
     assign_id  int         not null,
-    assign_url varchar(50) not null,
+    assign_url varchar(100) not null,
     FOREIGN KEY (assign_id) REFERENCES assignment (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -173,7 +173,7 @@ CREATE TABLE stu_assign_urls
 (
     user_id    int not null,
     assign_id  int not null,
-    assign_url varchar(50),
+    assign_url varchar(100),
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (assign_id) REFERENCES assignment (id) ON DELETE CASCADE ON UPDATE CASCADE
 );

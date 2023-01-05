@@ -3,12 +3,15 @@ package com.example.live_video.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.example.live_video.entity.Assignment;
 import com.example.live_video.exception.SQLAssignNameConflictException;
+import com.example.live_video.mapper.AssignmentMapper;
 import com.example.live_video.service.AssignmentService;
 import com.example.live_video.service.StudentService;
+import com.example.live_video.util.TokenUtils;
 import com.example.live_video.vo.AssignmentVo;
 import com.example.live_video.vo.QuizProblemVo;
-import com.example.live_video.wrapper.PassToken;
+import com.example.live_video.vo.StringVo;
 import com.example.live_video.wrapper.ResponseResult;
+import com.example.live_video.wrapper.UserLoginToken;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,19 +28,26 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.example.live_video.constance.FileConstance.FILE_PATH;
+import static com.example.live_video.controller.PictureController.getFileNameNew;
+
 @ResponseResult
 @RestController
-@PassToken
+//@PassToken
+@UserLoginToken
 @RequestMapping("/api/assignment")
 public class AssignmentController {
     @Autowired
     private AssignmentService assignmentService;
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private AssignmentMapper assignmentMapper;
 
     @GetMapping("/all")
-    public List<AssignmentVo> queryAssignmentByCourse(@RequestParam("userName") String userName,
-                                                      @RequestParam("courseId") long courseId) {
+    public List<AssignmentVo> queryAssignmentByCourse(@RequestHeader("token") String token,
+                                                      @RequestParam("courseId") long courseId) throws Exception {
+        String userName = token2userName(token);
         return queryAssignmentAndQuizByCourse(userName, courseId, assignmentService, studentService, true);
     }
 
@@ -48,7 +58,7 @@ public class AssignmentController {
         List<Assignment> assignmentList = assignmentService.getAssignmentsOfCourse(courseId);
         List<AssignmentVo> assignmentVoList = new ArrayList<>();
         for (Assignment a : assignmentList) {
-            if (a.getIsAssignment() == isAssignment) continue;
+            if (a.getIsAssignment() != isAssignment) continue;
             AssignmentVo b = AssignmentVo.parseInfo(a);
             long assignId = assignmentService.getAssignmentId(courseId, a.getAssignmentName());
             b.setStatus(getStatus(a, assignId, userName, studentService));
@@ -58,8 +68,9 @@ public class AssignmentController {
     }
 
     @GetMapping("/one")
-    public AssignmentVo queryAssignmentById(@RequestParam("userId") String userName,
-                                            @RequestParam("assignmentId") long assignId) {
+    public AssignmentVo queryAssignmentById(@RequestHeader("token") String token,
+                                            @RequestParam("assignmentId") long assignId) throws Exception {
+        String userName = token2userName(token);
         return queryAssignmentAndQuizById(userName, assignId, assignmentService, studentService, true);
     }
 
@@ -69,6 +80,7 @@ public class AssignmentController {
                                                              boolean isAssignment) {
         Assignment a = assignmentService.getOneAssignment(assignId);
         AssignmentVo b = AssignmentVo.parse(a);
+        System.err.println("a:\n" + a);
         // set some elements
         b.setStatus(getStatus(a, assignId, userName, studentService));
         b.setScore(studentService.getStudentAssignGrade(userName, assignId));
@@ -86,30 +98,34 @@ public class AssignmentController {
             throw new RuntimeException(e);
         }
         // return to front end
+        System.err.println("b:\n" + b);
         return b;
     }
 
-    @PostMapping("/submit")
-    public boolean submitAssignment(@RequestParam("userId") String userName,
-                                    @RequestParam("assignmentId") long assignId,
-                                    @RequestParam("answerFile") List<String> answerFile) {
-        return studentService.submitAssignment(userName, assignId, answerFile);
-    }
-
     @PostMapping("/upload")
-    public String uploadFile(@RequestParam MultipartFile f) throws IOException {
-        String filePath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files\\assignFiles\\";
+    public StringVo uploadFile(@RequestParam MultipartFile f,
+                               @RequestParam("assignmentId") long assignId) throws IOException {
+        String filePath = FILE_PATH + "\\assignFiles\\";
         String fileName = f.getOriginalFilename();
         assert fileName != null;
         String[] strs = fileName.split("\\.");
-        fileName = strs[strs.length - 2] + strs[strs.length - 1];
+        fileName = "assignFile_" + getFileNameNew() + "." + strs[strs.length - 1];
         String url = filePath + fileName;
         File dest = new File(url);
         if (!dest.getParentFile().exists())
             System.out.println("CREATE A NEW DIRECTORY: " + dest.getParentFile().mkdirs());
         f.transferTo(dest);
         System.out.println("SAVE TO: " + url);
-        return url;
+//        assignmentMapper.insertAssignUrlList(assignId, url);
+        return new StringVo(url);
+    }
+
+    @PostMapping("/submit")
+    public boolean submitAssignment(@RequestHeader("token") String token,
+                                    @RequestParam("assignmentId") long assignId,
+                                    @RequestParam("answerFile") List<String> answerFile) throws Exception {
+        String userName = token2userName(token);
+        return studentService.submitAssignment(userName, assignId, answerFile);
     }
 
     @PostMapping("/create")
@@ -123,6 +139,10 @@ public class AssignmentController {
     }
 
     // util methods:
+    protected static String token2userName(String token) throws Exception {
+        return TokenUtils.getUserName(token);
+    }
+
     @NotNull
     protected static String getStatus(Assignment a, long assignId, String userName, StudentService studentService) {
         Timestamp startTime = a.getStartTime();

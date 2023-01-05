@@ -19,8 +19,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static com.example.live_video.controller.AssignmentController.queryAssignmentAndQuizByCourse;
-import static com.example.live_video.controller.AssignmentController.queryAssignmentAndQuizById;
+import static com.example.live_video.constance.FileConstance.FILE_PATH;
+import static com.example.live_video.controller.AssignmentController.*;
 import static com.example.live_video.controller.PictureController.getFileNameNew;
 
 @ResponseResult
@@ -37,7 +37,7 @@ public class QuizController {
     public String createQuizJson(@RequestParam("problems") List<QuizProblemVo> problems) {
         try {
             String jsonStr = JSONObject.toJSONString(problems);  // Object List to String(json form)
-            String filePath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files\\quizFiles\\";
+            String filePath = FILE_PATH + "\\quizFiles\\";
             String fileName = "quizJson_" + getFileNameNew() + ".json";
             String quizUrl = filePath + fileName;
             Files.write(Paths.get(quizUrl), jsonStr.getBytes(StandardCharsets.UTF_8));
@@ -61,24 +61,27 @@ public class QuizController {
     }
 
     @GetMapping("/all")
-    public List<AssignmentVo> queryQuizByCourse(@RequestParam("userName") String userName,
-                                                @RequestParam("courseId") long courseId) {
+    public List<AssignmentVo> queryQuizByCourse(@RequestHeader("token") String token,
+                                                @RequestParam("courseId") long courseId) throws Exception {
+        String userName = token2userName(token);
         return queryAssignmentAndQuizByCourse(userName, courseId, assignmentService, studentService, false);
     }
 
     @GetMapping("/one")
-    public AssignmentVo queryQuizById(@RequestParam("userId") String userName,
-                                      @RequestParam("assignmentId") long quizId) {
+    public AssignmentVo queryQuizById(@RequestHeader("token") String token,
+                                      @RequestParam("assignmentId") long quizId) throws Exception {
+        String userName = token2userName(token);
         return queryAssignmentAndQuizById(userName, quizId, assignmentService, studentService, false);
     }
 
     @PostMapping("/submit")
-    public Integer submitQuiz(@RequestParam("userId") String userName,
+    public Integer submitQuiz(@RequestHeader("token") String token,
                               @RequestParam("assignmentId") long quizId,
-                              @RequestParam("answer") List<String> choice) {
+                              @RequestParam("answer") List<String> choice) throws Exception {
         try {
+            String userName = token2userName(token);
             String jsonStr = JSONObject.toJSONString(choice);  // Object List to String(json form)
-            String filePath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files\\quizAnswerFiles\\";
+            String filePath = FILE_PATH + "\\quizAnswerFiles\\";
             String fileName = "quizAnswerJson_" + getFileNameNew() + ".json";
             String quizUrl = filePath + fileName;
             Files.write(Paths.get(quizUrl), jsonStr.getBytes(StandardCharsets.UTF_8));
@@ -90,9 +93,10 @@ public class QuizController {
         }
     }
 
-    protected Integer getScore(@RequestParam("userId") String userName,
-                               @RequestParam("assignmentId") long quizId) {
+    protected Integer getScore(@RequestHeader("token") String token,
+                               @RequestParam("assignmentId") long quizId) throws Exception {
         try {
+            String userName = token2userName(token);
             String quizAnswerUrl = studentService.getStudentAssignmentUrlList(userName, quizId).get(0);
             Path path = Paths.get(quizAnswerUrl);
             List<String> allLines = Files.readAllLines(path, StandardCharsets.UTF_8);
@@ -117,14 +121,7 @@ public class QuizController {
             throw new RuntimeException(e);
         }
     }
+
+
 }
-
-
-
-
-
-
-
-
-
 

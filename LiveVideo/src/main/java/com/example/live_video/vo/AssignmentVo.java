@@ -4,6 +4,8 @@ import com.example.live_video.entity.Assignment;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,13 +16,13 @@ public class AssignmentVo {
     private Long courseId;
     private String courseName;
     private String teacherName;
-    private Timestamp deadline;
+    private String deadline;
     private Integer totalGrade;
     private List<String> assignUrls;
     private Boolean isAssignment = true;
     private String description;
-    private Timestamp createTime;
-    private Timestamp updateTime;
+    private String createTime;
+    private String updateTime;
     private String status;
     private Integer score;
     private List<String> attached;
@@ -36,13 +38,13 @@ public class AssignmentVo {
         this.courseId = courseId;
         this.courseName = courseName;
         this.teacherName = teacherName;
-        this.deadline = deadline;
+        this.deadline = timestamp2String(deadline);
         this.totalGrade = totalGrade;
         this.assignUrls = assignUrls;
         this.isAssignment = isAssignment;
         this.description = description;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
+        this.createTime = timestamp2String(createTime);
+        this.updateTime = timestamp2String(updateTime);
     }
 
     public static AssignmentVo parse(Assignment assignment) {
@@ -64,7 +66,7 @@ public class AssignmentVo {
     public AssignmentVo(Long id, String assignmentName, Timestamp deadline, String status) {
         this.id = id;
         this.assignmentName = assignmentName;
-        this.deadline = deadline;
+        this.deadline = timestamp2String(deadline);
         this.status = status;
     }
 
@@ -88,7 +90,7 @@ public class AssignmentVo {
                 assignmentVo.getAssignmentName(),
                 assignmentVo.getCourseName(),
                 assignmentVo.getTeacherName(),
-                assignmentVo.getDeadline(),
+                string2Timestamp(assignmentVo.getDeadline()),
                 assignmentVo.getTotalGrade(),
                 assignmentVo.getIsAssignment(),
                 assignmentVo.getDescription(),
@@ -100,10 +102,24 @@ public class AssignmentVo {
                         String description, List<String> attached, int limitedTime) {
         this.assignmentName = assignmentName;
         this.courseId = courseId;
-        this.deadline = deadline;
+        this.deadline = timestamp2String(deadline);
         this.totalGrade = totalGrade;
         this.description = description;
         this.attached = attached;
         this.limitedTime = limitedTime;
+    }
+
+    protected static String timestamp2String(Timestamp timeStamp) {
+        return String.valueOf(timeStamp);
+    }
+
+    protected static Timestamp string2Timestamp(String str) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            return new Timestamp(sdf.parse(str).getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
