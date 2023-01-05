@@ -72,11 +72,23 @@ export default {
   },
   methods: {
     fetchAssignment() {
-      this.classForm.privateKeyUrl=localStorage.getItem("course")
+      this.classForm.id=localStorage.getItem("course")
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
+      this.$axios.get(`api/course/{` + this.classForm.id + `}`).then(res => {
+        // 拿到结果
+        let result = res.data.result;
+        let message = res.data.msg;
+        this.classForm=result
+        // 判断结果
+        if (result) {
+        } else {
+          /*打印错误信息*/
+          alert(message);
+        }
+      })
       this.$axios.get('http://localhost:8082/api/assignment/all', {
             params: {
-              courseId: this.classForm.privateKeyUrl,
+              courseId: this.classForm.id,
             }}).then(res => {
         // 拿到结果
         let result = res.data.result;

@@ -206,6 +206,7 @@ export default {
   methods: {
     fetchClass() {
       this.classForm.id=localStorage.getItem("course")
+      this.quizForm.courseId=localStorage.getItem("course")
       this.$axios.get(`api/course/{` + this.classForm.id + `}`).then(res => {
         // 拿到结果
         let result = res.data.result;

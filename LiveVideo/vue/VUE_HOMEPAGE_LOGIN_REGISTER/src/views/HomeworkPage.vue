@@ -144,7 +144,6 @@ export default {
     fetchClass() {
       this.courseId = localStorage.getItem("course");
       this.homeworkForm.assignmentId = localStorage.getItem("Assignment");
-      // localStorage.removeItem("assignment");
       localStorage.removeItem("course")
     },
     fetchAssignment() {

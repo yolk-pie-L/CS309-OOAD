@@ -86,7 +86,7 @@
         </div>
       </ul>
     </div>
-    <el-button class="abutton" type="primary" round @click="Submit">Submit</el-button>
+    <el-button class="abutton" type="primary" round @click="Submit()">Submit</el-button>
   </div>
 </template>
 
@@ -166,10 +166,32 @@ export default {
         return val === "yes";
     }
   },
+  mounted() {
+    fetch()
+  },
   methods:{
+    fetch(){
+      this.quizForm.quizId=localStorage.getItem("quiz")
+      this.$axios.get('http://localhost:8082/api/course/quiz', {
+        params: {
+          QuizId: localStorage.getItem("quiz"),
+        }
+      }).then(res => {
+        // 拿到结果
+        let result = res.data.result;
+        let message = res.data.msg;
+        this.quizForm = result;
+        // 判断结果
+        if (result) {
+        } else {
+          /*打印错误信息*/
+          alert(message);
+        }
+      })
+    },
     Submit(){
       this.submitForm.quizId=this.quizForm.quizId
-      this.submitForm.answer=this.quizForm.problems
+      this.submitForm.answer=this.quizForm.problems.map(item => item.answer)
       this.$axios.post('http://localhost:8082/api/course/submitQuiz', this.submitForm).then(res => {
             let result = res.data.result;
             let message = res.data.msg;
@@ -183,47 +205,6 @@ export default {
       }
       )
     },
-    // 开始计时
-    startHandler(){
-      this.flag = setInterval(()=>{
-        if(this.three === 60 || this.three === '60'){
-          this.three = '00';
-          this.abc = 0;
-          if(this.two === 60 || this.two === '60'){
-            this.two = '00';
-            this.cde = 0;
-            if(this.efg+1 <= 9){
-              this.efg++;
-              this.one = '0' + this.efg;
-            }else{
-              this.efg++;
-              this.one = this.efg;
-            }
-          }else{
-            if(this.cde+1 <= 9){
-              this.cde++;
-              this.two = '0' + this.cde;
-            }else{
-              this.cde++;
-              this.two = this.cde;
-            }
-          }
-        }else{
-          if(this.abc+1 <= 9){
-            this.abc++;
-            this.three = '0' + this.abc;
-          }else{
-            this.abc++;
-            this.three=this.abc;
-          }
-        }
-
-      },100)
-    },
-    // 暂停计时
-    endHandler(){
-      this.flag = clearInterval(this.flag)
-    }
   }
 
 }
