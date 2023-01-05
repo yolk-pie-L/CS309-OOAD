@@ -11,6 +11,7 @@ import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
 import com.example.live_video.wrapper.UserLoginToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -47,7 +48,7 @@ public class ProfileController {
         user.setMail(userForm.getMail());
         user.setPhotoUrl(userForm.getPhotoUrl());
         if (StringUtils.hasText(userForm.getRepeatPassword()))
-            user.setPassword(userForm.getRepeatPassword());
+            user.setPassword(DigestUtils.md5DigestAsHex(userForm.getRepeatPassword().getBytes()));
         return userService.updateUser(user);
     }
 
