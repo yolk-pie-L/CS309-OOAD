@@ -53,7 +53,8 @@
             :body-style="{ padding: '0px', marginBottom: '1px' }"
             :href="item"
             v-text="item"
-            class="addi">
+            class="addi"
+            @click="openPdf(item)">
         </el-link>
       </div>
     </div>
@@ -114,6 +115,7 @@ export default {
         "https://element.eleme.io"
       ],
       answers: {
+        assignmentId: "aaa",
         answerFile: [
           // string的list
         ]
@@ -206,6 +208,9 @@ export default {
     // 重置表单
     resetForm(formName) {
       this.$refs[formName].resetFields();
+    },
+    openPdf(item){
+      window.open(item)
     }
   },
 }
