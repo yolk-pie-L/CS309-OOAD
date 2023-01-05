@@ -328,7 +328,7 @@
             "B": "sss",
             "C": "ddd",
             "D": "ddd",
-            "answer": "(A/B/C/D)/(yes/no)"
+            "answer": "(A/B/C/D) / (yes/no)"
           }
         ]
       },

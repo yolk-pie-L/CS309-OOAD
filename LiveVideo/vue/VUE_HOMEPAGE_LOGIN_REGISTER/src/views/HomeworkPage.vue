@@ -114,16 +114,8 @@ export default {
         resourceUrl: "https://element.eleme.io"
       }],
       answers: {
-        assignmentId: "aaa",
         answerFile: [
-          {
-            answerName: "a",
-            answerUrl: "b"
-          },
-          {
-            answerName: "c",
-            answerUrl: "d"
-          }
+          // string的list
         ]
       },
       sectionForm: {
@@ -169,20 +161,18 @@ export default {
       })
     },
     handleChange(file, fileList) {
-      let formdata = new FormData()
+      let formData = new FormData()
       fileList.map(item => { //fileList本来就是数组，就不用转为真数组了
-        formdata.append("f", item.raw)  //将每一个文件图片都加进formdata
+        formData.append("f", item.raw)  //将每一个文件图片都加进formdata
       })
-      formdata.append("assignmentId", localStorage.getItem("Assignment"))
+      formData.append("assignmentId", localStorage.getItem("Assignment"))
       console.log(file.size)
-      this.$axios.post("http://localhost:8082/api/assignment/upload", formdata).then(res => {
+      this.$axios.post("http://localhost:8082/api/assignment/upload", formData).then(res => {
         let result = res.data.result;
         let message = res.data.msg;
         if (result) {
-          let ans = {}
-          ans.answerUrl = result.answerUrl;
-          this.answer.answerFile.push(ans);
-        } else{
+          this.answers.answerFile.push(result.string);
+        } else {
           alert(message);
         }
       })
@@ -191,7 +181,11 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // 表单验证成功
-          this.$axios.post('http://localhost:8082/api/assignment/submit', this.answer).then(res => {
+          let formData = new FormData();
+          formData.append("answerFile", this.answers.answerFile);
+          formData.append("assignmentId", localStorage.getItem("Assignment"));
+          this.$axios.post('http://localhost:8082/api/assignment/submit', formData
+          ).then(res => {
             // 拿到结果
             let result = res.data.data;
             let message = res.data.msg;
@@ -201,7 +195,7 @@ export default {
               localStorage.setItem("course", this.homeworkForm.courseName)
               router.push('/homeworkHome')
             } else {
-
+              alert(message);
             }
           })
         } else {

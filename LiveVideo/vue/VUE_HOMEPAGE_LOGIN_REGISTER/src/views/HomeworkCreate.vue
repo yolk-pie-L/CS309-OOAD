@@ -96,7 +96,7 @@ export default {
     };
   },
   mounted() {
-    this.fetchAssignment()
+    this.fetchClass()
   },
   methods: {
     fetchClass() {
