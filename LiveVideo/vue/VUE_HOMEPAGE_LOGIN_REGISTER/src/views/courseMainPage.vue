@@ -66,8 +66,8 @@ export default {
       ).then(res => {
         // 拿到结果
         let result = res.data.result
-        this.courseForm.courseName = result.courseName
-        this.courseForm.teacherName = result.teacherName
+        this.courseForm.courseName = "课程名：" + result.courseName
+        this.courseForm.teacherName = "老师：" + result.teacherName
         // let message = res.data.msg;
         // 判断结果
         if (result) {
