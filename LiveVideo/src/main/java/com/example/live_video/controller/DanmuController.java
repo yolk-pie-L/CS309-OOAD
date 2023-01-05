@@ -1,6 +1,7 @@
 package com.example.live_video.controller;
 
 import com.example.live_video.service.MyWebSocket;
+import javafx.scene.input.MouseDragEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
  * 弹幕主页Controller层
  */
 @Controller
-@RequestMapping("/barrage")
+@RequestMapping("/liveroom")
 public class DanmuController {
 
     @Autowired
@@ -25,7 +26,8 @@ public class DanmuController {
 
     @GetMapping("/index")
     public ModelAndView index(){
-        return new ModelAndView("/index/index");
+        System.out.println("index");
+        return new ModelAndView("miaomiao");
     }
 
 //    @GetMapping("/send")

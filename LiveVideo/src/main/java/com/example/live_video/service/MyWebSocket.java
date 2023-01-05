@@ -11,7 +11,6 @@ import javax.websocket.server.ServerEndpoint;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-//控制层的路由可根据自身的情况修改
 @Component
 @ServerEndpoint("/websocket/{id}")
 public class MyWebSocket {

@@ -32,10 +32,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/api/register");
     }
 
-    @Override
+//    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        WebMvcConfigurer.super.addResourceHandlers(registry);
-        registry.addResourceHandler("/f/**").addResourceLocations("file:"+ FileConstance.FILE_PATH);
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/static/");
     }
 }
 

@@ -1,0 +1,23 @@
+*{margin: 0px; padding: 0px; font-size: 20px;}
+
+body{font-family: "微软雅黑"; color: black}
+
+.bigbox{width: auto; height: auto; margin: auto; position: relative;}
+.head-box{width: auto; height: 80px;}
+.content-box{width: 666px; height: 425px; margin: auto; position: relative;}
+.vid-box{width: 666px; height: 375px; margin: auto; position: relative;}
+
+.barrage-box{width: 666px; height: 320px; position: absolute; top: 0px; overflow: hidden;}
+
+.play-button{width: 40px; height:40px; background: black; position: relative;
+     left: 10px; bottom: 50px; float: left;}
+
+.inpu-box{width: 570px; height: 40px; border: darkseagreen 2px solid; position: absolute;
+    left: 0; bottom: 0; line-height: 40px; vertical-align: middle; }
+
+.button{width: 80px; height: 40px; border: rgb(87,175,253) 2px solid; position: absolute;
+    right: 0; bottom: 0; text-align: center; background: antiquewhite;}
+
+.send-img,.play-img{width: 40px; height:40px;}
+
+.barrage-box p{font-size: 14px; position: absolute; white-space:nowrap;} /*宽度不继承父元素,由自己内容决定*/

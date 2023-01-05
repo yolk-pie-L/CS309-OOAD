@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"></meta>
+    <link rel="stylesheet" href="/css/style.css"></link>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <title>直播</title>
+    <link href="https://cdn.bootcss.com/video.js/7.6.5/alt/video-js-cdn.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/video.js/6.6.2/video.js"></script>
+    <script src="https://cdn.bootcss.com/videojs-contrib-hls/5.15.0/videojs-contrib-hls.min.js"></script>
+</head>
+<body>
+
+
+<div class="bigbox">
+    <div class="head-box"></div>
+    <div class="content-box">
+        <div class="vid-box">
+            <video id="liveVideo" class="video-js vjs-default-skin vjs-big-play-centered" autoplay muted width="666" height="auto">
+                <source id="source" src="http://127.0.0.1:8080/show/stream.m3u8"  type="application/x-mpegURL">
+            </video>
+            <div class="barrage-box">
+            </div>
+        </div>
+
+        <div class="inpu-box" contenteditable=true><p>这里输入弹幕</p></div>
+        <div id="button" class="button"><img class="send-img" src="/img/send.png" alt="发送"/></div>
+    </div>
+
+</div>
+
+
+<script src="/js/vid.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/websocket.js"></script>
+<script>
+    var liveVideo = videojs('liveVideo',{
+        bigPlayButton : true,
+        textTrackDisplay : false,
+        posterImage: false,
+        errorDisplay : false,
+    })
+    // let li = document.getElementById("liveVideo");
+    // li.style.display = 'none';
+</script>
+</body>
+</html>
