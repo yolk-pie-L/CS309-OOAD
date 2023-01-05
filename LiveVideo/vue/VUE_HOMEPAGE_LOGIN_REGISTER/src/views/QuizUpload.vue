@@ -15,8 +15,8 @@
     <div>
       <el-col :span="7" class="login-card">
         <!--loginForm-->
-        <el-form :model="quizForm" :rules="rules" ref="loginForm" label-width="35%" class="loginForm">
-          <el-form-item label="QuizName"  prop="assignmentName" style="width: 380px" class="variable1">
+        <el-form :model="aquiz" :rules="rules" ref="loginForm" label-width="35%" class="loginForm">
+          <el-form-item label="Problem"  prop="assignmentName" style="width: 380px" class="variable1">
             <el-input v-model="quizForm.assignmentName"></el-input>
           </el-form-item>
           <el-form-item label="Deadline" prop="deadline" style="width: 380px" class="variable1">
@@ -43,7 +43,33 @@
     </div>
 
     <div v-if="check1">
-
+      <el-col :span="7" class="login-card">
+        <!--loginForm-->
+        <el-form :model="quizForm" :rules="rules" ref="loginForm" label-width="35%" class="loginForm">
+          <el-form-item label="QuizName"  prop="assignmentName" style="width: 380px" class="variable1">
+            <el-input v-model="quizForm.assignmentName"></el-input>
+          </el-form-item>
+          <el-form-item label="Deadline" prop="deadline" style="width: 380px" class="variable1">
+            <el-input v-model="quizForm.deadline"></el-input>
+          </el-form-item>
+          <el-form-item label="Description" prop="description" style="width: 380px" class="variable1">
+            <el-input v-model="quizForm.description"></el-input>
+          </el-form-item>
+          <el-form-item label="totalGrade" prop="totalGrade" style="width: 380px" class="variable1">
+            <el-input v-model="quizForm.totalGrade"></el-input>
+          </el-form-item>
+          <el-form-item class="btn-ground">
+            <el-row>
+              <el-button type="primary" @click="changeTo1">添加选择</el-button>
+              <el-button type="primary" @click="changeTo2">添加判断</el-button>
+            </el-row>
+            <el-row>
+              <el-button type="primary" @click="addComfirm">确定添加</el-button>
+              <el-button type="primary" @click="submitForm">完成</el-button>
+            </el-row>
+          </el-form-item>
+        </el-form>
+      </el-col>
     </div>
 
     <div class="business wrap">
@@ -109,6 +135,9 @@ export default {
         coursePicture: "",
         privateKeyUrl: "",
         status: ""
+      },
+      aquiz:{
+
       },
       quizForm: {
         courseId:"",
