@@ -47,19 +47,13 @@
       <ul class="box clearfix">
         <div v-for="item in quizForm.problems">
           <li>
-            <a>
-              <div v-if="chose">
-                <h3 v-text="item.problem"></h3>
-                <template>
-                  <el-radio v-model="item.answer" label="A" v-text="item.A"></el-radio>
-                  <el-radio v-model="item.answer" label="B" v-text="item.B"></el-radio>
-                  <el-radio v-model="item.answer" label="C" v-text="item.C"></el-radio>
-                  <el-radio v-model="item.answer" label="D" v-text="item.D"></el-radio>
-                </template>
-              </div>
-              <div v-else>
-                <h3 v-text="item.problem"></h3>
-
+            <a >
+              <el-header class="variable1" v-text="item.problem"></el-header>
+              <div>
+                <el-radio v-model="item.answer" label="A" v-text="item.A" border></el-radio>
+                <el-radio v-model="item.answer" label="B" v-text="item.B" border></el-radio>
+                <el-radio v-model="item.answer" label="C" v-text="item.C" border></el-radio>
+                <el-radio v-model="item.answer" label="D" v-text="item.D" border></el-radio>
               </div>
             </a>
           </li>
@@ -97,9 +91,29 @@ export default {
             C: "ddd",
             D: "ddd",
             answer: "(A/B/C/D)/(yes/no)"
+          },
+          {
+            isSelection: "(yes/no)",
+            problem: "xxxx",
+            A: "sdfa",
+            B: "sss",
+            C: "ddd",
+            D: "ddd",
+            answer: "(A/B/C/D)/(yes/no)"
           }
-        ]
-      }
+        ],
+        classForm: [
+          {
+            courseId:"aa",
+            courseName: "course",
+            teacherName: "teacher",
+            introduction: "intro",
+            coursePicture: "https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg",
+            privateKeyUrl: "ababa"
+          },
+        ],
+      },
+
     }
   },
   computed:{
@@ -165,7 +179,7 @@ export default {
 
 .business{
   position: absolute;
-  top: 600px;
+  top: 800px;
   left: 125px;
   border-top: 1px solid #ccc;
   border-right: none;
@@ -204,7 +218,7 @@ export default {
           left: 25px;
           bottom: 20px;
           z-index: 2;
-          font-size: 20px;
+          font-size: 40px;
           color: #fff;
           font-weight: 400;
           opacity: 1;
