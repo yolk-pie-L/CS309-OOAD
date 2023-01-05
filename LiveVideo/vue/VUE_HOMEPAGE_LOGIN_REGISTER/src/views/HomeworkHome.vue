@@ -15,7 +15,7 @@
       <el-table-column prop="status" label="Status" width="300" />
       <el-table-column prop="deadline" label="Due" width="300" />
       <el-table-column fixed="right" label="ENTER" width="400">
-        <template #default>
+        <template v-slot="scope" #default>
           <el-button link type="primary" size="small" @click="handleEnter(scope.$index)">Enter</el-button>
         </template>
       </el-table-column>
