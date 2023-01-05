@@ -72,6 +72,7 @@ export default {
   },
   methods: {
     fetchAssignment() {
+      this.classForm.privateKeyUrl=localStorage.getItem("course")
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
       this.$axios.get('http://localhost:8082/api/assignment/all', {
             params: {

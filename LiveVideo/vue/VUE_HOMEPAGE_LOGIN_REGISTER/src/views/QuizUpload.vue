@@ -15,12 +15,13 @@
     <div>
       <el-col :span="7" class="login-card">
         <!--loginForm-->
-        <el-form :model="aquiz" :rules="rules" ref="loginForm" label-width="70%" class="loginForm">
+        <el-form ref="loginForm" :model="quizForm" :rules="rules" class="loginForm" label-width="21%">
           <el-form-item label="Problem"  prop="assignmentName" style="width: 380px" class="variable1">
             <el-input v-model="quizForm.assignmentName"></el-input>
           </el-form-item>
           <el-form-item label="Deadline" prop="deadline" style="width: 380px" class="variable1">
-            <el-input v-model="quizForm.deadline"></el-input>
+            <el-date-picker v-model="quizForm.deadline" type="date" placeholder="选择日期" >
+            </el-date-picker>
           </el-form-item>
           <el-form-item label="Description" prop="description" style="width: 380px" class="variable1">
             <el-input v-model="quizForm.description"></el-input>
@@ -28,35 +29,8 @@
           <el-form-item label="totalGrade" prop="totalGrade" style="width: 380px" class="variable1">
             <el-input v-model="quizForm.totalGrade"></el-input>
           </el-form-item>
-          <el-form-item class="btn-ground">
-            <el-row>
-            <el-button type="primary" @click="changeTo1">添加选择</el-button>
-            <el-button type="primary" @click="changeTo2">添加判断</el-button>
-            </el-row>
-            <el-row>
-            <el-button type="primary" @click="addComfirm">确定添加</el-button>
-            <el-button type="primary" @click="submitForm">完成</el-button>
-            </el-row>
-          </el-form-item>
-        </el-form>
-      </el-col>
-    </div>
-
-    <div v-if="check1">
-      <el-col :span="7" class="login-card">
-        <!--loginForm-->
-        <el-form :model="quizForm" :rules="rules" ref="loginForm" label-width="35%" class="loginForm">
-          <el-form-item label="QuizName"  prop="assignmentName" style="width: 380px" class="variable1">
-            <el-input v-model="quizForm.assignmentName"></el-input>
-          </el-form-item>
-          <el-form-item label="Deadline" prop="deadline" style="width: 380px" class="variable1">
-            <el-input v-model="quizForm.deadline"></el-input>
-          </el-form-item>
-          <el-form-item label="Description" prop="description" style="width: 380px" class="variable1">
-            <el-input v-model="quizForm.description"></el-input>
-          </el-form-item>
-          <el-form-item label="totalGrade" prop="totalGrade" style="width: 380px" class="variable1">
-            <el-input v-model="quizForm.totalGrade"></el-input>
+          <el-form-item label="limitedTime" prop="limitedTime" style="width: 380px" class="variable1">
+            <el-input v-model="quizForm.limitedTime"></el-input>
           </el-form-item>
           <el-form-item class="btn-ground">
             <el-row>
@@ -67,6 +41,46 @@
               <el-button type="primary" @click="addComfirm">确定添加</el-button>
               <el-button type="primary" @click="submitForm">完成</el-button>
             </el-row>
+          </el-form-item>
+        </el-form>
+      </el-col>
+    </div>
+
+    <div v-if="check1" class="check11">
+      <el-col :span="7" class="login-card">
+        <!--loginForm-->
+        <el-form ref="loginForm" :model="quizForm" :rules="rules" class="loginForm" label-width="21%">
+          <el-form-item label="Problem"  prop="problem" style="width: 380px" class="variable1">
+            <el-input v-model="aQuiz.problem"></el-input>
+          </el-form-item>
+          <el-form-item label="A" prop="A" style="width: 380px" class="variable1">
+            <el-input v-model="aQuiz.A"></el-input>
+          </el-form-item>
+          <el-form-item label="B" prop="B" style="width: 380px" class="variable1">
+            <el-input v-model="aQuiz.B"></el-input>
+          </el-form-item>
+          <el-form-item label="C" prop="C" style="width: 380px" class="variable1">
+            <el-input v-model="aQuiz.C"></el-input>
+          </el-form-item>
+          <el-form-item label="D" prop="D" style="width: 380px" class="variable1">
+            <el-input v-model="aQuiz.D"></el-input>
+          </el-form-item>
+          <el-form-item label="Answer" prop="answer" style="width: 380px" class="variable1">
+            <el-input v-model="aQuiz.answer"></el-input>
+          </el-form-item>
+        </el-form>
+      </el-col>
+    </div>
+
+    <div v-if="check2" class="check11">
+      <el-col :span="7" class="login-card">
+        <!--loginForm-->
+        <el-form ref="loginForm" :model="quizForm" :rules="rules" class="loginForm" label-width="21%">
+          <el-form-item label="Problem"  prop="problem" style="width: 380px" class="variable1">
+            <el-input v-model="aQuiz.problem"></el-input>
+          </el-form-item>
+          <el-form-item label="Answer" prop="answer" style="width: 380px" class="variable1">
+            <el-input v-model="aQuiz.answer"></el-input>
           </el-form-item>
         </el-form>
       </el-col>
@@ -136,7 +150,7 @@ export default {
         privateKeyUrl: "",
         status: ""
       },
-      aquiz:{
+      aQuiz:{
         isSelection:true,
         problem:"xxxx",
         A:"sdfa",
@@ -151,6 +165,7 @@ export default {
         deadline: "",
         description: "",
         totalGrade: "",
+        limitedTime: 30,
         additionalResources: [
           {
             resourceName: "",
@@ -162,13 +177,13 @@ export default {
         num:0,
         problems:[
           {
-              isSelection:true,
-              problem:"xxxx",
-              A:"sdfa",
-              B:"sss",
-              C:"ddd",
-              D:"ddd",
-              answer:"(A/B/C/D)/(yes/no)"
+            isSelection:false,
+            problem:"xxxx",
+            A:"sdfa",
+            B:"sss",
+            C:"ddd",
+            D:"ddd",
+            answer:"(A/B/C/D)/(yes/no)"
           }
         ]
       },
@@ -186,13 +201,14 @@ export default {
     }
   },
   mounted() {
-    this.fetchAssignment()
+    this.fetchClass()
   },
   methods: {
     fetchClass() {
-      this.$axios.get('api/course/{' + this.classForm.id + '}').then(res => {
+      this.classForm.id=localStorage.getItem("course")
+      this.$axios.get(`api/course/{` + this.classForm.id + `}`).then(res => {
         // 拿到结果
-        let result = JSON.parse(res.data.data);
+        let result = res.data.result;
         let message = res.data.msg;
         this.classForm=result
         // 判断结果
@@ -209,22 +225,20 @@ export default {
     },
     // 提交表单
     submitForm(formName) {
+
+      router.push('/quizHome')
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // 表单验证成功
-          this.$axios.post('http://localhost:8082/user/checkLogin', this.courseForm).then(res => {
+          this.$axios.post('http://localhost:8082/api/course/createQuizJson', this.createQuizJson).then(res => {
             // 拿到结果
-            let result = JSON.parse(res.data.data);
+            let result = res.data.result;
             let message = res.data.msg;
             // 判断结果
             if (result) {
-              /*登陆成功*/
-              Element.Message.success(message);
-              /*跳转页面*/
-              router.push('/')
+              localStorage.setItem("course", this.homeworkForm.courseName)
+              router.push('/quizHome')
             } else {
-              /*打印错误信息*/
-              Element.Message.error(message);
             }
           })
         } else {
@@ -239,13 +253,34 @@ export default {
     },
     changeTo1(){
       this.type=1;
-      alert(this.type)
     },
     changeTo2(){
       this.type=2;
     },
     addComfirm(){
-
+      if(this.type===1){
+        let newQuiz = {
+          isSelection: true,
+          problem: this.aQuiz.problem,
+          A:this.aQuiz.A,
+          B:this.aQuiz.B,
+          C:this.aQuiz.C,
+          D:this.aQuiz.D,
+          answer:this.aQuiz.answer
+        }
+        this.createQuizJson.problems.push(newQuiz)
+      }else {
+        let newQuiz = {
+          isSelection: false,
+          problem: this.aQuiz.problem,
+          A:null,
+          B:null,
+          C:null,
+          D:null,
+          answer:this.aQuiz.answer
+        }
+        this.createQuizJson.problems.push(newQuiz)
+      }
     }
 
   },
@@ -329,5 +364,121 @@ export default {
 .button1{
   position: center;
   left: 20%;
+}
+
+.check11 {
+  background-color: #ffffff;
+  opacity: 0.9;
+  box-shadow: 0 0 20px #ffffff;
+  border-radius: 10px;
+  padding: 40px 40px 30px 15px;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top:100%;
+}
+</style>
+
+<style scoped lang="less">
+
+.business{
+  position: absolute;
+  top: 180%;
+  left: 125px;
+  border-top: 1px solid #ccc;
+  border-right: none;
+  width: 80%;
+}
+.business {
+  ul {
+    li {
+      &:hover h3 {
+        opacity: 0;
+      }
+
+      &:hover img {
+        -webkit-transform: scale(1.1);
+        -ms-transform: scale(1.1);
+        transform: scale(1.1);
+      }
+
+      &:hover .word {
+        display: block;
+        opacity: 1;
+        background: rgba(0, 0, 0, 0.6);
+      }
+
+      width: 100%;
+      height: 400px;
+      position: relative;
+      float: left;
+      overflow: hidden;
+      margin-top: 15px;
+      margin-left: 15px;
+
+      a {
+        h3 {
+          position: absolute;
+          left: 25px;
+          bottom: 20px;
+          z-index: 2;
+          font-size: 40px;
+          color: #fff;
+          font-weight: 400;
+          opacity: 1;
+          filter: alpha(opacity=100);
+          -webkit-transition: opacity 0.4s;
+          transition: opacity 0.4s;
+        }
+
+        img {
+          position: relative;
+          display: block;
+          z-index: 1;
+          width: 100%;
+          -webkit-transition: -webkit-transform 0.4s;
+          transition: -webkit-transform 0.4s;
+          transition: transform 0.4s;
+          transition: transform 0.4s, -webkit-transform 0.4s;
+        }
+
+        .word {
+          opacity: 0;
+          filter: alpha(opacity=0);
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          z-index: 3;
+          padding-top: 20%;
+          text-align: center;
+          -webkit-transition: opacity 0.4s;
+          transition: opacity 0.4s;
+
+          h4 {
+            font-size: 20px;
+            color: #fff;
+            font-weight: 400;
+          }
+
+          .border {
+            display: block;
+            margin: 10px auto;
+            width: 22px;
+            height: 1px;
+            line-height: 0;
+            font-size: 0;
+            background: #4681e6;
+          }
+
+          p {
+            font-size: 14px;
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
 }
 </style>

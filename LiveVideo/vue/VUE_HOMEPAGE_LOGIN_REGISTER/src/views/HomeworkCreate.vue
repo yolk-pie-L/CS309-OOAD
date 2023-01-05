@@ -60,7 +60,6 @@
 
 <script>
 import router from "@/router";
-import md5 from "js-md5";
 
 export default {
   name: "HomeworkUpload",
@@ -99,15 +98,12 @@ export default {
   },
   methods: {
     fetchClass() {
-      this.classForm.id = localStorage.getItem("course")
-      this.$axios.get('http://localhost:8082/api/course/', {
-        params: {
-          courseId: this.classForm.id,
-        }
-      }).then(res => {
+      this.homeworkForm.courseId = localStorage.getItem("course")
+      this.$axios.get(`api/course/{` + this.classForm.id + `}`).then(res => {
+        // 拿到结果
         let result = res.data.result;
         let message = res.data.msg;
-        this.classForm = result
+        this.classForm=result
         // 判断结果
         if (result) {
         } else {
@@ -146,7 +142,7 @@ export default {
             // 判断结果
             if (result) {
               /*登陆成功*/
-              localStorage.setItem("course", this.homeworkForm.courseName)
+              localStorage.setItem("course", this.homeworkForm.courseId)
               router.push('/homeworkHome')
             } else {
 
