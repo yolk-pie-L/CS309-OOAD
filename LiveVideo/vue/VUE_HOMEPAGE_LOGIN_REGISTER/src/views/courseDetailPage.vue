@@ -1,4 +1,5 @@
 <template>
+  <menubar></menubar>
   <div :xl="6" :lg="7" class="home">
     <!--标题-->
     <el-row type="flex" class="row-bg row-two" justify="center" align="top">
@@ -71,9 +72,13 @@
 // @ is an alias to /src
 import router from "@/router";
 import {useRoute} from "vue-router";
+import menubar from "@/components/layout/menu";
 
 export default {
   name: 'courseDetailPage',
+  components: {
+    menubar
+  },
   data() {
     return {
       coShow: true,

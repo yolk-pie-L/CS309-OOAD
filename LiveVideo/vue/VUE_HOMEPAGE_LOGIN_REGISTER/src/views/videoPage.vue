@@ -276,22 +276,6 @@ export default {
   },
   mounted() {
     this.fetchData()
-    this.recodrTime = setInterval(() => {
-      if (document.getElementsByTagName('video')[0].currentTime && this.sectionId) {
-        localStorage.setItem(
-            'videoParams',
-            JSON.stringify({
-              courseId: this.id,
-              resourceId: this.sectionId,
-              resourceTime:
-              document.getElementsByTagName('video')[0].currentTime
-            })
-        )
-        this.sectionData[this.row].sectionComplete = (this.continueTime /
-            document.getElementsByTagName('video')[0].duration * 100).toFixed(1)
-        this.updateProgress()
-      }
-    }, 1000)
   },
   methods: {
     fetchData() {
@@ -339,6 +323,7 @@ export default {
           this.myHeader = getPhoto(result.photoUrl)
           this.fetchComment()
           this.fetchTotalComment()
+          this.fetchProgress(document.getElementsByTagName('video')[0])
         } else {
           this.$notify({
             message: result,
@@ -405,6 +390,16 @@ export default {
       })
     },
     fetchProgress(player) {
+      this.$axios.get(`http://localhost:8082/api/course/student/section/grades?studentName=${this.userName}&courseId=${this.courseId}`).then(res => {
+        let result = res.data.result
+        this.sectionData.forEach(section => {
+          result.forEach(obj => {
+            if (obj.sectionName === section.sectionName) {
+              section.sectionComplete = obj.studentProgress * 100
+            }
+          })
+        })
+      })
       this.$axios.get(`http://localhost:8082/api/section/getprogress?studentName=${this.userName}&sectionId=${this.sectionId}`).then(res => {
         let result = res.data.result
         this.continueTime = result.totalWatch
@@ -587,7 +582,6 @@ export default {
     canPlay(player) {
       this.player = document.getElementsByTagName('video')[0]
       console.log(this.player)
-      this.fetchProgress(this.player)
     },
     onPlayerPlay(player) {
       console.log('player play!', player)
@@ -608,6 +602,9 @@ export default {
     onPlayerTimeUpdate(player) {
       console.log('player time update', player)
       this.last = this.player.currentTime
+      this.sectionData[this.row].sectionComplete = (this.continueTime /
+          document.getElementsByTagName('video')[0].duration * 100).toFixed(1)
+      this.updateProgress()
     }
   }
 }

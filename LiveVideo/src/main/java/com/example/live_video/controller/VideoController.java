@@ -73,7 +73,7 @@ public class VideoController {
     private UserService userService;
 
     @PostMapping("/update")
-    public void updateSectionProgress(@RequestBody SectionProgressForm sectionProgressForm) {
+    public Boolean updateSectionProgress(@RequestBody SectionProgressForm sectionProgressForm) {
         QueryWrapper<StuSection> stuSectionQueryWrapper = new QueryWrapper<>();
         Long userId = userService.getUserId(sectionProgressForm.getStudentName());
         stuSectionQueryWrapper.eq("user_id", userId);
@@ -82,7 +82,10 @@ public class VideoController {
         StuSection stuSection = new StuSection(userId, sectionProgressForm.getSectionId(),
                 Math.min((int) (sectionProgressForm.getTotalWatch() / sectionProgressForm.getVideoTime()  * 1.1 * section.getGrade()), section.getGrade()),
                 sectionProgressForm.getTotalWatch(), sectionProgressForm.getCurrentWatch());
-        stuSectionService.update(stuSection, stuSectionQueryWrapper);
+        if (!stuSectionService.update(stuSection, stuSectionQueryWrapper))
+            return stuSectionService.save(stuSection);
+        else
+            return true;
     }
 
     @GetMapping("/getprogress")

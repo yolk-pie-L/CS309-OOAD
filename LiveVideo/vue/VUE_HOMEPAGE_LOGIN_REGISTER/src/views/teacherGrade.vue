@@ -131,7 +131,6 @@ export default {
       ajax.getFile(`http://localhost:8082/api/course/export?courseId=${this.courseId}`, option)
       // this.$axios.get(`http://localhost:8082/api/course/export?courseId=${this.courseId}`).then(res => {
       // })
-    }
     },
     selectItem(row, column, event) {
       this.selectedFundRow = row
@@ -151,7 +150,7 @@ export default {
         }
         return flag
       })
-    },
+    }
   }
 }
 </script>
