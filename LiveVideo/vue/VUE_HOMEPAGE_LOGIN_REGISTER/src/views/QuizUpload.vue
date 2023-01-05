@@ -15,8 +15,8 @@
     <div>
       <el-col :span="7" class="login-card">
         <!--loginForm-->
-        <el-form :model="quizForm" :rules="rules" ref="loginForm" label-width="35%" class="loginForm">
-          <el-form-item label="QuizName"  prop="assignmentName" style="width: 380px" class="variable1">
+        <el-form :model="aquiz" :rules="rules" ref="loginForm" label-width="35%" class="loginForm">
+          <el-form-item label="Problem"  prop="assignmentName" style="width: 380px" class="variable1">
             <el-input v-model="quizForm.assignmentName"></el-input>
           </el-form-item>
           <el-form-item label="Deadline" prop="deadline" style="width: 380px" class="variable1">
