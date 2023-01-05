@@ -18,5 +18,5 @@ public interface AssignmentService extends IService<Assignment> {
 
     public List<Assignment> getAssignmentsOfCourse(long courseId);
 
-    public List<String> getAssignmentUrlList(long assignId);
+
 }

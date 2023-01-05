@@ -25,7 +25,7 @@ public class AssignmentVo {
     private String updateTime;
     private String status;
     private Integer score;
-    private List<String> attached;
+//    private List<String> attached;
     private List<String> answer;
     private List<QuizProblemVo> problems;
     private int limitedTime;
@@ -98,16 +98,16 @@ public class AssignmentVo {
         );
     }
 
-    public AssignmentVo(String assignmentName, Long courseId, Timestamp deadline, Integer totalGrade,
-                        String description, List<String> attached, int limitedTime) {
-        this.assignmentName = assignmentName;
-        this.courseId = courseId;
-        this.deadline = timestamp2String(deadline);
-        this.totalGrade = totalGrade;
-        this.description = description;
-        this.attached = attached;
-        this.limitedTime = limitedTime;
-    }
+//    public AssignmentVo(String assignmentName, Long courseId, Timestamp deadline, Integer totalGrade,
+//                        String description, List<String> attached, int limitedTime) {
+//        this.assignmentName = assignmentName;
+//        this.courseId = courseId;
+//        this.deadline = timestamp2String(deadline);
+//        this.totalGrade = totalGrade;
+//        this.description = description;
+//        this.attached = attached;
+//        this.limitedTime = limitedTime;
+//    }
 
     protected static String timestamp2String(Timestamp timeStamp) {
         return String.valueOf(timeStamp);

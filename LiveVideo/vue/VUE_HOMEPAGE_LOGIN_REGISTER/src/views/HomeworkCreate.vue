@@ -238,10 +238,10 @@ export default {
       let fileName = file.name;
       let suffix = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length).toLowerCase();
       //这里判断文件格式，有其他格式的自行判断
-      if (suffix != 'mp4') {
-        this.$message.error('文件格式错了哦。。');
-        return;
-      }
+      // if (suffix != 'mp4') {
+      //   this.$message.error('文件格式错了哦。。');
+      //   return;
+      // }
 
       let shardSize = _this.shardSize;
       let shardIndex = 1;		//分片索引，1表示第1个分片

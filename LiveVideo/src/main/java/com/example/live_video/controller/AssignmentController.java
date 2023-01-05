@@ -3,7 +3,6 @@ package com.example.live_video.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.example.live_video.entity.Assignment;
 import com.example.live_video.exception.SQLAssignNameConflictException;
-import com.example.live_video.mapper.AssignmentMapper;
 import com.example.live_video.service.AssignmentService;
 import com.example.live_video.service.StudentService;
 import com.example.live_video.util.TokenUtils;
@@ -41,8 +40,6 @@ public class AssignmentController {
     private AssignmentService assignmentService;
     @Autowired
     private StudentService studentService;
-    @Autowired
-    private AssignmentMapper assignmentMapper;
 
     @GetMapping("/all")
     public List<AssignmentVo> queryAssignmentByCourse(@RequestHeader("token") String token,
@@ -84,7 +81,6 @@ public class AssignmentController {
         // set some elements
         b.setStatus(getStatus(a, assignId, userName, studentService));
         b.setScore(studentService.getStudentAssignGrade(userName, assignId));
-        b.setAttached(assignmentService.getAssignmentUrlList(assignId));
         if (isAssignment)
             b.setAnswer(studentService.getStudentAssignmentUrlList(userName, assignId));
         else try {
@@ -103,8 +99,7 @@ public class AssignmentController {
     }
 
     @PostMapping("/upload")
-    public StringVo uploadFile(@RequestParam MultipartFile f,
-                               @RequestParam("assignmentId") long assignId) throws IOException {
+    public StringVo uploadFile(@RequestParam MultipartFile f) throws IOException {
         String filePath = FILE_PATH + "\\assignFiles\\";
         String fileName = f.getOriginalFilename();
         assert fileName != null;
@@ -116,7 +111,6 @@ public class AssignmentController {
             System.out.println("CREATE A NEW DIRECTORY: " + dest.getParentFile().mkdirs());
         f.transferTo(dest);
         System.out.println("SAVE TO: " + url);
-//        assignmentMapper.insertAssignUrlList(assignId, url);
         return new StringVo(url);
     }
 

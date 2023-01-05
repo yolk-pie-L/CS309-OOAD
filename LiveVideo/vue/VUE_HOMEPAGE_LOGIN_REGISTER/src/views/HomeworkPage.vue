@@ -15,7 +15,7 @@
 
     <div class="describe">
       <el-row>
-        <el-header class="variable1">AssignmentName:</el-header>
+        <el-header class="variable1">Assignment Name:</el-header>
         <el-header class="variable2" v-text="homeworkForm.assignmentName "></el-header>
       </el-row>
       <el-row>
@@ -47,13 +47,13 @@
     </div>
 
     <div class="add">
-      <el-header class="variable1">AdditionalSource:</el-header>
+      <el-header class="variable1">Additional Resource:</el-header>
       <div v-for="item in additionalResources">
         <el-link
             :body-style="{ padding: '0px', marginBottom: '1px' }"
-            :href="item.resourceUrl"
-            class="addi"
-            v-text="item.resourceName">
+            :href="item"
+            v-text="item"
+            class="addi">
         </el-link>
       </div>
     </div>
@@ -110,9 +110,9 @@ export default {
         updateTime: "date",
         answerStatus: "yes/no",
       },
-      additionalResources: [{
-        resourceUrl: "https://element.eleme.io"
-      }],
+      additionalResources: [
+        "https://element.eleme.io"
+      ],
       answers: {
         answerFile: [
           // string的list
@@ -143,9 +143,9 @@ export default {
         // 拿到结果
         let result = res.data.result;
         let message = res.data.msg;
-        this.homeworkForm = result
-        this.additionalResources = result.additionalResources
-        this.answer = result.answer
+        this.homeworkForm = result;
+        this.additionalResources = result.assignUrls;
+        this.answer = result.answer;
         // 判断结果
         if (result) {
         } else {
@@ -165,7 +165,6 @@ export default {
       fileList.map(item => { //fileList本来就是数组，就不用转为真数组了
         formData.append("f", item.raw)  //将每一个文件图片都加进formdata
       })
-      formData.append("assignmentId", localStorage.getItem("Assignment"))
       console.log(file.size)
       this.$axios.post("http://localhost:8082/api/assignment/upload", formData).then(res => {
         let result = res.data.result;
@@ -298,7 +297,7 @@ export default {
 }
 
 .addi {
-  font-size: 30px;
+  font-size: 10px;
   font-weight: 600;
 }
 
