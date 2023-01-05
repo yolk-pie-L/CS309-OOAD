@@ -74,11 +74,11 @@ export default {
   },
   methods: {
     fetchAssignment() {
-      this.classForm.privateKeyUrl=localStorage.getItem("course")
+      this.classForm.id=localStorage.getItem("course")
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
       this.$axios.get('/api/course/allQuiz', {
         params: {
-          courseId: this.classForm.privateKeyUrl,
+          courseId: this.classForm.id,
         }}).then(res => {
         let result = res.data.result;
         let message = res.data.msg;
