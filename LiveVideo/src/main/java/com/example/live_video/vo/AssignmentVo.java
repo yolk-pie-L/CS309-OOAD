@@ -25,6 +25,7 @@ public class AssignmentVo {
     private Integer score;
     private List<String> attached;
     private List<String> answer;
+    private List<QuizProblemVo> problems;
     private int limitedTime;
 
     public AssignmentVo(Long id, String assignmentName, Long courseId, String courseName, String teacherName,
