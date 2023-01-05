@@ -1,11 +1,22 @@
 <template>
   <div>
+<!--    <div class="aa">-->
+<!--      <div class="father" >-->
+<!--        <ul>-->
+<!--          <li>{{one}}<span>:</span></li>-->
+<!--          <li>{{two}}<span>:</span></li>-->
+<!--          <li>{{three}}</li>-->
+<!--        </ul>-->
+<!--        <el-button type="primary" @click="startHandler">开始</el-button>-->
+<!--        <el-button type="primary" @click="endHandler">暂停</el-button>-->
+<!--      </div>-->
+<!--    </div>-->
     <div>
       <el-row style="height: 95vh">
         <el-col :span="24" style="height: 100%">
           <el-card class="welcome" shadow=hover>
             <el-header class="tit" v-text="quizForm.courseName "></el-header>
-            <el-header class="tit" v-text="quizForm.assignmentName "></el-header>
+            <el-header class="tit" v-text="quizForm.QuizName "></el-header>
             <div class="border"></div>
           </el-card>
         </el-col>
@@ -48,26 +59,58 @@
         <div v-for="item in quizForm.problems">
           <li>
             <a >
-              <el-header class="variable1" v-text="item.problem"></el-header>
-              <div>
-                <el-radio v-model="item.answer" label="A" v-text="item.A" border></el-radio>
-                <el-radio v-model="item.answer" label="B" v-text="item.B" border></el-radio>
-                <el-radio v-model="item.answer" label="C" v-text="item.C" border></el-radio>
-                <el-radio v-model="item.answer" label="D" v-text="item.D" border></el-radio>
+              <div v-if="item.isSelection">
+                <el-header class="variable1" v-text="item.problem"></el-header>
+                <div >
+                  <el-row>
+                    <el-radio v-model="item.answer" label="A" border>A</el-radio>
+                    <el-header class="variable2" v-text="item.A"></el-header>
+                  </el-row>
+                  <el-row>
+                    <el-radio v-model="item.answer" label="B" border>B</el-radio>
+                    <el-header class="variable2" v-text="item.B"></el-header>
+                  </el-row>
+                  <el-row>
+                    <el-radio v-model="item.answer" label="C" border>C</el-radio>
+                    <el-header class="variable2" v-text="item.C"></el-header>
+                  </el-row>
+                  <el-row>
+                    <el-radio v-model="item.answer" label="D" border>D</el-radio>
+                    <el-header class="variable2" v-text="item.D"></el-header>
+                  </el-row>
+                </div>
+              </div>
+              <div v-else>
+                <el-header class="variable1" v-text="item.problem"></el-header>
+                <div >
+                    <el-radio v-model="item.answer" label="true" border>true</el-radio>
+                    <el-radio v-model="item.answer" label="false" border>false</el-radio>
+                </div>
               </div>
             </a>
           </li>
         </div>
       </ul>
     </div>
+    <el-button class="abutton" type="primary" round @click="Submit">Submit</el-button>
   </div>
 </template>
 
 <script>
+import router from "@/router";
+
 export default {
   name: "QuizPage",
   data(){
     return{
+      flag: null,
+      one : '00', // 时
+      two : '00', // 分
+      three : '00', // 秒
+      abc : 0, // 秒的计数
+      cde : 0, // 分的计数
+      efg : 0, // 时的计数
+      name:"",
       quizForm: {
         quizId: "aa",
         courseName: "course",
@@ -84,7 +127,7 @@ export default {
         num: "10",
         problems: [
           {
-            isSelection: "(yes/no)",
+            isSelection: true,
             problem: "xxxx",
             A: "sdfa",
             B: "sss",
@@ -93,7 +136,7 @@ export default {
             answer: "(A/B/C/D)/(yes/no)"
           },
           {
-            isSelection: "(yes/no)",
+            isSelection: false,
             problem: "xxxx",
             A: "sdfa",
             B: "sss",
@@ -113,14 +156,80 @@ export default {
           },
         ],
       },
-
+      submitForm:{
+        quizId: "",
+        answer:null
+      }
     }
   },
+  props: {
+    msg: String
+  },
   computed:{
-    chose(){
-      return true
+      check: function (val) {
+        return val === "yes";
+    }
+  },
+  methods:{
+    Submit(){
+      this.submitForm.quizId=this.quizForm.quizId
+      this.submitForm.answer=this.quizForm.problems
+      this.$axios.post('http://localhost:8082/api/course/submitQuiz', this.submitForm).then(res => {
+            let result = res.data.result;
+            let message = res.data.msg;
+            if (result) {
+              alert(result)
+              router.push("/quizHome")
+            } else {
+              /*打印错误信息*/
+              alert(message);
+            }
+      }
+      )
+    },
+    // 开始计时
+    startHandler(){
+      this.flag = setInterval(()=>{
+        if(this.three === 60 || this.three === '60'){
+          this.three = '00';
+          this.abc = 0;
+          if(this.two === 60 || this.two === '60'){
+            this.two = '00';
+            this.cde = 0;
+            if(this.efg+1 <= 9){
+              this.efg++;
+              this.one = '0' + this.efg;
+            }else{
+              this.efg++;
+              this.one = this.efg;
+            }
+          }else{
+            if(this.cde+1 <= 9){
+              this.cde++;
+              this.two = '0' + this.cde;
+            }else{
+              this.cde++;
+              this.two = this.cde;
+            }
+          }
+        }else{
+          if(this.abc+1 <= 9){
+            this.abc++;
+            this.three = '0' + this.abc;
+          }else{
+            this.abc++;
+            this.three=this.abc;
+          }
+        }
+
+      },100)
+    },
+    // 暂停计时
+    endHandler(){
+      this.flag = clearInterval(this.flag)
     }
   }
+
 }
 </script>
 
@@ -205,7 +314,7 @@ export default {
       }
 
       width: 100%;
-      height: 220px;
+      height: 400px;
       position: relative;
       float: left;
       overflow: hidden;
@@ -276,5 +385,36 @@ export default {
       }
     }
   }
+}
+</style>
+
+<style>
+.text {
+  font-size: 14px;
+}
+
+.item {
+  margin-bottom: 18px;
+}
+
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
+.clearfix:after {
+  clear: both
+}
+
+.abutton{
+  position: absolute;
+  top:10%;
+  left: 75%;
+}
+
+.aa{
+  position: absolute;
+  top:300%;
+  left: 20%;
 }
 </style>
