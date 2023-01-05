@@ -58,6 +58,18 @@
       </div>
     </div>
 
+    <div class="add1">
+      <el-header class="variable1">Answer:</el-header>
+      <div v-for="item in answers">
+        <el-link
+            :body-style="{ padding: '0px', marginBottom: '1px' }"
+            :href="item"
+            v-text="item"
+            class="addi">
+        </el-link>
+      </div>
+    </div>
+
     <div>
       <el-col :span="7" class="login-card">
         <!--loginForm-->
@@ -145,7 +157,7 @@ export default {
         let message = res.data.msg;
         this.homeworkForm = result;
         this.additionalResources = result.assignUrls;
-        this.answer = result.answer;
+        this.answers = result.answer;
         // 判断结果
         if (result) {
         } else {
@@ -273,7 +285,7 @@ export default {
 .describe {
   position: absolute;
   background-color: #c1d1d7;
-  top: 100%;
+  top: 30%;
   left: 8%;
   height: 70%;
   opacity: 0.9;
@@ -286,6 +298,19 @@ export default {
 .add {
   position: absolute;
   top: 30%;
+  left: 55%;
+  height: 20%;
+  width: 30%;
+  background-color: #c1d1d7;
+  opacity: 0.9;
+  box-shadow: 0 0 20px #ffffff;
+  border-radius: 10px;
+  padding: 40px 40px 30px 15px;
+}
+
+.add1 {
+  position: absolute;
+  top: 0%;
   left: 55%;
   height: 20%;
   width: 30%;
