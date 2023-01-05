@@ -9,7 +9,7 @@
   </el-row>
   <el-button @click="exportGrade" style="position: fixed; top:100px; left: 50px">导出成绩</el-button>
   <div class="tableD">
-    <el-table :data="gradeForm" height="300" class="tableH" >
+    <el-table :data="gradeForm" height="300" class="tableH" @row-click="selectItem">
       <el-table-column prop="studentName" label="studentName" width="300"></el-table-column>
       <el-table-column label="studentSectionGradeList" width="250">
         <el-table-column v-for="(title, index) in gradeForm[0].studentSectionGradeList"
@@ -28,6 +28,9 @@
               .totalGrade}}</span>
           </template>
         </el-table-column>
+      </el-table-column>
+      <el-table-column>
+        <el-button @click="handleDelete(scope.$index)">删除学生</el-button>
       </el-table-column>
     </el-table>
   </div>
@@ -129,6 +132,26 @@ export default {
       // this.$axios.get(`http://localhost:8082/api/course/export?courseId=${this.courseId}`).then(res => {
       // })
     }
+    },
+    selectItem(row, column, event) {
+      this.selectedFundRow = row
+      if (event.target.innerText === "删除学生") {
+        this.removeFundBtn(this.selectedFundRow)
+      }
+    },
+    removeFundBtn(params) {
+      this.gradeForm = this.gradeForm.filter((ele) => {
+        var flag = false
+        // 如果不一致，则保留该行
+        for (const key in params) {
+          if (ele[key] !== params[key]) {
+            flag = true
+            break
+          }
+        }
+        return flag
+      })
+    },
   }
 }
 </script>

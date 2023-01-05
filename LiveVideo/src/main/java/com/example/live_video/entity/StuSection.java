@@ -19,7 +19,8 @@ public class StuSection {
 
     int grade;
 
-    double duration;
+    @TableField(value = "total_watch")
+    double totalWatch;
 
     @TableField(value = "current_watch")
     double currentWatch;

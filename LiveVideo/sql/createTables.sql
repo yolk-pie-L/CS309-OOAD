@@ -132,10 +132,11 @@ CREATE TABLE danmu
 
 CREATE TABLE live_stream
 (
-    id      int auto_increment primary key,
-    title   text        not null,
-    user_id int         not null,
-    url     varchar(50) not null,
+    id          int auto_increment primary key,
+    title       text        not null,
+    description text        not null,
+    user_id     int         not null,
+    url         varchar(50) not null,
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -191,7 +192,7 @@ CREATE TABLE stu_section
     user_id       int not null,
     section_id    int not null,
     grade         int not null default 0,
-    duration      double       default 0,
+    total_watch   double       default 0,
     current_watch double       default 0,
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (section_id) REFERENCES section (id) ON DELETE CASCADE ON UPDATE CASCADE

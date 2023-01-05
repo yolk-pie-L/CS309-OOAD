@@ -1,18 +1,18 @@
 package com.example.live_video.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.live_video.constance.FileConstance;
 import com.example.live_video.dto.FileForm;
 import com.example.live_video.dto.MergeInfo;
 import com.example.live_video.dto.SectionProgressForm;
 import com.example.live_video.entity.FileTb;
-import com.example.live_video.service.FileTbService;
+import com.example.live_video.entity.StuSection;
+import com.example.live_video.service.*;
 import com.example.live_video.vo.SectionVo;
 import com.example.live_video.vo.StringVo;
 import com.example.live_video.wrapper.NonStaticResourceHttpRequestHandler;
 import com.example.live_video.entity.Section;
 import com.example.live_video.exception.MyException;
-import com.example.live_video.service.CourseService;
-import com.example.live_video.service.SectionService;
 import com.example.live_video.util.RandomUtils;
 import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
@@ -65,9 +65,33 @@ public class VideoController {
     @Autowired
     private FileTbService fileTbService;
 
-    @PostMapping("/update")
-    public void updateSectionProgress(@RequestBody SectionProgressForm sectionProgressForm){
 
+    @Autowired
+    private StuSectionService stuSectionService;
+
+    @Autowired
+    private UserService userService;
+
+    @PostMapping("/update")
+    public void updateSectionProgress(@RequestBody SectionProgressForm sectionProgressForm) {
+        QueryWrapper<StuSection> stuSectionQueryWrapper = new QueryWrapper<>();
+        Long userId = userService.getUserId(sectionProgressForm.getStudentName());
+        stuSectionQueryWrapper.eq("user_id", userId);
+        stuSectionQueryWrapper.eq("section_id", sectionProgressForm.getSectionId());
+        Section section = sectionService.getOneSection(sectionProgressForm.getSectionId());
+        StuSection stuSection = new StuSection(userId, sectionProgressForm.getSectionId(),
+                Math.min((int) (sectionProgressForm.getTotalWatch() / sectionProgressForm.getVideoTime()  * 1.1 * section.getGrade()), section.getGrade()),
+                sectionProgressForm.getTotalWatch(), sectionProgressForm.getCurrentWatch());
+        stuSectionService.update(stuSection, stuSectionQueryWrapper);
+    }
+
+    @GetMapping("/getprogress")
+    public StuSection getProgress(@RequestParam String studentName, @RequestParam Long sectionId) {
+        QueryWrapper<StuSection> stuSectionQueryWrapper = new QueryWrapper<>();
+        Long userId = userService.getUserId(studentName);
+        stuSectionQueryWrapper.eq("user_id", userId);
+        stuSectionQueryWrapper.eq("section_id", sectionId);
+        return stuSectionService.getOne(stuSectionQueryWrapper);
     }
 
     @GetMapping("/{sectionId}")
