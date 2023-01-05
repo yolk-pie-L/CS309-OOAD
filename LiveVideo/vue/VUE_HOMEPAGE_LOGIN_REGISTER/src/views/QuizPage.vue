@@ -1,16 +1,5 @@
 <template>
   <div>
-<!--    <div class="aa">-->
-<!--      <div class="father" >-->
-<!--        <ul>-->
-<!--          <li>{{one}}<span>:</span></li>-->
-<!--          <li>{{two}}<span>:</span></li>-->
-<!--          <li>{{three}}</li>-->
-<!--        </ul>-->
-<!--        <el-button type="primary" @click="startHandler">开始</el-button>-->
-<!--        <el-button type="primary" @click="endHandler">暂停</el-button>-->
-<!--      </div>-->
-<!--    </div>-->
     <div>
       <el-row style="height: 95vh">
         <el-col :span="24" style="height: 100%">
@@ -21,6 +10,11 @@
           </el-card>
         </el-col>
       </el-row>
+    </div>
+    <div class="sas">
+      <countdown v-slot="timeObj" :time="30*60 * 1000" :isMilliSecond="true">
+        {{timeObj.mm}}分钟{{timeObj.ss}}秒
+      </countdown>
     </div>
     <div class="describe">
       <el-row>
@@ -98,8 +92,10 @@
 
 <script>
 import router from "@/router";
+import countdown from '../components/layout/countdown.vue'
 
 export default {
+  components:{countdown},
   name: "QuizPage",
   data(){
     return{
@@ -415,6 +411,12 @@ export default {
 .aa{
   position: absolute;
   top:300%;
+  left: 20%;
+}
+
+.sas{
+  position: absolute;
+  top:30%;
   left: 20%;
 }
 </style>
