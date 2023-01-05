@@ -66,14 +66,22 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
     public List<Course> getApprovedCourseList(int recordsPerPage, int pageNum) {
         int limit = recordsPerPage;
         int offset = recordsPerPage * (pageNum - 1);
-        return courseMapper.getApprovedCourseList(limit, offset);
+        List<Course> courseList = courseMapper.getApprovedCourseList(limit, offset);
+        for(Course course: courseList){
+            course.setTeacherName(userService.getById(course.getTeacherId()).getUserName());
+        }
+        return courseList;
     }
 
     @Override
     public List<Course> getApprovedCourseListOfTeacher(int recordsPerPage, int pageNum, String teacherName) {
         int limit = recordsPerPage;
         int offset = recordsPerPage * (pageNum - 1);
-        return courseMapper.getApprovedCourseListOfTeacher(limit, offset, teacherName);
+        List<Course> courseList = courseMapper.getApprovedCourseListOfTeacher(limit, offset, teacherName);
+        for(Course course: courseList){
+            course.setTeacherName(userService.getById(course.getTeacherId()).getUserName());
+        }
+        return courseList;
     }
 
     @Override
@@ -108,7 +116,11 @@ class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements Cou
     public List<Course> getApprovedCourseList(int recordsPerPage, int pageNum, String courseName) {
         int limit = recordsPerPage;
         int offset = recordsPerPage * (pageNum - 1);
-        return courseMapper.getApprovedCourseListByCourseName(limit, offset, courseName);
+        List<Course> courseList = courseMapper.getApprovedCourseListByCourseName(limit, offset, courseName);
+        for(Course course: courseList){
+            course.setTeacherName(userService.getById(course.getTeacherId()).getUserName());
+        }
+        return courseList;
     }
 
     @Override
