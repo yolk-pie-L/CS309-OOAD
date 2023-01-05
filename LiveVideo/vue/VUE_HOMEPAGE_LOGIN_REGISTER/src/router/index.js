@@ -23,9 +23,10 @@ import personInfo from "@/views/myspace/personInfo";
 import myspace from "@/views/myspace";
 import addNotice from "@/views/addNotice";
 import avatarUpdate from "@/views/myspace/avatarUpdate";
-import live from "@/views/live";
+import live from "@/views/live/live";
 import studentGrade from "@/views/studentGrade";
 import teacherGrade from "@/views/teacherGrade";
+import live_all from "@/views/live/live_all";
 const routes = [
   {
     path:'/',
@@ -121,6 +122,11 @@ const routes = [
     path: '/live',
     name: live,
     component: live
+  },
+  {
+    path: '/live/all',
+    name: live_all,
+    component: live_all
   },
   {
     path: '/person',

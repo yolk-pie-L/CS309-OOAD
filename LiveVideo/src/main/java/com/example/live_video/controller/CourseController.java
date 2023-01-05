@@ -9,6 +9,7 @@ import com.example.live_video.exception.SQLCoursenameConflictException;
 import com.example.live_video.service.CourseService;
 import com.example.live_video.service.StudentService;
 import com.example.live_video.service.UserService;
+import com.example.live_video.util.FileWithExcelUtil;
 import com.example.live_video.vo.CourseVo;
 import com.example.live_video.vo.StudentGradeVo;
 import com.example.live_video.vo.StudentSectionGradeVo;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.List;
 
@@ -126,5 +128,11 @@ public class CourseController {
     public List<StudentSectionProgressVo> getStudentSectionGrades(@RequestParam String studentName, @RequestParam Long courseId){
         long studentId = userService.getUserId(studentName);
         return studentService.getStudentSectionsProgress(studentId, courseId);
+    }
+
+    @GetMapping("/export")
+    public void exportExcel(HttpServletResponse response, @RequestParam String courseId) {
+        List<StudentGradeVo> activityList = studentService.getStudentGrades(Long.parseLong(courseId));
+        FileWithExcelUtil.exportExcel(activityList, "成绩表", "sheet页名称", StudentGradeVo.class, "成绩表.xls", response);
     }
 }

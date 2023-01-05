@@ -18,6 +18,7 @@
 
 <script>
 import router from "@/router";
+import {useRoute} from "vue-router";
 
 export default {
   name: "studentGrade",
@@ -40,7 +41,7 @@ export default {
   methods: {
     fetchUser() {
       console.log(localStorage.getItem('token'))
-      this.courseId = this.$route.query.courseId
+      this.courseId = useRoute().query.courseId
       console.log(this.courseId)
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
       this.$axios.get('http://localhost:8082/api/user').then(res => {
@@ -61,7 +62,7 @@ export default {
             message: result,
             type: 'error'
           })
-          localStorage.removeItem('token')
+          // localStorage.removeItem('token')
         }
       })
     },
@@ -89,7 +90,7 @@ export default {
             message: result,
             type: 'error'
           })
-          localStorage.removeItem('token')
+          // localStorage.removeItem('token')
         }
       })
     }

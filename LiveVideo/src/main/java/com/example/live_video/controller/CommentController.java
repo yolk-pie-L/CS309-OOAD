@@ -27,9 +27,6 @@ import java.util.List;
 public class CommentController {
 
     @Autowired
-    StudentService studentService;
-
-    @Autowired
     CommentService commentService;
 
     @Autowired
@@ -70,11 +67,5 @@ public class CommentController {
         comment.setId(commentId);
         comment.setLikes(likes);
         return commentService.updateComment(comment);
-    }
-
-    @GetMapping(value = "/exportExcel")
-    public void exportExcel(HttpServletResponse response, @RequestParam String courseId) {
-        List<StudentGradeVo> activityList = studentService.getStudentGrades(Long.parseLong(courseId));
-        FileWithExcelUtil.exportExcel(activityList, "成绩表", "sheet页名称", StudentGradeVo.class, "成绩表.xls", response);
     }
 }

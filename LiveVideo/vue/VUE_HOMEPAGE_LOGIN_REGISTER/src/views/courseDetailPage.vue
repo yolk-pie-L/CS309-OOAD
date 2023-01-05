@@ -152,6 +152,7 @@ export default {
       router.push(`/teacherGrade?courseId=${this.courseId}`)
     },
     async fetchUserType() {
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
       await this.$axios.get('http://localhost:8082/api/user').then(res => {
         console.log(res)
         if (res.data.code === 200) {
@@ -163,7 +164,7 @@ export default {
             message: '获取用户信息错误',
             type: 'error'
           })
-          router.push('/login')
+          // router.push('/login')
         }
       })
     }

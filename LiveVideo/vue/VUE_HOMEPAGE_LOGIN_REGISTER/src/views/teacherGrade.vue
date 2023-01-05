@@ -7,6 +7,7 @@
       </el-card>
     </el-col>
   </el-row>
+  <el-button @click="exportGrade" style="position: fixed; top:100px; left: 50px">导出成绩</el-button>
   <div class="tableD">
     <el-table :data="gradeForm" height="300" class="tableH" >
       <el-table-column prop="studentName" label="studentName" width="300"></el-table-column>
@@ -33,6 +34,8 @@
 </template>
 
 <script>
+import ajax from "@/utils/ajax";
+
 export default {
   name: "teacherGrade",
   data() {
@@ -113,6 +116,18 @@ export default {
           localStorage.removeItem('token')
         }
       })
+    },
+    exportGrade() {
+      // let a = document.createElement('a')
+      // a.href = `http://localhost:8082/api/course/export?courseId=${this.courseId}`
+      // a.click()
+      let option = {
+        fileName: 'StudentGrade.xls',
+        fileType: 'xls'
+      }
+      ajax.getFile(`http://localhost:8082/api/course/export?courseId=${this.courseId}`, option)
+      // this.$axios.get(`http://localhost:8082/api/course/export?courseId=${this.courseId}`).then(res => {
+      // })
     }
   }
 }

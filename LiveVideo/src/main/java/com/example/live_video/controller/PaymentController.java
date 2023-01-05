@@ -4,6 +4,7 @@ import com.alipay.api.AlipayApiException;
 import com.example.live_video.config.AlipayConfig;
 import com.example.live_video.entity.AlipayBean;
 import com.example.live_video.service.PaymentService;
+import com.example.live_video.service.UserOrderService;
 import com.example.live_video.vo.StringVo;
 import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
@@ -25,11 +26,15 @@ public class PaymentController {
     private PaymentService paymentService;
 
     @Autowired
+    private UserOrderService orderService;
+
+    @Autowired
     AlipayConfig alipayConfig;
     @PostMapping("/api/alipay")
     public StringVo toAlipay(@RequestBody AlipayBean alipayBean) throws AlipayApiException {
         alipayBean.setOut_trade_no(UUID.randomUUID().toString().replaceAll("-",""));
         System.out.println(alipayBean);
+//        orderService.
         return new StringVo(paymentService.toAlipay(alipayBean));
     }
 

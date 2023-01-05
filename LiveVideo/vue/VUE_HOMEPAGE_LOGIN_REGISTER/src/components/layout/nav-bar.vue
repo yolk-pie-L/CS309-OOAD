@@ -24,17 +24,17 @@
   <div class="business wrap">
     <ul class="box clearfix">
       <div v-for="item in classForm">
-      <li>
-        <a @click="intoClass(item.id)">
-          <h3 v-text="item.courseName"></h3>
-          <img :src="item.coursePicture" alt="课程"/>
-          <div class="word">
-            <h4 v-text="item.teacherName"></h4>
-            <i class="border"></i>
-            <p v-text="item.introduction"></p>
-          </div>
-        </a>
-      </li>
+        <li>
+          <a @click="intoClass(item.id)">
+            <h3 v-text="item.courseName"></h3>
+            <img :src="item.coursePicture" alt="课程"/>
+            <div class="word">
+              <h4 v-text="item.teacherName"></h4>
+              <i class="border"></i>
+              <p v-text="item.introduction"></p>
+            </div>
+          </a>
+        </li>
       </div>
 <!--      <li>-->
 <!--        <a href="javascript:">-->

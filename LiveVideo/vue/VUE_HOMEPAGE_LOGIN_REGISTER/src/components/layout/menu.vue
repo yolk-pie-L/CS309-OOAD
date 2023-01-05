@@ -12,7 +12,7 @@
       <el-menu-item>
         <el-avatar size="large" :src="userForm.photoUrl" @click="toOne"></el-avatar>
       </el-menu-item>
-      <el-menu-item index="1">Processing Center</el-menu-item>
+      <el-menu-item index="1"> 直播课程 </el-menu-item>
       <el-sub-menu index="2">
         <template #title>{{userForm.userName}}</template>
         <el-menu-item index="2-1" @click="toOne"> {{item.one}}</el-menu-item>
@@ -70,6 +70,11 @@ export default {
     },
     handleSelect: (key, keyPath) => {
       console.log(key, keyPath)
+      switch (key) {
+        case "1":
+          router.push("/live/all")
+          break
+      }
     },
     toHome() {
       router.push('/');
