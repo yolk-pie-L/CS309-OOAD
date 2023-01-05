@@ -114,10 +114,10 @@ export default {
         // 拿到结果
         let result = res.data.result
         console.log(result)
-        this.courseForm.courseName = result.courseName
+        this.courseForm.courseName = "课程名：" + result.courseName
         this.courseForm.tag = result.tag
         this.courseForm.coursePic = result.coursePicture
-        this.courseForm.teacherName = result.teacherName
+        this.courseForm.teacherName = "老师：" + result.teacherName
         this.infoTable[0].info = result.introduction
         this.courseForm.charge = result.charge
         // let message = res.data.msg;

@@ -11,7 +11,10 @@
         <el-row v-text="this.courseForm.teacherName" class="title"></el-row>
       </el-col>
     </el-row>
-    <el-row  type="flex" justify="space-around" align="middle">
+    <el-row v-show="coShow" type="flex" class="row-bg card" justify="center" align="bottom">
+      <el-button type="primary" @click="detailed">课程信息</el-button>
+    </el-row>
+    <el-row v-show="coNotShow" type="flex" class="row-bg card" justify="center" align="bottom">
       <el-button type="primary" @click="detailed">课程信息</el-button>
       <el-button type="primary" @click="joinCourse">报名课程</el-button>
       <el-button type="primary" @click="leave">退课</el-button>
@@ -28,6 +31,8 @@ export default {
   name: 'courseMainPage',
   data() {
     return {
+      coShow: true,
+      coNotShow: false,
       courseId: useRoute().query.courseId,
       courseForm: {
         courseName: "DSAA",
@@ -43,6 +48,7 @@ export default {
   mounted() {
     this.fetchUser();
     this.fetchCourse();
+    this.fetchUserType();
   },
   methods: {
     fetchUser() {
@@ -60,8 +66,8 @@ export default {
       ).then(res => {
         // 拿到结果
         let result = res.data.result
-        this.courseForm.courseName = result.courseName
-        this.courseForm.teacherName = result.teacherName
+        this.courseForm.courseName = "课程名：" + result.courseName
+        this.courseForm.teacherName = "老师：" + result.teacherName
         // let message = res.data.msg;
         // 判断结果
         if (result) {
@@ -113,7 +119,38 @@ export default {
       })
     },
     detailed() {
-      router.push(`/courseDetailPage?courseId=${this.courseId}`)
+      this.$axios.get('http://localhost:8082/api/course/isRelated', {
+        params: {
+          courseId: this.courseId,
+          userName: this.joinForm.studentName
+        }
+      }).then(res => {
+        if (res.data.code === 200) {
+          console.log(res)
+          if (res.data.result) {
+            router.push(`/courseDetailPage?courseId=${this.courseId}`)
+          }
+          else {
+            alert("您不是这个课程相关的人员")
+          }
+        }
+      })
+    },
+    async fetchUserType() {
+      await this.$axios.get('http://localhost:8082/api/user').then(res => {
+        console.log(res)
+        if (res.data.code === 200) {
+          this.coShow = res.data.result.userType === 'Teacher'
+          this.coNotShow = res.data.result.userType !== 'Teacher'
+        } else {
+          this.$notify({
+            title: '错误',
+            message: '获取用户信息错误',
+            type: 'error'
+          })
+          router.push('/login')
+        }
+      })
     }
   }
 }
