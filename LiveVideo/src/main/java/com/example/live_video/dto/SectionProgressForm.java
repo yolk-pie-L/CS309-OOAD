@@ -5,7 +5,8 @@ import lombok.Data;
 @Data
 public class SectionProgressForm {
     long sectionId;
-    long studentId;
-    long duration;
-    long currentWatch;
+    String studentName;
+    double totalWatch;
+    double currentWatch;
+    double videoTime;
 }
