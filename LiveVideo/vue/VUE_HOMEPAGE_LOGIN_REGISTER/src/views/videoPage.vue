@@ -8,14 +8,26 @@
 <!--          <el-table-column prop="sectionComplete" label="Section Complete" align="center"-->
 <!--                           min-width="180px"></el-table-column>-->
 <!--        </el-table>-->
-        <template #header>Section List</template>
+        <template #header>
+          <span>Section List</span>
+          <router-link :to="`/courseDetailPage?courseId=${courseId}`">
+            <el-button>返回课程主页</el-button>
+          </router-link>
+        </template>
         <el-scrollbar>
           <div v-for="(item, i) in sectionData" :key="i" style="padding: 5px;">
             <router-link :to="reFetch(item)">
               <el-card class="box-card">
                 <div class="card-header">
                   <span>{{item.sectionName}}</span>
-                  <span>{{item.sectionComplete}}</span>
+                  <div class="demo-progress">
+                    <el-progress :percentage="item.sectionComplete"></el-progress>
+<!--                    <el-progress :percentage="50" />-->
+<!--                    <el-progress :percentage="100" :format="format" />-->
+<!--                    <el-progress :percentage="100" status="success" />-->
+<!--                    <el-progress :percentage="100" status="warning" />-->
+<!--                    <el-progress :percentage="50" status="exception" />-->
+                  </div>
                 </div>
               </el-card>
             </router-link>
@@ -131,7 +143,7 @@ export default {
   data() {
     return {
       courseId: useRoute().query.courseId,
-      sectionId: undefined,
+      sectionId: useRoute().query.sectionId,
       userName: 'SY',
       total: '总评论数： 7',
       courseName: 'black',
@@ -142,7 +154,7 @@ export default {
         {
           sectionIdIn: "0",
           sectionName: "ababa",
-          sectionComplete: '0%',
+          sectionComplete: 0,
           status: "OK"
         }
       ],
@@ -264,7 +276,6 @@ export default {
   },
   mounted() {
     this.fetchData()
-    this.fetchUser()
     this.recodrTime = setInterval(() => {
       if (document.getElementsByTagName('video')[0].currentTime && this.sectionId) {
         localStorage.setItem(
@@ -277,7 +288,8 @@ export default {
             })
         )
         this.sectionData[this.row].sectionComplete = (this.continueTime /
-            document.getElementsByTagName('video')[0].duration * 100).toString().split('.')[0] + '%'
+            document.getElementsByTagName('video')[0].duration * 100).toFixed(1)
+        this.updateProgress()
       }
     }, 1000)
   },
@@ -288,32 +300,35 @@ export default {
       this.$axios.get(`http://localhost:8082/api/section/all/${this.courseId}`).then(res => {
         let result = res.data.result;
         this.sectionData = result
-        this.sectionId = result[0].sectionIdIn
         console.log(result)
         if (result) {
           /*登陆成功*/
           console.log('抓取到sectionList数据')
           /*跳转页面*/
+          this.fetchUser()
         } else {
           /*打印错误信息*/
           alert(result);
         }
-      })
-      if (this.sectionId === undefined) {
-
-      } else {
-        if (!this.playerOptions.sources[0].src && !useRoute().query.sectionId) {
-          console.log("无src参数")
-          router.push(`/videoPage?courseId=${this.courseId}&sectionId=${this.sectionId}&src=http://localhost:8082/api/section/${this.sectionId}`)
+        if (result[0].sectionIdIn === undefined) {
+          console.log('section undefined')
         } else {
-          console.log("有src参数" + this.playerOptions.sources[0].src)
-          this.sectionId = useRoute().query.sectionId
-          this.sectionData.forEach(section => {
-            if (section.sectionIdIn === this.sectionId)
-              this.row = this.sectionData.indexOf(section)
-          })
+          console.log('src', this.playerOptions.sources[0].src)
+          if (!this.playerOptions.sources[0].src) {
+            console.log("无src参数")
+            router.push(`/videoPage?courseId=${this.courseId}&sectionId=${result[0].sectionIdIn}&src=http://localhost:8082/api/section/${result[0].sectionIdIn}`)
+          } else {
+            console.log("有src参数" + this.playerOptions.sources[0].src)
+            this.sectionData.forEach(section => {
+              // console.log('section: ', section.sectionIdIn, this.sectionId, this.sectionData.indexOf(section))
+              if (section.sectionIdIn.toString() === this.sectionId) {
+                this.row = this.sectionData.indexOf(section)
+                console.log('row at ', this.row)
+              }
+            })
+          }
         }
-      }
+      })
     },
     fetchUser() {
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
@@ -334,7 +349,7 @@ export default {
       })
     },
     fetchComment() {
-      this.$axios.get('http://localhost:8082/api/comment/' + this.sectionId).then(res => {
+      this.$axios.get(`http://localhost:8082/api/comment/${this.sectionId}`).then(res => {
         let result = res.data.result;
         console.log(result)
 
@@ -352,12 +367,12 @@ export default {
           /*跳转页面*/
         } else {
           /*打印错误信息*/
-          alert(result);
+          // alert(result);
         }
       })
     },
     fetchTotalComment() {
-      this.$axios.get('http://localhost:8082/api/comment/all/' + this.sectionId).then(res => {
+      this.$axios.get(`http://localhost:8082/api/comment/all/${this.sectionId}`).then(res => {
         let result = res.data.result;
         let message = res.data.msg;
         console.log(result)
@@ -368,19 +383,32 @@ export default {
           /*跳转页面*/
         } else {
           /*打印错误信息*/
-          alert(result);
+          // alert(result);
         }
       })
     },
-    fetchContinueTime() {
-      this.$axios.get(`http://localhost:8082/api/grade?courseId=${this.courseId}&userName=${this.userName}`).then(res => {
+    updateProgress() {
+      let json = {
+        sectionId: this.sectionId,
+        studentName: this.userName,
+        totalWatch: this.continueTime,
+        currentWatch: this.last,
+        videoTime: this.player.duration
+      }
+      this.$axios.post(`http://localhost:8082/api/section/update`, json).then(res => {
         let result = res.data.result
         if (res.data.code === 200) {
-          this.continueTime = result.continueTime
-          this.last = result.last
+
         } else {
           this.$notify.error(result)
         }
+      })
+    },
+    fetchProgress(player) {
+      this.$axios.get(`http://localhost:8082/api/section/getprogress?studentName=${this.userName}&sectionId=${this.sectionId}`).then(res => {
+        let result = res.data.result
+        this.continueTime = result.totalWatch
+        player.currentTime = result.currentWatch
       })
     },
     reFetch(item) {
@@ -559,6 +587,7 @@ export default {
     canPlay(player) {
       this.player = document.getElementsByTagName('video')[0]
       console.log(this.player)
+      this.fetchProgress(this.player)
     },
     onPlayerPlay(player) {
       console.log('player play!', player)
@@ -586,6 +615,11 @@ export default {
 </script>
 
 <style scoped>
+
+.demo-progress .el-progress--line {
+  /*margin-bottom: 15px;*/
+  width: 200px;
+}
 .leastBox {
   height: 800px;
 }
@@ -717,7 +751,8 @@ export default {
 }
 
 .box-card {
-  width: 420px;
+
+  /*width: 420px;*/
 }
 
 </style>
