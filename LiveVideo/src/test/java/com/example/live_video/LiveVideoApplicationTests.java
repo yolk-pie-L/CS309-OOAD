@@ -10,6 +10,7 @@ import org.mockito.internal.matchers.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -43,16 +44,17 @@ class LiveVideoApplicationTests {
 
     @Test
     void contextLoads() throws EnrollCourseException {
-        User user = new User("LIXIN", UserType.Administrator, "lx@mail.com1", "123456");
-        User chenruiyao = new User("CHENRUIYAO", UserType.Student, "cry@mail.com1", "23EDCX", null, 1000L);
-        User wangzian = new User("WANGZIAN", UserType.Student, "wza@mail.com1", "23EDCX", null, 2000L);
-        User likai = new User("LIKAI", UserType.Student, "12013029@mail.sustech.edu.cn", "123456", null, 3000L);
-        User suzhaowen = new User("SUZHAOWEN", UserType.Student, "szw@mail.com1", "123456");
-        User wangchenyu = new User("WANGCHENYU", UserType.Student, "wcy@mail.com1", "34rfsv");
-        User lzz = new User("LZZ", UserType.Teacher, "lzz@mail.com1", "23EDCX");
-        User sy = new User("SY", UserType.Teacher, "sy@mail.com1", "123456");
-        User hq = new User("HQ", UserType.Teacher, "hq@mail.com1", "123456");
-        User lfl = new User("LFL", UserType.Teacher, "lfl@mail.com1", "sdfwadse");
+        String defaultUrlPath = "default.png";
+        User user = new User("LIXIN", UserType.Administrator, "lx@mail.com1", "123456", defaultUrlPath, 0L);
+        User chenruiyao = new User("CHENRUIYAO", UserType.Student, "cry@mail.com1", "23EDCX", defaultUrlPath, 1000L);
+        User wangzian = new User("WANGZIAN", UserType.Student, "wza@mail.com1", "23EDCX", defaultUrlPath, 2000L);
+        User likai = new User("LIKAI", UserType.Student, "12013029@mail.sustech.edu.cn", "123456", defaultUrlPath, 3000L);
+        User suzhaowen = new User("SUZHAOWEN", UserType.Student, "szw@mail.com1", "123456", defaultUrlPath, 3000L);
+        User wangchenyu = new User("WANGCHENYU", UserType.Student, "wcy@mail.com1", "34rfsv", defaultUrlPath, 3000L);
+        User lzz = new User("LZZ", UserType.Teacher, "lzz@mail.com1", "23EDCX", defaultUrlPath, 3000L);
+        User sy = new User("SY", UserType.Teacher, "sy@mail.com1", "123456", defaultUrlPath, 3000L);
+        User hq = new User("HQ", UserType.Teacher, "hq@mail.com1", "123456", defaultUrlPath, 3000L);
+        User lfl = new User("LFL", UserType.Teacher, "lfl@mail.com1", "sdfwadse", defaultUrlPath, 3000L);
         userMapper.insert(user);
         userMapper.insert(chenruiyao);
         userMapper.insert(wangzian);

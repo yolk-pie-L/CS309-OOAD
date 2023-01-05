@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.File;
 import java.util.List;
 
 @ResponseResult
@@ -48,6 +49,7 @@ public class UserController {
         }
         User user = userForm.convertToUser();
         user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+        user.setPhotoUrl("default.png");
         return userService.register(user);
     }
 
