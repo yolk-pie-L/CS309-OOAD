@@ -23,6 +23,7 @@ import personInfo from "@/views/myspace/personInfo";
 import myspace from "@/views/myspace";
 import addNotice from "@/views/addNotice";
 import avatarUpdate from "@/views/myspace/avatarUpdate";
+import live from "@/views/live";
 import studentGrade from "@/views/studentGrade";
 import teacherGrade from "@/views/teacherGrade";
 const routes = [
@@ -115,6 +116,11 @@ const routes = [
     path: '/payment',
     name: payment,
     component: payment
+  },
+  {
+    path: '/live',
+    name: live,
+    component: live
   },
   {
     path: '/person',
