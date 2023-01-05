@@ -6,22 +6,19 @@ import com.example.live_video.dto.UserForm;
 import com.example.live_video.entity.User;
 import com.example.live_video.entity.UserType;
 import com.example.live_video.exception.MyException;
-import com.example.live_video.service.MailService;
 import com.example.live_video.service.UserService;
 import com.example.live_video.util.MailUtil;
-import com.example.live_video.util.RandomUtils;
 import com.example.live_video.util.TokenUtils;
 import com.example.live_video.wrapper.ResponseResult;
-import com.wf.captcha.utils.CaptchaUtil;
-import org.apache.catalina.connector.Request;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.DigestUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.File;
 import java.util.List;
 
 @ResponseResult
@@ -50,7 +47,10 @@ public class UserController {
             List<ObjectError> list = bindingResult.getAllErrors();
             throw new MyException(list.get(0).getDefaultMessage());
         }
-        return userService.register(userForm.convertToUser());
+        User user = userForm.convertToUser();
+        user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+        user.setPhotoUrl("default.png");
+        return userService.register(user);
     }
 
     @PostMapping("/api/login")
@@ -60,7 +60,7 @@ public class UserController {
         if (!CaptchaController.ver(userForm.getCode())) {
             throw new MyException("验证码不正确");
         }
-        if (userService.compareUserPassword(userForm.getUserName(), userForm.getPassword())) {
+        if (userService.compareUserPassword(userForm.getUserName(), DigestUtils.md5DigestAsHex(userForm.getPassword().getBytes()))) {
             jsonObject.put("token", TokenUtils.sign(userForm.getUserName()));
             return jsonObject;
         }else

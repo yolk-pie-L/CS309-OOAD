@@ -13,12 +13,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 @Rollback
 class AdminServiceTest {
@@ -32,6 +33,12 @@ class AdminServiceTest {
     List<User> userList = new ArrayList<>();
 
     Long count;
+
+    @Test
+    void tt(){
+        String defaultUrlPath = System.getProperty("user.dir") + File.separator + "src/main/resources/static/picture/default.png";
+        System.out.println(defaultUrlPath);
+    }
 
     @BeforeEach
     void setUp() {

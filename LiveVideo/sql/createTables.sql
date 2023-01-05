@@ -46,7 +46,7 @@ CREATE TABLE user
     admin_right enum ('SuperAdmin', 'Admin', 'NonAdmin')   not null,
     mail        varchar(50),
     password    varchar(50)                                not null,
-    photo_url   varchar(50),
+    photo_url   varchar(100),
     account     bigint                                              default 0,
     create_time timestamp                                  not null default CURRENT_TIMESTAMP,
     update_time timestamp                                  null     default null on update CURRENT_TIMESTAMP,
@@ -64,8 +64,8 @@ CREATE TABLE course
     charge          bigint                                   not null,
     description     text,
     status          enum ('APPROVED', 'FAILED', 'REVIEWING') not null,
-    picture_url     varchar(50),
-    private_key_url varchar(50),
+    picture_url     varchar(100),
+    private_key_url varchar(100),
     create_time     timestamp                                not null default CURRENT_TIMESTAMP,
     update_time     timestamp                                null     default null on update CURRENT_TIMESTAMP,
     is_delete       int                                               default 0,
@@ -92,7 +92,7 @@ CREATE TABLE assignment
 CREATE TABLE assign_urls
 (
     assign_id  int         not null,
-    assign_url varchar(50) not null,
+    assign_url varchar(100) not null,
     FOREIGN KEY (assign_id) REFERENCES assignment (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -102,7 +102,7 @@ CREATE TABLE section
     id           int auto_increment primary key,
     section_name varchar(20) not null,
     course_id    int         not null,
-    video_url    varchar(50),
+    video_url    varchar(100),
     grade        int,
     create_time  timestamp   not null default CURRENT_TIMESTAMP,
     update_time  timestamp   null     default null on update CURRENT_TIMESTAMP,
@@ -136,7 +136,7 @@ CREATE TABLE live_stream
     title       text        not null,
     description text        not null,
     user_id     int         not null,
-    url         varchar(50) not null,
+    url         varchar(100) not null,
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -173,7 +173,7 @@ CREATE TABLE stu_assign_urls
 (
     user_id    int not null,
     assign_id  int not null,
-    assign_url varchar(50),
+    assign_url varchar(100),
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (assign_id) REFERENCES assignment (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
