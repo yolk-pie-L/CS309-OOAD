@@ -1,9 +1,10 @@
 package com.example.live_video.controller;
 
-import com.example.live_video.dto.DeleteLiveStreamForm;
 import com.example.live_video.dto.LiveStreamForm;
 import com.example.live_video.entity.LiveStream;
 import com.example.live_video.service.LiveStreamService;
+import com.example.live_video.util.RandomUtils;
+import com.example.live_video.vo.LiveStreamVo;
 import com.example.live_video.wrapper.PassToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,26 +20,26 @@ public class LiveStreamController {
     LiveStreamService liveStreamService;
 
     @GetMapping("/all")
-    List<LiveStream> getAllLiveSteam(){
+    List<LiveStream> getAllLiveSteam() {
         return liveStreamService.getLiveStreamList();
     }
 
     @GetMapping("/{id}")
-    LiveStream getOneLiveStream(@PathVariable Long id){
+    LiveStream getOneLiveStream(@PathVariable Long id) {
         return liveStreamService.getLiveStream(id);
     }
 
     @PostMapping("/create")
-    boolean createLiveStream(@RequestBody LiveStreamForm liveStreamForm){
-        LiveStream liveStream = new LiveStream(liveStreamForm.getTitle(), liveStreamForm.getUserName(),
-                liveStreamForm.getUrl());
+    LiveStreamVo createLiveStream(@RequestBody LiveStreamForm liveStreamForm) {
+        LiveStream liveStream = new LiveStream(liveStreamForm.getTitle(), liveStreamForm.getDescription(),
+                liveStreamForm.getUserName(), "L" + RandomUtils.VID(10));
         liveStreamService.createLiveStream(liveStream);
-        return true;
+        return new LiveStreamVo(liveStream.getId(), liveStream.getUrl());
     }
 
-    @PostMapping("/stop")
-    boolean deleteLiveStream(@RequestBody DeleteLiveStreamForm deleteLiveStreamForm){
-        liveStreamService.removeById(deleteLiveStreamForm.getId());
+    @PostMapping("/stop/{id}")
+    boolean deleteLiveStream(@PathVariable String id) {
+        liveStreamService.removeById(Long.parseLong(id));
         return true;
     }
 

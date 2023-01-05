@@ -4,10 +4,9 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/LiveVideo?serverTimeZone=GMT%2b8
-    #    url: jdbc:mysql://localhost:3306/test_db?serverTimeZone=GMT%2b8
     username: root
     password: 123456
-#    password: root
+#    password: ??????
   mail:
     host: smtp.163.com
     username: livevideo2022@163.com
@@ -42,3 +41,8 @@ mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:mapper/*.xml
+#logging:
+#  level:
+#    com.example.live_video.mapper: debug
+
+

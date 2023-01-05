@@ -62,7 +62,8 @@ public class Assignment {
         this.description = description;
     }
 
-    public Assignment(String assignmentName, Long courseId, Timestamp deadline, Integer totalGrade, List<String> assignUrls, Boolean isAssignment, String description, Timestamp startTime) {
+    public Assignment(String assignmentName, Long courseId, Timestamp deadline, Integer totalGrade,
+                      List<String> assignUrls, Boolean isAssignment, String description, Timestamp startTime) {
         this.assignmentName = assignmentName;
         this.courseId = courseId;
         this.deadline = deadline;
@@ -76,13 +77,14 @@ public class Assignment {
     /**
      * Any parameter if you don't know, just fill it with null. But assignmentName, courseName, teacherName is a must.
      *
-     * @param assignmentName
-     * @param courseName
-     * @param teacherName
-     * @param deadline
-     * @param totalGrade
-     * @param isAssignment
-     * @param description
+     * @param assignmentName not null
+     * @param courseName not null
+     * @param teacherName not null
+     * @param deadline 截止日
+     * @param totalGrade 总分
+     * @param isAssignment assign or quiz
+     * @param description 描述
+     * @param assignUrls url list
      */
     public Assignment(String assignmentName, String courseName, String teacherName, Timestamp deadline,
                       Integer totalGrade, Boolean isAssignment, String description, List<String> assignUrls) {

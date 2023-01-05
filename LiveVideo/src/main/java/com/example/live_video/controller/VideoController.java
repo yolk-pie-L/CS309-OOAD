@@ -1,18 +1,17 @@
 package com.example.live_video.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.live_video.constance.FileConstance;
 import com.example.live_video.dto.FileForm;
 import com.example.live_video.dto.MergeInfo;
 import com.example.live_video.dto.SectionProgressForm;
 import com.example.live_video.entity.FileTb;
-import com.example.live_video.service.FileTbService;
-import com.example.live_video.vo.SectionVo;
+import com.example.live_video.entity.StuSection;
+import com.example.live_video.service.*;
 import com.example.live_video.vo.StringVo;
 import com.example.live_video.wrapper.NonStaticResourceHttpRequestHandler;
 import com.example.live_video.entity.Section;
 import com.example.live_video.exception.MyException;
-import com.example.live_video.service.CourseService;
-import com.example.live_video.service.SectionService;
 import com.example.live_video.util.RandomUtils;
 import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
@@ -43,7 +42,7 @@ import static com.example.live_video.wrapper.NonStaticResourceHttpRequestHandler
 
 @ResponseResult
 @RestController
-@PassToken
+@UserLoginToken
 @Slf4j
 @RequestMapping("/api/section")
 public class VideoController {
@@ -65,16 +64,37 @@ public class VideoController {
     @Autowired
     private FileTbService fileTbService;
 
-    @PostMapping("/update")
-    public void updateSectionProgress(@RequestBody SectionProgressForm sectionProgressForm){
+    @Autowired
+    UserService userService;
 
+    @Autowired
+    private StuSectionService stuSectionService;
+
+    @PostMapping("/update")
+    public void updateSectionProgress(@RequestBody SectionProgressForm sectionProgressForm) {
+        QueryWrapper<StuSection> stuSectionQueryWrapper = new QueryWrapper<>();
+        Long userId = userService.getUserId(sectionProgressForm.getStudentName());
+        stuSectionQueryWrapper.eq("user_id", userId);
+        stuSectionQueryWrapper.eq("section_id", sectionProgressForm.getSectionId());
+        Section section = sectionService.getOneSection(sectionProgressForm.getSectionId());
+        StuSection stuSection = new StuSection(userId, sectionProgressForm.getSectionId(),
+                Math.min((int) (sectionProgressForm.getTotalWatch() / sectionProgressForm.getVideoTime()  * 1.1 * section.getGrade()), section.getGrade()),
+                sectionProgressForm.getTotalWatch(), sectionProgressForm.getCurrentWatch());
+        stuSectionService.update(stuSection, stuSectionQueryWrapper);
+    }
+
+    @GetMapping("/getprogress")
+    public StuSection getProgress(@RequestParam String studentName, @RequestParam Long sectionId) {
+        QueryWrapper<StuSection> stuSectionQueryWrapper = new QueryWrapper<>();
+        Long userId = userService.getUserId(studentName);
+        stuSectionQueryWrapper.eq("user_id", userId);
+        stuSectionQueryWrapper.eq("section_id", sectionId);
+        return stuSectionService.getOne(stuSectionQueryWrapper);
     }
 
     @GetMapping("/{sectionId}")
     public void videoPreview(HttpServletRequest request, HttpServletResponse response, @PathVariable String sectionId) throws Exception {
         String videoUrl = sectionService.getOneSection(Long.valueOf(sectionId)).getVideoUrl();
-//        System.out.println("Hello world");
-//        String videoUrl = "src/main/resources/static/video/demo1.mp4";
 
         System.out.println(videoUrl);
         Path filePath = Paths.get(videoUrl);
@@ -97,7 +117,7 @@ public class VideoController {
                              @RequestParam Long courseId,
                              @RequestParam String secName) throws Exception {
         // 获取后缀名
-        String fileExt = Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf(".")+1).toLowerCase();
+        String fileExt = Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf(".") + 1).toLowerCase();
         if (!Arrays.asList(extList).contains(fileExt)) {
             throw new MyException("视频格式不正确");
         }
@@ -133,7 +153,7 @@ public class VideoController {
         String fullPath = FileConstance.FILE_PATH + fileForm.getKey() + "." + fileForm.getShardIndex();
         File dest = new File(fullPath);
         file.transferTo(dest);
-        log.info("文件分片 {} 保存完成",fileForm.getShardIndex());
+        log.info("文件分片 {} 保存完成", fileForm.getShardIndex());
 
         //开始保存索引分片信息 bu不存在就新加 存在就修改索引分片
         FileTb fileTb = FileTb.builder()
@@ -144,7 +164,7 @@ public class VideoController {
                 .build();
         if (fileTbService.isNotExist(fileForm.getKey())) {
             fileTbService.saveFile(fileTb);
-        }else {
+        } else {
             fileTbService.updateFile(fileTb);
         }
 
@@ -166,7 +186,7 @@ public class VideoController {
         }
         FileOutputStream outputStream = new FileOutputStream(newFile, true);//文件追加写入
         System.out.println(newFile.getCanonicalPath());
-        Section section = new Section(fileForm.getSectionName(), fileForm.getCourseId(), newFile.getCanonicalPath(), fileForm.getSectionScore().intValue());
+        Section section = new Section(fileForm.getSectionName(), fileForm.getCourseId(), newFile.getCanonicalPath(), 0);
         Long id = sectionService.getSectionId(fileForm.getCourseId(), fileForm.getSectionName());
         if (id == -1) {
             sectionService.createSection(section);
@@ -205,7 +225,7 @@ public class VideoController {
 
     //文件上传之前判断是否已经上传过 -1就是没有
     @GetMapping("/check")
-    public FileTb check(@RequestParam String key){
+    public FileTb check(@RequestParam String key) {
         FileTb fileTb = fileTbService.selectLatestIndex(key);
         log.info("检查分片：{}");
         return fileTb;
@@ -221,7 +241,7 @@ public class VideoController {
     }
 
     @GetMapping("all/{courseId}")
-    public List<SectionVo> getSectionList(@PathVariable String courseId) {
-        return SectionVo.parse(sectionService.getSectionList(Long.valueOf(courseId)));
+    public List<Section> getSectionList(@PathVariable Long courseId) {
+        return sectionService.getSectionList(courseId);
     }
 }

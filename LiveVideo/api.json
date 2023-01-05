@@ -224,6 +224,7 @@
       }
     }
   },
+
   "AssignmentPage": {
     "queryAssignmentByCourseName": {
       "Method": "GET",
@@ -313,12 +314,12 @@
       }
     }
   },
+
   "Quiz": {
     "createQuizJson": {
       "Method": "POST",
       "Path": "~/api/course/createQuizJson",
       "InputForm": {
-        "num": "10",
         "problems": [
           {
             "isSelection": "(yes/no)",
@@ -413,6 +414,7 @@
       }
     }
   },
+
   "ThirdParty": {
     "securityCodeCreate": {
       "Method": "GET",

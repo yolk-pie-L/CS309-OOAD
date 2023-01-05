@@ -143,14 +143,17 @@ export default {
   methods: {
     fetchClass(){
       this.courseId=localStorage.getItem("course");
-      this.homeworkForm.assignmentId=localStorage.getItem("assignment");
-      localStorage.removeItem("assignment");
+      this.homeworkForm.assignmentId=localStorage.getItem("Assignment");
+      // localStorage.removeItem("assignment");
       localStorage.removeItem("course")
     },
     fetchAssignment() {
-      this.$axios.get('api/course/assignment?AssignmentId={' + this.homeworkForm.assignmentId + '}').then(res => {
+      this.$axios.get('http://localhost:8082/api/assignment/one', {
+        params: {
+          assignmentId: this.homeworkForm.assignmentId,
+        }}).then(res => {
         // 拿到结果
-        let result = JSON.parse(res.data.data);
+        let result = res.data.result;
         let message = res.data.msg;
         this.homeworkForm = result
         this.additionalResources = result.additionalResources
@@ -172,10 +175,11 @@ export default {
     handleChange(file, fileList) {
       let formdata = new FormData()
       fileList.map(item => { //fileList本来就是数组，就不用转为真数组了
-        formdata.append("file", item.raw)  //将每一个文件图片都加进formdata
+        formdata.append("f", item.raw)  //将每一个文件图片都加进formdata
       })
+      formdata.append("assignmentId", localStorage.getItem("Assignment"))
       console.log(file.size)
-      this.$axios.post("http://localhost:8082/api/uploadFile", formdata).then(res => {
+      this.$axios.post("http://localhost:8082/api/assignment/upload", formdata).then(res => {
         console.log(res)
       })
     },
@@ -183,7 +187,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // 表单验证成功
-          this.$axios.post('http://localhost:8082/api/course/submitAssignment', this.answer).then(res => {
+          this.$axios.post('http://localhost:8082/api/assignment/submit', this.answer).then(res => {
             // 拿到结果
             let result = JSON.parse(res.data.data);
             let message = res.data.msg;

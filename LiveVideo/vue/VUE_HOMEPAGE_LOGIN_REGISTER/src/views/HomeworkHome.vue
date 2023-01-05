@@ -37,7 +37,7 @@ export default {
         teacherName: "teacher",
         introduction: "intro",
         coursePicture: "https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg",
-        privateKeyUrl: "ababa"
+        privateKeyUrl: "1"
       },
       homeworkForm: [
         {
@@ -73,17 +73,14 @@ export default {
   methods: {
     fetchAssignment() {
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
-      this.$axios.get('api/course/allAssignment', {
+      this.$axios.get('http://localhost:8082/api/assignment/all', {
             params: {
               courseId: this.classForm.privateKeyUrl,
             }}).then(res => {
         // 拿到结果
-        let result = JSON.parse(res.data.data);
+        let result = res.data.result;
         let message = res.data.msg;
-        this.homeworkForm.id = result.id
-        this.homeworkForm.assignmentName = result.assignmentName
-        this.homeworkForm.deadline = result.deadline
-        this.homeworkForm.status = result.status
+        this.homeworkForm = result;
         // 判断结果
         if (result) {
         } else {
