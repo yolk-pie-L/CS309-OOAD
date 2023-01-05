@@ -308,21 +308,4 @@ export default {
   font-weight: 600;
 }
 
-.answer {
-  position: absolute;
-  top: 52%;
-  left: 50%;
-  width: 40%;
-  height: 20%;
-  background-color: #c1d1d7;
-}
-
-.upload {
-  position: absolute;
-  top: 75%;
-  left: 50%;
-  width: 40%;
-  height: 20%;
-  background-color: #c1d1d7;
-}
 </style>
