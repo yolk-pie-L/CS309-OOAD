@@ -72,7 +72,10 @@ export default {
   },
   methods: {
     fetchAssignment() {
-      this.$axios.get('api/course/allAssignment?courseId={' + this.classForm.privateKeyUrl + '}').then(res => {
+      this.$axios.get('api/course/allAssignment', {
+            params: {
+              courseId: this.classForm.privateKeyUrl,
+            }}).then(res => {
         // 拿到结果
         let result = JSON.parse(res.data.data);
         let message = res.data.msg;
