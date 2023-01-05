@@ -33,7 +33,7 @@ public class User {
     private Long account;
 
     @TableField(value = "admin_right", updateStrategy = FieldStrategy.NOT_EMPTY)
-    private AdminRight adminRight = AdminRight.NonAdmin;
+    private AdminRight adminRight;
 
     @TableField(value = "create_time", insertStrategy = FieldStrategy.NOT_EMPTY)
     private Timestamp createTime;

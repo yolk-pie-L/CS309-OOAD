@@ -29,7 +29,7 @@ public class ProfileController {
     UserService userService;
 
     @GetMapping("/api/user")
-    public UserVo queryUserInfo(@RequestHeader String token) throws Exception{
+    public UserVo queryUserInfo(@RequestHeader String token) throws Exception {
         return UserVo.parse(userService.getUser(TokenUtils.getUserName(token)));
     }
 
@@ -47,8 +47,9 @@ public class ProfileController {
         }
         user.setMail(userForm.getMail());
         user.setPhotoUrl(userForm.getPhotoUrl());
+        System.out.println("{" + userForm.getRepeatPassword() + TokenUtils.getUserName(token) + "}");
         if (StringUtils.hasText(userForm.getRepeatPassword()))
-            user.setPassword(DigestUtils.md5DigestAsHex(userForm.getRepeatPassword().getBytes()));
+            user.setPassword(DigestUtils.md5DigestAsHex((userForm.getRepeatPassword() + TokenUtils.getUserName(token)).getBytes()));
         return userService.updateUser(user);
     }
 

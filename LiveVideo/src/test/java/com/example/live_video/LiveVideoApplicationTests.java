@@ -2,13 +2,16 @@ package com.example.live_video;
 
 import com.example.live_video.entity.*;
 import com.example.live_video.exception.EnrollCourseException;
+import com.example.live_video.exception.MyException;
 import com.example.live_video.mapper.*;
 import com.example.live_video.service.SectionService;
 import com.example.live_video.service.StudentService;
+import com.example.live_video.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.mockito.internal.matchers.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.DigestUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,29 +45,33 @@ class LiveVideoApplicationTests {
     @Autowired
     StudentService studentService;
 
+    @Autowired
+    UserService userService;
+
     @Test
-    void contextLoads() throws EnrollCourseException {
+    void contextLoads() throws MyException {
         String defaultUrlPath = "default.png";
-        User user = new User("LIXIN", UserType.Administrator, "lx@mail.com1", "123456", defaultUrlPath, 0L);
-        User chenruiyao = new User("CHENRUIYAO", UserType.Student, "cry@mail.com1", "23EDCX", defaultUrlPath, 1000L);
-        User wangzian = new User("WANGZIAN", UserType.Student, "wza@mail.com1", "23EDCX", defaultUrlPath, 2000L);
-        User likai = new User("LIKAI", UserType.Student, "12013029@mail.sustech.edu.cn", "123456", defaultUrlPath, 3000L);
-        User suzhaowen = new User("SUZHAOWEN", UserType.Student, "szw@mail.com1", "123456", defaultUrlPath, 3000L);
-        User wangchenyu = new User("WANGCHENYU", UserType.Student, "wcy@mail.com1", "34rfsv", defaultUrlPath, 3000L);
-        User lzz = new User("LZZ", UserType.Teacher, "lzz@mail.com1", "23EDCX", defaultUrlPath, 3000L);
-        User sy = new User("SY", UserType.Teacher, "sy@mail.com1", "123456", defaultUrlPath, 3000L);
-        User hq = new User("HQ", UserType.Teacher, "hq@mail.com1", "123456", defaultUrlPath, 3000L);
-        User lfl = new User("LFL", UserType.Teacher, "lfl@mail.com1", "sdfwadse", defaultUrlPath, 3000L);
-        userMapper.insert(user);
-        userMapper.insert(chenruiyao);
-        userMapper.insert(wangzian);
-        userMapper.insert(likai);
-        userMapper.insert(suzhaowen);
-        userMapper.insert(wangchenyu);
-        userMapper.insert(lzz);
-        userMapper.insert(sy);
-        userMapper.insert(hq);
-        userMapper.insert(lfl);
+        String password = "123456";
+        User user = new User("LIXIN", UserType.Administrator, "lx@mail.com1", password, defaultUrlPath, 0L);
+        User chenruiyao = new User("CHENRUIYAO", UserType.Student, "cry@mail.com1", password, defaultUrlPath, 1000L);
+        User wangzian = new User("WANGZIAN", UserType.Student, "wza@mail.com1", password, defaultUrlPath, 2000L);
+        User likai = new User("LIKAI", UserType.Student, "12013029@mail.sustech.edu.cn", password, defaultUrlPath, 3000L);
+        User suzhaowen = new User("SUZHAOWEN", UserType.Student, "szw@mail.com1", password, defaultUrlPath, 3000L);
+        User wangchenyu = new User("WANGCHENYU", UserType.Student, "wcy@mail.com1", password, defaultUrlPath, 3000L);
+        User lzz = new User("LZZ", UserType.Teacher, "lzz@mail.com1", password, defaultUrlPath, 3000L);
+        User sy = new User("SY", UserType.Teacher, "sy@mail.com1", password, defaultUrlPath, 3000L);
+        User hq = new User("HQ", UserType.Teacher, "hq@mail.com1", password, defaultUrlPath, 3000L);
+        User lfl = new User("LFL", UserType.Teacher, "lfl@mail.com1", password, defaultUrlPath, 3000L);
+        userService.register(user);
+        userService.register(chenruiyao);
+        userService.register(wangzian);
+        userService.register(likai);
+        userService.register(suzhaowen);
+        userService.register(wangchenyu);
+        userService.register(lzz);
+        userService.register(sy);
+        userService.register(hq);
+        userService.register(lfl);
         Course ComputerNetwork = new Course("Computer Network", lzz.getId(), "CS", 10L, "good", CourseStatus.APPROVED, "assign_url");
         Course DataStructure = new Course("Data Structure", sy.getId(), "CS", 20L, "good", CourseStatus.APPROVED, "assign_url");
         Course MachineLearning = new Course("Machine Learning", hq.getId(), "ML", 30L, "bad", CourseStatus.APPROVED, "assign_url");
@@ -117,7 +124,7 @@ class LiveVideoApplicationTests {
         sectionMapper.insert(section14);
         sectionMapper.insert(section15);
         sectionMapper.insert(linkedlayer);
-        Notice n1 = new Notice( "project1 released",ComputerNetwork.getId(), "project1 released, ddl is tomorrow");
+        Notice n1 = new Notice("project1 released", ComputerNetwork.getId(), "project1 released, ddl is tomorrow");
         Notice n2 = new Notice("project2 released", ComputerNetwork.getId(), "project2 released, ddl is today");
         Notice n3 = new Notice("OJ account", DataStructure.getId(), "check your oj account");
         Notice n4 = new Notice("Bonus", DataStructure.getId(), "everybody add 3 point");
@@ -154,7 +161,7 @@ class LiveVideoApplicationTests {
     }
 
     @Test
-    void testSectionCache(){
+    void testSectionCache() {
         Long sectionId = 1L;
         System.out.println();
         System.out.println();

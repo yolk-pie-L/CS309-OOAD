@@ -43,7 +43,7 @@ CREATE TABLE user
     id          int auto_increment primary key,
     username    varchar(20)                                not null,
     usertype    enum ('Administrator','Student','Teacher') not null,
-    admin_right enum ('SuperAdmin', 'Admin', 'NonAdmin')   not null,
+    admin_right enum ('SuperAdmin', 'Admin', 'NonAdmin')   not null default 'NonAdmin',
     mail        varchar(50),
     password    varchar(50)                                not null,
     photo_url   varchar(100),
@@ -91,7 +91,7 @@ CREATE TABLE assignment
 
 CREATE TABLE assign_urls
 (
-    assign_id  int         not null,
+    assign_id  int          not null,
     assign_url varchar(100) not null,
     FOREIGN KEY (assign_id) REFERENCES assignment (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -133,9 +133,9 @@ CREATE TABLE danmu
 CREATE TABLE live_stream
 (
     id          int auto_increment primary key,
-    title       text        not null,
-    description text        not null,
-    user_id     int         not null,
+    title       text         not null,
+    description text         not null,
+    user_id     int          not null,
     url         varchar(100) not null,
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
