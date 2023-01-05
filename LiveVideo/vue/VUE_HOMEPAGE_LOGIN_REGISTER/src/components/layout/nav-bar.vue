@@ -55,7 +55,7 @@
         @size-change="fetchCourse"
         @current-change="handleCurrentChange"
         v-model:current-page="pageForm.page"
-        :page-size="9"
+        :page-size="8"
         layout="prev, pager, next, jumper"
         :total="1000"
     >
