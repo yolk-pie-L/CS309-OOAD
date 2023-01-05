@@ -97,6 +97,11 @@ public class CourseController {
         return courseService.createCourse(courseDto.convertToCourse(CourseStatus.REVIEWING));
     }
 
+    @PostMapping("/del/{courseId}")
+    public Boolean delCourseOfTeacher(@PathVariable String courseId) {
+        return courseService.removeCourse(Long.valueOf(courseId));
+    }
+
     @GetMapping("/waiting")
     public List<CourseVo> queryCourseOfAdministrator(@RequestParam String administrator) {
         return CourseVo.parse(courseService.getReviewingCourseList());

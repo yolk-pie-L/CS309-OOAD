@@ -21,7 +21,7 @@
           <div class="card-header">
             <span>{{item.courseName}}</span>
             <el-button class="button" text @click="toCourse(item)"> 进入课程 </el-button>
-            <el-button class="button" text @click="leave(item.id)"> 退出课程 </el-button>
+            <el-button class="button" text @click="leave(item.id)"> {{ exitC }} </el-button>
           </div>
         </template>
         <div class="text item">
@@ -57,6 +57,7 @@ export default {
       currentPage: 1,
       pageSize: 114514,
       courseTitle: "已加入的课程",
+      exitC: '',
       teacherForm: {
         userName: "teacher1",
         userType: "Teacher",
@@ -102,10 +103,13 @@ export default {
         if (getPhoto(this.teacherForm.photoUrl) !== null)
           this.teacherForm.photoUrl = getPhoto(this.teacherForm.photoUrl);
 
-        if (this.teacherForm.userType === 'Teacher')
+        if (this.teacherForm.userType === 'Teacher') {
           this.courseTitle = "已创建的课程"
-        else
+          this.exitC = "删除课程"
+        } else {
           this.courseTitle = "已加入的课程"
+          this.exitC = "退出课程"
+        }
         // 判断结果
         if (res.data.code === 200) {
           /*登陆成功*/
@@ -160,26 +164,38 @@ export default {
       })
     },
     leave(courseId) {
-      let joinForm = {
-        studentName: this.teacherForm.userName,
-        courseId: courseId
-      }
-      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
-      this.$axios.post('http://localhost:8082/api/course/exit', joinForm).then(res => {
-        // 拿到结果
-        let code = res.data.code;
-        let message = res.data.message;
-        // 判断结果
-        if (code === 200) {
-          /*登陆成功*/
-
-          /*跳转页面*/
-          router.push('/')
-        } else {
-          /*打印错误信息*/
-          alert(message)
+      if (this.teacherForm.userType === 'Student') {
+        let joinForm = {
+          studentName: this.teacherForm.userName,
+          courseId: courseId
         }
-      })
+        this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
+        this.$axios.post('http://localhost:8082/api/course/exit', joinForm).then(res => {
+          // 拿到结果
+          let code = res.data.code;
+          let message = res.data.message;
+          // 判断结果
+          if (code === 200) {
+            /*登陆成功*/
+
+            /*跳转页面*/
+            router.push('/')
+          } else {
+            /*打印错误信息*/
+            alert(message)
+          }
+        })
+      }
+      if (this.teacherForm.userType === 'Teacher') {
+        this.$axios.post(`http://localhost:8082/api/course/del/${courseId}`).then(res => {
+          let result = res.data.result;
+          if (res.data.code === 200) {
+            this.$notify.success('删除成功')
+          } else {
+            this.$notify.error(result)
+          }
+        })
+      }
     },
     toCourse(item) {
       router.push(`/courseDetailPage?courseId=${item.id}`)

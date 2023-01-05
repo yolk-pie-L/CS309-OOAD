@@ -2,6 +2,7 @@ package com.example.live_video;
 
 import com.example.live_video.entity.*;
 import com.example.live_video.exception.EnrollCourseException;
+import com.example.live_video.exception.MyException;
 import com.example.live_video.mapper.*;
 import com.example.live_video.service.SectionService;
 import com.example.live_video.service.StudentService;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.internal.matchers.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.DigestUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,18 +45,18 @@ class LiveVideoApplicationTests {
     StudentService studentService;
 
     @Test
-    void contextLoads() throws EnrollCourseException {
+    void contextLoads() throws MyException {
         String defaultUrlPath = "default.png";
-        User user = new User("LIXIN", UserType.Administrator, "lx@mail.com1", "123456", defaultUrlPath, 0L);
-        User chenruiyao = new User("CHENRUIYAO", UserType.Student, "cry@mail.com1", "23EDCX", defaultUrlPath, 1000L);
-        User wangzian = new User("WANGZIAN", UserType.Student, "wza@mail.com1", "23EDCX", defaultUrlPath, 2000L);
-        User likai = new User("LIKAI", UserType.Student, "12013029@mail.sustech.edu.cn", "123456", defaultUrlPath, 3000L);
-        User suzhaowen = new User("SUZHAOWEN", UserType.Student, "szw@mail.com1", "123456", defaultUrlPath, 3000L);
-        User wangchenyu = new User("WANGCHENYU", UserType.Student, "wcy@mail.com1", "34rfsv", defaultUrlPath, 3000L);
-        User lzz = new User("LZZ", UserType.Teacher, "lzz@mail.com1", "23EDCX", defaultUrlPath, 3000L);
-        User sy = new User("SY", UserType.Teacher, "sy@mail.com1", "123456", defaultUrlPath, 3000L);
-        User hq = new User("HQ", UserType.Teacher, "hq@mail.com1", "123456", defaultUrlPath, 3000L);
-        User lfl = new User("LFL", UserType.Teacher, "lfl@mail.com1", "sdfwadse", defaultUrlPath, 3000L);
+        User user = new User("LIXIN", UserType.Administrator, "lx@mail.com1", DigestUtils.md5DigestAsHex("123456".getBytes()), defaultUrlPath, 0L);
+        User chenruiyao = new User("CHENRUIYAO", UserType.Student, "cry@mail.com1", DigestUtils.md5DigestAsHex("23EDCX".getBytes()), defaultUrlPath, 1000L);
+        User wangzian = new User("WANGZIAN", UserType.Student, "wza@mail.com1", DigestUtils.md5DigestAsHex("23EDCX".getBytes()), defaultUrlPath, 2000L);
+        User likai = new User("LIKAI", UserType.Student, "12013029@mail.sustech.edu.cn", DigestUtils.md5DigestAsHex("123456".getBytes()), defaultUrlPath, 3000L);
+        User suzhaowen = new User("SUZHAOWEN", UserType.Student, "szw@mail.com1", DigestUtils.md5DigestAsHex("123456".getBytes()), defaultUrlPath, 3000L);
+        User wangchenyu = new User("WANGCHENYU", UserType.Student, "wcy@mail.com1", DigestUtils.md5DigestAsHex("34rfsv".getBytes()), defaultUrlPath, 3000L);
+        User lzz = new User("LZZ", UserType.Teacher, "lzz@mail.com1", DigestUtils.md5DigestAsHex("23EDCX".getBytes()), defaultUrlPath, 3000L);
+        User sy = new User("SY", UserType.Teacher, "sy@mail.com1", DigestUtils.md5DigestAsHex("123456".getBytes()), defaultUrlPath, 3000L);
+        User hq = new User("HQ", UserType.Teacher, "hq@mail.com1", DigestUtils.md5DigestAsHex("123456".getBytes()), defaultUrlPath, 3000L);
+        User lfl = new User("LFL", UserType.Teacher, "lfl@mail.com1", DigestUtils.md5DigestAsHex("sdfwadse".getBytes()), defaultUrlPath, 3000L);
         userMapper.insert(user);
         userMapper.insert(chenruiyao);
         userMapper.insert(wangzian);
@@ -65,16 +67,16 @@ class LiveVideoApplicationTests {
         userMapper.insert(sy);
         userMapper.insert(hq);
         userMapper.insert(lfl);
-        Course ComputerNetwork = new Course("Computer Network", lzz.getId(), "CS", 10L, "good", CourseStatus.APPROVED, "assign_url");
-        Course DataStructure = new Course("Data Structure", sy.getId(), "CS", 20L, "good", CourseStatus.APPROVED, "assign_url");
-        Course MachineLearning = new Course("Machine Learning", hq.getId(), "ML", 30L, "bad", CourseStatus.APPROVED, "assign_url");
-        Course Politics = new Course("Politics", lfl.getId(), "POL", 40L, "bad", CourseStatus.APPROVED, "assign_url");
-        Course JAVA_A_lzz = new Course("JAVA A", lzz.getId(), "CS", 50L, "good", CourseStatus.APPROVED, "assign_url");
-        Course JAVA_A_sy = new Course("JAVA A", sy.getId(), "CS", 0L, "good", CourseStatus.APPROVED, "assign_url");
-        Course ROBOTS = new Course("ROBOTS", hq.getId(), "ME", 3L, "unknown", CourseStatus.FAILED, "assign_url");
-        Course Operating_System = new Course("Operating System", sy.getId(), "CS", 23L, "sy is god", CourseStatus.REVIEWING, "assign_url");
-        Course MathematicalLogic = new Course("Mathematical Logic", hq.getId(), "MA", 0L, "hard", CourseStatus.APPROVED, "assign_url");
-        Course JAVA_B = new Course("JAVA B", lzz.getId(), "CS", 8L, "easy", CourseStatus.REVIEWING, "assign_url");
+        Course ComputerNetwork = new Course("Computer Network", lzz.getId(), "CS", 10L, "good", CourseStatus.APPROVED, "课程示例图.jpg");
+        Course DataStructure = new Course("Data Structure", sy.getId(), "CS", 20L, "good", CourseStatus.APPROVED, "课程示例图.jpg");
+        Course MachineLearning = new Course("Machine Learning", hq.getId(), "ML", 30L, "bad", CourseStatus.APPROVED, "课程示例图.jpg");
+        Course Politics = new Course("Politics", lfl.getId(), "POL", 40L, "bad", CourseStatus.APPROVED, "课程示例图.jpg");
+        Course JAVA_A_lzz = new Course("JAVA A", lzz.getId(), "CS", 50L, "good", CourseStatus.APPROVED, "课程示例图.jpg");
+        Course JAVA_A_sy = new Course("JAVA A", sy.getId(), "CS", 0L, "good", CourseStatus.APPROVED, "课程示例图.jpg");
+        Course ROBOTS = new Course("ROBOTS", hq.getId(), "ME", 3L, "unknown", CourseStatus.FAILED, "课程示例图.jpg");
+        Course Operating_System = new Course("Operating System", sy.getId(), "CS", 23L, "sy is god", CourseStatus.REVIEWING, "课程示例图.jpg");
+        Course MathematicalLogic = new Course("Mathematical Logic", hq.getId(), "MA", 0L, "hard", CourseStatus.APPROVED, "课程示例图.jpg");
+        Course JAVA_B = new Course("JAVA B", lzz.getId(), "CS", 8L, "easy", CourseStatus.REVIEWING, "课程示例图.jpg");
         courseMapper.insert(ComputerNetwork);
         courseMapper.insert(DataStructure);
         courseMapper.insert(MachineLearning);

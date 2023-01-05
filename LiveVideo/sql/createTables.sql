@@ -43,7 +43,7 @@ CREATE TABLE user
     id          int auto_increment primary key,
     username    varchar(20)                                not null,
     usertype    enum ('Administrator','Student','Teacher') not null,
-    admin_right enum ('SuperAdmin', 'Admin', 'NonAdmin')   not null,
+    admin_right enum ('SuperAdmin', 'Admin', 'NonAdmin')   not null default 'NonAdmin',
     mail        varchar(50),
     password    varchar(50)                                not null,
     photo_url   varchar(100),

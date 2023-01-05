@@ -122,7 +122,7 @@ export default {
             // 判断结果
             if (result === 200) {
               /*登陆成功*/
-              this.$notify.success(this.method === 'create' ? "创建成功" : "修改成功")
+              this.$notify.success(this.method === 'create' ? "创建成功，正在审核" : "修改成功，正在审核")
               /*跳转页面*/
               router.push('/person/info')
             } else {

@@ -61,9 +61,6 @@
               <router-link to="/person/create-notice">
                 <el-menu-item index="6">创建通知</el-menu-item>
               </router-link>
-              <router-link to="/person/delete-notice">
-                <el-menu-item index="7">删除通知</el-menu-item>
-              </router-link>
             </div>
           </el-menu>
         </el-scrollbar>

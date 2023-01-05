@@ -82,6 +82,7 @@ export default {
           /*登陆成功*/
           this.$notify.success("创建成功")
           /*跳转页面*/
+          router.push('/person/info')
         } else {
           /*打印错误信息*/
           this.$notify.error(result)

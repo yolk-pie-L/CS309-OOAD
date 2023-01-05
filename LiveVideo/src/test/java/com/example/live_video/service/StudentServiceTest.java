@@ -3,6 +3,7 @@ package com.example.live_video.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.live_video.entity.*;
 import com.example.live_video.exception.EnrollCourseException;
+import com.example.live_video.exception.MyException;
 import com.example.live_video.exception.SQLAssignNameConflictException;
 import com.example.live_video.exception.SQLCoursenameConflictException;
 import com.example.live_video.mapper.*;
@@ -109,7 +110,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void enrollCourse() throws EnrollCourseException {
+    void enrollCourse() throws MyException {
         User s1 = students.get(0);
         User s2 = students.get(1);
         Course c1 = courses.get(0);
@@ -159,7 +160,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void setStudentAssignGrade() throws SQLAssignNameConflictException, EnrollCourseException {
+    void setStudentAssignGrade() throws MyException {
         User s1 = students.get(0);
         User s2 = students.get(1);
         Course c1 = courses.get(0);
@@ -203,7 +204,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void setStudentSectionProgress() throws EnrollCourseException {
+    void setStudentSectionProgress() throws MyException {
         User s1 = students.get(0);
         User s2 = students.get(2);
         Course c1 = courses.get(0);
@@ -222,7 +223,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void getStudentListOfOneCourse() throws EnrollCourseException {
+    void getStudentListOfOneCourse() throws MyException {
         User s1 = students.get(0);
         User s3 = students.get(2);
         Course c1 = courses.get(0);
@@ -243,7 +244,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void getStudentGrades() throws EnrollCourseException, SQLAssignNameConflictException, IOException {
+    void getStudentGrades() throws MyException, IOException {
         Course course = courses.get(0);
         Course course1 = courses.get(1);
         User student = students.get(0);
@@ -299,7 +300,7 @@ class StudentServiceTest {
     }
 
     @Test
-    public void testTrigger() throws SQLAssignNameConflictException, EnrollCourseException {
+    public void testTrigger() throws MyException {
         Course course = courses.get(0);
         Course course1 = courses.get(1);
         User student = students.get(0);
