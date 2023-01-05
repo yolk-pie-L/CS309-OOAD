@@ -247,7 +247,7 @@ export default {
   padding: 40px 40px 30px 15px;
   width: 30%;
   position: absolute;
-  top: 63%;
+  top: 70%;
   left: 55%;
 }
 </style>
@@ -302,7 +302,7 @@ export default {
 
 .add {
   position: absolute;
-  top: 30%;
+  top: 25%;
   left: 55%;
   height: 20%;
   width: 30%;
@@ -315,7 +315,7 @@ export default {
 
 .add1 {
   position: absolute;
-  top: 0%;
+  top: 47%;
   left: 55%;
   height: 20%;
   width: 30%;

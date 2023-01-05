@@ -15,7 +15,7 @@
     <div>
       <el-col :span="7" class="login-card">
         <!--loginForm-->
-        <el-form :model="aquiz" :rules="rules" ref="loginForm" label-width="35%" class="loginForm">
+        <el-form :model="aquiz" :rules="rules" ref="loginForm" label-width="70%" class="loginForm">
           <el-form-item label="Problem"  prop="assignmentName" style="width: 380px" class="variable1">
             <el-input v-model="quizForm.assignmentName"></el-input>
           </el-form-item>
@@ -137,7 +137,13 @@ export default {
         status: ""
       },
       aquiz:{
-
+        isSelection:true,
+        problem:"xxxx",
+        A:"sdfa",
+        B:"sss",
+        C:"ddd",
+        D:"ddd",
+        answer:"(A/B/C/D)/(yes/no)"
       },
       quizForm: {
         courseId:"",
@@ -233,6 +239,7 @@ export default {
     },
     changeTo1(){
       this.type=1;
+      alert(this.type)
     },
     changeTo2(){
       this.type=2;
