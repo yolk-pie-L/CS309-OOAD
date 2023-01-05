@@ -27,6 +27,7 @@ import live from "@/views/live/live";
 import studentGrade from "@/views/studentGrade";
 import teacherGrade from "@/views/teacherGrade";
 import live_all from "@/views/live/live_all";
+import paySuccess from "@/views/paySuccess";
 const routes = [
   {
     path:'/',
@@ -117,6 +118,11 @@ const routes = [
     path: '/payment',
     name: payment,
     component: payment
+  },
+  {
+    path: '/pay/success',
+    name: paySuccess,
+    component: paySuccess
   },
   {
     path: '/live',

@@ -51,9 +51,9 @@ public class NoticeController {
     }
 
     @PostMapping("/del")
-    public boolean deleteNotice(@RequestBody DeleteNoticeForm deleteNoticeForm){
-        long noticeId = deleteNoticeForm.getNoticeId();
-        noticeService.deleteNotice(noticeId);
+    public boolean deleteNotice(@RequestParam String noticeId){
+//        long noticeId = deleteNoticeForm.getNoticeId();
+        noticeService.deleteNotice(Long.valueOf(noticeId));
         return true;
     }
 }

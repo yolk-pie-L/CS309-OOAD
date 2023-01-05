@@ -3,6 +3,7 @@ package com.example.live_video.service;
 import com.example.live_video.entity.Course;
 import com.example.live_video.entity.User;
 import com.example.live_video.exception.EnrollCourseException;
+import com.example.live_video.exception.MyException;
 import com.example.live_video.vo.StudentGradeVo;
 import com.example.live_video.vo.StudentSectionProgressVo;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 public interface StudentService {
 
-    public Boolean enrollCourse(Long courseId, String studentName) throws EnrollCourseException;
+    public Boolean enrollCourse(Long courseId, String studentName) throws EnrollCourseException, MyException;
 
     public Boolean exitCourse(Long courseId, String studentName);
 

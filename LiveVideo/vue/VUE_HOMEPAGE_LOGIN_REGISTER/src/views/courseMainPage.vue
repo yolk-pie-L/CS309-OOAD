@@ -9,6 +9,7 @@
       <el-col :span="10">
         <el-row v-text="this.courseForm.courseName" class="title"></el-row>
         <el-row v-text="this.courseForm.teacherName" class="title"></el-row>
+        <el-row v-text="this.courseForm.charge" class="title"></el-row>
       </el-col>
     </el-row>
     <el-row v-show="coShow" type="flex" class="row-bg card" justify="center" align="bottom">
@@ -37,7 +38,8 @@ export default {
       courseForm: {
         courseName: "DSAA",
         teacherName: "李开",
-        coursePic: "url"
+        coursePic: "url",
+        charge: 0
       },
       joinForm: {
         studentName: 'black',
@@ -68,6 +70,7 @@ export default {
         let result = res.data.result
         this.courseForm.courseName = "课程名：" + result.courseName
         this.courseForm.teacherName = "老师：" + result.teacherName
+        this.courseForm.charge = "费用： " + result.charge
         // let message = res.data.msg;
         // 判断结果
         if (result) {
@@ -89,14 +92,10 @@ export default {
         // 判断结果
         if (result === 200) {
           /*跳转页面*/
-          router.push('/')
+          this.$notify.success(`已扣款${this.courseForm.charge}￥`)
+          router.push(`/courseDetailPage?courseId=${this.courseId}`)
         } else {
-          this.$notify({
-            title: "加入失败",
-            message: message,
-            type: "error"
-          })
-          router.push(`/payment?courseId=${this.courseId}`)
+          this.$notify.error(message)
         }
       })
     },

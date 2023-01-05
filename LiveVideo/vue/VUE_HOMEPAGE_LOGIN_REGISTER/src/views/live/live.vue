@@ -1,29 +1,27 @@
 <template>
-  <div>
-    <button @click="send">发消息</button>
-  </div>
-
-  <div class='video' style="height: 100px;">
-    <video-player class="video-player vjs-custom-skin"
-                  ref="videoPlayer"
-                  :playsinline="true"
-                  :options="playerOptions">
-    </video-player>
-<!--    @canplay="canPlay($event)"-->
-<!--    @play="onPlayerPlay($event)"-->
-<!--    @pause="onPlayerPause($event)"-->
-<!--    @ended="onPlayerEnded($event)"-->
-<!--    @playing="onPlayerPlaying($event)"-->
-<!--    @timeupdate="onPlayerTimeUpdate($event)"-->
-  </div>
+  <menubar></menubar>
+  <el-container>
+    <div class='video' style="height: 100px;">
+      <video-player class="video-player vjs-custom-skin"
+                    ref="videoPlayer"
+                    :playsinline="true"
+                    :options="playerOptions">
+      </video-player>
+      <button @click="send">发消息</button>
+    </div>
+  </el-container>
 </template>
 
 <script>
 import {useRoute} from "vue-router";
+import menubar from '@/components/layout/menu.vue'
 import "videojs-flash";
 
 export default {
   name: "live",
+  components: {
+    menubar
+  },
   data() {
     return {
       sourceUrl: 'rtmp://localhost:1935/file',
@@ -40,16 +38,26 @@ export default {
         sources: [
           {
             type: "video/mp2t",  // 类型
-            src: 'http://127.0.0.1:8084/show/stream.m3u8'        // url地址
+            src: 'http://121.37.69.104:8084/show/www.m3u8'        // url地址
           }
+          // {
+          //   type: "video/mp2t",
+          //   src: 'rtmp://116.204.86.196:1935/live/stream'
+          // }
         ],
         poster: '',  // 封面地址
         notSupportedMessage: '此视频暂无法播放，请稍后再试',  // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
         controls: true,
       },
+      arr: [],
+      isPause: false,
+      sendContent: null,
+      isJs: false,
+      direction: 'default'
     }
   },
   mounted() {
+    this.initTestData()
     this.initWebsocket()
   },
   methods: {
@@ -69,7 +77,56 @@ export default {
     },
     send() {
       this.websocket.send("你好你好")
-    }
+    },
+    initTestData () {
+      let arr = [
+        '这是一条有弹幕',
+        '今天去打LOL',
+        '可以吗？',
+        '一起嗨！！！'
+      ]
+      for (let i = 0; i < 6; i++) {
+        for (let index = 0; index < 1000; index++) {
+          if (index % 2 === 0) {
+            this.arr.push({
+              direction: 'top',
+              content: arr[parseInt(Math.random() * arr.length)]
+            })
+          } else {
+            this.arr.push({
+              direction: 'default',
+              content: arr[parseInt(Math.random() * arr.length)]
+            })
+          }
+        }
+      }
+    },
+    // 发送弹幕
+    sendBarrage () {
+      if (this.arr.length > 1 && this.sendContent !== '' && this.sendContent != null) {
+        this.arr.unshift({
+          content: this.sendContent,
+          direction: this.direction,
+          isSelf: true,
+          style: {
+            color: 'red',
+            fontSize: '25px'
+          },
+          isJs: this.isJs
+        });
+      } else {
+        this.arr.push({
+          content: this.sendContent,
+          direction: this.direction,
+          isSelf: true,
+          style: {
+            color: 'red'
+          },
+          isJs: this.isJs
+        });
+      }
+      this.sendContent = null;
+    },
   }
 }
 </script>
@@ -80,5 +137,9 @@ export default {
   width: 70%;
   height: 70%;
   margin: auto;
+}
+.barrage-control {
+  text-align: center;
+  margin: 10px 0px;
 }
 </style>

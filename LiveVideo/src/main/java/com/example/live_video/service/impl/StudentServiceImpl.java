@@ -5,6 +5,7 @@ import com.example.live_video.entity.Course;
 import com.example.live_video.entity.Section;
 import com.example.live_video.entity.User;
 import com.example.live_video.exception.EnrollCourseException;
+import com.example.live_video.exception.MyException;
 import com.example.live_video.mapper.CourseMapper;
 import com.example.live_video.mapper.SectionMapper;
 import com.example.live_video.mapper.StudentMapper;
@@ -50,10 +51,13 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
-    public Boolean enrollCourse(Long courseId, String studentName) throws EnrollCourseException {
+    public Boolean enrollCourse(Long courseId, String studentName) throws MyException {
         Long studentId = userService.getUserId(studentName);
         Long courseCharge = courseMapper.getCourseCharge(courseId);
         Long studentAccount = userService.getUserAccount(studentName);
+        if (studentMapper.getRelationship(studentId, courseId)) {
+            throw new MyException("已加入课程");
+        }
         if (courseCharge <= studentAccount) {
             User user = new User(studentName, null, null, null, null,
                     studentAccount - courseCharge);

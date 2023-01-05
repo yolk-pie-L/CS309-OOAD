@@ -21,6 +21,7 @@
           <div class="card-header">
             <span>{{item.courseName}}</span>
             <el-button class="button" text @click="toCourse(item)"> 进入课程 </el-button>
+            <el-button class="button" text @click="leave(item.id)"> 退出课程 </el-button>
           </div>
         </template>
         <div class="text item">
@@ -36,6 +37,9 @@
       <el-collapse-item :title="item.title + ' ' + item.date" :name="messageTable.indexOf(item)">
         <div>
           {{item.context}}
+        </div>
+        <div>
+          <el-button @click="del(item.id)">删除通知</el-button>
         </div>
       </el-collapse-item>
     </el-collapse>
@@ -72,6 +76,7 @@ export default {
       ],
       messageTable: [
         {
+          id: "1",
           title: "Da Jia Hao",
           date: "2022-11-10",
           context: "Hao Ye"
@@ -154,8 +159,44 @@ export default {
         }
       })
     },
+    leave(courseId) {
+      let joinForm = {
+        studentName: this.teacherForm.userName,
+        courseId: courseId
+      }
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
+      this.$axios.post('http://localhost:8082/api/course/exit', joinForm).then(res => {
+        // 拿到结果
+        let code = res.data.code;
+        let message = res.data.message;
+        // 判断结果
+        if (code === 200) {
+          /*登陆成功*/
+
+          /*跳转页面*/
+          router.push('/')
+        } else {
+          /*打印错误信息*/
+          alert(message)
+        }
+      })
+    },
     toCourse(item) {
       router.push(`/courseDetailPage?courseId=${item.id}`)
+    },
+    del(id) {
+      this.$axios.post(`http://localhost:8082/api/notice/del?noticeId=${id}`).then(res => {
+        let result = res.data.result
+        if (res.data.code === 200) {
+          this.$notify.success('删除成功')
+          this.messageTable.forEach(mes => {
+            if (mes.id === id)
+              this.messageTable.splice(mes, 1)
+          })
+        } else {
+          this.$notify.error(result)
+        }
+      })
     }
   }
 }
