@@ -272,7 +272,7 @@ export default {
 .describe {
   position: absolute;
   background-color: #c1d1d7;
-  top: 33%;
+  top: 100%;
   left: 8%;
   height: 70%;
   opacity: 0.9;

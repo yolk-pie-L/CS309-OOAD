@@ -42,14 +42,14 @@
             :value="item.value">
         </el-option>
       </el-select>
-      <el-button slot="append" icon="el-icon-search" @click="getUserList"></el-button>
+      <el-button slot="append" icon="el-icon-search" @click="getUserList">搜索</el-button>
     </div>
 
     <div class="tableU">
       <el-table :data="tableUser" height="300">
         <el-table-column label="UserName" prop="userName" width="300"/>
         <el-table-column label="UserType" prop="userType" width="390"/>
-        <el-table-column label="Privilege" prop="isAdm" width="300"/>
+        <el-table-column label="Privilege" prop="adminRight" width="300"/>
         <el-table-column fixed="right" label="Operation1" width="300">
           <template v-slot="scope" #default>
             <el-button link size="small" type="primary" @click="handleChangePrivilege(scope.$index)">
@@ -65,6 +65,9 @@
 
 <script>
 
+import {getPhoto} from "@/utils";
+import router from "@/router";
+
 export default {
   name: "Administer",
   data() {
@@ -74,6 +77,7 @@ export default {
       userForm: {
         userName: "black",
         userType: "Teacher",
+        adminRight: 'Admin',
         mail: "",
         photoUrl: "https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg",
         account: "0",
@@ -96,13 +100,13 @@ export default {
           userName: "black",
           userType: "Teacher",
           photoUrl: "https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg",
-          isAdm: "yes"
+          adminRight: "Admin",
         },
         {
           userName: "black",
           userType: "Teacher",
           photoUrl: "https://p1.meituan.net/dpplatform/520b1a640610802b41c5d2f7a6779f8a87189.jpg",
-          isAdm: "yes"
+          adminRight: "Admin",
         },
       ],
       queryInfo: {
@@ -122,9 +126,27 @@ export default {
     }
   },
   mounted() {
+    this.fetchUserInfo()
     this.fetchClass()
   },
   methods: {
+    fetchUserInfo() {
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
+      this.$axios.get('http://localhost:8082/api/user').then(res => {
+        let result = res.data.result
+        if (res.data.code === 200) {
+          this.userForm = result
+          this.userForm.photoUrl = getPhoto(this.userForm.photoUrl)
+        } else {
+          this.$notify.error("您未登录")
+          router.push("/login")
+        }
+        if (this.userForm.adminRight === 'NonAdmin') {
+          this.$notify.error("您不是管理员")
+          router.push("/")
+        }
+      })
+    },
     fetchClass() {
       this.$axios.get('http://localhost:8082/api/admin/waiting').then(res => {
         // 拿到结果
@@ -175,11 +197,13 @@ export default {
       this.$axios.post('http://localhost:8082/api/admin/privilege', form1).then(res => {
         let result = res.data.result;
         let message = res.data.msg;
-        if (result) {
+        if (res.data.code === 200) {
+          this.$notify.success("修改成功")
           this.fetchClass();
+          this.getUserList();
         } else {
           /*打印错误信息*/
-          alert(message);
+          this.$notify.error(result)
         }
       })
     },

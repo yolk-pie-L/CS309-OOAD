@@ -73,12 +73,12 @@ export default {
   methods: {
     handleChange(file, fileList) {
 
-      let formdata = new FormData()
+      let formData = new FormData()
       fileList.map(item => { //fileList本来就是数组，就不用转为真数组了
-        formdata.append("file", item.raw)  //将每一个文件图片都加进formdata
+        formData.append("file", item.raw)  //将每一个文件图片都加进formdata
       })
       console.log(file.size)
-      this.$axios.post("http://localhost:8082/api/getPhoto", formdata).then(res => {
+      this.$axios.post("http://localhost:8082/api/getPhoto", formData).then(res => {
         console.log(res)
       })
     },

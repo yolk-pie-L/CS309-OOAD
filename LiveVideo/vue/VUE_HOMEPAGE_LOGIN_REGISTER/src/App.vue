@@ -1,18 +1,24 @@
 <template>
-  <el-row style="padding: 10px; border-bottom: 2px black solid; position: fixed; width: 100%;">
-    <el-link href="/">首页</el-link>
-    <el-input placeholder="search..." style="width: 200px; margin: auto"></el-input>
-    <el-image src="@/assets/logo.png" style="height: 20px"></el-image>
-    <el-link href="/" style="margin-right: 10px">VIP</el-link>
-    <el-link href="/">通知</el-link>
-  </el-row>
   <div id="app">
+<!--    <menubar></menubar>-->
     <!--路由页面-->
-    <router-view/>
+    <router-view :key="$route.fullPath"/>
   </div>
 </template>
 
+<script>
+// import menubar from './components/layout/menu.vue'
+// export default {
+//   components: {
+//     menubar
+//   }
+// }
+</script>
+
 <style>
+.flex-grow{
+  flex-grow: 1;
+}
 /*全局的父类高度*/
 html {
   height: 100%;

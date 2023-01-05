@@ -146,6 +146,11 @@ export default {
               router.push('/login')
             } else {
               /*打印错误信息*/
+              this.$notify({
+                title: '注册失败',
+                message: res.data.result,
+                type: 'error'
+              })
             }
           })
         } else {
@@ -163,6 +168,11 @@ export default {
           /*登陆成功*/
           alert("发送成功")
         } else {
+          this.$notify({
+            title: '发送失败',
+            message: res.data.result,
+            type: 'error'
+          })
         }
       })
     },

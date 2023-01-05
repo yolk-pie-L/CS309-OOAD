@@ -1,5 +1,6 @@
 <template>
   <div>
+    <menubar></menubar>
     <navbar></navbar>
     <el-row style="height: 95vh">
       <el-col :span="24" style="height: 100%">
@@ -20,9 +21,10 @@
 
 <script>
 import navbar from '../components/layout/nav-bar.vue'
+import menubar from '../components/layout/menu.vue'
 export default {
   components: {
-    navbar
+    navbar,menubar
   },
 }
 </script>

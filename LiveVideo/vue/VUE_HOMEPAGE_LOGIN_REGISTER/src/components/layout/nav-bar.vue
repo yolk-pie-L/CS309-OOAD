@@ -1,29 +1,22 @@
 <template>
   <!--导航-->
-  <nav></nav>
 
   <div>
-    <div class="animate__animated animate__fadeIn title"  :style="{'background-image': bgUrl}" style="top: 55px"></div>
+    <div class="animate__animated animate__fadeIn title"  :style="{'background-image': bgUrl}"></div>
     <el-header  class="animate__animated animate__fadeIn">
       <div class="menu-expend">
         <i class="el-icon-menu"></i>
       </div>
-      <div v-if="isLog" class="user_show">
-        <el-image  :src="userForm.photoUrl" class="user_pic"></el-image>
-        <el-link type="success" class="user_name" v-text="userForm.userName" @click="into()"></el-link>
-      </div>
-      <div v-else class="loginRegister">
-        <el-row>
-          <el-button v-if="isNotLog" type="primary" plain round @click="toLogin()">login</el-button>
-          <el-button v-if="isNotLog" type="primary" plain round @click="toRegister()">register</el-button>
-        </el-row>
-      </div>
-      <div class="query">
+<!--      <div v-if="isLog" class="user_show">-->
+<!--        <el-image  :src="userForm.photoUrl" class="user_pic"></el-image>-->
+<!--        <el-link type="success" class="user_name" v-text="userForm.userName" @click="into()"></el-link>-->
+<!--      </div>-->
+      <div class="query" style="padding: 10px">
         <el-input v-model="queryInfo.course" clearable placeholder="Course"
                   @clear="fetchCourse"></el-input>
         <el-input v-model="queryInfo.teacher" clearable placeholder="Teacher"
-                  @clear="fetchUser"></el-input>
-        <el-button slot="append" icon="el-icon-search" @click="fetchCourse"></el-button>
+                  @clear="fetchCourse"></el-input>
+        <el-button slot="append" icon="el-icon-search" @click="fetchCourse">搜索</el-button>
       </div>
     </el-header>
   </div>
@@ -61,10 +54,11 @@
     <el-pagination
         @size-change="fetchCourse"
         @current-change="handleCurrentChange"
-        :current-page.sync="pageForm.page"
+        v-model:current-page="pageForm.page"
         :page-size="9"
         layout="prev, pager, next, jumper"
-        :total="1000">
+        :total="1000"
+    >
     </el-pagination>
   </div>
 
@@ -80,8 +74,8 @@ export default {
       bgUrl:'url(https://p0.meituan.net/dpplatform/4ce8553013e2e819c08e6d6ba409bee8473079.jpg)',
       user_pic_src:'url(\'this.userForm.photoUrl\')',
       pageForm:{
-        page:"1",
-        pageNum:"9",
+        page: 1,
+        pageNum: 9,
       },
       userForm: {
         userName: "teacher1",
@@ -112,18 +106,9 @@ export default {
   },
   methods: {
     fetchCourse() {
-      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
-
-      this.$axios.get('http://localhost:8082/api/course/success/all', {
-        params: {
-          o: this.pageForm.pageNum,
-          page: this.pageForm.page,
-          courseName: this.queryInfo.course,
-          teacherName: this.queryInfo.teacher
-        }
-      }).then(res => {
+      this.$axios.get(`http://localhost:8082/api/course/success/all?o=${this.pageForm.pageNum}&page=${this.pageForm.page}&courseName=${this.queryInfo.course}&teacherName=${this.queryInfo.teacher}`).then(res => {
         let result = res.data.result;
-        let message = res.data.msg;
+        let message = res.data.message;
         this.classForm = result;
         this.classForm.forEach(course => {
           course.coursePicture = this.$picture + course.coursePicture
@@ -186,6 +171,11 @@ export default {
       localStorage.setItem("courseId",id)
       router.push({path:'/courseMainPage', query: { courseId: id }})
     },
+    handleCurrentChange() {
+      console.log('changed! pageNum: '+ this.pageForm.pageNum)
+      console.log('changed! page: '+ this.pageForm.page)
+      this.fetchCourse()
+    }
   },
   computed:{
     isLog(){
@@ -233,7 +223,7 @@ export default {
 
 .title {
   position: fixed;
-  top: 0;
+  top: 75px;
   width: 100%;
   height: 100%;
   background-repeat: no-repeat;

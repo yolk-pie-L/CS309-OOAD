@@ -2,12 +2,12 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Login from '@/views/Login';
 import register from "@/views/regist";
 import Home from '@/views/home'
-import teacherHomeView from "@/views/teacherHomeView";
-import infoUpdate from "@/views/infoUpdate";
-import courseUpdate from "@/views/courseUpdate";
+import teacherHomeView from "@/views/myspace/teacherHomeView";
+import infoUpdate from "@/views/myspace/infoUpdate";
+import courseUpdate from "@/views/myspace/courseUpdate";
 import courseMainPage from "@/views/courseMainPage";
 import courseDetailPage from "@/views/courseDetailPage";
-import studentHome from "@/views/StudentHome";
+import studentHome from "@/views/myspace/StudentHome";
 import studentinfoUpdate from "@/views/StudentinfoUpdate";
 import homeworkHome from "@/views/HomeworkHome";
 import homeworkPage from "@/views/HomeworkPage";
@@ -15,11 +15,17 @@ import administer from "@/views/Administer";
 import quizHome from "@/views/QuizHome";
 import quizPage from "@/views/QuizPage";
 import quizUpload from "@/views/QuizUpload";
-import homeworkUpload from "@/views/HomeworkUpload";
+import homeworkCreate from "@/views/HomeworkCreate";
 import videoPage from "@/views/videoPage";
 import addSection from "@/views/addSection";
 import payment from "@/views/payment";
+import personInfo from "@/views/myspace/personInfo";
+import myspace from "@/views/myspace";
 import addNotice from "@/views/addNotice";
+import avatarUpdate from "@/views/myspace/avatarUpdate";
+import live from "@/views/live";
+import studentGrade from "@/views/studentGrade";
+import teacherGrade from "@/views/teacherGrade";
 const routes = [
   {
     path:'/',
@@ -40,16 +46,6 @@ const routes = [
     path: '/teacherHomeView',
     name: teacherHomeView,
     component: teacherHomeView
-  },
-  {
-    path: '/infoUpdate',
-    name: infoUpdate,
-    component: infoUpdate
-  },
-  {
-    path: '/courseUpdate',
-    name: courseUpdate,
-    component: courseUpdate
   },
   {
     path: '/courseMainPage',
@@ -82,9 +78,9 @@ const routes = [
     component: homeworkPage
   },
   {
-    path: '/homeworkUpload',
-    name: homeworkUpload,
-    component: homeworkUpload
+    path: '/homeworkCreate',
+    name: homeworkCreate,
+    component: homeworkCreate
   },
   {
     path: "/administer",
@@ -122,11 +118,52 @@ const routes = [
     component: payment
   },
   {
-    path: '/addNotice',
-    name: addNotice,
-    component: addNotice
+    path: '/live',
+    name: live,
+    component: live
+  },
+  {
+    path: '/person',
+    name: myspace,
+    component: myspace,
+    children: [
+      {
+        path: '/person/info',
+        name: personInfo,
+        component: personInfo
+      },
+      {
+        path: '/person/course',
+        name: courseUpdate,
+        component: courseUpdate
+      },
+      {
+        path: '/person/modify-info',
+        name: infoUpdate,
+        component: infoUpdate
+      },
+      {
+        path: '/person/modify-avatar',
+        name: avatarUpdate,
+        component: avatarUpdate
+      },
+      {
+        path: '/person/create-notice',
+        name: addNotice,
+        component: addNotice
+      }
+    ],
+  },
+  {
+    path: '/studentGrade',
+    name: studentGrade,
+    component: studentGrade
+  },
+  {
+    path: '/teacherGrade',
+    name: teacherGrade,
+    component: teacherGrade
   }
-
 ]
 
 const router = createRouter({

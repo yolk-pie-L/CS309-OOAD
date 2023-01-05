@@ -1,32 +1,38 @@
 <template>
   <div class="leastBox"> <el-row>
     <el-col :span="6">
-      <el-card class="box-card">
-        <el-table :data="sectionData" border stripe style="width: 100% " @row-click="reFetch">
-          <el-table-column prop="sectionName" label="sectionNames" align="center"
-                           min-width="180px"></el-table-column>
-          <el-table-column prop="sectionComplete" label="sectionComplete" align="center"
-                           min-width="180px"></el-table-column>
-        </el-table>
-        <el-row>
-          <el-col>
-            <div class="block">
-              <el-pagination
-                  background
-                  :current-page.sync="currentPage"
-                  :page-size="pageSize"
-                  layout="total, prev, next, jumper, pager"
-                  :total="total"
-              ></el-pagination>
-            </div>
-          </el-col>
-        </el-row>
+      <el-card>
+<!--        <el-table :data="sectionData" border stripe style="width: 100%">-->
+<!--          <el-table-column prop="sectionName" label="Section Name" align="center"-->
+<!--                           min-width="180px"></el-table-column>-->
+<!--          <el-table-column prop="sectionComplete" label="Section Complete" align="center"-->
+<!--                           min-width="180px"></el-table-column>-->
+<!--        </el-table>-->
+        <template #header>Section List</template>
+        <el-scrollbar>
+          <div v-for="(item, i) in sectionData" :key="i" style="padding: 5px;">
+            <router-link :to="reFetch(item)">
+              <el-card class="box-card">
+                <div class="card-header">
+                  <span>{{item.sectionName}}</span>
+                  <span>{{item.sectionComplete}}</span>
+                </div>
+              </el-card>
+            </router-link>
+          </div>
+        </el-scrollbar>
       </el-card>
     </el-col>
     <el-col :span="18">
       <div class='video' style="height: 100px;">
         <video-player class="video-player vjs-custom-skin"
                       ref="videoPlayer"
+                      @canplay="canPlay($event)"
+                      @play="onPlayerPlay($event)"
+                      @pause="onPlayerPause($event)"
+                      @ended="onPlayerEnded($event)"
+                      @playing="onPlayerPlaying($event)"
+                      @timeupdate="onPlayerTimeUpdate($event)"
                       :playsinline="true"
                       :options="playerOptions">
         </video-player>
@@ -53,6 +59,9 @@
         >
         </div>
       </div>
+      <object>
+        <embed>
+      </object>
       <div class="reply-btn-box" v-show="btnShow">
         <el-button class="reply-btn" size="medium" @click="sendComment" type="primary">发表评论</el-button>
       </div>
@@ -65,7 +74,7 @@
       </div>
       <div class="icon-btn">
         <span @click="showReplyInput(i,item.name,item.id)"><el-icon><comment></comment></el-icon>{{item.commentNum}}</span>
-        <i class="iconfont el-icon-caret-top"></i>
+        <span @click="deleteReply(i,item.name,item.id)"><el-icon><setting></setting></el-icon></span>
       </div>
       <div class="talk-box">
         <p>
@@ -81,7 +90,7 @@
           </div>
           <div class="icon-btn">
             <span @click="showReplyInput(i,reply.from,reply.id)"><el-icon><comment></comment></el-icon></span>
-            <i class="iconfont el-icon-caret-top"></i>
+            <span @click="deleteReply(i,reply.from,reply.fromId)"><el-icon><setting></setting></el-icon></span>
           </div>
           <div class="talk-box">
             <p>
@@ -111,6 +120,8 @@
 <script>
 import router from "@/router";
 import {Comment, Setting, Menu ,Document} from '@element-plus/icons'
+import {useRoute} from "vue-router";
+import {getPhoto} from "@/utils";
 export default {
   components: {
     Comment, Setting, Menu ,Document
@@ -119,12 +130,13 @@ export default {
 
   data() {
     return {
+      courseId: useRoute().query.courseId,
+      sectionId: undefined,
       userName: 'SY',
       total: '总评论数： 7',
       courseName: 'black',
       videoURL: "url",
       recodrTime: '0',
-      sectionId: 1,
       row: 0,
       sectionData: [
         {
@@ -143,11 +155,13 @@ export default {
         language: 'zh-CN',
         aspectRatio: '4:3',  // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
         fluid: false,  // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
-        sources: [{
-          type: "video/mp4",  // 类型
-          src: 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4'             // url地址
-       // src: 'http://localhost:8082/api/video/?sectionId=${sectionId}'             // url地址
-        }],
+        sources: [
+          {
+            type: "video/mp4",  // 类型
+            // src: 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4'             // url地址
+            src: useRoute().query.src           // url地址
+          }
+        ],
         poster: '',  // 封面地址
         notSupportedMessage: '此视频暂无法播放，请稍后再试',  // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
         controls: true
@@ -239,13 +253,18 @@ export default {
           inputShow:false,
           reply:[]
         },
-      ]
+      ],
+      player: {
+        currentTime: 1,
+        duration: 114514
+      },
+      last: 0,
+      continueTime: 0
     }
   },
   mounted() {
     this.fetchData()
-    this.fetchComment()
-    this.fetchTotalComment()
+    this.fetchUser()
     this.recodrTime = setInterval(() => {
       if (document.getElementsByTagName('video')[0].currentTime && this.sectionId) {
         localStorage.setItem(
@@ -257,30 +276,60 @@ export default {
               document.getElementsByTagName('video')[0].currentTime
             })
         )
-        this.sectionData[this.row].sectionComplete = (document.getElementsByTagName('video')[0].currentTime /
+        this.sectionData[this.row].sectionComplete = (this.continueTime /
             document.getElementsByTagName('video')[0].duration * 100).toString().split('.')[0] + '%'
       }
     }, 1000)
   },
   methods: {
-
     fetchData() {
-      this.courseName = this.$route.query.courseName
-      console.log(this.courseName)
-      this.$axios.get(`http://localhost:8082/api/section/${this.sectionId}`).then(res => {
+      console.log(localStorage.getItem('token'))
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
+      this.$axios.get(`http://localhost:8082/api/section/all/${this.courseId}`).then(res => {
         let result = res.data.result;
-        let message = res.data.msg;
         this.sectionData = result
         this.sectionId = result[0].sectionIdIn
-        console.log(this.sectionId)
+        console.log(result)
         if (result) {
           /*登陆成功*/
-
+          console.log('抓取到sectionList数据')
           /*跳转页面*/
-          router.push('/videoPage')
         } else {
           /*打印错误信息*/
-          alert(message);
+          alert(result);
+        }
+      })
+      if (this.sectionId === undefined) {
+
+      } else {
+        if (!this.playerOptions.sources[0].src && !useRoute().query.sectionId) {
+          console.log("无src参数")
+          router.push(`/videoPage?courseId=${this.courseId}&sectionId=${this.sectionId}&src=http://localhost:8082/api/section/${this.sectionId}`)
+        } else {
+          console.log("有src参数" + this.playerOptions.sources[0].src)
+          this.sectionId = useRoute().query.sectionId
+          this.sectionData.forEach(section => {
+            if (section.sectionIdIn === this.sectionId)
+              this.row = this.sectionData.indexOf(section)
+          })
+        }
+      }
+    },
+    fetchUser() {
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
+      this.$axios.get('http://localhost:8082/api/user').then(res => {
+        let result = res.data.result
+        if (res.data.code === 200) {
+          this.userName = result.userName
+          this.myHeader = getPhoto(result.photoUrl)
+          this.fetchComment()
+          this.fetchTotalComment()
+        } else {
+          this.$notify({
+            message: result,
+            type: "error",
+            title: "拉取错误"
+          })
         }
       })
     },
@@ -288,15 +337,22 @@ export default {
       this.$axios.get('http://localhost:8082/api/comment/' + this.sectionId).then(res => {
         let result = res.data.result;
         console.log(result)
-        this.comments = result
 
-        if (result) {
+        if (res.data.code === 200) {
           /*登陆成功*/
-
+          this.comments = result
+          this.comments.forEach(comment => {
+            comment.headImg = getPhoto(comment.headImg)
+            if (comment.reply.length > 0) {
+              comment.reply.forEach(reply => {
+                reply.fromHeadImg = getPhoto(reply.fromHeadImg)
+              })
+            }
+          })
           /*跳转页面*/
         } else {
           /*打印错误信息*/
-          alert(message);
+          alert(result);
         }
       })
     },
@@ -306,23 +362,32 @@ export default {
         let message = res.data.msg;
         console.log(result)
         this.total = "总评论数： " + result
-        if (result) {
+        if (res.data.code === 200) {
           /*登陆成功*/
 
           /*跳转页面*/
-          router.push('/videoPage')
         } else {
           /*打印错误信息*/
-          alert(message);
+          alert(result);
         }
       })
     },
-    reFetch(row) {
-      router.push("/videoPage?courseName=" + "white" + "&sectionId={" + row.sectionIdIn + "}")
-      this.row = row.sectionIdIn
+    fetchContinueTime() {
+      this.$axios.get(`http://localhost:8082/api/grade?courseId=${this.courseId}&userName=${this.userName}`).then(res => {
+        let result = res.data.result
+        if (res.data.code === 200) {
+          this.continueTime = result.continueTime
+          this.last = result.last
+        } else {
+          this.$notify.error(result)
+        }
+      })
+    },
+    reFetch(item) {
+      return `/videoPage?courseId=${this.courseId}&sectionId=${item.sectionIdIn}&src=http://localhost:8082/api/section/${item.sectionIdIn}`
     },
     inputFocus(){
-      var replyInput = document.getElementById('replyInput');
+      let replyInput = document.getElementById('replyInput');
       replyInput.style.padding= "8px 8px"
       replyInput.style.border ="2px solid blue"
       replyInput.focus()
@@ -331,6 +396,7 @@ export default {
       this.btnShow = true
     },
     hideReplyBtn(){
+      let replyInput = document.getElementById('replyInput');
       this.btnShow = false
       replyInput.style.padding= "10px"
       replyInput.style.border ="none"
@@ -347,8 +413,8 @@ export default {
     },
     sendComment(){
       if(!this.replyComment){
-        this.$message({
-          showClose: true,
+        this.$notify({
+          title: "警告",
           type:'warning',
           message:'评论不能为空'
         })
@@ -375,24 +441,27 @@ export default {
           context: a.comment
         }).then(res => {
           let result = res.data.result;
-          let message = res.data.msg;
-          this.sectionData = result
-          if (result) {
+          if (res.data.code === 200) {
             /*登陆成功*/
-
+            a.id = result
+            this.$notify({
+              message: "发送成功",
+              title: "成功",
+              type: "success"
+            })
             /*跳转页面*/
-            router.push('/videoPage')
+            // router.push('/videoPage')
           } else {
             /*打印错误信息*/
-            alert(message);
+            alert(result);
           }
         })
       }
     },
     sendCommentReply(i,j){
       if(!this.replyComment){
-        this.$message({
-          showClose: true,
+        this.$notify({
+          title: '警告',
           type:'warning',
           message:'评论不能为空'
         })
@@ -419,16 +488,18 @@ export default {
           context: a.comment
         }).then(res => {
           let result = res.data.result;
-          let message = res.data.msg;
-          this.sectionData = result
-          if (result) {
+          if (res.data.code === 200) {
             /*登陆成功*/
-
+            a.id = result
             /*跳转页面*/
-            router.push('/videoPage')
+            // router.push('/videoPage')
           } else {
             /*打印错误信息*/
-            alert(message);
+            this.$notify({
+              message: result,
+              title: "评论发送错误",
+              type: "error"
+            })
           }
         })
       }
@@ -462,6 +533,52 @@ export default {
         var date= new Date(parseInt(date));
         return date.getFullYear()+"/"+(date.getMonth()+1)+"/"+date.getDate();
       }
+    },
+    deleteReply(i,userName,commentId) {
+      this.$axios.post('http://localhost:8082/api/comment/del', {
+        userName: userName,
+        commentId: commentId
+      }).then(res => {
+        let result = res.data.result;
+        if (res.data.code === 200) {
+          /*登陆成功*/
+          this.comments.splice(i, 1)
+          this.$notify({
+            message: "删除成功",
+            type: "success",
+            title: "成功"
+          })
+          /*跳转页面*/
+          // router.push('/videoPage')
+        } else {
+          /*打印错误信息*/
+          alert(result);
+        }
+      })
+    },
+    canPlay(player) {
+      this.player = document.getElementsByTagName('video')[0]
+      console.log(this.player)
+    },
+    onPlayerPlay(player) {
+      console.log('player play!', player)
+      this.timeInterval = setInterval(() => {
+        this.continueTime ++
+      }, 1000)
+    },
+    onPlayerPause(player) {
+      console.log('player pause!', player)
+      clearInterval(this.timeInterval)
+    },
+    onPlayerEnded(player) {
+      console.log('player end!', player)
+    },
+    onPlayerPlaying(player) {
+      console.log('player playing', player)
+    },
+    onPlayerTimeUpdate(player) {
+      console.log('player time update', player)
+      this.last = this.player.currentTime
     }
   }
 }
@@ -584,5 +701,24 @@ export default {
   margin: 10px 0 0 50px;
   background-color: #efefef;
 }
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text {
+  font-size: 14px;
+}
+
+.item {
+  margin-bottom: 18px;
+}
+
+.box-card {
+  width: 420px;
+}
+
 </style>
 

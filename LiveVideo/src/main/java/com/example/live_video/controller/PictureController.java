@@ -1,5 +1,7 @@
 package com.example.live_video.controller;
 
+import com.example.live_video.exception.MyException;
+import com.example.live_video.vo.StringVo;
 import com.example.live_video.wrapper.NonStaticResourceHttpRequestHandler;
 import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
@@ -33,41 +35,36 @@ public class PictureController {
     private NonStaticResourceHttpRequestHandler requestHandler;
     static MultipartFile curFile;
 
-    @PostMapping("/api/upload")
-    public String upload() throws IOException {
+    @RequestMapping("/api/upload")
+    public StringVo upload(@RequestParam MultipartFile file) throws Exception {
+        curFile = file;
         if (!curFile.isEmpty()) {
             //获取文件名
             String fileName = curFile.getOriginalFilename();
             // 获取文件的后缀名
             String suffixName = fileName.substring(fileName.lastIndexOf("."));
-            // 文件上传路径
-            String filePath = System.getProperty("user.dir")
-                    + "\\src\\main\\resources\\static\\files\\";
             // 解决中文路径,图片显示问题
             fileName = getFileNameNew() + suffixName;
-            String url = filePath + fileName;
-            File dest = new File(url);
+            File dest = new File(defaultPath, fileName);
             // 检测是否存在目录
-            if (!dest.getParentFile().exists())
-                dest.getParentFile().mkdirs();
-            curFile.transferTo(dest);
-            System.out.println("SAVE TO: " + url);
-            return url;
+            curFile.transferTo(dest.getCanonicalFile());
+            System.out.println("SAVE TO: " + dest.getCanonicalPath());
+            return new StringVo(dest.getName());
         }
-        System.err.println("not yet upload any file.");
-        return "";
+        throw new MyException("not yet upload any file.");
     }
 
     @RequestMapping("/api/getPhoto")
-    public void getPhoto(@RequestParam MultipartFile file) throws IOException {
+    public void getPhoto(@RequestParam MultipartFile file) {
         curFile = file;
         System.out.println("UPLOAD: " + curFile.getOriginalFilename()
                 + ", size of MB:" + curFile.getSize() / ((1 << 20) + 0.0));
-        System.out.println(upload());
     }
 
     @GetMapping("/api/picture/{url}")
     public void photoPreview(HttpServletRequest request, HttpServletResponse response, @PathVariable String url) throws Exception {
+        if (url.equals("null"))
+            url = "default.png";
         if (!url.contains(defaultPath)) {
             url = defaultPath + url;
         }

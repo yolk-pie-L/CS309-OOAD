@@ -20,7 +20,7 @@ public class PaymentServiceImpl implements PaymentService {
     AlipayConfig alipayConfig;
 
     @Override
-    public String toAlipay(AlipayBean alipayBean) {
+    public String toAlipay(AlipayBean alipayBean) throws AlipayApiException {
         AlipayClient alipayClient = new DefaultAlipayClient(
                 alipayConfig.getGatewayUrl(),//支付宝网关
                 alipayConfig.getApp_id(),//appid
@@ -38,13 +38,11 @@ public class PaymentServiceImpl implements PaymentService {
         //封装参数
         alipayRequest.setBizContent(JSON.toJSONString(alipayBean));
         String result = "";
-        try {
-            //3、请求支付宝进行付款，并获取支付结果
-            result = alipayClient.pageExecute(alipayRequest).getBody();
-        } catch (AlipayApiException e) {
-            e.printStackTrace();
-        }
+        System.out.println(alipayConfig.toString());
+        //3、请求支付宝进行付款，并获取支付结果
+        result = alipayClient.pageExecute(alipayRequest).getBody();
         //返回付款信息
+        System.out.println("Result: " + result);
         return result;
     }
 }
