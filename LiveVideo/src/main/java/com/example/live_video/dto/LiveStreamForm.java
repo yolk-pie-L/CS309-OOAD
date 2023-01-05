@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 public class LiveStreamForm {
     String title;
+    String description;
     String userName;
-    String url;
 }

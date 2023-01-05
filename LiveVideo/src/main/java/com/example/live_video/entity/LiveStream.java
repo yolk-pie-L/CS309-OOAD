@@ -15,14 +15,17 @@ public class LiveStream {
     Long id;
     String title;
 
+    String description;
+
     @TableField(value = "user_id")
     Long userId;
     @TableField(exist = false)
     String userName;
     String url;
 
-    public LiveStream(String title, String userName, String url) {
+    public LiveStream(String title, String description, String userName, String url) {
         this.title = title;
+        this.description = description;
         this.userName = userName;
         this.url = url;
     }
