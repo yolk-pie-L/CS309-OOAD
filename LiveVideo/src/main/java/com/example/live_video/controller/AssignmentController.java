@@ -9,8 +9,8 @@ import com.example.live_video.util.TokenUtils;
 import com.example.live_video.vo.AssignmentVo;
 import com.example.live_video.vo.QuizProblemVo;
 import com.example.live_video.vo.StringVo;
+import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
-import com.example.live_video.wrapper.UserLoginToken;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,11 +29,12 @@ import java.util.List;
 
 import static com.example.live_video.constance.FileConstance.FILE_PATH;
 import static com.example.live_video.controller.PictureController.getFileNameNew;
+import static com.example.live_video.vo.AssignmentVo.*;
 
 @ResponseResult
 @RestController
-//@PassToken
-@UserLoginToken
+@PassToken
+//@UserLoginToken
 @RequestMapping("/api/assignment")
 public class AssignmentController {
     @Autowired
@@ -100,7 +101,7 @@ public class AssignmentController {
 
     @PostMapping("/upload")
     public StringVo uploadFile(@RequestParam MultipartFile f) throws IOException {
-        String filePath = FILE_PATH + "\\assignFiles\\";
+        String filePath = FILE_PATH + "assignFiles\\";
         String fileName = f.getOriginalFilename();
         assert fileName != null;
         String[] strs = fileName.split("\\.");
@@ -123,9 +124,18 @@ public class AssignmentController {
     }
 
     @PostMapping("/create")
-    public boolean createAssignment(@RequestParam AssignmentVo assignmentVo) {
+    public boolean createAssignment(
+//            @RequestParam AssignmentVo assignmentVo,
+            @RequestParam("courseId") String courseId,
+            @RequestParam("assignmentName") String assignName,
+            @RequestParam("deadline") String ddl,
+            @RequestParam("description") String description,
+            @RequestParam("totalGrade") int totalGrade,
+            @RequestParam("additionalResources") List<String> assignUrls) {
         try {
-            Assignment a = AssignmentVo.voToAssign(assignmentVo);
+//            Assignment a = AssignmentVo.voToAssign(assignmentVo);
+            Assignment a = new Assignment(assignName, Long.parseLong(courseId), string2Timestamp(ddl), totalGrade,
+                    assignUrls, true, description);
             return assignmentService.createAssignment(a);
         } catch (SQLAssignNameConflictException e) {
             throw new RuntimeException(e);

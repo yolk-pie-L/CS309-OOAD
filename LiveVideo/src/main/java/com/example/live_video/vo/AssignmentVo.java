@@ -109,11 +109,11 @@ public class AssignmentVo {
 //        this.limitedTime = limitedTime;
 //    }
 
-    protected static String timestamp2String(Timestamp timeStamp) {
+    public static String timestamp2String(Timestamp timeStamp) {
         return String.valueOf(timeStamp);
     }
 
-    protected static Timestamp string2Timestamp(String str) {
+    public static Timestamp string2Timestamp(String str) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             return new Timestamp(sdf.parse(str).getTime());

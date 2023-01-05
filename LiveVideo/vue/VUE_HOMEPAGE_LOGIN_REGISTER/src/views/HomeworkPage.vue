@@ -127,9 +127,8 @@ export default {
         "https://element.eleme.io"
       ],
       answers: {
-        assignmentId: "aaa",
         answerFile: [
-          // string的list
+          "// string的list"
         ]
       },
       sectionForm: {
@@ -192,6 +191,7 @@ export default {
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
+        alert("sss")
         if (valid) {
           // 表单验证成功
           let formData = new FormData();
