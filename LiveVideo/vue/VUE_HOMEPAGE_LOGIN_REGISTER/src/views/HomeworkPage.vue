@@ -59,7 +59,7 @@
     </div>
 
     <div>
-      <el-col :span="7" class="login-card" >
+      <el-col :span="7" class="login-card">
         <!--loginForm-->
         <el-form :model="answers.answerFile" :rules="rules" ref="loginForm" label-width="21%" class="loginForm">
           <el-upload
@@ -69,7 +69,9 @@
               :show-file-list="true"
               :on-change="handleChange"
               drag>
-            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+            <el-icon class="el-icon--upload">
+              <upload-filled/>
+            </el-icon>
             <div class="el-upload__text">
               将文件拖到此处，或<em>点击上传</em>
             </div>
@@ -93,7 +95,7 @@ export default {
   name: "Login",
   data() {
     return {
-      courseId:"",
+      courseId: "",
       homeworkForm: {
         assignmentId: "aa",
         courseName: "course",
@@ -108,18 +110,11 @@ export default {
         updateTime: "date",
         answerStatus: "yes/no",
       },
-      additionalResources: [
-        {
-          resourceName: "aa",
-          resourceUrl: "https://element.eleme.io"
-        },
-        {
-          resourceName: "aa",
-          resourceUrl: "https://element.eleme.io"
-        }
-      ],
+      additionalResources: [{
+        resourceUrl: "https://element.eleme.io"
+      }],
       answers: {
-        assignmentId:"aaa",
+        assignmentId: "aaa",
         answerFile: [
           {
             answerName: "a",
@@ -141,9 +136,9 @@ export default {
     this.fetchAssignment()
   },
   methods: {
-    fetchClass(){
-      this.courseId=localStorage.getItem("course");
-      this.homeworkForm.assignmentId=localStorage.getItem("Assignment");
+    fetchClass() {
+      this.courseId = localStorage.getItem("course");
+      this.homeworkForm.assignmentId = localStorage.getItem("Assignment");
       // localStorage.removeItem("assignment");
       localStorage.removeItem("course")
     },
@@ -151,7 +146,8 @@ export default {
       this.$axios.get('http://localhost:8082/api/assignment/one', {
         params: {
           assignmentId: this.homeworkForm.assignmentId,
-        }}).then(res => {
+        }
+      }).then(res => {
         // 拿到结果
         let result = res.data.result;
         let message = res.data.msg;
@@ -180,7 +176,15 @@ export default {
       formdata.append("assignmentId", localStorage.getItem("Assignment"))
       console.log(file.size)
       this.$axios.post("http://localhost:8082/api/assignment/upload", formdata).then(res => {
-        console.log(res)
+        let result = res.data.result;
+        let message = res.data.msg;
+        if (result) {
+          let ans = {}
+          ans.answerUrl = result.answerUrl;
+          this.answer.answerFile.push(ans);
+        } else{
+          alert(message);
+        }
       })
     },
     submitForm(formName) {
@@ -189,12 +193,12 @@ export default {
           // 表单验证成功
           this.$axios.post('http://localhost:8082/api/assignment/submit', this.answer).then(res => {
             // 拿到结果
-            let result = JSON.parse(res.data.data);
+            let result = res.data.data;
             let message = res.data.msg;
             // 判断结果
             if (result) {
               /*登陆成功*/
-              localStorage.setItem("course",this.homeworkForm.courseName)
+              localStorage.setItem("course", this.homeworkForm.courseName)
               router.push('/homeworkHome')
             } else {
 
