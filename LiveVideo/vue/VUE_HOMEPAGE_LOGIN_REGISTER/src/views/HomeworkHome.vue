@@ -89,7 +89,8 @@ export default {
       })
     },
     handleEnter(index) {
-      router.push({path:'/homeworkPage',query: {id:this.homeworkForm.at(index).id}})
+      router.push('/homeworkPage')
+      localStorage.setItem("Assignment",this.homeworkForm.at(index).id)
     },
   }
 }
