@@ -47,4 +47,7 @@ public interface StudentMapper {
 
     @Select("SELECT grade FROM stu_section WHERE user_id = #{userId} AND section_id = #{sectionId}")
     public int getStudentSectionGrade(long userId, long sectionId);
+
+    @Select("SELECT exists(SELECT 1 FROM stu_course WHERE user_id = #{userId} AND course_id = #{courseId})")
+    public boolean getRelationship(Long userId, Long courseId);
 }

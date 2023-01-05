@@ -6,6 +6,7 @@ import com.example.live_video.entity.Course;
 import com.example.live_video.entity.CourseStatus;
 import com.example.live_video.entity.UserType;
 import com.example.live_video.exception.SQLCoursenameConflictException;
+import com.example.live_video.mapper.StudentMapper;
 import com.example.live_video.service.CourseService;
 import com.example.live_video.service.StudentService;
 import com.example.live_video.service.UserService;
@@ -37,6 +38,14 @@ public class CourseController {
 
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    StudentMapper studentMapper;
+
+    @GetMapping("/isRelated")
+    boolean getRelated(@RequestParam long courseId, String userName){
+        return studentMapper.getRelationship(userService.getUserId(userName), courseId);
+    }
 
     @GetMapping("/{courseId}")
     CourseVo getCourse(@PathVariable int courseId) {
