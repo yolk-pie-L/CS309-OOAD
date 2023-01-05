@@ -54,7 +54,7 @@ public class AdminController {
     }
 
     @PostMapping("privilege")
-    public boolean updatePrivilege(@RequestParam(name = "userName") String userName) {
+    public boolean updatePrivilege(@RequestParam("userName") String userName) {
         if (userService.getUser(userName).getUserType().toString().equalsIgnoreCase("Administrator"))
             return false;
         User updateUser = new User();

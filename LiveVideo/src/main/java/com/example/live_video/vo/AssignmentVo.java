@@ -17,7 +17,7 @@ public class AssignmentVo {
     private Timestamp deadline;
     private Integer totalGrade;
     private List<String> assignUrls;
-    private Boolean isAssignment;
+    private Boolean isAssignment = true;
     private String description;
     private Timestamp createTime;
     private Timestamp updateTime;
@@ -25,6 +25,7 @@ public class AssignmentVo {
     private Integer score;
     private List<String> attached;
     private List<String> answer;
+    private int limitedTime;
 
     public AssignmentVo(Long id, String assignmentName, Long courseId, String courseName, String teacherName,
                         Timestamp deadline, Integer totalGrade, List<String> assignUrls, Boolean isAssignment,
@@ -92,5 +93,16 @@ public class AssignmentVo {
                 assignmentVo.getDescription(),
                 assignmentVo.getAssignUrls()
         );
+    }
+
+    public AssignmentVo(String assignmentName, Long courseId, Timestamp deadline, Integer totalGrade,
+                        String description, List<String> attached, int limitedTime) {
+        this.assignmentName = assignmentName;
+        this.courseId = courseId;
+        this.deadline = deadline;
+        this.totalGrade = totalGrade;
+        this.description = description;
+        this.attached = attached;
+        this.limitedTime = limitedTime;
     }
 }

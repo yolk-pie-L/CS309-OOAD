@@ -86,13 +86,13 @@ public class PictureController {
     }
 
     // 为文件重新命名，命名规则为当前系统时间毫秒数
-    private static String getFileNameNew() {
+    protected static String getFileNameNew() {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMddHHmmssSSS");
         return fmt.format(new Date());
     }
 
     // 以当前日期为名，创建新文件夹
-    private static String createNewDir() {
+    protected static String createNewDir() {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
         return fmt.format(new Date());
     }

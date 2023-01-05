@@ -34,6 +34,7 @@ public class AssignmentController {
         List<Assignment> assignmentList = assignmentService.getAssignmentsOfCourse(courseId);
         List<AssignmentVo> assignmentVoList = new ArrayList<>();
         for (Assignment a : assignmentList) {
+            if (!a.getIsAssignment()) continue;
             AssignmentVo b = AssignmentVo.parseInfo(a);
             Long assignId = assignmentService.getAssignmentId(courseId, a.getAssignmentName());
             b.setStatus(getStatus(a, assignId, userName));
