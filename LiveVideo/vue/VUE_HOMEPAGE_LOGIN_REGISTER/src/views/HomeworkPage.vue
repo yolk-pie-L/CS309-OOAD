@@ -187,9 +187,8 @@ export default {
           .then(res => {
             let result = res.data.result;
             let message = res.data.msg;
-            if (result) {
+            if (res.data.code===200) {
               this.$notify.success("上传成功")
-              // alert(this.answers.answerFile)
               this.answers.push(result.string);
             } else {
               alert(message);

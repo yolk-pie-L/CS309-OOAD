@@ -104,6 +104,9 @@ export default {
     handleEnter(index) {
       router.push(`/homeworkPage?assignId=${this.homeworkForm.at(index).id}&courseId=${this.courseId}`)
     },
+    toPDF(url) {
+      return `http://localhost:8080/#/pdf/preview?assignId=${this.assignId}&courseId=${this.courseId}&src=${url}`
+    },
   }
 }
 </script>

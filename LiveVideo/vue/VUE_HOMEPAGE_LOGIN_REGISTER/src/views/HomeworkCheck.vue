@@ -29,8 +29,8 @@
         </el-table-column>
       </el-table>
     <div class="add">
-      <el-header class="variable1">Additional Resource:</el-header>
-      <div v-for="item in additionalResources">
+      <el-header class="variable1">Answer:</el-header>
+      <div v-for="item in this.answerSee">
         <el-link
             :body-style="{ padding: '0px', marginBottom: '1px' }"
             :href="toPDF(item)"
@@ -43,7 +43,6 @@
 
 <script>
 import {useRoute} from "vue-router";
-import router from "@/router";
 
 export default {
   name: "HomeworkCheck",
@@ -55,15 +54,19 @@ export default {
       courseName:"course",
       grade:100,
       homeworkForm:[{
-        id: "",
+        assignId: "",
         studentName: "",
         assignmentName: "",
-        status: "作业状态，如迟交，未交等",
         totalGrade: "总分",
-        answer: "",
+        answers:[],
       },
-        ],
-      additionalResources: ["https://element.eleme.io"],
+      ],
+      answerSee: ["https://element.eleme.io"],
+      submitGrade: {
+        id:"",
+        studentName:"",
+        grade:""
+      }
     }
   },
   mounted() {
@@ -85,12 +88,12 @@ export default {
     },
     fetchAssignment() {
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
-      this.$axios.get(`http://localhost:8082/api/assignment/all?courseId=${this.courseId}`).then(res => {
+      this.$axios.get(`http://localhost:8082/api/assignment/stuassign?courseId=${this.courseId}`).then(res => {
         let result = res.data.result;
         this.homeworkForm = result
         // 判断结果
         this.fetchCourse()
-        if (result) {
+        if (res.data.code===200) {
         } else {
           /*打印错误信息*/
           alert(result);
@@ -103,37 +106,15 @@ export default {
         type: 'error'
       })
     },
-    handleChange(file, fileList) {
-      let formData = new FormData()
-      fileList.map(item => { //fileList本来就是数组，就不用转为真数组了
-        formData.append("f", item.raw)  //将每一个文件图片都加进formdata
-      })
-      console.log(file.size)
-      this.$axios
-          .post("http://localhost:8082/api/assignment/upload", formData)
-          .then(res => {
-            let result = res.data.result;
-            let message = res.data.msg;
-            if (res.data.code===200) {
-              this.$notify.success("上传成功")
-              this.answers.push(result.string);
-            } else {
-              alert(message);
-            }
-          })
-    },
     handleGrade(index) {
-      this.$axios.get('http://localhost:8082/api/assignment/modify', {
-        params: {
-          id:this.homeworkForm.at(index).id,
-          studentName:this.homeworkForm.at(index).studentName,
-          grade:this.grade
-        }
-      }).then(res => {
+      this.submitGrade.id=this.homeworkForm.at(index).assignId;
+      this.submitGrade.studentName=this.homeworkForm.at(index).studentName;
+      this.submitGrade.grade=this.grade;
+      this.$axios.post('http://localhost:8082/api/assignment/modify', this.submitGrade).then(res => {
         let result = res.data.result;
         let message = res.data.msg;
-        if (result) {
-          this.fetchClass();
+        if (res.data.code===200) {
+          this.$notify.success("成功打分")
         } else {
           /*打印错误信息*/
           alert(message);
@@ -141,7 +122,9 @@ export default {
       })
     },
     handleCheck(index) {
-      this.additionalResources=this.homeworkForm.at(index).answer
+      this.answerSee=this.homeworkForm.at(index).answers
+      alert(this.answerSee)
+      this.$notify.success("切换作业")
     },
   },
 }
