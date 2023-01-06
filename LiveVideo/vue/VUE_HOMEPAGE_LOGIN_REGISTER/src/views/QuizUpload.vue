@@ -174,7 +174,6 @@ export default {
         ]
       },
       createQuizJson:{
-        num:0,
         problems:[
           {
             isSelection:false,
@@ -205,9 +204,9 @@ export default {
   },
   methods: {
     fetchClass() {
-      this.classForm.id=localStorage.getItem("course")
-      this.quizForm.courseId=localStorage.getItem("course")
-      this.$axios.get(`api/course/{` + this.classForm.id + `}`).then(res => {
+      this.classForm.id=this.$route.query.courseId
+      this.quizForm.courseId=this.$route.query.courseId
+      this.$axios.get(`http://localhost:8082/api/course/` + this.classForm.id ).then(res => {
         // 拿到结果
         let result = res.data.result;
         let message = res.data.msg;
@@ -225,28 +224,20 @@ export default {
       return false
     },
     // 提交表单
-    submitForm(formName) {
 
-      router.push('/quizHome')
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          // 表单验证成功
-          this.$axios.post('http://localhost:8082/api/course/createQuizJson', this.createQuizJson).then(res => {
-            // 拿到结果
-            let result = res.data.result;
-            let message = res.data.msg;
-            // 判断结果
-            if (result) {
-              localStorage.setItem("course", this.homeworkForm.courseName)
-              router.push('/quizHome')
-            } else {
-            }
-          })
+    submitForm() {
+      // 表单验证成功
+      this.$axios.post('http://localhost:8082/api/quiz/createQuizJson', this.createQuizJson).then(res => {
+        // 拿到结果
+        let result = res.data.result;
+        let message = res.data.msg;
+        // 判断结果
+        if (result) {
+          // router.push('/courseDetailPage?courseId=' + this.classForm.id)
         } else {
-          console.log('error submit!!');
-          return false;
+
         }
-      });
+      })
     },
     // 重置表单
     resetForm(formName) {

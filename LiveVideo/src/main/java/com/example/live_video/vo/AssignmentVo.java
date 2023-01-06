@@ -2,6 +2,7 @@ package com.example.live_video.vo;
 
 import com.example.live_video.entity.Assignment;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
