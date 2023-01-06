@@ -26,11 +26,13 @@
 
 <script>
 import router from "@/router";
+import {useRoute} from "vue-router";
 
 export default {
   name: "HomeworkHome",
   data() {
     return {
+      courseId: useRoute().query.courseId,
       bgUrl:'url(https://p0.meituan.net/dpplatform/4ce8553013e2e819c08e6d6ba409bee8473079.jpg)',
       classForm: {
         courseName: "course",
@@ -72,9 +74,8 @@ export default {
   },
   methods: {
     fetchAssignment() {
-      this.classForm.id=localStorage.getItem("course")
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
-      this.$axios.get(`api/course/{` + this.classForm.id + `}`).then(res => {
+      this.$axios.get(`http://localhost:8082/api/course/${this.courseId}`).then(res => {
         // 拿到结果
         let result = res.data.result;
         let message = res.data.msg;
@@ -88,7 +89,7 @@ export default {
       })
       this.$axios.get('http://localhost:8082/api/assignment/all', {
             params: {
-              courseId: this.classForm.id,
+              courseId: this.courseId,
             }}).then(res => {
         // 拿到结果
         let result = res.data.result;
@@ -103,8 +104,7 @@ export default {
       })
     },
     handleEnter(index) {
-      router.push('/homeworkPage')
-      localStorage.setItem("Assignment",this.homeworkForm.at(index).id)
+      router.push(`/homeworkPage?assignId=${this.homeworkForm.at(index).id}`)
     },
   }
 }

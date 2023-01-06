@@ -5,6 +5,7 @@ import com.example.live_video.entity.Assignment;
 import com.example.live_video.exception.SQLAssignNameConflictException;
 import com.example.live_video.service.AssignmentService;
 import com.example.live_video.service.StudentService;
+import com.example.live_video.service.UserService;
 import com.example.live_video.vo.AssignmentVo;
 import com.example.live_video.vo.QuizProblemVo;
 import com.example.live_video.wrapper.PassToken;
@@ -32,6 +33,9 @@ public class QuizController {
     private AssignmentService assignmentService;
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/createQuizJson")
     public String createQuizJson(@RequestParam("problems") List<QuizProblemVo> problems) {
@@ -64,14 +68,14 @@ public class QuizController {
     public List<AssignmentVo> queryQuizByCourse(@RequestHeader("token") String token,
                                                 @RequestParam("courseId") long courseId) throws Exception {
         String userName = token2userName(token);
-        return queryAssignmentAndQuizByCourse(userName, courseId, assignmentService, studentService, false);
+        return queryAssignmentAndQuizByCourse(userName, courseId, assignmentService, studentService, userService, false);
     }
 
     @GetMapping("/one")
     public AssignmentVo queryQuizById(@RequestHeader("token") String token,
                                       @RequestParam("assignmentId") long quizId) throws Exception {
         String userName = token2userName(token);
-        return queryAssignmentAndQuizById(userName, quizId, assignmentService, studentService, false);
+        return queryAssignmentAndQuizById(userName, quizId, assignmentService, studentService, userService,false);
     }
 
     @PostMapping("/submit")

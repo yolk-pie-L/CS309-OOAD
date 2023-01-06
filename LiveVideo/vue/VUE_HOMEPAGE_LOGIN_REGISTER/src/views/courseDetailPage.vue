@@ -53,9 +53,11 @@
       </el-card>
     </el-row>
     <el-row v-show="coShow" type="flex" class="row-bg card" justify="center" align="bottom">
-      <el-button type="primary" @click="toAssignUpload">Assignment</el-button>
-      <el-button type="primary" @click="toQuizUpload">Quiz</el-button>
-      <el-button type="primary" @click="toAllGrade">Grade</el-button>
+      <el-button type="primary" @click="toAssignUpload">AssignmentUpload</el-button>
+      <el-button type="primary" @click="toQuizUpload">QuizUpload</el-button>
+      <el-button type="primary" @click="toAllGrade">Grade for all Students</el-button>
+      <el-button type="primary" @click="toAssign">Assignment</el-button>
+      <el-button type="primary" @click="toQuiz">Quiz</el-button>
       <el-button type="primary" @click="videoPage">lessons</el-button>
       <el-button type="primary" @click="addSection">Add Section</el-button>
     </el-row>
@@ -133,17 +135,16 @@ export default {
       })
     },
     toAssign() {
-      router.push(`/homeworkHome`)
+      router.push(`/homeworkHome?courseId=${this.courseId}`)
     },
     toAssignUpload() {
-      localStorage.setItem("course",this.courseId)
-      router.push(`/homeworkCreate`)
+      router.push(`/homeworkCreate?courseId=${this.courseId}`)
     },
     toQuiz() {
-      router.push(`/quizHome`)
+      router.push(`/quizHome?courseId=${this.courseId}`)
     },
     toQuizUpload() {
-      router.push(`/quizUpload`)
+      router.push(`/quizUpload?courseId=${this.courseId}`)
     },
     videoPage() {
       router.push(`/videoPage?courseId=${this.courseId}`)

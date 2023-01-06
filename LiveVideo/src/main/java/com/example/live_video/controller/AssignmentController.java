@@ -1,10 +1,14 @@
 package com.example.live_video.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.live_video.dto.AssignForm;
 import com.example.live_video.entity.Assignment;
+import com.example.live_video.entity.User;
+import com.example.live_video.entity.UserType;
 import com.example.live_video.exception.SQLAssignNameConflictException;
 import com.example.live_video.service.AssignmentService;
 import com.example.live_video.service.StudentService;
+import com.example.live_video.service.UserService;
 import com.example.live_video.util.TokenUtils;
 import com.example.live_video.vo.AssignmentVo;
 import com.example.live_video.vo.QuizProblemVo;
@@ -41,24 +45,34 @@ public class AssignmentController {
     @Autowired
     private StudentService studentService;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/all")
     public List<AssignmentVo> queryAssignmentByCourse(@RequestHeader("token") String token,
                                                       @RequestParam("courseId") long courseId) throws Exception {
         String userName = token2userName(token);
-        return queryAssignmentAndQuizByCourse(userName, courseId, assignmentService, studentService, true);
+        return queryAssignmentAndQuizByCourse(userName, courseId, assignmentService, studentService, userService, true);
     }
 
     protected static List<AssignmentVo> queryAssignmentAndQuizByCourse(String userName, long courseId,
                                                                        AssignmentService assignmentService,
                                                                        StudentService studentService,
+                                                                       UserService userService,
                                                                        boolean isAssignment) {
         List<Assignment> assignmentList = assignmentService.getAssignmentsOfCourse(courseId);
+        System.out.println(assignmentList);
+        System.out.println("userName: " + userName);
         List<AssignmentVo> assignmentVoList = new ArrayList<>();
+        User user = userService.getUser(userName);
         for (Assignment a : assignmentList) {
             if (a.getIsAssignment() != isAssignment) continue;
             AssignmentVo b = AssignmentVo.parseInfo(a);
             long assignId = assignmentService.getAssignmentId(courseId, a.getAssignmentName());
-            b.setStatus(getStatus(a, assignId, userName, studentService));
+            if (user.getUserType().equals(UserType.Student))
+                b.setStatus(getStatus(a, assignId, userName, studentService));
+            else
+                b.setStatus("Ignored");
             assignmentVoList.add(b);
         }
         return assignmentVoList;
@@ -68,19 +82,26 @@ public class AssignmentController {
     public AssignmentVo queryAssignmentById(@RequestHeader("token") String token,
                                             @RequestParam("assignmentId") long assignId) throws Exception {
         String userName = token2userName(token);
-        return queryAssignmentAndQuizById(userName, assignId, assignmentService, studentService, true);
+        return queryAssignmentAndQuizById(userName, assignId, assignmentService, studentService, userService,true);
     }
 
     protected static AssignmentVo queryAssignmentAndQuizById(String userName, long assignId,
                                                              AssignmentService assignmentService,
                                                              StudentService studentService,
+                                                             UserService userService,
                                                              boolean isAssignment) {
         Assignment a = assignmentService.getOneAssignment(assignId);
         AssignmentVo b = AssignmentVo.parse(a);
         System.err.println("a:\n" + a);
         // set some elements
-        b.setStatus(getStatus(a, assignId, userName, studentService));
-        b.setScore(studentService.getStudentAssignGrade(userName, assignId));
+        User user = userService.getUser(userName);
+        if (user.getUserType().equals(UserType.Student)) {
+            b.setStatus(getStatus(a, assignId, userName, studentService));
+            b.setScore(studentService.getStudentAssignGrade(userName, assignId));
+        } else {
+            b.setStatus("Ignored");
+            b.setScore(0);
+        }
         if (isAssignment)
             b.setAnswer(studentService.getStudentAssignmentUrlList(userName, assignId));
         else try {
@@ -123,20 +144,10 @@ public class AssignmentController {
     }
 
     @PostMapping("/create")
-    public boolean createAssignment(@RequestParam("courseId") long courseId,
-                                    @RequestParam("assignmentName") String assignmentName,
-                                    @RequestParam("deadline") String deadline,
-                                    @RequestParam("description") String description,
-                                    @RequestParam("totalGrade") int totalGrade,
-                                    @RequestParam("additionalResources") List<String> additionalResources) {
-        try {
-            System.err.println(deadline);
-            Assignment a = new Assignment(assignmentName, courseId, Timestamp.valueOf(deadline), totalGrade,
-                    additionalResources, true, description);
-            return assignmentService.createAssignment(a);
-        } catch (SQLAssignNameConflictException e) {
-            throw new RuntimeException(e);
-        }
+    public boolean createAssignment(@RequestBody AssignForm assignForm) throws Exception{
+        Assignment a = new Assignment(assignForm.getAssignmentName(), assignForm.getCourseId(), new Timestamp(assignForm.getDeadline().getTime()), assignForm.getTotalGrade(),
+                assignForm.getAdditionalResources(), true, assignForm.getDescription());
+        return assignmentService.createAssignment(a);
     }
 
     // util methods:

@@ -101,13 +101,15 @@
 
 <script>
 import router from "@/router";
+import {useRoute} from "vue-router";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Login",
   data() {
     return {
-      courseId: "1",
+      courseId: useRoute().query.courseId,
+      assignId: useRoute().query.assignId,
       homeworkForm: {
         assignmentId: "aa",
         courseName: "course",
@@ -130,20 +132,13 @@ export default {
     };
   },
   mounted() {
-    this.fetchClass();
     this.fetchAssignment()
   },
   methods: {
-    fetchClass() {
-      this.courseId = localStorage.getItem("course");
-      this.homeworkForm.assignmentId = localStorage.getItem("Assignment");
-      // localStorage.removeItem("assignment");
-      localStorage.removeItem("course")
-    },
     fetchAssignment() {
       this.$axios.get('http://localhost:8082/api/assignment/one', {
         params: {
-          assignmentId: this.homeworkForm.assignmentId,
+          assignmentId: this.assignId,
         }
       }).then(res => {
         // 拿到结果

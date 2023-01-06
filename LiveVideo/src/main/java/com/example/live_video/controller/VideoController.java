@@ -43,7 +43,7 @@ import static com.example.live_video.wrapper.NonStaticResourceHttpRequestHandler
 
 @ResponseResult
 @RestController
-@UserLoginToken
+@PassToken
 @Slf4j
 @RequestMapping("/api/section")
 public class VideoController {
@@ -103,7 +103,7 @@ public class VideoController {
 //        System.out.println("Hello world");
 //        String videoUrl = "src/main/resources/static/video/demo1.mp4";
 
-        System.out.println(videoUrl);
+        System.out.println("videoUrl: " + videoUrl);
         Path filePath = Paths.get(videoUrl);
 
         if (Files.exists(filePath)) {
