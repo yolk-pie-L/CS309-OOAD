@@ -51,16 +51,16 @@ class LiveVideoApplicationTests {
     @Test
     void contextLoads() throws MyException {
         String defaultUrlPath = "default.png";
-        User user = new User("LIXIN", UserType.Administrator, "lx@mail.com1", DigestUtils.md5DigestAsHex("123456".getBytes()), defaultUrlPath, 0L);
-        User chenruiyao = new User("CHENRUIYAO", UserType.Student, "cry@mail.com1", DigestUtils.md5DigestAsHex("23EDCX".getBytes()), defaultUrlPath, 1000L);
-        User wangzian = new User("WANGZIAN", UserType.Student, "wza@mail.com1", DigestUtils.md5DigestAsHex("23EDCX".getBytes()), defaultUrlPath, 2000L);
-        User likai = new User("LIKAI", UserType.Student, "12013029@mail.sustech.edu.cn", DigestUtils.md5DigestAsHex("123456".getBytes()), defaultUrlPath, 3000L);
-        User suzhaowen = new User("SUZHAOWEN", UserType.Student, "szw@mail.com1", DigestUtils.md5DigestAsHex("123456".getBytes()), defaultUrlPath, 3000L);
-        User wangchenyu = new User("WANGCHENYU", UserType.Student, "wcy@mail.com1", DigestUtils.md5DigestAsHex("34rfsv".getBytes()), defaultUrlPath, 3000L);
-        User lzz = new User("LZZ", UserType.Teacher, "lzz@mail.com1", DigestUtils.md5DigestAsHex("23EDCX".getBytes()), defaultUrlPath, 3000L);
-        User sy = new User("SY", UserType.Teacher, "sy@mail.com1", DigestUtils.md5DigestAsHex("123456".getBytes()), defaultUrlPath, 3000L);
-        User hq = new User("HQ", UserType.Teacher, "hq@mail.com1", DigestUtils.md5DigestAsHex("123456".getBytes()), defaultUrlPath, 3000L);
-        User lfl = new User("LFL", UserType.Teacher, "lfl@mail.com1", DigestUtils.md5DigestAsHex("sdfwadse".getBytes()), defaultUrlPath, 3000L);
+        User user = new User("LIXIN", UserType.Administrator, "lx@mail.com1", DigestUtils.md5DigestAsHex("123456LIXIN".getBytes()), defaultUrlPath, 0L);
+        User chenruiyao = new User("CHENRUIYAO", UserType.Student, "cry@mail.com1", DigestUtils.md5DigestAsHex("23EDCXCHENRUIYAO".getBytes()), defaultUrlPath, 1000L);
+        User wangzian = new User("WANGZIAN", UserType.Student, "wza@mail.com1", DigestUtils.md5DigestAsHex("23EDCXWANGZIAN".getBytes()), defaultUrlPath, 2000L);
+        User likai = new User("LIKAI", UserType.Student, "12013029@mail.sustech.edu.cn", DigestUtils.md5DigestAsHex("123456LIKAI".getBytes()), defaultUrlPath, 3000L);
+        User suzhaowen = new User("SUZHAOWEN", UserType.Student, "szw@mail.com1", DigestUtils.md5DigestAsHex("123456SUZHAOWEN".getBytes()), defaultUrlPath, 3000L);
+        User wangchenyu = new User("WANGCHENYU", UserType.Student, "wcy@mail.com1", DigestUtils.md5DigestAsHex("34rfsvWANGCHENYU".getBytes()), defaultUrlPath, 3000L);
+        User lzz = new User("LZZ", UserType.Teacher, "lzz@mail.com1", DigestUtils.md5DigestAsHex("23EDCXLZZ".getBytes()), defaultUrlPath, 3000L);
+        User sy = new User("SY", UserType.Teacher, "sy@mail.com1", DigestUtils.md5DigestAsHex("123456SY".getBytes()), defaultUrlPath, 3000L);
+        User hq = new User("HQ", UserType.Teacher, "hq@mail.com1", DigestUtils.md5DigestAsHex("123456HQ".getBytes()), defaultUrlPath, 3000L);
+        User lfl = new User("LFL", UserType.Teacher, "lfl@mail.com1", DigestUtils.md5DigestAsHex("sdfwadseLFL".getBytes()), defaultUrlPath, 3000L);
         userMapper.insert(user);
         userMapper.insert(chenruiyao);
         userMapper.insert(wangzian);
