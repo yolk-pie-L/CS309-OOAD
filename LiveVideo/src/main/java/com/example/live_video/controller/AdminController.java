@@ -54,7 +54,7 @@ public class AdminController {
     }
 
     @PostMapping("privilege")
-    public boolean updatePrivilege(@RequestParam(name = "userName") String userName) {
+    public boolean updatePrivilege(@RequestParam("userName") String userName) {
         if (userService.getUser(userName).getUserType().toString().equalsIgnoreCase("Administrator"))
             return false;
         User updateUser = new User();
@@ -77,8 +77,7 @@ public class AdminController {
         Course course = courseService.getOneCourse(Long.parseLong(courseId));
         course.setTeacherName(userService.getById(course.getTeacherId()).getUserName());
         course.setStatus(ok ? CourseStatus.APPROVED : CourseStatus.FAILED);
-        ok = courseService.updateCourse(course);
-        return ok;
+        return courseService.updateCourse(course);
     }
 
 

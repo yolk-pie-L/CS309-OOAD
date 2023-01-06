@@ -38,6 +38,10 @@ public class Section {
     @TableField(value = "update_time", insertStrategy = FieldStrategy.NOT_EMPTY)
     private Timestamp updateTime;
 
+//    @TableLogic(value = "0", delval = "id")
+//    @TableField(value = "is_delete", insertStrategy = FieldStrategy.NOT_EMPTY)
+//    private Integer deleteFlag;
+
     /**
      * For upper layer
      * @param sectionName

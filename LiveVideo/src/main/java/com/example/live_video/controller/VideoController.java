@@ -43,7 +43,7 @@ import static com.example.live_video.wrapper.NonStaticResourceHttpRequestHandler
 
 @ResponseResult
 @RestController
-@PassToken
+@UserLoginToken
 @Slf4j
 @RequestMapping("/api/section")
 public class VideoController {

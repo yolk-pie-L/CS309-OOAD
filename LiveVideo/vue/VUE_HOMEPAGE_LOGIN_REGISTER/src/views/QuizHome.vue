@@ -16,7 +16,7 @@
         <el-table-column prop="deadline" label="Due" width="250" />
         <el-table-column prop="score" label="Score" width="200" />
         <el-table-column fixed="right" label="ENTER" width="300">
-          <template #default>
+          <template v-slot="scope" #default>
             <el-button link type="primary" size="small" @click="handleEnter(scope.$index)">Enter</el-button>
           </template>
         </el-table-column>
@@ -74,9 +74,25 @@ export default {
   },
   methods: {
     fetchAssignment() {
-      this.$axios.get('/api/course/allQuiz?courseId={' + this.classForm.privateKeyUrl + '}').then(res => {
+      this.classForm.id=localStorage.getItem("course")
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
+      this.$axios.get(`api/course/{` + this.classForm.id + `}`).then(res => {
         // 拿到结果
-        let result = JSON.parse(res.data.data);
+        let result = res.data.result;
+        let message = res.data.msg;
+        this.classForm=result
+        // 判断结果
+        if (result) {
+        } else {
+          /*打印错误信息*/
+          alert(message);
+        }
+      })
+      this.$axios.get('/api/course/allQuiz', {
+        params: {
+          courseId: this.classForm.id,
+        }}).then(res => {
+        let result = res.data.result;
         let message = res.data.msg;
         this.quizForm=result
         // 判断结果
@@ -88,7 +104,8 @@ export default {
       })
     },
     handleEnter(index) {
-      router.push({path:'/homeworkPage',query: {id:this.homeworkForm.at(index).id}})
+      localStorage.setItem("quiz",this.quizForm.at(index).id)
+      router.push("/quizPage")
     },
   }
 }
@@ -134,4 +151,108 @@ export default {
   top:5px;
 }
 
+</style>
+
+<style scoped lang="less">
+
+.business{
+  position: absolute;
+  top: 800px;
+  left: 125px;
+  border-top: 1px solid #ccc;
+  border-right: none;
+  width: 80%;
+}
+.business {
+  ul {
+    li {
+      &:hover h3 {
+        opacity: 0;
+      }
+
+      &:hover img {
+        -webkit-transform: scale(1.1);
+        -ms-transform: scale(1.1);
+        transform: scale(1.1);
+      }
+
+      &:hover .word {
+        display: block;
+        opacity: 1;
+        background: rgba(0, 0, 0, 0.6);
+      }
+
+      width: 100%;
+      height: 400px;
+      position: relative;
+      float: left;
+      overflow: hidden;
+      margin-top: 15px;
+      margin-left: 15px;
+
+      a {
+        h3 {
+          position: absolute;
+          left: 25px;
+          bottom: 20px;
+          z-index: 2;
+          font-size: 40px;
+          color: #fff;
+          font-weight: 400;
+          opacity: 1;
+          filter: alpha(opacity=100);
+          -webkit-transition: opacity 0.4s;
+          transition: opacity 0.4s;
+        }
+
+        img {
+          position: relative;
+          display: block;
+          z-index: 1;
+          width: 100%;
+          -webkit-transition: -webkit-transform 0.4s;
+          transition: -webkit-transform 0.4s;
+          transition: transform 0.4s;
+          transition: transform 0.4s, -webkit-transform 0.4s;
+        }
+
+        .word {
+          opacity: 0;
+          filter: alpha(opacity=0);
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          z-index: 3;
+          padding-top: 20%;
+          text-align: center;
+          -webkit-transition: opacity 0.4s;
+          transition: opacity 0.4s;
+
+          h4 {
+            font-size: 20px;
+            color: #fff;
+            font-weight: 400;
+          }
+
+          .border {
+            display: block;
+            margin: 10px auto;
+            width: 22px;
+            height: 1px;
+            line-height: 0;
+            font-size: 0;
+            background: #4681e6;
+          }
+
+          p {
+            font-size: 14px;
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+}
 </style>

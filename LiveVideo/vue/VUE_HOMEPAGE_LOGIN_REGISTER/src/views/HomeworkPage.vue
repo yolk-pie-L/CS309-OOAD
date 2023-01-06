@@ -15,7 +15,7 @@
 
     <div class="describe">
       <el-row>
-        <el-header class="variable1">AssignmentName:</el-header>
+        <el-header class="variable1">Assignment Name:</el-header>
         <el-header class="variable2" v-text="homeworkForm.assignmentName "></el-header>
       </el-row>
       <el-row>
@@ -47,21 +47,33 @@
     </div>
 
     <div class="add">
-      <el-header class="variable1">AdditionalSource:</el-header>
+      <el-header class="variable1">Additional Resource:</el-header>
       <div v-for="item in additionalResources">
         <el-link
             :body-style="{ padding: '0px', marginBottom: '1px' }"
-            :href="item.resourceUrl"
-            class="addi"
-            v-text="item.resourceName">
+            :href="item"
+            v-text="item"
+            class="addi">
+        </el-link>
+      </div>
+    </div>
+
+    <div class="add1">
+      <el-header class="variable1">Answer:</el-header>
+      <div v-for="item in answers">
+        <el-link
+            :body-style="{ padding: '0px', marginBottom: '1px' }"
+            :href="item"
+            v-text="item"
+            class="addi">
         </el-link>
       </div>
     </div>
 
     <div>
-      <el-col :span="7" class="login-card" >
+      <el-col :span="7" class="login-card">
         <!--loginForm-->
-        <el-form :model="answers.answerFile" :rules="rules" ref="loginForm" label-width="21%" class="loginForm">
+        <el-form :model="answers" :rules="rules" ref="loginForm" label-width="21%" class="loginForm">
           <el-upload
               action="#"
               multiple
@@ -69,7 +81,9 @@
               :show-file-list="true"
               :on-change="handleChange"
               drag>
-            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+            <el-icon class="el-icon--upload">
+              <upload-filled/>
+            </el-icon>
             <div class="el-upload__text">
               将文件拖到此处，或<em>点击上传</em>
             </div>
@@ -93,7 +107,7 @@ export default {
   name: "Login",
   data() {
     return {
-      courseId:"",
+      courseId: "1",
       homeworkForm: {
         assignmentId: "aa",
         courseName: "course",
@@ -108,29 +122,8 @@ export default {
         updateTime: "date",
         answerStatus: "yes/no",
       },
-      additionalResources: [
-        {
-          resourceName: "aa",
-          resourceUrl: "https://element.eleme.io"
-        },
-        {
-          resourceName: "aa",
-          resourceUrl: "https://element.eleme.io"
-        }
-      ],
-      answers: {
-        assignmentId:"aaa",
-        answerFile: [
-          {
-            answerName: "a",
-            answerUrl: "b"
-          },
-          {
-            answerName: "c",
-            answerUrl: "d"
-          }
-        ]
-      },
+      additionalResources: ["https://element.eleme.io"],
+      answers: ["answer file tmp"],
       sectionForm: {
         sectionName: 'blank'
       },
@@ -141,20 +134,24 @@ export default {
     this.fetchAssignment()
   },
   methods: {
-    fetchClass(){
-      this.courseId=localStorage.getItem("course");
-      this.homeworkForm.assignmentId=localStorage.getItem("assignment");
-      localStorage.removeItem("assignment");
+    fetchClass() {
+      this.courseId = localStorage.getItem("course");
+      this.homeworkForm.assignmentId = localStorage.getItem("Assignment");
+      // localStorage.removeItem("assignment");
       localStorage.removeItem("course")
     },
     fetchAssignment() {
-      this.$axios.get('api/course/assignment?AssignmentId={' + this.homeworkForm.assignmentId + '}').then(res => {
+      this.$axios.get('http://localhost:8082/api/assignment/one', {
+        params: {
+          assignmentId: this.homeworkForm.assignmentId,
+        }
+      }).then(res => {
         // 拿到结果
-        let result = JSON.parse(res.data.data);
+        let result = res.data.result;
         let message = res.data.msg;
-        this.homeworkForm = result
-        this.additionalResources = result.additionalResources
-        this.answer = result.answer
+        this.homeworkForm = result;
+        this.additionalResources = result.assignUrls;
+        this.answers = result.answer;
         // 判断结果
         if (result) {
         } else {
@@ -170,30 +167,44 @@ export default {
       })
     },
     handleChange(file, fileList) {
-      let formdata = new FormData()
+      let formData = new FormData()
       fileList.map(item => { //fileList本来就是数组，就不用转为真数组了
-        formdata.append("file", item.raw)  //将每一个文件图片都加进formdata
+        formData.append("f", item.raw)  //将每一个文件图片都加进formdata
       })
       console.log(file.size)
-      this.$axios.post("http://localhost:8082/api/uploadFile", formdata).then(res => {
-        console.log(res)
-      })
+      this.$axios
+          .post("http://localhost:8082/api/assignment/upload", formData)
+          .then(res => {
+            let result = res.data.result;
+            let message = res.data.msg;
+            if (result) {
+              alert(this.answers)
+              // alert(this.answers.answerFile)
+              this.answers.push(result.string);
+            } else {
+              alert(message);
+            }
+          })
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // 表单验证成功
-          this.$axios.post('http://localhost:8082/api/course/submitAssignment', this.answer).then(res => {
+          let formData = new FormData();
+          formData.append("answerFile", this.answers);
+          formData.append("assignmentId", localStorage.getItem("Assignment"));
+          this.$axios.post('http://localhost:8082/api/assignment/submit', formData
+          ).then(res => {
             // 拿到结果
-            let result = JSON.parse(res.data.data);
+            let result = res.data.data;
             let message = res.data.msg;
             // 判断结果
             if (result) {
               /*登陆成功*/
-              localStorage.setItem("course",this.homeworkForm.courseName)
+              localStorage.setItem("course", this.homeworkForm.courseName)
               router.push('/homeworkHome')
             } else {
-
+              alert(message);
             }
           })
         } else {
@@ -272,7 +283,7 @@ export default {
 .describe {
   position: absolute;
   background-color: #c1d1d7;
-  top: 33%;
+  top: 30%;
   left: 8%;
   height: 70%;
   opacity: 0.9;
@@ -295,26 +306,22 @@ export default {
   padding: 40px 40px 30px 15px;
 }
 
+.add1 {
+  position: absolute;
+  top: 0%;
+  left: 55%;
+  height: 20%;
+  width: 30%;
+  background-color: #c1d1d7;
+  opacity: 0.9;
+  box-shadow: 0 0 20px #ffffff;
+  border-radius: 10px;
+  padding: 40px 40px 30px 15px;
+}
+
 .addi {
-  font-size: 30px;
+  font-size: 10px;
   font-weight: 600;
 }
 
-.answer {
-  position: absolute;
-  top: 52%;
-  left: 50%;
-  width: 40%;
-  height: 20%;
-  background-color: #c1d1d7;
-}
-
-.upload {
-  position: absolute;
-  top: 75%;
-  left: 50%;
-  width: 40%;
-  height: 20%;
-  background-color: #c1d1d7;
-}
 </style>

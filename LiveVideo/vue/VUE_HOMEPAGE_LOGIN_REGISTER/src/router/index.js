@@ -15,7 +15,7 @@ import administer from "@/views/Administer";
 import quizHome from "@/views/QuizHome";
 import quizPage from "@/views/QuizPage";
 import quizUpload from "@/views/QuizUpload";
-import homeworkUpload from "@/views/HomeworkUpload";
+import homeworkCreate from "@/views/HomeworkCreate";
 import videoPage from "@/views/videoPage";
 import addSection from "@/views/addSection";
 import payment from "@/views/payment";
@@ -80,9 +80,9 @@ const routes = [
     component: homeworkPage
   },
   {
-    path: '/homeworkUpload',
-    name: homeworkUpload,
-    component: homeworkUpload
+    path: '/homeworkCreate',
+    name: homeworkCreate,
+    component: homeworkCreate
   },
   {
     path: "/administer",
