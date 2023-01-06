@@ -63,8 +63,13 @@ export default {
         totalGrade: "总分",
         answers:[],
       },
-        ],
+      ],
       answerSee: ["https://element.eleme.io"],
+      submitGrade: {
+        id:this.homeworkForm.at(index).id,
+        studentName:this.homeworkForm.at(index).studentName,
+        grade:this.grade
+      }
     }
   },
   mounted() {
@@ -105,13 +110,10 @@ export default {
       })
     },
     handleGrade(index) {
-      this.$axios.get('http://localhost:8082/api/assignment/modify', {
-        params: {
-          id:this.homeworkForm.at(index).id,
-          studentName:this.homeworkForm.at(index).studentName,
-          grade:this.grade
-        }
-      }).then(res => {
+      this.submitGrade.id=this.homeworkForm.at(index).id;
+      this.submitGrade.studentName=this.homeworkForm.at(index).studentName;
+      this.submitGrade.grade=this.grade;
+      this.$axios.post('http://localhost:8082/api/assignment/modify', this.submitGrade).then(res => {
         let result = res.data.result;
         let message = res.data.msg;
         if (result) {
