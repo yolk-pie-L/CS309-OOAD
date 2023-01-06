@@ -2,17 +2,21 @@ package com.example.live_video.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.live_video.dto.AssignForm;
+import com.example.live_video.dto.ModifyStuAssignForm;
 import com.example.live_video.entity.Assignment;
+import com.example.live_video.entity.CourseStatus;
 import com.example.live_video.entity.User;
 import com.example.live_video.entity.UserType;
-import com.example.live_video.exception.SQLAssignNameConflictException;
 import com.example.live_video.service.AssignmentService;
+import com.example.live_video.service.CourseService;
 import com.example.live_video.service.StudentService;
 import com.example.live_video.service.UserService;
 import com.example.live_video.util.TokenUtils;
 import com.example.live_video.vo.AssignmentVo;
 import com.example.live_video.vo.QuizProblemVo;
 import com.example.live_video.vo.StringVo;
+import com.example.live_video.vo.StuAssignVo;
+import com.example.live_video.wrapper.PassToken;
 import com.example.live_video.wrapper.ResponseResult;
 import com.example.live_video.wrapper.UserLoginToken;
 import org.jetbrains.annotations.NotNull;
@@ -32,13 +36,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.example.live_video.constance.FileConstance.FILE_PATH;
 import static com.example.live_video.controller.PictureController.getFileNameNew;
 
 @ResponseResult
 @RestController
-//@PassToken
-@UserLoginToken
+@PassToken
+//@UserLoginToken
 @RequestMapping("/api/assignment")
 public class AssignmentController {
 
@@ -52,11 +55,39 @@ public class AssignmentController {
     @Autowired
     private UserService userService;
 
+
     @GetMapping("/all")
     public List<AssignmentVo> queryAssignmentByCourse(@RequestHeader("token") String token,
                                                       @RequestParam("courseId") long courseId) throws Exception {
         String userName = token2userName(token);
         return queryAssignmentAndQuizByCourse(userName, courseId, assignmentService, studentService, userService, true);
+    }
+
+    @PostMapping("/modify")
+    public void checkAssignment(@RequestBody ModifyStuAssignForm modifyStuAssignForm){
+        studentService.setStudentAssignGrade(modifyStuAssignForm.getStudentName(), Long.parseLong(modifyStuAssignForm.getId()),
+                Integer.parseInt(modifyStuAssignForm.getGrade()));
+    }
+
+    @GetMapping("/stuassign")
+    public List<StuAssignVo> getAllStuAssign(@RequestParam String courseId){
+        List<Assignment> assignmentList = assignmentService.getAssignmentsOfCourse(Long.parseLong(courseId));
+        List<StuAssignVo> stuAssignVos = new ArrayList<>();
+        List<User> users = studentService.getStudentListOfOneCourse(Long.parseLong(courseId));
+        for(Assignment assignment: assignmentList){
+            for(User user: users){
+                StuAssignVo stuAssignVo = new StuAssignVo();
+                stuAssignVo.setAssignId(assignment.getId());
+                stuAssignVo.setAssignmentName(assignment.getAssignmentName());
+                stuAssignVo.setTotalGrade(assignment.getTotalGrade());
+                stuAssignVo.setStudentName(user.getUserName());
+                stuAssignVo.setAnswers(studentService.getStudentAssignmentUrlList(user.getUserName(), assignment.getId()));
+                stuAssignVos.add(stuAssignVo);
+            }
+        }
+        System.out.println("stuAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        System.out.println(stuAssignVos);
+        return stuAssignVos;
     }
 
     protected static List<AssignmentVo> queryAssignmentAndQuizByCourse(String userName, long courseId,
@@ -168,7 +199,8 @@ public class AssignmentController {
         Timestamp ddl = a.getDeadline();
         Timestamp now = new Timestamp(new Date().getTime());
         int score = studentService.getStudentAssignGrade(userName, assignId);
-        if (score == -1) {
+        List<String> urls = studentService.getStudentAssignmentUrlList(userName, assignId);
+        if (urls == null) {
             if (startTime.after(now)) return "Not Started";
             else if (ddl.after(now)) return "Not Submitted";
             else return "Late";

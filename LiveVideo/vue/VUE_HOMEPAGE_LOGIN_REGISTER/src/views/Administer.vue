@@ -11,14 +11,14 @@
     </el-header>
 
     <div class="tableD">
-      <el-table :data="tableData" height="300">
+      <el-table :data="tableData" height="300" style="width: 100%">
         <el-table-column label="TeacherName" prop="teacherName" width="150"/>
         <el-table-column label="CourseName" prop="courseName" width="150"/>
         <el-table-column label="Tag" prop="tag" width="150"/>
         <el-table-column label="Charge" prop="charge" width="150"/>
         <el-table-column label="Introduction" prop="introduction" width="400"/>
         <el-table-column label="CoursePic" prop="coursePicture" width="400"/>
-        <el-table-column fixed="right" label="Operation1" width="120">
+        <el-table-column fixed="right" label="Operation1" >
           <template v-slot="scope" #default>
             <el-button link size="small" type="primary" @click="handleReject(scope.$index)">Reject</el-button>
           </template>

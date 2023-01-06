@@ -38,7 +38,7 @@ export default {
         sources: [
           {
             type: "video/mp2t",  // 类型
-            src: 'http://121.37.69.104:8084/show/www.m3u8'        // url地址
+            src: 'http://121.37.69.104:8084/show/stream.m3u8'        // url地址
           }
           // {
           //   type: "video/mp2t",

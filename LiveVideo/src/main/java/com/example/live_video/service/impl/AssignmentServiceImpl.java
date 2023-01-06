@@ -73,6 +73,7 @@ public class AssignmentServiceImpl extends ServiceImpl<AssignmentMapper, Assignm
     public List<Assignment> getAssignmentsOfCourse(long courseId) {
         QueryWrapper<Assignment> assignQueryWrapper = new QueryWrapper<>();
         assignQueryWrapper.eq("course_id", courseId);
+        assignQueryWrapper.orderByDesc("create_time");
         List<Assignment> assignmentList = assignmentMapper.selectList(assignQueryWrapper);
         return assignmentList;
     }

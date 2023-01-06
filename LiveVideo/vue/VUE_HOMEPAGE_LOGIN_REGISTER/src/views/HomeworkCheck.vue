@@ -1,7 +1,6 @@
 <template>
-  <div>
     <div>
-      <el-row style="height: 95vh">
+      <el-row style="height: 35vh">
         <el-col :span="24" style="height: 100%">
           <el-card class="welcome" shadow=hover>
             <el-header class="tit" v-text="this.teacherName "></el-header>
@@ -12,23 +11,23 @@
       </el-row>
     </div>
     <el-input v-model="this.grade" class="add1"></el-input>
-    <div class="tableD">
-      <el-table :data="homeworkForm" height="300">
-        <el-table-column label="StudentName" prop="studentName" width="300"/>
-        <el-table-column label="AssignmentName" prop="assignmentName" width="300"/>
-        <el-table-column label="TotalGrade" prop="totalGrade" width="200"/>
-        <el-table-column fixed="right" label="Check" width="250">
+      <el-table :data="homeworkForm" height="400">
+        <el-table-column label="AssignmentId" prop="id" width="200"/>
+        <el-table-column label="StudentName" prop="studentName" width="250"/>
+        <el-table-column label="AssignmentName" prop="assignmentName" width="250"/>
+        <el-table-column label="Status" prop="status" width="200"/>
+        <el-table-column label="TotalGrade" prop="totalGrade" width="100"/>
+        <el-table-column fixed="right" label="Check" width="150">
           <template v-slot="scope" #default>
             <el-button link size="small" type="primary" @click="handleCheck(scope.$index)">Check</el-button>
           </template>
         </el-table-column>
-        <el-table-column fixed="right" label="Grade" width="250">
+        <el-table-column fixed="right" label="Grade">
           <template v-slot="scope" #default>
             <el-button link size="small" type="primary" @click="handleGrade(scope.$index)">Grade</el-button>
           </template>
         </el-table-column>
       </el-table>
-    </div>
     <div class="add">
       <el-header class="variable1">Answer:</el-header>
       <div v-for="item in this.answerSee">
@@ -40,7 +39,6 @@
         </el-link>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -150,10 +148,10 @@ export default {
 }
 
 /deep/ .welcome {
-  position: fixed;
+  position: absolute;
   top: -20px;
   width: 100%;
-  height: 25%;
+  /*height: 25%;*/
   margin-top: 20px;
   background-color: #c1d1d7;
   color: #42b983;
@@ -200,7 +198,7 @@ export default {
 
 .add1{
   position: center;
-
+  width: 60%;
 }
 
 </style>

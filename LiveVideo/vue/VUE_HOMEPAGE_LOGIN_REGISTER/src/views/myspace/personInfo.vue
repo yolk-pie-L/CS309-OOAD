@@ -21,7 +21,11 @@
           <div class="card-header">
             <span>{{item.courseName}}</span>
             <el-button class="button" text @click="toCourse(item)"> 进入课程 </el-button>
-            <el-button class="button" text @click="leave(item.id)"> {{ exitC }} </el-button>
+            <el-popconfirm title="Are you sure to delete this?" @confirm="leave(item.id)">
+              <template #reference>
+                <el-button class="button" text> {{ exitC }} </el-button>
+              </template>
+            </el-popconfirm>
           </div>
         </template>
         <div class="text item">
@@ -198,7 +202,7 @@ export default {
       }
     },
     toCourse(item) {
-      router.push(`/courseDetailPage?courseId=${item.id}`)
+      router.push(`/course?courseId=${item.id}`)
     },
     del(id) {
       this.$axios.post(`http://localhost:8082/api/notice/del?noticeId=${id}`).then(res => {
