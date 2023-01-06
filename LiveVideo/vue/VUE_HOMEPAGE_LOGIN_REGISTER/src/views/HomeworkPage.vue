@@ -136,8 +136,17 @@ export default {
     this.fetchAssignment()
   },
   methods: {
+    fetchCourse() {
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
+      this.$axios.get(`http://localhost:8082/api/course/${this.courseId}`).then(res => {
+        let result = res.data.result
+        if (res.data.code === 200) {
+          this.homeworkForm.courseName = result.courseName
+        }
+      })
+    },
     toPDF(url) {
-      return getFile(url)
+      return `http://localhost:8080/#/pdf/preview?assignId=${this.assignId}&courseId=${this.courseId}&src=${url}`
     },
     fetchAssignment() {
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
@@ -153,6 +162,7 @@ export default {
         this.additionalResources = result.assignUrls;
         this.answers = result.answer;
         // 判断结果
+        this.fetchCourse()
         if (result) {
         } else {
           /*打印错误信息*/
@@ -193,6 +203,7 @@ export default {
           let formData = new FormData();
           formData.append("answerFile", this.answers);
           formData.append("assignmentId", this.assignId);
+          formData.append("status", this.homeworkForm.status)
           this.$axios.post('http://localhost:8082/api/assignment/submit', formData
           ).then(res => {
             // 拿到结果
@@ -239,7 +250,7 @@ export default {
   padding: 40px 40px 30px 15px;
   width: 30%;
   position: absolute;
-  top: 63%;
+  top: 90%;
   left: 55%;
 }
 </style>
@@ -307,7 +318,7 @@ export default {
 
 .add1 {
   position: absolute;
-  top: 0%;
+  top: 60%;
   left: 55%;
   height: 20%;
   width: 30%;

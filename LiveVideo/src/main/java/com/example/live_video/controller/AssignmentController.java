@@ -143,10 +143,12 @@ public class AssignmentController {
     @PostMapping("/submit")
     public boolean submitAssignment(@RequestHeader("token") String token,
                                     @RequestParam("assignmentId") long assignId,
-                                    @RequestParam("answerFile") List<String> answerFile) throws Exception {
+                                    @RequestParam("answerFile") List<String> answerFile,
+                                    @RequestParam("status") String status) throws Exception {
         String userName = token2userName(token);
         return studentService.submitAssignment(userName, assignId, answerFile);
     }
+
 
     @PostMapping("/create")
     public boolean createAssignment(@RequestBody AssignForm assignForm) throws Exception{
@@ -175,6 +177,4 @@ public class AssignmentController {
             else return "Return";
         }
     }
-
-
 }

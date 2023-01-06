@@ -28,6 +28,7 @@ import studentGrade from "@/views/studentGrade";
 import teacherGrade from "@/views/teacherGrade";
 import live_all from "@/views/live/live_all";
 import paySuccess from "@/views/paySuccess";
+import pdfView from "@/views/pdfView";
 const routes = [
   {
     path:'/',
@@ -108,6 +109,11 @@ const routes = [
     path: '/videoPage',
     name: videoPage,
     component: videoPage
+  },
+  {
+    path: '/pdf/preview',
+    name: pdfView,
+    component: pdfView
   },
   {
     path: '/addSection',
