@@ -14,16 +14,15 @@
     <el-input v-model="this.grade" class="add1"></el-input>
     <div class="tableD">
       <el-table :data="homeworkForm" height="300">
-        <el-table-column label="AssignmentId" prop="id" width="200"/>
-        <el-table-column label="StudentName" prop="studentName" width="250"/>
+        <el-table-column label="StudentName" prop="studentName" width="300"/>
         <el-table-column label="AssignmentName" prop="assignmentName" width="300"/>
         <el-table-column label="TotalGrade" prop="totalGrade" width="200"/>
-        <el-table-column fixed="right" label="Check" width="200">
+        <el-table-column fixed="right" label="Check" width="250">
           <template v-slot="scope" #default>
             <el-button link size="small" type="primary" @click="handleCheck(scope.$index)">Check</el-button>
           </template>
         </el-table-column>
-        <el-table-column fixed="right" label="Grade" width="200">
+        <el-table-column fixed="right" label="Grade" width="250">
           <template v-slot="scope" #default>
             <el-button link size="small" type="primary" @click="handleGrade(scope.$index)">Grade</el-button>
           </template>
@@ -96,7 +95,7 @@ export default {
         this.homeworkForm = result
         // 判断结果
         this.fetchCourse()
-        if (result) {
+        if (res.data.code===200) {
         } else {
           /*打印错误信息*/
           alert(result);
