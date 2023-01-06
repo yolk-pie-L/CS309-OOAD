@@ -35,15 +35,16 @@ export default {
         let message = res.data.msg;
         this.userType = result.userType;
         if (res.data.code===200) {
+          if(this.userType==="Teacher"){
+            this.toLink = `/homeworkCheck?courseId=${courseId}`
+          }
+          else this.toLink = `/homeworkPage?courseId=${courseId}&assignId=${assignId}`
         } else {
           /*打印错误信息*/
           alert(result);
         }
       })
-      if(this.userType==="Teacher"){
-        this.toLink = `/homeworkCheck?courseId=${courseId}`
-      }
-      else this.toLink = `/homeworkPage?courseId=${courseId}&assignId=${assignId}`
+
     }
   }
 }
