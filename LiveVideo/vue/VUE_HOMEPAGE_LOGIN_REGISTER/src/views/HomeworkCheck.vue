@@ -130,6 +130,7 @@ export default {
       this.$axios.get('http://localhost:8082/api/assignment/modify', {
         params: {
           id:this.homeworkForm.at(index).id,
+          studentName:this.homeworkForm.at(index).studentName,
           grade:this.grade
         }
       }).then(res => {
