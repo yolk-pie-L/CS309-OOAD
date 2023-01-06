@@ -62,7 +62,7 @@ export default {
         studentName: "",
         assignmentName: "",
         totalGrade: "总分",
-        answers: "",
+        answers:[],
       },
         ],
       additionalResources: ["https://element.eleme.io"],
