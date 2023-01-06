@@ -131,7 +131,8 @@ export default {
       router.push(`/homeworkHome`)
     },
     toAssignUpload() {
-      router.push(`/homeworkUpload`)
+      localStorage.setItem("course",this.courseId)
+      router.push(`/homeworkCreate`)
     },
     toQuiz() {
       router.push(`/quizHome`)

@@ -1,16 +1,5 @@
 <template>
   <div>
-<!--    <div class="aa">-->
-<!--      <div class="father" >-->
-<!--        <ul>-->
-<!--          <li>{{one}}<span>:</span></li>-->
-<!--          <li>{{two}}<span>:</span></li>-->
-<!--          <li>{{three}}</li>-->
-<!--        </ul>-->
-<!--        <el-button type="primary" @click="startHandler">开始</el-button>-->
-<!--        <el-button type="primary" @click="endHandler">暂停</el-button>-->
-<!--      </div>-->
-<!--    </div>-->
     <div>
       <el-row style="height: 95vh">
         <el-col :span="24" style="height: 100%">
@@ -21,6 +10,11 @@
           </el-card>
         </el-col>
       </el-row>
+    </div>
+    <div class="sas">
+      <countdown v-slot="timeObj" :time="30*60 * 1000" :isMilliSecond="true">
+        {{timeObj.mm}}分钟{{timeObj.ss}}秒
+      </countdown>
     </div>
     <div class="describe">
       <el-row>
@@ -92,14 +86,16 @@
         </div>
       </ul>
     </div>
-    <el-button class="abutton" type="primary" round @click="Submit">Submit</el-button>
+    <el-button class="abutton" type="primary" round @click="Submit()">Submit</el-button>
   </div>
 </template>
 
 <script>
 import router from "@/router";
+import countdown from '../components/layout/countdown.vue'
 
 export default {
+  components:{countdown},
   name: "QuizPage",
   data(){
     return{
@@ -170,10 +166,32 @@ export default {
         return val === "yes";
     }
   },
+  mounted() {
+    fetch()
+  },
   methods:{
+    fetch(){
+      this.quizForm.quizId=localStorage.getItem("quiz")
+      this.$axios.get('http://localhost:8082/api/course/quiz', {
+        params: {
+          QuizId: localStorage.getItem("quiz"),
+        }
+      }).then(res => {
+        // 拿到结果
+        let result = res.data.result;
+        let message = res.data.msg;
+        this.quizForm = result;
+        // 判断结果
+        if (result) {
+        } else {
+          /*打印错误信息*/
+          alert(message);
+        }
+      })
+    },
     Submit(){
       this.submitForm.quizId=this.quizForm.quizId
-      this.submitForm.answer=this.quizForm.problems
+      this.submitForm.answer=this.quizForm.problems.map(item => item.answer)
       this.$axios.post('http://localhost:8082/api/course/submitQuiz', this.submitForm).then(res => {
             let result = res.data.result;
             let message = res.data.msg;
@@ -187,47 +205,6 @@ export default {
       }
       )
     },
-    // 开始计时
-    startHandler(){
-      this.flag = setInterval(()=>{
-        if(this.three === 60 || this.three === '60'){
-          this.three = '00';
-          this.abc = 0;
-          if(this.two === 60 || this.two === '60'){
-            this.two = '00';
-            this.cde = 0;
-            if(this.efg+1 <= 9){
-              this.efg++;
-              this.one = '0' + this.efg;
-            }else{
-              this.efg++;
-              this.one = this.efg;
-            }
-          }else{
-            if(this.cde+1 <= 9){
-              this.cde++;
-              this.two = '0' + this.cde;
-            }else{
-              this.cde++;
-              this.two = this.cde;
-            }
-          }
-        }else{
-          if(this.abc+1 <= 9){
-            this.abc++;
-            this.three = '0' + this.abc;
-          }else{
-            this.abc++;
-            this.three=this.abc;
-          }
-        }
-
-      },100)
-    },
-    // 暂停计时
-    endHandler(){
-      this.flag = clearInterval(this.flag)
-    }
   }
 
 }
@@ -415,6 +392,12 @@ export default {
 .aa{
   position: absolute;
   top:300%;
+  left: 20%;
+}
+
+.sas{
+  position: absolute;
+  top:30%;
   left: 20%;
 }
 </style>

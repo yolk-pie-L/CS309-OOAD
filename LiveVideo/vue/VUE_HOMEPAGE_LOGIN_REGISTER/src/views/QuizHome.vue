@@ -16,7 +16,7 @@
         <el-table-column prop="deadline" label="Due" width="250" />
         <el-table-column prop="score" label="Score" width="200" />
         <el-table-column fixed="right" label="ENTER" width="300">
-          <template #default>
+          <template v-slot="scope" #default>
             <el-button link type="primary" size="small" @click="handleEnter(scope.$index)">Enter</el-button>
           </template>
         </el-table-column>
@@ -74,12 +74,25 @@ export default {
   },
   methods: {
     fetchAssignment() {
+      this.classForm.id=localStorage.getItem("course")
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
+      this.$axios.get(`api/course/{` + this.classForm.id + `}`).then(res => {
+        // 拿到结果
+        let result = res.data.result;
+        let message = res.data.msg;
+        this.classForm=result
+        // 判断结果
+        if (result) {
+        } else {
+          /*打印错误信息*/
+          alert(message);
+        }
+      })
       this.$axios.get('/api/course/allQuiz', {
         params: {
-          courseId: this.classForm.privateKeyUrl,
+          courseId: this.classForm.id,
         }}).then(res => {
-        let result = JSON.parse(res.data.data);
+        let result = res.data.result;
         let message = res.data.msg;
         this.quizForm=result
         // 判断结果
@@ -91,7 +104,8 @@ export default {
       })
     },
     handleEnter(index) {
-      router.push({path:'/homeworkPage',query: {id:this.homeworkForm.at(index).id}})
+      localStorage.setItem("quiz",this.quizForm.at(index).id)
+      router.push("/quizPage")
     },
   }
 }
