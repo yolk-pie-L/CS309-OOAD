@@ -87,7 +87,7 @@ export default {
     },
     fetchAssignment() {
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
-      this.$axios.get(`http://localhost:8082/api/assignment/all?courseId=${this.courseId}`).then(res => {
+      this.$axios.get(`http://localhost:8082/api/assignment/stuassign?courseId=${this.courseId}`).then(res => {
         let result = res.data.result;
         this.homeworkForm = result
         // 判断结果
