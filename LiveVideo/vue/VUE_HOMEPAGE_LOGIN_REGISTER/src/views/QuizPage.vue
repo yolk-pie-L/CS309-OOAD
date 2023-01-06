@@ -13,7 +13,7 @@
     </div>
     <div class="sas">
       <countdown v-slot="timeObj" :time="30*60 * 1000" :isMilliSecond="true">
-        {{timeObj.mm}}分钟{{timeObj.ss}}秒
+        {{ timeObj.mm }}分钟{{ timeObj.ss }}秒
       </countdown>
     </div>
     <div class="describe">
@@ -52,10 +52,10 @@
       <ul class="box clearfix">
         <div v-for="item in quizForm.problems">
           <li>
-            <a >
+            <a>
               <div v-if="item.isSelection">
                 <el-header class="variable1" v-text="item.problem"></el-header>
-                <div >
+                <div>
                   <el-row>
                     <el-radio v-model="item.answer" label="A" border>A</el-radio>
                     <el-header class="variable2" v-text="item.A"></el-header>
@@ -76,9 +76,9 @@
               </div>
               <div v-else>
                 <el-header class="variable1" v-text="item.problem"></el-header>
-                <div >
-                    <el-radio v-model="item.answer" label="true" border>true</el-radio>
-                    <el-radio v-model="item.answer" label="false" border>false</el-radio>
+                <div>
+                  <el-radio v-model="item.answer" label="true" border>true</el-radio>
+                  <el-radio v-model="item.answer" label="false" border>false</el-radio>
                 </div>
               </div>
             </a>
@@ -95,18 +95,18 @@ import router from "@/router";
 import countdown from '../components/layout/countdown.vue'
 
 export default {
-  components:{countdown},
+  components: {countdown},
   name: "QuizPage",
-  data(){
-    return{
+  data() {
+    return {
       flag: null,
-      one : '00', // 时
-      two : '00', // 分
-      three : '00', // 秒
-      abc : 0, // 秒的计数
-      cde : 0, // 分的计数
-      efg : 0, // 时的计数
-      name:"",
+      one: '00', // 时
+      two: '00', // 分
+      three: '00', // 秒
+      abc: 0, // 秒的计数
+      cde: 0, // 分的计数
+      efg: 0, // 时的计数
+      name: "",
       quizForm: {
         quizId: "aa",
         courseName: "course",
@@ -143,7 +143,7 @@ export default {
         ],
         classForm: [
           {
-            courseId:"aa",
+            courseId: "aa",
             courseName: "course",
             teacherName: "teacher",
             introduction: "intro",
@@ -152,46 +152,46 @@ export default {
           },
         ],
       },
-      submitForm:{
+      submitForm: {
         quizId: "",
-        answer:null
+        answer: null
       }
     }
   },
   props: {
     msg: String
   },
-  computed:{
-      check: function (val) {
-        return val === "yes";
+  computed: {
+    check: function (val) {
+      return val === "yes";
     }
   },
   mounted() {
-    fetch()
+    fetch();
   },
-  methods:{
-    fetch(){
-      this.quizForm.quizId=localStorage.getItem("quiz")
-      this.$axios.get('http://localhost:8082/api/course/quiz', {
-        params: {
-          QuizId: localStorage.getItem("quiz"),
-        }
-      }).then(res => {
-        // 拿到结果
-        let result = res.data.result;
-        let message = res.data.msg;
-        this.quizForm = result;
-        // 判断结果
-        if (result) {
-        } else {
-          /*打印错误信息*/
-          alert(message);
-        }
-      })
+  methods: {
+    fetch() {
+      this.quizForm.quizId = localStorage.getItem("quiz")
+      this.$axios
+          .get('http://localhost:8082/api/quiz/one?assignmentId=' + localStorage.getItem("quiz")
+              // {params: {QuizId: localStorage.getItem("quiz"),}}
+          )
+          .then(res => {
+            // 拿到结果
+            let result = res.data.result;
+            let message = res.data.msg;
+            this.quizForm = result;
+            // 判断结果
+            if (result) {
+            } else {
+              /*打印错误信息*/
+              alert(message);
+            }
+          })
     },
-    Submit(){
-      this.submitForm.quizId=this.quizForm.quizId
-      this.submitForm.answer=this.quizForm.problems.map(item => item.answer)
+    Submit() {
+      this.submitForm.quizId = this.quizForm.quizId
+      this.submitForm.answer = this.quizForm.problems.map(item => item.answer)
       this.$axios.post('http://localhost:8082/api/course/submitQuiz', this.submitForm).then(res => {
             let result = res.data.result;
             let message = res.data.msg;
@@ -202,7 +202,7 @@ export default {
               /*打印错误信息*/
               alert(message);
             }
-      }
+          }
       )
     },
   }
@@ -263,7 +263,7 @@ export default {
 
 <style scoped lang="less">
 
-.business{
+.business {
   position: absolute;
   top: 800px;
   left: 125px;
@@ -271,97 +271,131 @@ export default {
   border-right: none;
   width: 80%;
 }
+
 .business {
-  ul {
-    li {
-      &:hover h3 {
-        opacity: 0;
-      }
 
-      &:hover img {
-        -webkit-transform: scale(1.1);
-        -ms-transform: scale(1.1);
-        transform: scale(1.1);
-      }
+ul {
 
-      &:hover .word {
-        display: block;
-        opacity: 1;
-        background: rgba(0, 0, 0, 0.6);
-      }
+li {
 
-      width: 100%;
-      height: 400px;
-      position: relative;
-      float: left;
-      overflow: hidden;
-      margin-top: 15px;
-      margin-left: 15px;
+&
+:hover h3 {
+  opacity: 0;
+}
 
-      a {
-        h3 {
-          position: absolute;
-          left: 25px;
-          bottom: 20px;
-          z-index: 2;
-          font-size: 40px;
-          color: #fff;
-          font-weight: 400;
-          opacity: 1;
-          filter: alpha(opacity=100);
-          -webkit-transition: opacity 0.4s;
-          transition: opacity 0.4s;
-        }
+&
+:hover img {
+  -webkit-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  transform: scale(1.1);
+}
 
-        img {
-          position: relative;
-          display: block;
-          z-index: 1;
-          width: 100%;
-          -webkit-transition: -webkit-transform 0.4s;
-          transition: -webkit-transform 0.4s;
-          transition: transform 0.4s;
-          transition: transform 0.4s, -webkit-transform 0.4s;
-        }
+&
+:hover .word {
+  display: block;
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.6);
+}
 
-        .word {
-          opacity: 0;
-          filter: alpha(opacity=0);
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          z-index: 3;
-          padding-top: 20%;
-          text-align: center;
-          -webkit-transition: opacity 0.4s;
-          transition: opacity 0.4s;
+width:
 
-          h4 {
-            font-size: 20px;
-            color: #fff;
-            font-weight: 400;
-          }
+100
+%
+;
+height:
 
-          .border {
-            display: block;
-            margin: 10px auto;
-            width: 22px;
-            height: 1px;
-            line-height: 0;
-            font-size: 0;
-            background: #4681e6;
-          }
+400
+px
 
-          p {
-            font-size: 14px;
-            color: #fff;
-          }
-        }
-      }
-    }
-  }
+;
+position: relative
+
+;
+float: left
+
+;
+overflow: hidden
+
+;
+margin-top:
+
+15
+px
+
+;
+margin-left:
+
+15
+px
+
+;
+
+a {
+
+h3 {
+  position: absolute;
+  left: 25px;
+  bottom: 20px;
+  z-index: 2;
+  font-size: 40px;
+  color: #fff;
+  font-weight: 400;
+  opacity: 1;
+  filter: alpha(opacity=100);
+  -webkit-transition: opacity 0.4s;
+  transition: opacity 0.4s;
+}
+
+img {
+  position: relative;
+  display: block;
+  z-index: 1;
+  width: 100%;
+  -webkit-transition: -webkit-transform 0.4s;
+  transition: -webkit-transform 0.4s;
+  transition: transform 0.4s;
+  transition: transform 0.4s, -webkit-transform 0.4s;
+}
+
+.word {
+  opacity: 0;
+  filter: alpha(opacity=0);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  padding-top: 20%;
+  text-align: center;
+  -webkit-transition: opacity 0.4s;
+  transition: opacity 0.4s;
+
+h4 {
+  font-size: 20px;
+  color: #fff;
+  font-weight: 400;
+}
+
+.border {
+  display: block;
+  margin: 10px auto;
+  width: 22px;
+  height: 1px;
+  line-height: 0;
+  font-size: 0;
+  background: #4681e6;
+}
+
+p {
+  font-size: 14px;
+  color: #fff;
+}
+
+}
+}
+}
+}
 }
 </style>
 
@@ -379,25 +413,26 @@ export default {
   display: table;
   content: "";
 }
+
 .clearfix:after {
   clear: both
 }
 
-.abutton{
+.abutton {
   position: absolute;
-  top:10%;
+  top: 10%;
   left: 75%;
 }
 
-.aa{
+.aa {
   position: absolute;
-  top:300%;
+  top: 300%;
   left: 20%;
 }
 
-.sas{
+.sas {
   position: absolute;
-  top:30%;
+  top: 30%;
   left: 20%;
 }
 </style>

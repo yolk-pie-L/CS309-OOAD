@@ -5,7 +5,6 @@ import com.example.live_video.dto.AssignForm;
 import com.example.live_video.entity.Assignment;
 import com.example.live_video.entity.User;
 import com.example.live_video.entity.UserType;
-import com.example.live_video.exception.SQLAssignNameConflictException;
 import com.example.live_video.service.AssignmentService;
 import com.example.live_video.service.StudentService;
 import com.example.live_video.service.UserService;
@@ -32,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.example.live_video.constance.FileConstance.FILE_PATH;
 import static com.example.live_video.controller.PictureController.getFileNameNew;
 
 @ResponseResult
@@ -114,8 +112,8 @@ public class AssignmentController {
             Path path = Paths.get(quizUrl);
             List<String> allLines = Files.readAllLines(path, StandardCharsets.UTF_8);
             String jsonStr = String.join("", allLines);
-            List<QuizProblemVo> list = JSONObject.parseArray(jsonStr, QuizProblemVo.class);  // String(json form) to Object List
-            b.setProblems(list);
+            QuizProblemVo qpv = JSONObject.parseObject(jsonStr, QuizProblemVo.class);  // String(json form) to Object List
+            b.setProblemSet(qpv);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -152,7 +150,8 @@ public class AssignmentController {
 
     @PostMapping("/create")
     public boolean createAssignment(@RequestBody AssignForm assignForm) throws Exception{
-        Assignment a = new Assignment(assignForm.getAssignmentName(), assignForm.getCourseId(), new Timestamp(assignForm.getDeadline().getTime()), assignForm.getTotalGrade(),
+        Assignment a = new Assignment(assignForm.getAssignmentName(), assignForm.getCourseId(),
+                new Timestamp(assignForm.getDeadline().getTime()), assignForm.getTotalGrade(),
                 assignForm.getAdditionalResources(), true, assignForm.getDescription());
         return assignmentService.createAssignment(a);
     }

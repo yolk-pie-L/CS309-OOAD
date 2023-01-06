@@ -1,6 +1,7 @@
 package com.example.live_video.vo;
 
 import com.example.live_video.entity.Assignment;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AssignmentVo {
     private Long id;
     private String assignmentName;
@@ -26,9 +29,9 @@ public class AssignmentVo {
     private String updateTime;
     private String status;
     private Integer score;
-//    private List<String> attached;
+    //    private List<String> attached;
     private List<String> answer;
-    private List<QuizProblemVo> problems;
+    private QuizProblemVo problemSet;
     private int limitedTime;
 
     public AssignmentVo(Long id, String assignmentName, Long courseId, String courseName, String teacherName,
@@ -86,7 +89,7 @@ public class AssignmentVo {
         return assignmentVoList;
     }
 
-    public static Assignment voToAssign(AssignmentVo assignmentVo) {
+    public static Assignment voToAssign(AssignmentVo assignmentVo) throws ParseException{
         return new Assignment(
                 assignmentVo.getAssignmentName(),
                 assignmentVo.getCourseName(),
@@ -114,13 +117,8 @@ public class AssignmentVo {
         return String.valueOf(timeStamp);
     }
 
-    public static Timestamp string2Timestamp(String str) {
+    public static Timestamp string2Timestamp(String str) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try {
-            return new Timestamp(sdf.parse(str).getTime());
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return new Timestamp(sdf.parse(str).getTime());
     }
 }
