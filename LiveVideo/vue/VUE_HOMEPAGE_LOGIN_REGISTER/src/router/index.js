@@ -29,6 +29,7 @@ import teacherGrade from "@/views/teacherGrade";
 import live_all from "@/views/live/live_all";
 import paySuccess from "@/views/paySuccess";
 import pdfView from "@/views/pdfView";
+import homeworkCheck from "@/views/HomeworkCheck";
 const routes = [
   {
     path:'/',
@@ -181,6 +182,11 @@ const routes = [
     path: '/teacherGrade',
     name: teacherGrade,
     component: teacherGrade
+  },
+  {
+    path: '/homeworkCheck',
+    name: homeworkCheck,
+    component: homeworkCheck
   }
 ]
 
