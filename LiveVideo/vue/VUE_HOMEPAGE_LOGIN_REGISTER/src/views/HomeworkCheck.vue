@@ -16,14 +16,14 @@
       <el-table :data="homeworkForm" height="300">
         <el-table-column label="AssignmentId" prop="id" width="200"/>
         <el-table-column label="StudentName" prop="studentName" width="250"/>
-        <el-table-column label="AssignmentName" prop="assignmentName" width="250"/>
-        <el-table-column label="TotalGrade" prop="totalGrade" width="100"/>
-        <el-table-column fixed="right" label="Check" width="150">
+        <el-table-column label="AssignmentName" prop="assignmentName" width="300"/>
+        <el-table-column label="TotalGrade" prop="totalGrade" width="200"/>
+        <el-table-column fixed="right" label="Check" width="200">
           <template v-slot="scope" #default>
             <el-button link size="small" type="primary" @click="handleCheck(scope.$index)">Check</el-button>
           </template>
         </el-table-column>
-        <el-table-column fixed="right" label="Grade" width="150">
+        <el-table-column fixed="right" label="Grade" width="200">
           <template v-slot="scope" #default>
             <el-button link size="small" type="primary" @click="handleGrade(scope.$index)">Grade</el-button>
           </template>
@@ -105,25 +105,6 @@ export default {
         type: 'error'
       })
     },
-    handleChange(file, fileList) {
-      let formData = new FormData()
-      fileList.map(item => { //fileList本来就是数组，就不用转为真数组了
-        formData.append("f", item.raw)  //将每一个文件图片都加进formdata
-      })
-      console.log(file.size)
-      this.$axios
-          .post("http://localhost:8082/api/assignment/upload", formData)
-          .then(res => {
-            let result = res.data.result;
-            let message = res.data.msg;
-            if (res.data.code===200) {
-              this.$notify.success("上传成功")
-              this.answers.push(result.string);
-            } else {
-              alert(message);
-            }
-          })
-    },
     handleGrade(index) {
       this.$axios.get('http://localhost:8082/api/assignment/modify', {
         params: {
@@ -135,7 +116,7 @@ export default {
         let result = res.data.result;
         let message = res.data.msg;
         if (result) {
-          this.fetchClass();
+          this.$notify.success("成功打分")
         } else {
           /*打印错误信息*/
           alert(message);
@@ -144,6 +125,7 @@ export default {
     },
     handleCheck(index) {
       this.additionalResources=this.homeworkForm.at(index).answer
+      this.$notify.success("切换作业")
     },
   },
 }
