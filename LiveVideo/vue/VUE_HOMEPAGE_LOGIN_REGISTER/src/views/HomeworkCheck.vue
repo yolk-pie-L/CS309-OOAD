@@ -31,8 +31,8 @@
       </el-table>
     </div>
     <div class="add">
-      <el-header class="variable1">Additional Resource:</el-header>
-      <div v-for="item in additionalResources">
+      <el-header class="variable1">Answer:</el-header>
+      <div v-for="item in this.answerSee">
         <el-link
             :body-style="{ padding: '0px', marginBottom: '1px' }"
             :href="toPDF(item)"
@@ -46,7 +46,6 @@
 
 <script>
 import {useRoute} from "vue-router";
-import router from "@/router";
 
 export default {
   name: "HomeworkCheck",
@@ -65,7 +64,7 @@ export default {
         answers:[],
       },
         ],
-      additionalResources: ["https://element.eleme.io"],
+      answerSee: ["https://element.eleme.io"],
     }
   },
   mounted() {
@@ -124,7 +123,8 @@ export default {
       })
     },
     handleCheck(index) {
-      this.additionalResources=this.homeworkForm.at(index).answer
+      this.answerSee=this.homeworkForm.at(index).answer
+      alert(this.answerSee)
       this.$notify.success("切换作业")
     },
   },
