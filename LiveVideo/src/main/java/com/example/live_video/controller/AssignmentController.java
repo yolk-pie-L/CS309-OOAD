@@ -141,12 +141,16 @@ public class AssignmentController {
         if (isAssignment)
             b.setAnswer(studentService.getStudentAssignmentUrlList(userName, assignId));
         else try {
-            String quizUrl = a.getAssignUrls().get(0);
+            if (a.getAssignUrls().isEmpty()) {
+                System.out.println("没有url");
+                return b;
+            }
+            String quizUrl = "src/main/resources/static/files/" + a.getAssignUrls().get(0);
             Path path = Paths.get(quizUrl);
             List<String> allLines = Files.readAllLines(path, StandardCharsets.UTF_8);
             String jsonStr = String.join("", allLines);
-            List<QuizProblemVo> list = JSONObject.parseArray(jsonStr, QuizProblemVo.class);  // String(json form) to Object List
-            b.setProblems(list);
+            QuizProblemVo qpv = JSONObject.parseObject(jsonStr, QuizProblemVo.class);  // String(json form) to Object List
+            b.setProblemSet(qpv);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -183,7 +187,8 @@ public class AssignmentController {
 
     @PostMapping("/create")
     public boolean createAssignment(@RequestBody AssignForm assignForm) throws Exception{
-        Assignment a = new Assignment(assignForm.getAssignmentName(), assignForm.getCourseId(), new Timestamp(assignForm.getDeadline().getTime()), assignForm.getTotalGrade(),
+        Assignment a = new Assignment(assignForm.getAssignmentName(), assignForm.getCourseId(),
+                new Timestamp(assignForm.getDeadline().getTime()), assignForm.getTotalGrade(),
                 assignForm.getAdditionalResources(), true, assignForm.getDescription());
         return assignmentService.createAssignment(a);
     }
