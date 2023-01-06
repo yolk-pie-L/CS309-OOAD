@@ -135,10 +135,10 @@ export default {
       router.push(`/homeworkCreate`)
     },
     toQuiz() {
-      router.push(`/quizHome`)
+      router.push(`/quizHome?courseId=${this.courseId}`)
     },
     toQuizUpload() {
-      router.push(`/quizUpload`)
+      router.push(`/quizUpload?courseId=${this.courseId}`)
     },
     videoPage() {
       router.push(`/videoPage?courseId=${this.courseId}`)

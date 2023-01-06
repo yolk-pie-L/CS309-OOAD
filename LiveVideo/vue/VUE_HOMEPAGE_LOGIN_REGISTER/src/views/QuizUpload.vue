@@ -225,28 +225,20 @@ export default {
       return false
     },
     // 提交表单
-    submitForm(formName) {
 
-      router.push('/quizHome')
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          // 表单验证成功
-          this.$axios.post('http://localhost:8082/api/course/createQuizJson', this.createQuizJson).then(res => {
-            // 拿到结果
-            let result = res.data.result;
-            let message = res.data.msg;
-            // 判断结果
-            if (result) {
-              localStorage.setItem("course", this.homeworkForm.courseName)
-              router.push('/quizHome')
-            } else {
-            }
-          })
+    submitForm() {
+      // 表单验证成功
+      this.$axios.post('http://localhost:8082/api/course/createQuizJson', this.createQuizJson).then(res => {
+        // 拿到结果
+        let result = res.data.result;
+        let message = res.data.msg;
+        // 判断结果
+        if (result) {
+          router.push('/courseDetailPage')
         } else {
-          console.log('error submit!!');
-          return false;
+
         }
-      });
+      })
     },
     // 重置表单
     resetForm(formName) {
@@ -259,6 +251,7 @@ export default {
       this.type=2;
     },
     addComfirm(){
+      this.createQuizJson.num = 1 + this.createQuizJson.num
       if(this.type===1){
         let newQuiz = {
           isSelection: true,
