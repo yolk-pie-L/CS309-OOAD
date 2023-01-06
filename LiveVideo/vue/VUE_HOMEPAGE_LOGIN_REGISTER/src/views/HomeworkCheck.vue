@@ -66,9 +66,9 @@ export default {
       ],
       answerSee: ["https://element.eleme.io"],
       submitGrade: {
-        id:this.homeworkForm.at(index).id,
-        studentName:this.homeworkForm.at(index).studentName,
-        grade:this.grade
+        id:"",
+        studentName:"",
+        grade:""
       }
     }
   },
@@ -110,13 +110,13 @@ export default {
       })
     },
     handleGrade(index) {
-      this.submitGrade.id=this.homeworkForm.at(index).id;
+      this.submitGrade.id=this.homeworkForm.at(index).assignId;
       this.submitGrade.studentName=this.homeworkForm.at(index).studentName;
       this.submitGrade.grade=this.grade;
       this.$axios.post('http://localhost:8082/api/assignment/modify', this.submitGrade).then(res => {
         let result = res.data.result;
         let message = res.data.msg;
-        if (result) {
+        if (res.data.code===200) {
           this.$notify.success("成功打分")
         } else {
           /*打印错误信息*/
