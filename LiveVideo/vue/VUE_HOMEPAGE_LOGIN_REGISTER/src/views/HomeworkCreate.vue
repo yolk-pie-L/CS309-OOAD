@@ -196,7 +196,7 @@ export default {
 }
 
 /deep/ .welcome {
-  position: fixed;
+  position: absolute;
   top: -20px;
   width: 100%;
   height: 25%;
