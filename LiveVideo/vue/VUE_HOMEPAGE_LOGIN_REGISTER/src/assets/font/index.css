@@ -1,0 +1,17 @@
+/*公共字体的样式 */
+@font-face {
+    font-family: 'dia';
+    src:url('./Diavlo_BOOK_II_37.otf')
+}
+
+@font-face{
+    font-family:'mine';
+    src:url('./1_Minecraft-Regular.otf')
+}
+
+@font-face{
+    font-family:'dfl';
+    src:url('./DFLS1B.TTF')
+}
+
+
