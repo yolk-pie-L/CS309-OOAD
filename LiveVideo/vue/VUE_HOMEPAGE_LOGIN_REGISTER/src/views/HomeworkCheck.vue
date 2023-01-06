@@ -17,7 +17,6 @@
         <el-table-column label="AssignmentId" prop="id" width="200"/>
         <el-table-column label="StudentName" prop="studentName" width="250"/>
         <el-table-column label="AssignmentName" prop="assignmentName" width="250"/>
-        <el-table-column label="Status" prop="status" width="200"/>
         <el-table-column label="TotalGrade" prop="totalGrade" width="100"/>
         <el-table-column fixed="right" label="Check" width="150">
           <template v-slot="scope" #default>
@@ -62,7 +61,6 @@ export default {
         id: "",
         studentName: "",
         assignmentName: "",
-        status: "作业状态，如迟交，未交等",
         totalGrade: "总分",
         answer: "",
       },
