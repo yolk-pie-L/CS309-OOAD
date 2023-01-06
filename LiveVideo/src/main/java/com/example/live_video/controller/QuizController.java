@@ -112,12 +112,12 @@ public class QuizController {
 
             int len = stuAnswer.size();
             int cnt = 0;
-            if (len != qpv.getProblem().size()) {
+            if (len != qpv.getProblems().size()) {
                 System.err.println("ERROR detect When calculating the score of the quiz. Lengths are not same!");
                 return -1;
             }
             for (int i = 0; i < len; i++)
-                if (stuAnswer.get(i).equalsIgnoreCase(qpv.getProblem().get(i).getAnswer())) cnt++;
+                if (stuAnswer.get(i).equalsIgnoreCase(qpv.getProblems().get(i).getAnswer())) cnt++;
             return 100 * cnt / len;
         } catch (IOException e) {
             throw new RuntimeException(e);
