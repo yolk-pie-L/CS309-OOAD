@@ -20,7 +20,7 @@
             <el-input v-model="homeworkForm.assignmentName"></el-input>
           </el-form-item>
           <el-form-item class="variable1" label="Deadline" prop="deadline" style="width: 380px">
-            <el-date-picker v-model="homeworkForm.deadline" type="date" placeholder="选择日期" >
+            <el-date-picker v-model="homeworkForm.deadline" type="date" placeholder="选择日期" value-format="yyyy-MM-dd HH:mm:ss">
             </el-date-picker>
           </el-form-item>
           <el-form-item class="variable1" label="Description" prop="description" style="width: 380px">
@@ -31,22 +31,23 @@
           </el-form-item>
           <el-form-item class="variable1" label="Additional Source" prop="additionalResources" style="width: 380px">
 
-              <el-form :model="homeworkForm.additionalResources" :rules="rules" ref="loginForm" label-width="21%" class="loginForm">
-                <el-upload
-                    action="#"
-                    multiple
-                    :auto-upload="false"
-                    :show-file-list="true"
-                    :on-change="handleChange"
-                    drag>
-                  <el-icon class="el-icon--upload">
-                    <upload-filled/>
-                  </el-icon>
-                  <div class="el-upload__text">
-                    将文件拖到此处，或<em>点击上传</em>
-                  </div>
-                </el-upload>
-              </el-form>
+            <el-form :model="homeworkForm.additionalResources" :rules="rules" ref="loginForm" label-width="21%"
+                     class="loginForm">
+              <el-upload
+                  action="#"
+                  multiple
+                  :auto-upload="false"
+                  :show-file-list="true"
+                  :on-change="handleChange"
+                  drag>
+                <el-icon class="el-icon--upload">
+                  <upload-filled/>
+                </el-icon>
+                <div class="el-upload__text">
+                  将文件拖到此处，或<em>点击上传</em>
+                </div>
+              </el-upload>
+            </el-form>
           </el-form-item>
           <el-form-item class="btn-ground">
             <el-button type="primary" @click="submitForm('loginForm')">立即上传</el-button>
@@ -79,17 +80,12 @@ export default {
         status: ""
       },
       homeworkForm: {
-        courseId: "",
+        courseId: "1",
         assignmentName: "",
         deadline: "",
         description: "",
         totalGrade: "",
-        additionalResources: [
-          {
-            resourceName: "",
-            resourceUrl: ""
-          }
-        ]
+        additionalResources: []
       },
       rules: {},
     };
@@ -130,7 +126,7 @@ export default {
           let aso = {}
           aso.resourceUrl = result.resourceUrl;
           this.homeworkForm.additionalResources.push(aso);
-        } else{
+        } else {
           alert(message);
         }
       })
@@ -139,7 +135,14 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // 表单验证成功
-          this.$axios.post('http://localhost:8082/api/course/createAssignment', this.homeworkForm).then(res => {
+          let formData = new FormData();
+          formData.append("courseId", this.homeworkForm.courseId);
+          formData.append("assignmentName", this.homeworkForm.assignmentName);
+          formData.append("deadline", this.homeworkForm.deadline);
+          formData.append("description", this.homeworkForm.description);
+          formData.append("totalGrade", this.homeworkForm.totalGrade);
+          formData.append("additionalResources", this.homeworkForm.additionalResources);
+          this.$axios.post('http://localhost:8082/api/assignment/create', formData).then(res => {
             // 拿到结果
             let result = res.data.data;
             let message = res.data.msg;
@@ -149,7 +152,7 @@ export default {
               localStorage.setItem("course", this.homeworkForm.courseName)
               router.push('/homeworkHome')
             } else {
-
+              alert(message)
             }
           })
         } else {
@@ -211,12 +214,18 @@ export default {
 
 <style lang="less" scoped>
 .file-upload {
-  .file-upload-el {
-    width: 300px;
-    margin: auto;
-  }
 
-  padding-top: 50px;
+.file-upload-el {
+  width: 300px;
+  margin: auto;
+}
+
+padding-top:
+
+50
+px
+
+;
 }
 
 .v-box-card {

@@ -100,7 +100,7 @@ public class AssignmentController {
 
     @PostMapping("/upload")
     public StringVo uploadFile(@RequestParam MultipartFile f) throws IOException {
-        String filePath = FILE_PATH + "\\assignFiles\\";
+        String filePath = FILE_PATH + "assignFiles\\";
         String fileName = f.getOriginalFilename();
         assert fileName != null;
         String[] strs = fileName.split("\\.");
@@ -123,9 +123,16 @@ public class AssignmentController {
     }
 
     @PostMapping("/create")
-    public boolean createAssignment(@RequestParam AssignmentVo assignmentVo) {
+    public boolean createAssignment(@RequestParam("courseId") long courseId,
+                                    @RequestParam("assignmentName") String assignmentName,
+                                    @RequestParam("deadline") String deadline,
+                                    @RequestParam("description") String description,
+                                    @RequestParam("totalGrade") int totalGrade,
+                                    @RequestParam("additionalResources") List<String> additionalResources) {
         try {
-            Assignment a = AssignmentVo.voToAssign(assignmentVo);
+            System.err.println(deadline);
+            Assignment a = new Assignment(assignmentName, courseId, Timestamp.valueOf(deadline), totalGrade,
+                    additionalResources, true, description);
             return assignmentService.createAssignment(a);
         } catch (SQLAssignNameConflictException e) {
             throw new RuntimeException(e);

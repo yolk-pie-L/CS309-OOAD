@@ -73,7 +73,7 @@
     <div>
       <el-col :span="7" class="login-card">
         <!--loginForm-->
-        <el-form :model="answers.answerFile" :rules="rules" ref="loginForm" label-width="21%" class="loginForm">
+        <el-form :model="answers" :rules="rules" ref="loginForm" label-width="21%" class="loginForm">
           <el-upload
               action="#"
               multiple
@@ -107,7 +107,7 @@ export default {
   name: "Login",
   data() {
     return {
-      courseId: "",
+      courseId: "1",
       homeworkForm: {
         assignmentId: "aa",
         courseName: "course",
@@ -122,14 +122,8 @@ export default {
         updateTime: "date",
         answerStatus: "yes/no",
       },
-      additionalResources: [
-        "https://element.eleme.io"
-      ],
-      answers: {
-        answerFile: [
-          // string的list
-        ]
-      },
+      additionalResources: ["https://element.eleme.io"],
+      answers: ["answer file tmp"],
       sectionForm: {
         sectionName: 'blank'
       },
@@ -178,22 +172,26 @@ export default {
         formData.append("f", item.raw)  //将每一个文件图片都加进formdata
       })
       console.log(file.size)
-      this.$axios.post("http://localhost:8082/api/assignment/upload", formData).then(res => {
-        let result = res.data.result;
-        let message = res.data.msg;
-        if (result) {
-          this.answers.answerFile.push(result.string);
-        } else {
-          alert(message);
-        }
-      })
+      this.$axios
+          .post("http://localhost:8082/api/assignment/upload", formData)
+          .then(res => {
+            let result = res.data.result;
+            let message = res.data.msg;
+            if (result) {
+              alert(this.answers)
+              // alert(this.answers.answerFile)
+              this.answers.push(result.string);
+            } else {
+              alert(message);
+            }
+          })
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // 表单验证成功
           let formData = new FormData();
-          formData.append("answerFile", this.answers.answerFile);
+          formData.append("answerFile", this.answers);
           formData.append("assignmentId", localStorage.getItem("Assignment"));
           this.$axios.post('http://localhost:8082/api/assignment/submit', formData
           ).then(res => {
