@@ -20,7 +20,8 @@
             <el-input v-model="quizForm.assignmentName"></el-input>
           </el-form-item>
           <el-form-item label="Deadline" prop="deadline" style="width: 380px" class="variable1">
-            <el-date-picker v-model="quizForm.deadline" type="date" placeholder="选择日期" >
+            <el-date-picker v-model="quizForm.deadline" type="date" placeholder="选择日期"
+                            value-format="YYYY-MM-DD HH:mm:ss">
             </el-date-picker>
           </el-form-item>
           <el-form-item label="Description" prop="description" style="width: 380px" class="variable1">
@@ -95,20 +96,20 @@
                 <el-header class="variable1" v-text="item.problem"></el-header>
                 <div >
                   <el-row>
-                    <el-radio v-model="item.answer" label="A" border>A</el-radio>
-                    <el-header class="variable2" v-text="item.A"></el-header>
+                    <el-radio v-model="item.answer" label="selectionA" border>A</el-radio>
+                    <el-header class="variable2" v-text="item.selectionA"></el-header>
                   </el-row>
                   <el-row>
-                    <el-radio v-model="item.answer" label="B" border>B</el-radio>
-                    <el-header class="variable2" v-text="item.B"></el-header>
+                    <el-radio v-model="item.answer" label="selectionB" border>B</el-radio>
+                    <el-header class="variable2" v-text="item.selectionB"></el-header>
                   </el-row>
                   <el-row>
-                    <el-radio v-model="item.answer" label="C" border>C</el-radio>
-                    <el-header class="variable2" v-text="item.C"></el-header>
+                    <el-radio v-model="item.answer" label="selectionC" border>C</el-radio>
+                    <el-header class="variable2" v-text="item.selectionC"></el-header>
                   </el-row>
                   <el-row>
-                    <el-radio v-model="item.answer" label="D" border>D</el-radio>
-                    <el-header class="variable2" v-text="item.D"></el-header>
+                    <el-radio v-model="item.answer" label="selectionD" border>D</el-radio>
+                    <el-header class="variable2" v-text="item.selectionD"></el-header>
                   </el-row>
                 </div>
               </div>
@@ -162,15 +163,13 @@ export default {
       quizForm: {
         courseId:"",
         assignmentName: "",
+        teacherName: "",
         deadline: "",
         description: "",
         totalGrade: "",
         limitedTime: 30,
-        additionalResources: [
-          {
-            resourceName: "",
-            resourceUrl: ""
-          }
+        assignUrls: [
+            ""
         ]
       },
       createQuizJson:{
@@ -178,10 +177,10 @@ export default {
           {
             isSelection:false,
             problem:"xxxx",
-            A:"sdfa",
-            B:"sss",
-            C:"ddd",
-            D:"ddd",
+            selectionA:"sdfa",
+            selectionB:"sss",
+            selectionC:"ddd",
+            selectionD:"ddd",
             answer:"(A/B/C/D)/(yes/no)"
           }
         ]
@@ -220,7 +219,7 @@ export default {
       })
     },
     beforeUpload (file) {
-      this.homeworkForm.additionalResources.append('file', file)
+      this.homeworkForm.assignUrls.append('file', file)
       return false
     },
     // 提交表单
@@ -228,14 +227,21 @@ export default {
     submitForm() {
       // 表单验证成功
       this.$axios.post('http://localhost:8082/api/quiz/createQuizJson', this.createQuizJson).then(res => {
-        // 拿到结果
-        let result = res.data.result;
-        let message = res.data.msg;
-        // 判断结果
-        if (result) {
+        if (res.data.code === 200) {
+          this.quizForm.assignUrls[0] = res.data.result.string
+          this.createQuiz()
           // router.push('/courseDetailPage?courseId=' + this.classForm.id)
         } else {
 
+        }
+      })
+    },
+    createQuiz() {
+      this.quizForm.teacherName = this.classForm.teacherName
+      this.$axios.post('http://localhost:8082/api/quiz/createQuiz', this.quizForm).then(res => {
+        console.log(this.quizForm)
+        if (res.data.code === 200) {
+          console.log("OK")
         }
       })
     },

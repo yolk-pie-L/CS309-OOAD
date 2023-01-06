@@ -21,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.live_video.controller.AssignmentController.*;
@@ -42,6 +43,7 @@ public class QuizController {
 
     @PostMapping("/createQuizJson")
     public StringVo createQuizJson(@RequestBody QuizProblemVo problemSet) throws IOException {
+        System.err.println(problemSet);
         String jsonStr = JSONObject.toJSONString(problemSet);  // Object List to String(json form)
         String filePath = quizPath;
         String fileName = "quizJson_" + getFileNameNew() + ".json";
@@ -54,15 +56,17 @@ public class QuizController {
 
         Files.write(Paths.get(quizUrl), jsonStr.getBytes(StandardCharsets.UTF_8));
         System.out.println("SAVE TO: " + quizUrl);
-        return new StringVo(quizUrl);
+        return new StringVo(fileName);
     }
 
     @PostMapping("/createQuiz")
     public boolean createQuiz(@RequestBody AssignmentVo quizVo) throws Exception {
+        System.err.println(quizVo.getAssignUrls());
         Assignment a = AssignmentVo.voToAssign(quizVo);
         a.setIsAssignment(false);
         a.setCourseId(quizVo.getCourseId());
         assert (a.getCourseId() != null);
+        System.err.println(a.getAssignUrls());
         return assignmentService.createAssignment(a);
     }
 
@@ -77,7 +81,12 @@ public class QuizController {
     public AssignmentVo queryQuizById(@RequestHeader("token") String token,
                                       @RequestParam("assignmentId") long quizId) throws Exception {
         String userName = token2userName(token);
-        return queryAssignmentAndQuizById(userName, quizId, assignmentService, studentService, userService, false);
+        AssignmentVo assignmentVo = queryAssignmentAndQuizById(userName, quizId, assignmentService, studentService, userService, false);
+//        List<String> urls = assignmentVo.getAssignUrls();
+//        urls.set(0, quizPath + urls.get(0));
+//        System.out.println(urls.size());
+//        assignmentVo.setAssignUrls(urls);
+        return assignmentVo;
     }
 
     @PostMapping("/submit")
@@ -91,6 +100,9 @@ public class QuizController {
         String quizUrl = filePath + fileName;
         Files.write(Paths.get(quizUrl), jsonStr.getBytes(StandardCharsets.UTF_8));
         System.out.println("SAVE TO: " + quizUrl);
+        List<String> urls = new ArrayList<>();
+        urls.add(quizUrl);
+        studentService.submitAssignment(userName, quizSubmitDto.getQuizId(), urls);
         return getScore(userName, quizSubmitDto.getQuizId());
     }
 
@@ -105,7 +117,7 @@ public class QuizController {
         String jsonStr = String.join("", allLines);
         List<String> stuAnswer = JSONObject.parseArray(jsonStr, String.class);
 
-        String quizUrl = assignmentService.getOneAssignment(quizId).getAssignUrls().get(0);
+        String quizUrl = quizPath + assignmentService.getOneAssignment(quizId).getAssignUrls().get(0);
         path = Paths.get(quizUrl);
         allLines = Files.readAllLines(path, StandardCharsets.UTF_8);
         jsonStr = String.join("", allLines);
@@ -117,11 +129,13 @@ public class QuizController {
             System.err.println("ERROR detect When calculating the score of the quiz. Lengths are not same!");
             return -1;
         }
-        for (int i = 0; i < len; i++)
-            if (stuAnswer.get(i).equalsIgnoreCase(qpv.getProblems().get(i).getAnswer())) cnt++;
+        for (int i = 0; i < len; i++) {
+            System.out.println(stuAnswer.get(i));
+            System.out.println(qpv.getProblems().get(i).getAnswer());
+            if (stuAnswer.get(i).equalsIgnoreCase(qpv.getProblems().get(i).getAnswer())
+                    || stuAnswer.get(i).equalsIgnoreCase("selection" + qpv.getProblems().get(i).getAnswer())) cnt++;
+        }
         return 100 * cnt / len;
     }
-
-
 }
 

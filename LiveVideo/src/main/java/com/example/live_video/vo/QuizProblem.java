@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class QuizProblem {
+    @JsonProperty("isSelection")
     private boolean isSelection;
     private String problem;
     @JsonProperty("selectionA")

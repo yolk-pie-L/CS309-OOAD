@@ -50,27 +50,27 @@
     </div>
     <div class="business wrap">
       <ul class="box clearfix">
-        <div v-for="item in quizForm.problems">
+        <div v-for="item in quizForm.problemSet.problems">
           <li>
             <a>
               <div v-if="item.isSelection">
                 <el-header class="variable1" v-text="item.problem"></el-header>
                 <div>
                   <el-row>
-                    <el-radio v-model="item.answer" label="A" border>A</el-radio>
-                    <el-header class="variable2" v-text="item.A"></el-header>
+                    <el-radio v-model="item.answer" label="selectionA" border>A</el-radio>
+                    <el-header class="variable2" v-text="item.selectionA"></el-header>
                   </el-row>
                   <el-row>
-                    <el-radio v-model="item.answer" label="B" border>B</el-radio>
-                    <el-header class="variable2" v-text="item.B"></el-header>
+                    <el-radio v-model="item.answer" label="selectionB" border>B</el-radio>
+                    <el-header class="variable2" v-text="item.selectionB"></el-header>
                   </el-row>
                   <el-row>
-                    <el-radio v-model="item.answer" label="C" border>C</el-radio>
-                    <el-header class="variable2" v-text="item.C"></el-header>
+                    <el-radio v-model="item.answer" label="selectionC" border>C</el-radio>
+                    <el-header class="variable2" v-text="item.selectionC"></el-header>
                   </el-row>
                   <el-row>
-                    <el-radio v-model="item.answer" label="D" border>D</el-radio>
-                    <el-header class="variable2" v-text="item.D"></el-header>
+                    <el-radio v-model="item.answer" label="selectionD" border>D</el-radio>
+                    <el-header class="variable2" v-text="item.selectionD"></el-header>
                   </el-row>
                 </div>
               </div>
@@ -108,7 +108,7 @@ export default {
       efg: 0, // 时的计数
       name: "",
       quizForm: {
-        quizId: "aa",
+        id: "aa",
         courseName: "course",
         teacherName: "teacher",
         QuizName: "quiz1",
@@ -121,26 +121,19 @@ export default {
         createTime: "date",
         updateTime: "date",
         num: "10",
-        problems: [
-          {
-            isSelection: true,
-            problem: "xxxx",
-            A: "sdfa",
-            B: "sss",
-            C: "ddd",
-            D: "ddd",
-            answer: "(A/B/C/D)/(yes/no)"
-          },
-          {
-            isSelection: false,
-            problem: "xxxx",
-            A: "sdfa",
-            B: "sss",
-            C: "ddd",
-            D: "ddd",
-            answer: "(A/B/C/D)/(yes/no)"
-          }
-        ],
+        problemSet: {
+          problems: [
+            {
+              isSelection: true,
+              problem: "xxxx",
+              selectionA: "sdfa",
+              selectionB: "sss",
+              selectionC: "ddd",
+              selectionD: "ddd",
+              answer: "(A/B/C/D)/(yes/no)"
+            },
+          ]
+        },
         classForm: [
           {
             courseId: "aa",
@@ -154,7 +147,7 @@ export default {
       },
       submitForm: {
         quizId: "",
-        answer: null
+        choice: null
       }
     }
   },
@@ -167,11 +160,12 @@ export default {
     }
   },
   mounted() {
-    fetch();
+    this.fetch();
   },
   methods: {
     fetch() {
       this.quizForm.quizId = localStorage.getItem("quiz")
+      console.log(this.quizForm.quizId)
       this.$axios
           .get('http://localhost:8082/api/quiz/one?assignmentId=' + localStorage.getItem("quiz")
               // {params: {QuizId: localStorage.getItem("quiz"),}}
@@ -181,6 +175,7 @@ export default {
             let result = res.data.result;
             let message = res.data.msg;
             this.quizForm = result;
+            console.log(this.quizForm)
             // 判断结果
             if (result) {
             } else {
@@ -190,9 +185,10 @@ export default {
           })
     },
     Submit() {
-      this.submitForm.quizId = this.quizForm.quizId
-      this.submitForm.answer = this.quizForm.problems.map(item => item.answer)
-      this.$axios.post('http://localhost:8082/api/course/submitQuiz', this.submitForm).then(res => {
+      this.submitForm.quizId = this.quizForm.id
+      this.submitForm.choice = this.quizForm.problemSet.problems.map(item => item.answer)
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
+      this.$axios.post('http://localhost:8082/api/quiz/submit', this.submitForm).then(res => {
             let result = res.data.result;
             let message = res.data.msg;
             if (result) {
