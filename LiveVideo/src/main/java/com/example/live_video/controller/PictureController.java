@@ -1,6 +1,7 @@
 package com.example.live_video.controller;
 
 import com.example.live_video.exception.MyException;
+import com.example.live_video.util.FileUtil;
 import com.example.live_video.vo.StringVo;
 import com.example.live_video.wrapper.NonStaticResourceHttpRequestHandler;
 import com.example.live_video.wrapper.PassToken;
@@ -71,33 +72,17 @@ public class PictureController {
         if (!url.contains(defaultPath)) {
             url = defaultPath + url;
         }
-        Path filePath = Paths.get(url);
 
-        if (Files.exists(filePath)) {
-            String mimeType = Files.probeContentType(filePath);
-            if (StringUtils.hasText(mimeType))
-                response.setContentType(mimeType);
-            request.setAttribute(ATTR_FILE, url);
+        if (FileUtil.preview(url, request, response)) {
             requestHandler.handleRequest(request, response);
-        } else {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
         }
     }
 
     @GetMapping("/api/file/{url}")
     public void filePreview(HttpServletRequest request, HttpServletResponse response, @PathVariable String url) throws Exception {
         url = assignPath + url;
-        Path filePath = Paths.get(url);
-        if (Files.exists(filePath)) {
-            String mimeType = Files.probeContentType(filePath);
-            if (StringUtils.hasText(mimeType))
-                response.setContentType(mimeType);
-            request.setAttribute(ATTR_FILE, url);
+        if (FileUtil.preview(url, request, response)) {
             requestHandler.handleRequest(request, response);
-        } else {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
         }
     }
 
