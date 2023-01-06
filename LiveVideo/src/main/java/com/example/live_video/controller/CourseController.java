@@ -1,11 +1,14 @@
 package com.example.live_video.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.live_video.dto.CourseDto;
 import com.example.live_video.dto.JoinForm;
 import com.example.live_video.entity.Course;
 import com.example.live_video.entity.CourseStatus;
 import com.example.live_video.entity.UserType;
+import com.example.live_video.exception.MyException;
 import com.example.live_video.exception.SQLCoursenameConflictException;
+import com.example.live_video.mapper.CourseMapper;
 import com.example.live_video.mapper.StudentMapper;
 import com.example.live_video.service.CourseService;
 import com.example.live_video.service.StudentService;
@@ -44,6 +47,9 @@ public class CourseController {
 
     @Autowired
     StudentMapper studentMapper;
+
+    @Autowired
+    CourseMapper courseMapper;
 
     @GetMapping("/isRelated")
     boolean getRelated(@RequestParam long courseId, String userName){
@@ -93,7 +99,9 @@ public class CourseController {
     }
 
     @PostMapping ("/modify")
-    public Boolean modifyCourseOfTeacher(@RequestBody CourseDto courseDto) {
+    public Boolean modifyCourseOfTeacher(@RequestBody CourseDto courseDto) throws MyException {
+        if(!courseMapper.existCourse(courseDto.getTeacherName(), courseDto.getCourseName()))
+            throw new MyException("Course doesn't exist");
         return courseService.updateCourse(courseDto.convertToCourse(CourseStatus.REVIEWING));
     }
 
