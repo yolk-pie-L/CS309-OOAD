@@ -29,6 +29,7 @@ spring:
 src:
   video-path: src/main/resources/static/video/
   picture-path: src/main/resources/static/picture/
+  assign-path: src/main/resources/static/files/
 
 
 #logging:

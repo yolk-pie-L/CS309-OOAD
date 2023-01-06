@@ -104,7 +104,7 @@ export default {
       })
     },
     handleEnter(index) {
-      router.push(`/homeworkPage?assignId=${this.homeworkForm.at(index).id}`)
+      router.push(`/homeworkPage?assignId=${this.homeworkForm.at(index).id}&courseId=${this.courseId}`)
     },
   }
 }

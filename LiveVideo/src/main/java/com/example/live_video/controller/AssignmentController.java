@@ -17,6 +17,7 @@ import com.example.live_video.wrapper.ResponseResult;
 import com.example.live_video.wrapper.UserLoginToken;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,6 +41,9 @@ import static com.example.live_video.controller.PictureController.getFileNameNew
 @UserLoginToken
 @RequestMapping("/api/assignment")
 public class AssignmentController {
+
+    @Value("${src.assign-path}")
+    private String assignPath;
     @Autowired
     private AssignmentService assignmentService;
     @Autowired
@@ -102,6 +106,7 @@ public class AssignmentController {
             b.setStatus("Ignored");
             b.setScore(0);
         }
+        System.out.println("UserName, Assign"+userName+assignId);
         if (isAssignment)
             b.setAnswer(studentService.getStudentAssignmentUrlList(userName, assignId));
         else try {
@@ -121,7 +126,7 @@ public class AssignmentController {
 
     @PostMapping("/upload")
     public StringVo uploadFile(@RequestParam MultipartFile f) throws IOException {
-        String filePath = FILE_PATH + "assignFiles\\";
+        String filePath = assignPath;
         String fileName = f.getOriginalFilename();
         assert fileName != null;
         String[] strs = fileName.split("\\.");
@@ -130,9 +135,9 @@ public class AssignmentController {
         File dest = new File(url);
         if (!dest.getParentFile().exists())
             System.out.println("CREATE A NEW DIRECTORY: " + dest.getParentFile().mkdirs());
-        f.transferTo(dest);
+        f.transferTo(dest.getCanonicalFile());
         System.out.println("SAVE TO: " + url);
-        return new StringVo(url);
+        return new StringVo(fileName);
     }
 
     @PostMapping("/submit")

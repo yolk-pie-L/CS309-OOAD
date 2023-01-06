@@ -31,6 +31,9 @@ public class PictureController {
     @Value("${src.picture-path}")
     private String defaultPath;
 
+    @Value("${src.assign-path}")
+    private String assignPath;
+
     @Autowired
     private NonStaticResourceHttpRequestHandler requestHandler;
     static MultipartFile curFile;
@@ -70,6 +73,22 @@ public class PictureController {
         }
         Path filePath = Paths.get(url);
 
+        if (Files.exists(filePath)) {
+            String mimeType = Files.probeContentType(filePath);
+            if (StringUtils.hasText(mimeType))
+                response.setContentType(mimeType);
+            request.setAttribute(ATTR_FILE, url);
+            requestHandler.handleRequest(request, response);
+        } else {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+        }
+    }
+
+    @GetMapping("/api/file/{url}")
+    public void filePreview(HttpServletRequest request, HttpServletResponse response, @PathVariable String url) throws Exception {
+        url = assignPath + url;
+        Path filePath = Paths.get(url);
         if (Files.exists(filePath)) {
             String mimeType = Files.probeContentType(filePath);
             if (StringUtils.hasText(mimeType))

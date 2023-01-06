@@ -51,7 +51,7 @@
       <div v-for="item in additionalResources">
         <el-link
             :body-style="{ padding: '0px', marginBottom: '1px' }"
-            :href="item"
+            :href="toPDF(item)"
             v-text="item"
             class="addi">
         </el-link>
@@ -63,7 +63,7 @@
       <div v-for="item in answers">
         <el-link
             :body-style="{ padding: '0px', marginBottom: '1px' }"
-            :href="item"
+            :href="toPDF(item)"
             v-text="item"
             class="addi">
         </el-link>
@@ -102,10 +102,11 @@
 <script>
 import router from "@/router";
 import {useRoute} from "vue-router";
+import {getFile} from "@/utils";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: "Login",
+  name: "HomeworkPage",
   data() {
     return {
       courseId: useRoute().query.courseId,
@@ -135,7 +136,11 @@ export default {
     this.fetchAssignment()
   },
   methods: {
+    toPDF(url) {
+      return getFile(url)
+    },
     fetchAssignment() {
+      this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
       this.$axios.get('http://localhost:8082/api/assignment/one', {
         params: {
           assignmentId: this.assignId,
@@ -151,7 +156,7 @@ export default {
         if (result) {
         } else {
           /*打印错误信息*/
-          alert(message);
+          alert(result);
         }
       })
     },
@@ -173,7 +178,7 @@ export default {
             let result = res.data.result;
             let message = res.data.msg;
             if (result) {
-              alert(this.answers)
+              this.$notify.success("上传成功")
               // alert(this.answers.answerFile)
               this.answers.push(result.string);
             } else {
@@ -187,19 +192,18 @@ export default {
           // 表单验证成功
           let formData = new FormData();
           formData.append("answerFile", this.answers);
-          formData.append("assignmentId", localStorage.getItem("Assignment"));
+          formData.append("assignmentId", this.assignId);
           this.$axios.post('http://localhost:8082/api/assignment/submit', formData
           ).then(res => {
             // 拿到结果
-            let result = res.data.data;
+            let result = res.data.result;
             let message = res.data.msg;
             // 判断结果
             if (result) {
               /*登陆成功*/
-              localStorage.setItem("course", this.homeworkForm.courseName)
-              router.push('/homeworkHome')
+              router.push(`/homeworkHome?courseId=${this.courseId}`)
             } else {
-              alert(message);
+              alert(result);
             }
           })
         } else {
