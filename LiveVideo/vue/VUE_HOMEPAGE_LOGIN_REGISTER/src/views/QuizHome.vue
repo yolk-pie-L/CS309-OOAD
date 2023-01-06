@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row style="height: 95vh">
+    <el-row style="height: 35vh">
       <el-col :span="24" style="height: 100%">
         <el-card shadow=hover class="welcome">
           <el-header class="tit" v-text="classForm.courseName " ></el-header>
@@ -9,19 +9,17 @@
         </el-card>
       </el-col>
     </el-row>
-    <div class="tableD">
-      <el-table :data="quizForm" height="300" class="tableH">
-        <el-table-column prop="assignmentName" label="Quiz Title" width="300" />
-        <el-table-column prop="status" label="Status" width="250" />
-        <el-table-column prop="deadline" label="Due" width="250" />
-        <el-table-column prop="score" label="Score" width="200" />
-        <el-table-column fixed="right" label="ENTER" width="300">
-          <template v-slot="scope" #default>
-            <el-button link type="primary" size="small" @click="handleEnter(scope.$index)">Enter</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+    <el-table :data="quizForm" height="400" class="tableH">
+      <el-table-column prop="assignmentName" label="Quiz Title" width="300" />
+      <el-table-column prop="status" label="Status" width="250" />
+      <el-table-column prop="deadline" label="Due" width="250" />
+      <el-table-column prop="score" label="Score" width="200" />
+      <el-table-column fixed="right" label="ENTER">
+        <template v-slot="scope" #default>
+          <el-button link type="primary" size="small" @click="handleEnter(scope.$index)">Enter</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
@@ -136,10 +134,10 @@ export default {
 <style scoped>
 
 /deep/.welcome {
-  position: fixed;
+  position: absolute;
   top: -20px;
   width: 100%;
-  height: 25%;
+  /*height: 25%;*/
   margin-top: 20px;
   background-color: #c1d1d7;
   color: #42b983;

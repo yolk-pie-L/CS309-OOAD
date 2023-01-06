@@ -1,5 +1,5 @@
 <template>
-  <el-row style="height: 95vh">
+  <el-row style="height: 35vh">
     <el-col :span="24" style="height: 100%">
       <el-card shadow=hover class="welcome">
         <el-header class="tit" >Grade</el-header>
@@ -7,13 +7,11 @@
       </el-card>
     </el-col>
   </el-row>
-  <div class="tableD">
-  <el-table :data="gradeForm" height="300" class="tableH" >
-    <el-table-column prop="sectionName" label="sectionName" width="300" />
-    <el-table-column prop="studentProgress" label="studentProgress" width="250"></el-table-column>
-    <el-table-column prop="studentGrade" label="studentGrade" width="250" />
+  <el-table :data="gradeForm" height="400" class="tableH" >
+    <el-table-column prop="sectionName" label="sectionName" width="450" />
+    <el-table-column prop="studentProgress" label="studentProgress" width="350"></el-table-column>
+    <el-table-column prop="studentGrade" label="studentGrade" />
   </el-table>
-  </div>
 </template>
 
 <script>
@@ -77,6 +75,7 @@ export default {
         // 拿到结果
         let result = res.data.result;
         this.gradeForm = result
+        // this.gradeForm.studentProgress = result.studentProgress * 100
         // 判断结果
         if (res.data.code === 200) {
           /*登陆成功*/
@@ -100,10 +99,10 @@ export default {
 
 <style scoped>
 /deep/.welcome {
-  position: fixed;
+  position: absolute;
   top: -20px;
   width: 100%;
-  height: 25%;
+  /*height: 25%;*/
   margin-top: 20px;
   background-color: #c1d1d7;
   color: #42b983;

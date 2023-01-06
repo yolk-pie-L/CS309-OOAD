@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row style="height: 95vh">
+    <el-row style="height: 35vh">
       <el-col :span="24" style="height: 100%">
         <el-card shadow=hover class="welcome">
           <el-header class="tit" v-text="classForm.courseName " ></el-header>
@@ -9,19 +9,17 @@
         </el-card>
       </el-col>
     </el-row>
-    <div class="tableD">
-    <el-table :data="homeworkForm" height="300" class="tableH">
-      <el-table-column prop="assignmentName" label="Assignment Title" width="300" />
-      <el-table-column prop="status" label="Status" width="300" />
-      <el-table-column prop="deadline" label="Due" width="300" />
-      <el-table-column fixed="right" label="ENTER" width="400">
-        <template v-slot="scope" #default>
-          <el-button link type="primary" size="small" @click="handleEnter(scope.$index)">Enter</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-  </div>
-  </div>
+      <el-table :data="homeworkForm" height="400" class="tableH" style="width: 90%">
+        <el-table-column prop="assignmentName" label="Assignment Title" width="300" />
+        <el-table-column prop="status" label="Status" width="300" />
+        <el-table-column prop="deadline" label="Due" width="300" />
+        <el-table-column fixed="right" label="ENTER">
+          <template v-slot="scope" #default>
+            <el-button link type="primary" size="small" @click="handleEnter(scope.$index)">Enter</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
 </template>
 
 <script>
@@ -120,9 +118,8 @@ export default {
 .tableH {
   background-color: transparent;
   position: absolute;
-  top: -100px;
-  left: 50px;
-  width: 90%;
+  top: 100px;
+  left: 10px;
   border-radius: 5%;
   font-size: 20px;
   font-weight: 600;
@@ -133,10 +130,10 @@ export default {
 <style scoped>
 
 /deep/.welcome {
-  position: fixed;
+  position: absolute;
   top: -20px;
   width: 100%;
-  height: 25%;
+  /*height: 25%;*/
   margin-top: 20px;
   background-color: #c1d1d7;
   color: #42b983;

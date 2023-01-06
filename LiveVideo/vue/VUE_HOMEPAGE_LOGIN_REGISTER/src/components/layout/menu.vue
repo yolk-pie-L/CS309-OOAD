@@ -72,7 +72,7 @@ export default {
       console.log(key, keyPath)
       switch (key) {
         case "1":
-          router.push("/live/all")
+          router.push("http://localhost:8082/liveroom/hello")
           break
       }
     },
