@@ -34,6 +34,7 @@ export default {
     return {
       bgUrl:'url(https://p0.meituan.net/dpplatform/4ce8553013e2e819c08e6d6ba409bee8473079.jpg)',
       classForm: {
+        id: "0",
         courseName: "course",
         teacherName: "teacher",
         introduction: "intro",
@@ -74,9 +75,10 @@ export default {
   },
   methods: {
     fetchAssignment() {
-      this.classForm.id=localStorage.getItem("course")
+      this.classForm.id = this.$route.query.courseId
+      console.log(this.classForm.id)
       this.$axios.defaults.headers.common["token"] = localStorage.getItem('token');
-      this.$axios.get(`api/course/{` + this.classForm.id + `}`).then(res => {
+      this.$axios.get('http://localhost:8082/api/course/' + this.classForm.id ).then(res => {
         // 拿到结果
         let result = res.data.result;
         let message = res.data.msg;
@@ -88,7 +90,7 @@ export default {
           alert(message);
         }
       })
-      this.$axios.get('/api/course/allQuiz', {
+      this.$axios.get('http://localhost:8082/api/quiz/all', {
         params: {
           courseId: this.classForm.id,
         }}).then(res => {
