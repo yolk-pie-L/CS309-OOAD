@@ -96,19 +96,19 @@
                 <el-header class="variable1" v-text="item.problem"></el-header>
                 <div >
                   <el-row>
-                    <el-radio v-model="item.answer" label="selectionA" border>A</el-radio>
+                    <el-radio v-model="item.selectionA" label="selectionA" border>A</el-radio>
                     <el-header class="variable2" v-text="item.selectionA"></el-header>
                   </el-row>
                   <el-row>
-                    <el-radio v-model="item.answer" label="selectionB" border>B</el-radio>
+                    <el-radio v-model="item.selectionB" label="selectionB" border>B</el-radio>
                     <el-header class="variable2" v-text="item.selectionB"></el-header>
                   </el-row>
                   <el-row>
-                    <el-radio v-model="item.answer" label="selectionC" border>C</el-radio>
+                    <el-radio v-model="item.selectionC" label="selectionC" border>C</el-radio>
                     <el-header class="variable2" v-text="item.selectionC"></el-header>
                   </el-row>
                   <el-row>
-                    <el-radio v-model="item.answer" label="selectionD" border>D</el-radio>
+                    <el-radio v-model="item.selectionD" label="selectionD" border>D</el-radio>
                     <el-header class="variable2" v-text="item.selectionD"></el-header>
                   </el-row>
                 </div>
@@ -260,10 +260,10 @@ export default {
         let newQuiz = {
           isSelection: true,
           problem: this.aQuiz.problem,
-          A:this.aQuiz.A,
-          B:this.aQuiz.B,
-          C:this.aQuiz.C,
-          D:this.aQuiz.D,
+          selectionA:this.aQuiz.A,
+          selectionB:this.aQuiz.B,
+          selectionC:this.aQuiz.C,
+          selectionD:this.aQuiz.D,
           answer:this.aQuiz.answer
         }
         this.createQuizJson.problems.push(newQuiz)
@@ -271,10 +271,10 @@ export default {
         let newQuiz = {
           isSelection: false,
           problem: this.aQuiz.problem,
-          A:null,
-          B:null,
-          C:null,
-          D:null,
+          selectionA:null,
+          selectionB:null,
+          selectionC:null,
+          selectionD:null,
           answer:this.aQuiz.answer
         }
         this.createQuizJson.problems.push(newQuiz)
