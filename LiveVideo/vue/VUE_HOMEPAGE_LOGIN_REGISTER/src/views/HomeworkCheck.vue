@@ -96,7 +96,7 @@ export default {
         this.homeworkForm = result
         // 判断结果
         this.fetchCourse()
-        if (result) {
+        if (res.data.code===200) {
         } else {
           /*打印错误信息*/
           alert(result);
@@ -125,7 +125,7 @@ export default {
       })
     },
     handleCheck(index) {
-      this.answerSee=this.homeworkForm.at(index).answer
+      this.answerSee=this.homeworkForm.at(index).answers
       alert(this.answerSee)
       this.$notify.success("切换作业")
     },
