@@ -125,7 +125,7 @@ export default {
       })
     },
     handleCheck(index) {
-      this.answerSee=this.homeworkForm.at(index).answer
+      this.answerSee=this.homeworkForm.at(index).answers
       alert(this.answerSee)
       this.$notify.success("切换作业")
     },

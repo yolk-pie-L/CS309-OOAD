@@ -192,6 +192,5 @@ class LiveVideoApplicationTests {
         Section section2 = sectionService.getOneSection(sectionId);
         assertNull(section2);
         System.out.println("=================================================");
-
     }
 }

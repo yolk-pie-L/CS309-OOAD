@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @ResponseResult
 @RestController
@@ -46,7 +47,11 @@ public class CourseController {
 
     @GetMapping("/isRelated")
     boolean getRelated(@RequestParam long courseId, String userName){
-        return studentMapper.getRelationship(userService.getUserId(userName), courseId);
+        Long userId = userService.getUserId(userName);
+        Course course = courseService.getOneCourse(courseId);
+        boolean flag =  studentMapper.getRelationship(userId, courseId);
+        boolean flag1 = Objects.equals(course.getTeacherId(), userId);
+        return flag || flag1;
     }
 
     @GetMapping("/{courseId}")
