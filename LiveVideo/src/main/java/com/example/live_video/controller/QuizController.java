@@ -99,11 +99,14 @@ public class QuizController {
         String fileName = "quizAnswerJson_" + getFileNameNew() + ".json";
         String quizUrl = filePath + fileName;
         Files.write(Paths.get(quizUrl), jsonStr.getBytes(StandardCharsets.UTF_8));
+
         System.out.println("SAVE TO: " + quizUrl);
+        int resGrade = getScore(userName, quizSubmitDto.getQuizId());
+        studentService.setStudentAssignGrade(userName, quizSubmitDto.getQuizId(), resGrade);
         List<String> urls = new ArrayList<>();
         urls.add(quizUrl);
         studentService.submitAssignment(userName, quizSubmitDto.getQuizId(), urls);
-        return getScore(userName, quizSubmitDto.getQuizId());
+        return resGrade;
     }
 
 
