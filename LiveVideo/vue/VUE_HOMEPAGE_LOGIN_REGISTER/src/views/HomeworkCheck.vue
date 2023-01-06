@@ -58,11 +58,11 @@ export default {
       courseName:"course",
       grade:100,
       homeworkForm:[{
-        id: "",
+        assignId: "",
         studentName: "",
         assignmentName: "",
         totalGrade: "总分",
-        answer: "",
+        answers: "",
       },
         ],
       additionalResources: ["https://element.eleme.io"],
