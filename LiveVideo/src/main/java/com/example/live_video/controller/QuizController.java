@@ -34,7 +34,7 @@ public class QuizController {
     private StudentService studentService;
 
     @PostMapping("/createQuizJson")
-    public String createQuizJson(@RequestParam("problems") List<QuizProblemVo> problems) {
+    public String createQuizJson(@RequestBody QuizProblemVo problems) {
         try {
             String jsonStr = JSONObject.toJSONString(problems);  // Object List to String(json form)
             String filePath = FILE_PATH + "\\quizFiles\\";
@@ -93,6 +93,7 @@ public class QuizController {
         }
     }
 
+    // util
     protected Integer getScore(@RequestHeader("token") String token,
                                @RequestParam("assignmentId") long quizId) throws Exception {
         try {
@@ -107,15 +108,16 @@ public class QuizController {
             path = Paths.get(quizUrl);
             allLines = Files.readAllLines(path, StandardCharsets.UTF_8);
             jsonStr = String.join("", allLines);
-            List<QuizProblemVo> list = JSONObject.parseArray(jsonStr, QuizProblemVo.class);  // String(json form) to Object List
+            QuizProblemVo qpv = JSONObject.parseObject(jsonStr, QuizProblemVo.class);
 
             int len = stuAnswer.size();
             int cnt = 0;
-            if (len != list.size()) {
+            if (len != qpv.getProblem().size()) {
                 System.err.println("ERROR detect When calculating the score of the quiz. Lengths are not same!");
                 return -1;
             }
-            for (int i = 0; i < len; i++) if (stuAnswer.get(i).equalsIgnoreCase(list.get(i).getAnswer())) cnt++;
+            for (int i = 0; i < len; i++)
+                if (stuAnswer.get(i).equalsIgnoreCase(qpv.getProblem().get(i).getAnswer())) cnt++;
             return 100 * cnt / len;
         } catch (IOException e) {
             throw new RuntimeException(e);
