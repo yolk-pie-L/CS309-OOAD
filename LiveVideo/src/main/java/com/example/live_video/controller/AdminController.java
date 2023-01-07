@@ -1,12 +1,17 @@
 package com.example.live_video.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.live_video.entity.AdminRight;
 import com.example.live_video.entity.Course;
 import com.example.live_video.entity.CourseStatus;
 import com.example.live_video.entity.User;
+import com.example.live_video.exception.MyException;
+import com.example.live_video.exception.PermissionDeniedException;
+import com.example.live_video.mapper.UserMapper;
 import com.example.live_video.service.AdminService;
 import com.example.live_video.service.CourseService;
 import com.example.live_video.service.UserService;
+import com.example.live_video.util.TokenUtils;
 import com.example.live_video.vo.CourseVo;
 import com.example.live_video.vo.UserVo;
 import com.example.live_video.wrapper.PassToken;
@@ -28,6 +33,9 @@ public class AdminController {
     private AdminService adminService;
     @Autowired
     private UserService userService;
+
+    @Autowired
+    UserMapper userMapper;
 
 
     @GetMapping("/waiting")
@@ -54,17 +62,23 @@ public class AdminController {
     }
 
     @PostMapping("privilege")
-    public boolean updatePrivilege(@RequestParam("userName") String userName) {
-        if (userService.getUser(userName).getUserType().toString().equalsIgnoreCase("Administrator"))
-            return false;
-        User updateUser = new User();
-        updateUser.setUserName(userName);
-        AdminRight pastRight = userService.getUser(userName).getAdminRight();
-        if (pastRight == AdminRight.Admin)
-            updateUser.setAdminRight(AdminRight.NonAdmin);
-        else if (pastRight == AdminRight.NonAdmin)
-            updateUser.setAdminRight(AdminRight.Admin);
-        return userService.updateUser(updateUser);
+    public boolean updatePrivilege(@RequestHeader("token") String token, @RequestParam("userName") String userName)
+            throws Exception {
+        String name = TokenUtils.getUserName(token);
+        if(name.equals(userName))
+            throw new MyException("不能修改本人的管理员权限");
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("username", userName);
+        User newAdmin = userMapper.selectOne(userQueryWrapper);
+        if(newAdmin.getAdminRight().equals(AdminRight.SuperAdmin)){ // 超级管理员
+            throw new PermissionDeniedException();
+        }
+        if(newAdmin.getAdminRight().equals(AdminRight.Admin)){ // 普通管理员变成非管理员
+            newAdmin.setAdminRight(AdminRight.NonAdmin);
+        }else{
+            newAdmin.setAdminRight(AdminRight.Admin); // 非管理员变成管理员
+        }
+        return userService.updateUser(newAdmin);
     }
 
     @PostMapping("/status")

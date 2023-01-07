@@ -16,6 +16,7 @@ import methods from './methods'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import 'videojs-flash'
+import './assets/font/index.css'
 
 require('video.js/dist/video-js.css')
 // require('vue-video-player/src/custom-theme.css')

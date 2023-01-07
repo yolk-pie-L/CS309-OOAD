@@ -10,7 +10,7 @@
 <!--        </el-table>-->
         <template #header>
           <span>Section List</span>
-          <router-link :to="`/courseDetailPage?courseId=${courseId}`">
+          <router-link :to="`/course/info?courseId=${courseId}`">
             <el-button>返回课程主页</el-button>
           </router-link>
         </template>

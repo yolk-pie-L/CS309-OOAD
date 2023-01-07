@@ -20,7 +20,7 @@ import videoPage from "@/views/videoPage";
 import addSection from "@/views/addSection";
 import payment from "@/views/payment";
 import personInfo from "@/views/myspace/personInfo";
-import myspace from "@/views/myspace";
+import myspace from "@/views/myspace/myspace";
 import addNotice from "@/views/addNotice";
 import avatarUpdate from "@/views/myspace/avatarUpdate";
 import live from "@/views/live/live";
@@ -30,6 +30,8 @@ import live_all from "@/views/live/live_all";
 import paySuccess from "@/views/paySuccess";
 import pdfView from "@/views/pdfView";
 import homeworkCheck from "@/views/HomeworkCheck";
+import cospace from "@/views/cospace/cospace";
+import coinfo from "@/views/cospace/coinfo";
 const routes = [
   {
     path:'/',
@@ -140,6 +142,73 @@ const routes = [
     path: '/live/all',
     name: live_all,
     component: live_all
+  },
+  {
+    path: '/course',
+    name: cospace,
+    component: cospace,
+    children: [
+      {
+        path: '/course/info',
+        name: coinfo,
+        component: coinfo
+      },
+      {
+        path: '/course/homework/home',
+        name: homeworkHome,
+        component: homeworkHome
+      },
+      {
+        path: '/course/homework/page',
+        name: homeworkPage,
+        component: homeworkPage
+      },
+      {
+        path: '/course/homework/create',
+        name: homeworkCreate,
+        component: homeworkCreate
+      },
+      {
+        path: '/course/quiz/home',
+        name: quizHome,
+        component: quizHome
+      },
+      {
+        path: '/course/quiz/page',
+        name: quizPage,
+        component: quizPage,
+      },
+      {
+        path: '/course/quiz/upload',
+        name: quizUpload,
+        component: quizUpload
+      },
+      {
+        path: '/course/video/view',
+        name: videoPage,
+        component: videoPage
+      },
+      {
+        path: '/course/video/create',
+        name: addSection,
+        component: addSection
+      },
+      {
+        path: '/course/student-grade',
+        name: studentGrade,
+        component: studentGrade
+      },
+      {
+        path: '/course/teacher-grade',
+        name: teacherGrade,
+        component: teacherGrade
+      },
+      {
+        path: '/course/homework/check',
+        name: homeworkCheck,
+        component: homeworkCheck
+      }
+    ],
   },
   {
     path: '/person',

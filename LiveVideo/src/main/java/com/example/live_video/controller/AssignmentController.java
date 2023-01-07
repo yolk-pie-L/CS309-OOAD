@@ -127,7 +127,6 @@ public class AssignmentController {
                                                              boolean isAssignment) {
         Assignment a = assignmentService.getOneAssignment(assignId);
         AssignmentVo b = AssignmentVo.parse(a);
-        System.err.println("a:\n" + a);
         // set some elements
         User user = userService.getUser(userName);
         if (user.getUserType().equals(UserType.Student)) {
@@ -200,13 +199,14 @@ public class AssignmentController {
 
     @NotNull
     protected static String getStatus(Assignment a, long assignId, String userName, StudentService studentService) {
-        Timestamp startTime = a.getStartTime();
+        Timestamp createTime = a.getCreateTime();
         Timestamp ddl = a.getDeadline();
         Timestamp now = new Timestamp(new Date().getTime());
         int score = studentService.getStudentAssignGrade(userName, assignId);
         List<String> urls = studentService.getStudentAssignmentUrlList(userName, assignId);
-        if (urls == null) {
-            if (startTime.after(now)) return "Not Started";
+        System.out.println("uuuuuuuuurls" + urls);
+        if (urls.size() == 0) {
+            if (createTime.after(now)) return "Not Started";
             else if (ddl.after(now)) return "Not Submitted";
             else return "Late";
         } else {

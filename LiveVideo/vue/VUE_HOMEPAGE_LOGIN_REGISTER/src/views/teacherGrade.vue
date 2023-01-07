@@ -1,5 +1,5 @@
 <template>
-  <el-row style="height: 95vh">
+  <el-row style="height: 35vh">
     <el-col :span="24" style="height: 100%">
       <el-card shadow=hover class="welcome">
         <el-header class="tit" >Grade</el-header>
@@ -7,9 +7,8 @@
       </el-card>
     </el-col>
   </el-row>
-  <el-button @click="exportGrade" style="position: fixed; top:100px; left: 50px">导出成绩</el-button>
-  <div class="tableD">
-    <el-table :data="gradeForm" height="300" class="tableH" @row-click="selectItem">
+  <el-button @click="exportGrade" style="position: fixed; top:100px; left: 350px">导出成绩</el-button>
+    <el-table :data="gradeForm" height="400" class="tableH" style="width: 95%" @row-click="selectItem">
       <el-table-column prop="studentName" label="studentName" width="300"></el-table-column>
       <el-table-column label="studentSectionGradeList" width="250">
         <el-table-column v-for="(title, index) in gradeForm[0].studentSectionGradeList"
@@ -33,7 +32,6 @@
         <el-button @click="handleDelete(scope.$index)">删除学生</el-button>
       </el-table-column>
     </el-table>
-  </div>
 </template>
 
 <script>
@@ -156,11 +154,12 @@ export default {
 </script>
 
 <style scoped>
+
 /deep/.welcome {
-  position: fixed;
+  position: absolute;
   top: -20px;
   width: 100%;
-  height: 25%;
+  /*height: 25%;*/
   margin-top: 20px;
   background-color: #c1d1d7;
   color: #42b983;

@@ -28,6 +28,7 @@ public class AssignmentVo {
     private String createTime;
     private String updateTime;
     private String status;
+
     private Integer score;
     //    private List<String> attached;
     private List<String> answer;
