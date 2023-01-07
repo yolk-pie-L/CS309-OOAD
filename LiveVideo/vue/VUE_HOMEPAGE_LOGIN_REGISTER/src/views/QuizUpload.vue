@@ -174,15 +174,7 @@ export default {
       },
       createQuizJson:{
         problems:[
-          {
-            isSelection:false,
-            problem:"xxxx",
-            selectionA:"sdfa",
-            selectionB:"sss",
-            selectionC:"ddd",
-            selectionD:"ddd",
-            answer:"(A/B/C/D)/(yes/no)"
-          }
+
         ]
       },
       rules: {
