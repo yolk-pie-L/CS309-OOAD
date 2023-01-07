@@ -11,13 +11,11 @@
       </el-row>
     </div>
     <el-input v-model="this.grade" class="add1"></el-input>
-      <el-table :data="homeworkForm" height="400">
-        <el-table-column label="AssignmentId" prop="id" width="200"/>
-        <el-table-column label="StudentName" prop="studentName" width="250"/>
-        <el-table-column label="AssignmentName" prop="assignmentName" width="250"/>
-        <el-table-column label="Status" prop="status" width="200"/>
-        <el-table-column label="TotalGrade" prop="totalGrade" width="100"/>
-        <el-table-column fixed="right" label="Check" width="150">
+      <el-table :data="homeworkForm" height="400" >
+        <el-table-column label="StudentName" prop="studentName" width="400"/>
+        <el-table-column label="AssignmentName" prop="assignmentName" width="400"/>
+        <el-table-column label="TotalGrade" prop="totalGrade" width="200"/>
+        <el-table-column fixed="right" label="Check" width="250">
           <template v-slot="scope" #default>
             <el-button link size="small" type="primary" @click="handleCheck(scope.$index)">Check</el-button>
           </template>
@@ -213,7 +211,7 @@ export default {
 .tableD {
   background-color: transparent;
   position: absolute;
-  top: 30%;
+  top: 10%;
   left: 50px;
   width: 90%;
   border-radius: 50%
